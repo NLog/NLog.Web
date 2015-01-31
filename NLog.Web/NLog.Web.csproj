@@ -42,7 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IISInstanceNameLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
