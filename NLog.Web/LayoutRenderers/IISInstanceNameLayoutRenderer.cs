@@ -2,7 +2,7 @@
 using System.Web.Hosting;
 using NLog.LayoutRenderers;
 
-namespace NLog.Web
+namespace NLog.Web.LayoutRenderers
 {
     [LayoutRenderer("iis-site-name")]
     public class IISInstanceNameLayoutRenderer : LayoutRenderer

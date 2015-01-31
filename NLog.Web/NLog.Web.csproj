@@ -42,8 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IISInstanceNameLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
+    <Compile Include="NLogHttpModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Targets\Temp.cs" />
+    <Compile Include="Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
