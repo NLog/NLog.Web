@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NLog.Web</id>
+    <version>$version$</version>
+    <title>NLog.Web</title>
+    <authors>NLog</authors>
+    <owners>NLog</owners>
+    <licenseUrl>https://github.com/NLog/NLog.Web/raw/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/NLog/NLog.Web</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NLog targets and layout renderers specific for web site</description>
+    <releaseNotes>Community contributed custom target for NLog.</releaseNotes>
+    <copyright>Copyright 2014-2015</copyright>
+    <tags>nlog target layoutrenderer web</tags>
+  </metadata>
+</package>
