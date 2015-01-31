@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
