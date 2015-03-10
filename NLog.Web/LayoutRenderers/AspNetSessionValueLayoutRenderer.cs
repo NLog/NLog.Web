@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Web;
 using NLog.Config;
@@ -66,7 +67,17 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            builder.Append(Convert.ToString(context.Session[this.Variable], CultureInfo.InvariantCulture));
+            var path = Variable.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var value = context.Session[path[0]];
+
+            foreach (var property in path.Skip(1))
+            {
+                var propertyInfo = value.GetType().GetProperty(property);
+                value = propertyInfo.GetValue(value, null);
+            }
+            
+            builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
         }
     }
 }
