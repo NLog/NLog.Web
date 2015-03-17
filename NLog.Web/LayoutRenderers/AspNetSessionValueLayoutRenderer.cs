@@ -45,6 +45,12 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get; set; }
 
         /// <summary>
+        /// Gets or sets whether variables with a dot are evaluated as properties or not
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public bool EvaluateAsNestedProperties { get; set; }
+
+        /// <summary>
         /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
@@ -67,16 +73,25 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var path = Variable.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var value = context.Session[path[0]];
-
-            foreach (var property in path.Skip(1))
+            object value;
+            if (EvaluateAsNestedProperties)
             {
-                var propertyInfo = value.GetType().GetProperty(property);
-                value = propertyInfo.GetValue(value, null);
+                var path = Variable.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+                value = context.Session[path[0]];
+
+                foreach (var property in path.Skip(1))
+                {
+                    var propertyInfo = value.GetType().GetProperty(property);
+                    value = propertyInfo.GetValue(value, null);
+                } 
             }
-            
+            else
+            {
+                value = context.Session[Variable];
+            }
+
             builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
         }
     }
