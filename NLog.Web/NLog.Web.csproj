@@ -52,7 +52,7 @@
     <Compile Include="LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
     <Compile Include="NLogHttpModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Targets\Temp.cs" />
+    <Compile Include="Targets\AspNetTrace.cs" />
     <Compile Include="Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
