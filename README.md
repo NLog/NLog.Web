@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/nuget/v/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
 [![AppVeyor](https://img.shields.io/appveyor/ci/Xharze/nlog-web/master.svg)](https://ci.appveyor.com/project/Xharze/nlog-web/branch/master)
 
-This package is a extension to [NLog](https://github.com/NLog/NLog/). 
+This package is an extension to [NLog](https://github.com/NLog/NLog/). 
 
 This package contains 
 targets and layout-renderes related to ASP.Net and IIS. 
