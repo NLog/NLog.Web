@@ -6,7 +6,7 @@
 This package is an extension to [NLog](https://github.com/NLog/NLog/). 
 
 This package contains 
-targets and layout-renderes related to ASP.Net and IIS. 
+targets and layout-renderes specific to ASP.Net and IIS. 
 
 ###Targets
 * AspNetTrace
