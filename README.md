@@ -25,6 +25,9 @@ See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Ta
 
 See [Layout renderers documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Layout-Renderers)
 
+##How to use
+When installing with Nuget, no additional configuration is needed.
+
 ##License
 BSD
 
