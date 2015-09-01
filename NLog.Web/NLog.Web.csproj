@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HttpContextDiagnosticsContext.cs" />
+    <Compile Include="RequestContext.cs" />
     <Compile Include="Internal\FormatHelper.cs" />
     <Compile Include="LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
-    <Compile Include="LayoutRenderers\AspNetHttpDiagnosticsContextLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetRequestContextLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
