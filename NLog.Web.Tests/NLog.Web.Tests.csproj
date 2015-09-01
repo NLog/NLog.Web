@@ -55,7 +55,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="LayoutRenderers\AspNetHttpDiagnosticsContextLayoutRendererTests.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\LayoutRendererTestsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
