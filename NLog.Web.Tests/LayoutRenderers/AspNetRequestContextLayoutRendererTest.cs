@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NLog.LayoutRenderers;
@@ -31,6 +32,34 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             ExecTest("a", "b", "", appSettingLayoutRenderer);
         }
+
+
+        [TestMethod()]
+        public void FormatTest()
+        {
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
+            {
+                Variable = "a",
+                Format = "yyyy-MM-dd"
+            };
+
+            ExecTest("a", new DateTime(2020,1,30), "2020-01-30", appSettingLayoutRenderer);
+        }
+
+
+
+        [TestMethod()]
+        public void CultureTest()
+        {
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
+            {
+                Variable = "a",
+                Culture = new CultureInfo("NL-nl")
+            };
+
+            ExecTest("a", new DateTime(2020, 1, 30), "30-1-2020 00:00:00", appSettingLayoutRenderer);
+        }
+
 
         /// <summary>
         /// set in Session and test
