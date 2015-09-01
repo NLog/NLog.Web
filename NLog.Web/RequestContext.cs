@@ -8,9 +8,11 @@ using NLog.Common;
 namespace NLog.Web
 {
     /// <summary>
-    /// Keep values on the httpcontext, e.g. on one request.
+    /// Keep values for one request.
+    /// 
+    /// a Per-Request Cache Store
     /// </summary>
-    public class HttpDiagnosticsContext
+    public class RequestContext
     {
  
         private static IDictionary Context
@@ -111,6 +113,6 @@ namespace NLog.Web
             set { Context[key] = value; }
         }
 
-        public static HttpDiagnosticsContext Current = new HttpDiagnosticsContext();
+        public static RequestContext Current = new RequestContext();
     }
 }

@@ -8,12 +8,12 @@ using NLog.Web.LayoutRenderers;
 namespace NLog.Web.Tests.LayoutRenderers
 {
     [TestClass()]
-    public class AspNetHttpDiagnosticsContextLayoutRendererTests : LayoutRendererTestsBase
+    public class AspNetRequestContextLayoutRendererTest : LayoutRendererTestsBase
     {
         [TestMethod()]
         public void SimpleTest()
         {
-            var appSettingLayoutRenderer = new AspNetHttpDiagnosticsContextLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
             {
                 Variable = "a"
             };
@@ -24,7 +24,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [TestMethod()]
         public void MissingTest()
         {
-            var appSettingLayoutRenderer = new AspNetHttpDiagnosticsContextLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
             {
                 Variable = "X"
             };
