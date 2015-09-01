@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web;
-using System.Web.Configuration;
 using NLog.Common;
 
 namespace NLog.Web
 {
+    /// <summary>
+    /// Keep values on the httpcontext, e.g. on one request.
+    /// </summary>
     public class HttpDiagnosticsContext
     {
  
