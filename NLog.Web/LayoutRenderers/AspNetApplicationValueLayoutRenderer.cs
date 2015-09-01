@@ -4,7 +4,6 @@ using System.Text;
 using System.Web;
 using NLog.Config;
 using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -34,8 +33,8 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-application:variable=stringvariable:upperCase=true} - produces "AAA BBB"
     /// </code>
     /// </example>
-    [LayoutRenderer("HDC")]
-    public class HttpDiagnosticsContextLayoutRenderer : LayoutRenderer
+    [LayoutRenderer("aspnet-application")]
+    public class AspNetApplicationValueLayoutRenderer : LayoutRenderer
     {
         /// <summary>
         /// Gets or sets the variable name.
@@ -46,31 +45,29 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get; set; }
 
         /// <summary>
-        /// Format string for conversion from object to string.
-        /// </summary>
-        public string Format { get; set; }
-
-        /// <summary>
-        /// Gets or sets the culture used for rendering. 
-        /// </summary>
-        /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; }
-
-        /// <summary>
-        /// Renders the specified log event context item and appends it to the specified <see cref="StringBuilder" />.
+        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            
-
-            var context = HttpDiagnosticsContext.Current;
-
-            if (context.Contains(Variable))
+            if (this.Variable == null)
             {
-                builder.Append(context[Variable].ToStringWithOptionalFormat(Format, Culture));
+                return;
             }
+
+            HttpContext context = HttpContext.Current;
+            if (context == null)
+            {
+                return;
+            }
+
+            if (context.Application == null)
+            {
+                return;
+            }
+
+            builder.Append(Convert.ToString(context.Application[this.Variable], CultureInfo.InvariantCulture));
         }
     }
 }
