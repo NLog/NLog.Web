@@ -34,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-http-context")]
-    public class ApNetHttpDiagnosticsContextLayoutRenderer : LayoutRenderer
+    public class AspNetHttpDiagnosticsContextLayoutRenderer : LayoutRenderer
     {
         /// <summary>
         /// Gets or sets the variable name.
