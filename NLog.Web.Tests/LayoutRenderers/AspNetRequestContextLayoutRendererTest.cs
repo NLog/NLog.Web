@@ -70,7 +70,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="appSettingLayoutRenderer"></param>
         private void ExecTest(string key, object value, object expected, LayoutRenderer appSettingLayoutRenderer)
         {
-            HttpContextItems[key] = value;
+            RequestContext[key] = value;
 
             TestValues(expected, appSettingLayoutRenderer);
         }

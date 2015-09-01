@@ -18,9 +18,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             get { return HttpContext.Current.Session; }
         }
 
-        protected IDictionary HttpContextItems
+        protected RequestContext RequestContext
         {
-            get { return HttpContext.Current.Items; }
+            get { return RequestContext.Current; }
         }
 
         [TestCleanup]
