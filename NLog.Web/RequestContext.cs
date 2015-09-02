@@ -11,11 +11,15 @@ namespace NLog.Web
     /// Keep values for one request.
     /// 
     /// a Per-Request Cache Store
+    /// 
+    /// Use  <see cref="Current"/>
     /// </summary>
     public class RequestContext : IDictionary<String,object>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// Use <see cref="Current"/>
+        /// 
+        /// Init the <see cref="RequestContext"/>
         /// </summary>
         private RequestContext(IDictionary<string, object> store)
         {
@@ -24,42 +28,38 @@ namespace NLog.Web
 
         private readonly IDictionary<string, object> _store;
 
-        public static RequestContext Current = new RequestContext(Context);
+        public static RequestContext Current = new RequestContext(CreateContext());
 
-        private static IDictionary<string, object> Context
+        /// <summary>
+        /// Create the context
+        /// </summary>
+        private static IDictionary<string, object> CreateContext()
         {
-            get
-            {   const string key = "NLogRequestContext";
+            const string key = "NLogRequestContext";
 
-                var httpContext = HttpContext.Current;
-                if (httpContext == null)
+            var httpContext = HttpContext.Current;
+            if (httpContext == null)
+            {
+                InternalLogger.Error("httpContext is NULL");
+                if (LogManager.ThrowExceptions)
                 {
-                    InternalLogger.Error("httpContext is NULL");
-                    if (LogManager.ThrowExceptions)
-                    {
-                        throw new NLogRuntimeException("httpContext is NULL");
-                    }
-                    InternalLogger.Warn("httpContext is NULL - fake context will be used");
-
-
-
-                    return new Dictionary<string, object>();
+                    throw new NLogRuntimeException("httpContext is NULL");
                 }
-                if(httpContext.Items.Contains(key))
-                {
-                    return (IDictionary<string, object>) httpContext.Items[key];
-                }
-                //create and set
-                var dictionary = new Dictionary<string, object>();
-                httpContext.Items[key] = dictionary;
-                return dictionary;
+                InternalLogger.Warn("httpContext is NULL - fake context will be used");
 
+                return new Dictionary<string, object>();
             }
+            if (httpContext.Items.Contains(key))
+            {
+                return (IDictionary<string, object>) httpContext.Items[key];
+            }
+            //create and set
+            var dictionary = new Dictionary<string, object>();
+            httpContext.Items[key] = dictionary;
+            return dictionary;
         }
 
-       
-
-#region delegating
+        #region delegating
 
         /// <summary>
         /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
