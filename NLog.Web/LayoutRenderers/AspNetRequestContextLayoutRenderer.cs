@@ -62,9 +62,10 @@ namespace NLog.Web.LayoutRenderers
         {
             var context = RequestContext.Current;
 
-            if (context.Contains(Variable))
+            object value;
+            if (context.TryGetValue(Variable, out value))
             {
-                builder.Append(context[Variable].ToStringWithOptionalFormat(Format, Culture));
+                builder.Append(value.ToStringWithOptionalFormat(Format, Culture));
             }
         }
     }

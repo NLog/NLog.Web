@@ -20,7 +20,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected RequestContext RequestContext
         {
-            get { return RequestContext.Current; }
+            get { return NLog.Web.RequestContext.Current; }
         }
 
         [TestCleanup]
