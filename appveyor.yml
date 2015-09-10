@@ -11,7 +11,7 @@ nuget:
   project_feed: true
   disable_publish_on_pr: true
 before_build:
-- ps: nuget restore
+- ps: nuget restore -DisableParallelProcessing
 build:
   publish_nuget: true
   publish_nuget_symbols: true
