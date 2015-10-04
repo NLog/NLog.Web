@@ -8,6 +8,7 @@
     <owners>NLog</owners>
     <licenseUrl>https://github.com/NLog/NLog.Web/raw/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/NLog/NLog.Web</projectUrl>
+    <iconUrl>http://nlog-project.org/N.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NLog targets and layout renderers specific for web site</description>
     <releaseNotes>Community contributed custom target for NLog.</releaseNotes>
