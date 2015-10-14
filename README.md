@@ -18,6 +18,7 @@ See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Ta
 * ${aspnet-application}
 * ${aspnet-request}
 * ${aspnet-session}
+* ${aspnet-item}
 * ${aspnet-sessionid}
 * ${aspnet-user-authtype}
 * ${aspnet-user-identity}
