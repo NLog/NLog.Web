@@ -1,7 +1,7 @@
 # NLog.Web
 
 [![Version](https://img.shields.io/nuget/v/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
-[![AppVeyor](https://img.shields.io/appveyor/ci/Xharze/nlog-web/master.svg)](https://ci.appveyor.com/project/Xharze/nlog-web/branch/master)
+[![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 
 This package is an extension to [NLog](https://github.com/NLog/NLog/). 
 
