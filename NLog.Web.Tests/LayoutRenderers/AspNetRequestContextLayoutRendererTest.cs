@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.SessionState;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NLog.LayoutRenderers;
 using NLog.Web.LayoutRenderers;
@@ -12,14 +9,12 @@ using NLog.Web.LayoutRenderers;
 namespace NLog.Web.Tests.LayoutRenderers
 {
     [TestClass()]
-    public class AspNetSessionValueLayoutRendererTests : LayoutRendererTestsBase
+    public class AspNetRequestContextLayoutRendererTest : LayoutRendererTestsBase
     {
-
-
         [TestMethod()]
         public void SimpleTest()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
             {
                 Variable = "a"
             };
@@ -28,29 +23,43 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [TestMethod()]
-        public void SimpleTest2()
+        public void MissingTest()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
             {
-                Variable = "a.b"
+                Variable = "X"
             };
 
-            ExecTest("a.b", "c", "c", appSettingLayoutRenderer);
+            ExecTest("a", "b", "", appSettingLayoutRenderer);
         }
+
 
         [TestMethod()]
-        public void NestedProps()
+        public void FormatTest()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
             {
-                Variable = "a.b",
-                EvaluateAsNestedProperties = true
+                Variable = "a",
+                Format = "yyyy-MM-dd"
             };
 
-            var o = new { b = "c" };
-            //set in "a"
-            ExecTest("a", o, "c", appSettingLayoutRenderer);
+            ExecTest("a", new DateTime(2020,1,30), "2020-01-30", appSettingLayoutRenderer);
         }
+
+
+
+        [TestMethod()]
+        public void CultureTest()
+        {
+            var appSettingLayoutRenderer = new AspNetRequestContextLayoutRenderer()
+            {
+                Variable = "a",
+                Culture = new CultureInfo("NL-nl")
+            };
+
+            ExecTest("a", new DateTime(2020, 1, 30), "30-1-2020 00:00:00", appSettingLayoutRenderer);
+        }
+
 
         /// <summary>
         /// set in Session and test
@@ -61,7 +70,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="appSettingLayoutRenderer"></param>
         private void ExecTest(string key, object value, object expected, LayoutRenderer appSettingLayoutRenderer)
         {
-            Session[key] = value;
+            RequestContext[key] = value;
 
             TestValues(expected, appSettingLayoutRenderer);
         }
