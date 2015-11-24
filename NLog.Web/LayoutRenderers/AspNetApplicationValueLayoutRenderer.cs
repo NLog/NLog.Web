@@ -67,7 +67,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            builder.Append(Convert.ToString(context.Application[this.Variable], CultureInfo.InvariantCulture));
+            builder.Append(Convert.ToString(context.Application[this.Variable], CultureInfo.CurrentUICulture));
         }
     }
 }

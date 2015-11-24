@@ -76,7 +76,7 @@ namespace NLog.Web.LayoutRenderers
             }
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 
-            builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
+            builder.Append(Convert.ToString(value, CultureInfo.CurrentUICulture));
         }
     }
 }
