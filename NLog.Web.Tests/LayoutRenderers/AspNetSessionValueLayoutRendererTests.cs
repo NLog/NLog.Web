@@ -18,7 +18,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [TestCleanup]
         public void CleanUp()
         {
-        
+
             Session.Clear();
         }
 
@@ -64,7 +64,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 EvaluateAsNestedProperties = true
             };
 
-            var o = new {b = "c"};
+            var o = new { b = "c" };
             //set in "a"
             ExecTest("a", o, "c", appSettingLayoutRenderer);
         }
@@ -170,9 +170,9 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             Layout layout = "${aspnet-session:a.b:culture=en-GB:evaluateAsNestedProperties=true}";
 
-            var o = new { b = new DateTime(2015,11,24) };
+            var o = new { b = new DateTime(2015, 11, 24, 2, 30, 23) };
             //set in "a"
-            ExecTest("a", o, "    c", layout);
+            ExecTest("a", o, "11/24/2015 2:30:23 AM", layout);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                                         null)
                                 .Invoke(new object[] { sessionContainer });
 
-           HttpContext.Current = httpContext;
+            HttpContext.Current = httpContext;
 
         }
     }
