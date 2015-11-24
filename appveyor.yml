@@ -1,4 +1,5 @@
 version: 4.0.0.{build}
+clone_folder: c:\projects\nlogweb
 configuration: Release
 platform: Any CPU
 assembly_info:
@@ -9,11 +10,19 @@ assembly_info:
   assembly_informational_version: '4.0'
 nuget:
   project_feed: true
-  disable_publish_on_pr: true
 before_build:
-- ps: nuget restore -DisableParallelProcessing
+  - ps: nuget restore -DisableParallelProcessing
+matrix:
+  fast_finish: true
 build:
   publish_nuget: true
   publish_nuget_symbols: true
-  verbosity: normal
+  verbosity: quiet
 deploy: off
+after_test:
+  - nuget.exe install OpenCover -ExcludeVersion
+  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:coverage.xml
+  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - pip install codecov
+  - codecov -f "coverage.xml"
+ 
