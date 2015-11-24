@@ -69,22 +69,23 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            if (context.Request == null)
+            var httpRequest = context.Request;
+            if (httpRequest == null)
             {
                 return;
             }
 
             if (this.QueryString != null)
             {
-                builder.Append(context.Request.QueryString[this.QueryString]);
+                builder.Append(httpRequest.QueryString[this.QueryString]);
             }
             else if (this.Form != null)
             {
-                builder.Append(context.Request.Form[this.Form]);
+                builder.Append(httpRequest.Form[this.Form]);
             }
             else if (this.Cookie != null)
             {
-                HttpCookie cookie = context.Request.Cookies[this.Cookie];
+                HttpCookie cookie = httpRequest.Cookies[this.Cookie];
 
                 if (cookie != null)
                 {
@@ -93,11 +94,11 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.ServerVariable != null)
             {
-                builder.Append(context.Request.ServerVariables[this.ServerVariable]);
+                builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
             }
             else if (this.Item != null)
             {
-                builder.Append(context.Request[this.Item]);
+                builder.Append(httpRequest[this.Item]);
             }
         }
     }
