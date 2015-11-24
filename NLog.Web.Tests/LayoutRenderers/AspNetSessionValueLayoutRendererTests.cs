@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Web;
 using System.Web.SessionState;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
 
 namespace NLog.Web.Tests.LayoutRenderers
@@ -151,6 +153,28 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
+
+        [TestMethod()]
+        public void SessionWithPadding()
+        {
+            Layout layout = "${aspnet-session:a.b:padding=5:evaluateAsNestedProperties=true}";
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "    c", layout);
+        }
+
+
+        [TestMethod()]
+        public void SessionWithCulture()
+        {
+            Layout layout = "${aspnet-session:a.b:culture=en-GB:evaluateAsNestedProperties=true}";
+
+            var o = new { b = new DateTime(2015,11,24) };
+            //set in "a"
+            ExecTest("a", o, "    c", layout);
+        }
+
         /// <summary>
         /// set in Session and test
         /// </summary>
@@ -158,10 +182,26 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="value">set this value</param>
         /// <param name="expected">expected</param>
         /// <param name="appSettingLayoutRenderer"></param>
-        private void ExecTest(string key, object value, object expected, AspNetSessionValueLayoutRenderer appSettingLayoutRenderer)
+        ///  <remarks>IRenderable is internal</remarks>
+        private void ExecTest(string key, object value, object expected, Layout appSettingLayoutRenderer)
         {
+            Session[key] = value;
 
+            var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
 
+            Assert.AreEqual(expected, rendered);
+        }
+
+        /// <summary>
+        /// set in Session and test
+        /// </summary>
+        /// <param name="key">set with this key</param>
+        /// <param name="value">set this value</param>
+        /// <param name="expected">expected</param>
+        /// <param name="appSettingLayoutRenderer"></param>
+        /// <remarks>IRenderable is internal</remarks>
+        private void ExecTest(string key, object value, object expected, LayoutRenderer appSettingLayoutRenderer)
+        {
             Session[key] = value;
 
             var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
