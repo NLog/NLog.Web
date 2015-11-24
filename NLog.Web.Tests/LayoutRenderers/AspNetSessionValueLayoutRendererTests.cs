@@ -67,6 +67,90 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "c", appSettingLayoutRenderer);
         }
 
+        [TestMethod()]
+        public void NestedProps2()
+        {
+            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            {
+                Variable = "a.b.c",
+                EvaluateAsNestedProperties = true
+            };
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "", appSettingLayoutRenderer);
+        }
+
+        [TestMethod()]
+        public void NestedProps3()
+        {
+            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            {
+                Variable = "a.b..c",
+                EvaluateAsNestedProperties = true
+            };
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "", appSettingLayoutRenderer);
+        }
+
+        [TestMethod()]
+        public void EmptyPath()
+        {
+            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            {
+                Variable = "",
+                EvaluateAsNestedProperties = true
+            };
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "", appSettingLayoutRenderer);
+        }
+
+        [TestMethod()]
+        public void EmptyVarname()
+        {
+            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            {
+                Variable = "",
+                EvaluateAsNestedProperties = false
+            };
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "", appSettingLayoutRenderer);
+        }
+
+        [TestMethod()]
+        public void NullPath()
+        {
+            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            {
+                Variable = null,
+                EvaluateAsNestedProperties = true
+            };
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "", appSettingLayoutRenderer);
+        }
+
+        [TestMethod()]
+        public void NullVarname()
+        {
+            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            {
+                Variable = null,
+                EvaluateAsNestedProperties = false
+            };
+
+            var o = new { b = "c" };
+            //set in "a"
+            ExecTest("a", o, "", appSettingLayoutRenderer);
+        }
+
         /// <summary>
         /// set in Session and test
         /// </summary>
