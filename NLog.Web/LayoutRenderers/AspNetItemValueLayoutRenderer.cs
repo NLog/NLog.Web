@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -68,23 +69,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            object value;
-            if (EvaluateAsNestedProperties)
-            {
-                var path = Variable.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-
-                value = context.Items[path[0]];
-
-                foreach (var property in path.Skip(1))
-                {
-                    var propertyInfo = value.GetType().GetProperty(property);
-                    value = propertyInfo.GetValue(value, null);
-                }
-            }
-            else
-            {
-                value = context.Items[Variable];
-            }
+            var value = PropertyReader.GetValue(Variable, k => context.Items[k], EvaluateAsNestedProperties);
 
             builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
         }

@@ -3,8 +3,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.SessionState;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -72,25 +74,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-
-
-            object value;
-            if (EvaluateAsNestedProperties)
-            {
-                var path = Variable.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-
-                value = context.Session[path[0]];
-
-                foreach (var property in path.Skip(1))
-                {
-                    var propertyInfo = value.GetType().GetProperty(property);
-                    value = propertyInfo.GetValue(value, null);
-                } 
-            }
-            else
-            {
-                value = context.Session[Variable];
-            }
+            var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 
             builder.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
         }

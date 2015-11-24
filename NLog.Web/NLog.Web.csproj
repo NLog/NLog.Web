@@ -61,6 +61,7 @@
     <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
+    <Compile Include="Internal\PropertyReader.cs" />
     <Compile Include="NLogHttpModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Targets\AspNetTrace.cs" />
