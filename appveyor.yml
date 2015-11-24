@@ -1,4 +1,4 @@
-version: 4.0.0.{build}
+version: 4.1.0.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
 platform: Any CPU
@@ -7,7 +7,7 @@ assembly_info:
   file: '**\AssemblyInfo.*'
   assembly_version: '4.0.0'
   assembly_file_version: '{version}'
-  assembly_informational_version: '4.0'
+  assembly_informational_version: '4.1'
 nuget:
   project_feed: true
 before_build:
