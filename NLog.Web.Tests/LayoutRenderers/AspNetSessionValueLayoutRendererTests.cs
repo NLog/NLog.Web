@@ -5,27 +5,31 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.SessionState;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
+using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    [TestClass()]
-    public class AspNetSessionValueLayoutRendererTests
+    public class AspNetSessionValueLayoutRendererTests : IDisposable
     {
-        [TestCleanup]
+
+
+        public AspNetSessionValueLayoutRendererTests()
+        {
+            SetUp();
+        }
+
+        public void SetUp()
+        {
+            SetupFakeSession();
+        }
+
         public void CleanUp()
         {
 
             Session.Clear();
-        }
-
-        [TestInitialize]
-        public void SetUp()
-        {
-            SetupFakeSession();
         }
 
         private HttpSessionState Session
@@ -33,7 +37,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             get { return HttpContext.Current.Session; }
         }
 
-        [TestMethod()]
+        [Fact]
         public void SimpleTest()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -44,7 +48,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", "b", "b", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void SimpleTest2()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -55,7 +59,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a.b", "c", "c", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void NestedProps()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -69,7 +73,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "c", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void NestedProps2()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -83,7 +87,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void NestedProps3()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -97,7 +101,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void EmptyPath()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -111,7 +115,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void EmptyVarname()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -125,7 +129,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void NullPath()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -139,7 +143,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
-        [TestMethod()]
+        [Fact]
         public void NullVarname()
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
@@ -154,7 +158,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
 
-        [TestMethod()]
+        [Fact]
         public void SessionWithPadding()
         {
             Layout layout = "${aspnet-session:a.b:padding=5:evaluateAsNestedProperties=true}";
@@ -165,7 +169,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
 
-        [TestMethod()]
+        [Fact]
         public void SessionWithCulture()
         {
             Layout layout = "${aspnet-session:a.b:culture=en-GB:evaluateAsNestedProperties=true}";
@@ -189,7 +193,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.AreEqual(expected, rendered);
+            Assert.Equal(expected, rendered);
         }
 
         /// <summary>
@@ -206,7 +210,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.AreEqual(expected, rendered);
+            Assert.Equal(expected, rendered);
         }
 
         /// <summary>
@@ -233,6 +237,14 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             HttpContext.Current = httpContext;
 
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            CleanUp();
         }
     }
 }
