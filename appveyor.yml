@@ -11,7 +11,7 @@ assembly_info:
 nuget:
   project_feed: true
 before_build:
-  - ps: nuget restore -DisableParallelProcessing
+  nuget restore -DisableParallelProcessing
 matrix:
   fast_finish: true
 build:
@@ -19,7 +19,7 @@ build:
   publish_nuget_symbols: true
   verbosity: quiet
 deploy: off
-after_test:
+test_script:
   - nuget.exe install OpenCover -ExcludeVersion
   - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:coverage.xml
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
