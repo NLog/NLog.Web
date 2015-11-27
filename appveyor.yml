@@ -11,7 +11,7 @@ assembly_info:
 nuget:
   project_feed: true
 before_build:
-  nuget restore -DisableParallelProcessing
+  - nuget restore -DisableParallelProcessing
 matrix:
   fast_finish: true
 build:
