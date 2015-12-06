@@ -11,8 +11,8 @@
     <iconUrl>http://nlog-project.org/N.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NLog targets and layout renderers specific for web site</description>
-    <releaseNotes>Community contributed custom target for NLog.</releaseNotes>
+    <releaseNotes></releaseNotes>
     <copyright>Copyright 2014-2015</copyright>
-    <tags>nlog target layoutrenderer web</tags>
+    <tags>nlog target layoutrenderer web asp.net log</tags>
   </metadata>
 </package>
