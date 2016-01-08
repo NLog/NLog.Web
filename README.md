@@ -15,14 +15,16 @@ targets and layout-renderes specific to ASP.Net and IIS.
 See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Targets)
 
 ###Layout renderers
-* ${aspnet-application}
-* ${aspnet-request}
-* ${aspnet-session}
-* ${aspnet-item}
-* ${aspnet-sessionid}
-* ${aspnet-user-authtype}
-* ${aspnet-user-identity}
-* ${iis-site-name}
+
+* [${aspnet-application}](https://github.com/NLog/NLog/wiki/AspNetApplication-Layout-Renderer) - ASP.NET Application variable.
+* [${aspnet-item}](https://github.com/NLog/NLog/wiki/AspNetItem-layout-renderer) - ASP.NET `HttpContext` item variable.
+* [${aspnet-request}](https://github.com/NLog/NLog/wiki/AspNetRequest-Layout-Renderer) - ASP.NET Request variable.
+* [${aspnet-session}](https://github.com/NLog/NLog/wiki/AspNetSession-Layout-Renderer) - ASP.NET Session variable.
+* [${aspnet-sessionid}](https://github.com/NLog/NLog/wiki/AspNetSessionId-Layout-Renderer) - ASP.NET Session ID.
+* [${aspnet-user-authtype}](https://github.com/NLog/NLog/wiki/AspNetUserAuthType-Layout-Renderer) - ASP.NET User variable.
+* [${aspnet-user-identity}](https://github.com/NLog/NLog/wiki/AspNetUserIdentity-Layout-Renderer) - ASP.NET User variable.
+* [${iis-site-name}](https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer) - IIS site name.
+
 
 See [Layout renderers documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Layout-Renderers)
 
