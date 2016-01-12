@@ -47,14 +47,18 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultHttpContextAccessor.cs" />
+    <Compile Include="IHttpContextAccessor.cs" />
     <Compile Include="LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
+    <Compile Include="LayoutRenderers\AspNetLayoutRendererBase.cs" />
     <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
