@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-item")]
-    public class AspNetItemValueLayoutRenderer : LayoutRenderer
+    public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the item variable name.
@@ -56,18 +56,14 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             if (Variable == null)
             {
                 return;
             }
 
-            HttpContext context = HttpContext.Current;
-            if (context == null)
-            {
-                return;
-            }
+            HttpContextBase context = HttpContextAccessor.HttpContext;
 
             var value = PropertyReader.GetValue(Variable, k => context.Items[k], EvaluateAsNestedProperties);
 

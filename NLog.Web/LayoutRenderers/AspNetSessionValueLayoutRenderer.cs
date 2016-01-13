@@ -37,7 +37,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-session")]
-    public class AspNetSessionValueLayoutRenderer : LayoutRenderer
+    public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the session variable name.
@@ -57,18 +57,14 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             if (this.Variable == null)
             {
                 return;
             }
 
-            HttpContext context = HttpContext.Current;
-            if (context == null)
-            {
-                return;
-            }
+            HttpContextBase context = HttpContextAccessor.HttpContext;
 
             if (context.Session == null)
             {
