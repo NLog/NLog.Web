@@ -10,9 +10,9 @@
     <projectUrl>https://github.com/NLog/NLog.Web</projectUrl>
     <iconUrl>http://nlog-project.org/N.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>NLog targets and layout renderers specific for web site</description>
+    <description>Extend NLog with targets and layout renderers for websites and webapplications. </description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2014-2015</copyright>
+    <copyright>Copyright 2014-2016</copyright>
     <tags>nlog target layoutrenderer web asp.net log</tags>
   </metadata>
 </package>
