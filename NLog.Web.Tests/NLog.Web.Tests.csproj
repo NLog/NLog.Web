@@ -43,6 +43,10 @@
       <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.9.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -73,7 +77,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DefaultHttpContextAccessorTests.cs" />
+    <Compile Include="FakeHttpContextAccessor.cs" />
+    <Compile Include="LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
