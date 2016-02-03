@@ -29,7 +29,9 @@ See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Ta
 See [Layout renderers documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Layout-Renderers)
 
 ##Configuration
-Be sure you register NLogHttpModule in web.config
+For the targets and layout renderers, no additional configuration is needed.
+
+The `NLogHttpModule` needs a registration in the web.config:
 ```xml
 <system.webServer> 
 	<modules runAllManagedModulesForAllRequests="true"> 
