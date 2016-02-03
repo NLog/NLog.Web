@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.SessionState;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
@@ -23,6 +24,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         public void SetUp()
         {
+            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("aspnet-session", typeof(AspNetSessionIDLayoutRenderer));
             SetupFakeSession();
         }
 
