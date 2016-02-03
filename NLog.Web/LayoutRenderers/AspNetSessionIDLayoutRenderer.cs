@@ -8,20 +8,16 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Session ID.
     /// </summary>
     [LayoutRenderer("aspnet-sessionid")]
-    public class AspNetSessionIDLayoutRenderer : LayoutRenderer
+    public class AspNetSessionIDLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            HttpContext context = HttpContext.Current;
-            if (context == null)
-            {
-                return;
-            }
+            HttpContextBase context = HttpContextAccessor.HttpContext;
 
             if (context.Session == null)
             {

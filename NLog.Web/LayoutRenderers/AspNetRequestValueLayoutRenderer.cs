@@ -23,7 +23,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request")]
-    public class AspNetRequestValueLayoutRenderer : LayoutRenderer
+    public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the item name. The QueryString, Form, Cookies, or ServerVariables collection variables having the specified name are rendered.
@@ -61,14 +61,9 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            HttpContext context = HttpContext.Current;
-            if (context == null)
-            {
-                return;
-            }
-
+            HttpContextBase context = HttpContextAccessor.HttpContext;
             var httpRequest = context.Request;
             if (httpRequest == null)
             {
