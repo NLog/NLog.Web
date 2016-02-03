@@ -24,7 +24,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         public void SetUp()
         {
-            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("aspnet-session", typeof(AspNetSessionIDLayoutRenderer));
+            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("aspnet-session", typeof(AspNetSessionValueLayoutRenderer));
             SetupFakeSession();
         }
 
