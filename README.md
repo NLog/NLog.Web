@@ -28,8 +28,15 @@ See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Ta
 
 See [Layout renderers documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Layout-Renderers)
 
-##How to use
-When installing with Nuget, no additional configuration is needed.
+##Configuration
+Be sure you register NLogHttpModule in web.config
+```xml
+<system.webServer> 
+	<modules runAllManagedModulesForAllRequests="true"> 
+		<add name="NLog" type="NLog.Web.NLogHttpModule, NLog.Web" />
+	</modules>
+</system.webServer>
+```
 
 ##License
 BSD
