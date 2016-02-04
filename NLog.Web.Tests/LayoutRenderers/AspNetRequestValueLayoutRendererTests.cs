@@ -112,6 +112,53 @@ namespace NLog.Web.Tests.LayoutRenderers
             }
         }
 
+        public class HeaderTests
+        {
+            [Fact]
+            public void NullKeyRendersEmptyString()
+            {
+                var httpContext = Substitute.For<HttpContextBase>();
+
+                var renderer = new AspNetRequestValueLayoutRenderer();
+                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+                renderer.Header = null;
+
+                var result = renderer.Render(new LogEventInfo());
+
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public void KeyNotFoundRendersEmptyString()
+            {
+                var httpContext = Substitute.For<HttpContextBase>();
+
+                var renderer = new AspNetRequestValueLayoutRenderer();
+                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+                renderer.Header = "key";
+
+                var result = renderer.Render(new LogEventInfo());
+
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public void KeyFoundRendersValue()
+            {
+                var expectedResult = "value";
+                var httpContext = Substitute.For<HttpContextBase>();
+                httpContext.Request.Headers.Returns(new NameValueCollection { { "key", expectedResult } });
+
+                var renderer = new AspNetRequestValueLayoutRenderer();
+                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+                renderer.Header = "key";
+
+                var result = renderer.Render(new LogEventInfo());
+
+                Assert.Equal(expectedResult, result);
+            }
+        }
+
         public class FormTests
         {
             [Fact]
