@@ -19,6 +19,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request:querystring=v}
     /// ${aspnet-request:form=v}
     /// ${aspnet-request:cookie=v}
+    /// ${aspnet-request:header=h}
     /// ${aspnet-request:serverVariable=v}
     /// </code>
     /// </example>
@@ -57,6 +58,12 @@ namespace NLog.Web.LayoutRenderers
         public string ServerVariable { get; set; }
 
         /// <summary>
+        /// Gets or sets the Headers item to be rendered.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Header { get; set; }
+
+        /// <summary>
         /// Renders the specified ASP.NET Request variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
@@ -90,6 +97,15 @@ namespace NLog.Web.LayoutRenderers
             else if (this.ServerVariable != null)
             {
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
+            }
+            else if (this.Header != null)
+            {
+                string header = httpRequest.Headers[this.Header];
+
+                if (header != null)
+                {
+                    builder.Append(header);
+                }
             }
             else if (this.Item != null)
             {

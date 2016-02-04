@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.SessionState;
@@ -12,10 +9,8 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionValueLayoutRendererTests : IDisposable
+    public class AspNetSessionValueLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-
-
         public AspNetSessionValueLayoutRendererTests()
         {
             SetUp();
@@ -26,9 +21,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             SetupFakeSession();
         }
 
-        public void CleanUp()
+        protected override void CleanUp()
         {
-
             Session.Clear();
         }
 
@@ -216,35 +210,19 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <summary>
         /// Create Fake Session http://stackoverflow.com/a/10126711/201303
         /// </summary>
-        public static void SetupFakeSession()
+        public void SetupFakeSession()
         {
-            var httpRequest = new HttpRequest("", "http://stackoverflow/", "");
-            var stringWriter = new StringWriter();
-            var httpResponse = new HttpResponse(stringWriter);
-            var httpContext = new HttpContext(httpRequest, httpResponse);
-
             var sessionContainer = new HttpSessionStateContainer("id", new SessionStateItemCollection(),
                                                     new HttpStaticObjectsCollection(), 10, true,
                                                     HttpCookieMode.AutoDetect,
                                                     SessionStateMode.InProc, false);
 
-            httpContext.Items["AspSession"] = typeof(HttpSessionState).GetConstructor(
+            HttpContext.Items["AspSession"] = typeof(HttpSessionState).GetConstructor(
                                         BindingFlags.NonPublic | BindingFlags.Instance,
                                         null, CallingConventions.Standard,
                                         new[] { typeof(HttpSessionStateContainer) },
                                         null)
                                 .Invoke(new object[] { sessionContainer });
-
-            HttpContext.Current = httpContext;
-
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            CleanUp();
         }
     }
 }

@@ -84,6 +84,7 @@
     <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
     <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
     <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
+    <Compile Include="LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
     <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
