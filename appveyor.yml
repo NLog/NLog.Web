@@ -14,6 +14,11 @@ before_build:
   - nuget restore -DisableParallelProcessing
 matrix:
   fast_finish: true
+before_build:
+- cmd: >-
+    dnvm install latest
+    
+    dnu restore --quiet  
 build:
   publish_nuget: true
   publish_nuget_symbols: true
