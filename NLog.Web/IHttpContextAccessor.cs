@@ -1,8 +1,11 @@
-﻿using System;
+﻿#if NET451
+
+using System;
 using System.Web;
 
 namespace NLog.Web
 {
+ 
     /// <summary>
     /// Provides access to the HttpContext
     /// </summary>
@@ -14,3 +17,4 @@ namespace NLog.Web
         HttpContextBase HttpContext { get; }
     }
 }
+#endif

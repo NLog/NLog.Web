@@ -1,5 +1,10 @@
 using System.Text;
+#if NET451
 using System.Web;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -10,6 +15,14 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-user-authtype")]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {
+#if DOTNET5_4
+        /// <summary>
+        /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="IHttpContextAccessor"/>.
+        /// </summary>
+        public AspNetUserAuthTypeLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
+        {
+        }
+#endif
         /// <summary>
         /// Renders the specified ASP.NET User.Identity.AuthenticationType variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -17,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            HttpContextBase context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
 
             if (context.User == null)
             {

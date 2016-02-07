@@ -2,8 +2,11 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+#if NET451
 using System.Web;
-using System.Web.SessionState;
+#else
+using Microsoft.AspNet.Http;
+#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
@@ -39,6 +42,14 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
+#if DOTNET5_4
+        /// <summary>
+        /// Initializes the <see cref="AspNetSessionValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
+        /// </summary>
+        public AspNetSessionValueLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
+        {
+        }
+#endif
         /// <summary>
         /// Gets or sets the session variable name.
         /// </summary>
@@ -64,13 +75,17 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            HttpContextBase context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
 
             if (context.Session == null)
             {
                 return;
             }
+#if NET451
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
+#else
+            var value = PropertyReader.GetValue(Variable, k => context.Session.GetString(k), EvaluateAsNestedProperties);
+#endif
 
             builder.Append(Convert.ToString(value, CultureInfo.CurrentUICulture));
         }

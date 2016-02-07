@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace NLog.Web.Internal
 {
@@ -24,7 +25,7 @@ namespace NLog.Web.Internal
 
                 foreach (var property in path.Skip(1))
                 {
-                    var propertyInfo = value.GetType().GetProperty(property);
+                    var propertyInfo = value.GetType().GetTypeInfo().GetDeclaredProperty(property);
                     value = propertyInfo.GetValue(value, null);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET451
+using System;
 using System.ComponentModel;
 using System.Web;
 using NLog.Common;
@@ -208,3 +209,4 @@ namespace NLog.Web.Targets.Wrappers
         }
     }
 }
+#endif

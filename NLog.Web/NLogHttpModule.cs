@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET451
+using System;
 using System.Web;
 
 namespace NLog.Web
@@ -54,3 +55,4 @@ namespace NLog.Web
         }
     }
 }
+#endif

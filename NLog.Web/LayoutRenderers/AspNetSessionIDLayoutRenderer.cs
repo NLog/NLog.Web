@@ -1,7 +1,13 @@
 using System.Text;
+#if NET451
 using System.Web;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 using NLog.LayoutRenderers;
 
+#if NET451
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -10,6 +16,14 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-sessionid")]
     public class AspNetSessionIDLayoutRenderer : AspNetLayoutRendererBase
     {
+#if DOTNET5_4
+        /// <summary>
+        /// Initializes the <see cref="AspNetSessionIDLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
+        /// </summary>
+        public AspNetSessionIDLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
+        {
+        }
+#endif
         /// <summary>
         /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -17,7 +31,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            HttpContextBase context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
 
             if (context.Session == null)
             {
@@ -28,3 +42,4 @@ namespace NLog.Web.LayoutRenderers
         }
     }
 }
+#endif

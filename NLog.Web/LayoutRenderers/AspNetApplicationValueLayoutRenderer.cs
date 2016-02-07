@@ -1,10 +1,17 @@
 using System;
 using System.Globalization;
 using System.Text;
+#if NET451
 using System.Web;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 
+
+#if NET451
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -36,6 +43,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-application")]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
+
         /// <summary>
         /// Gets or sets the variable name.
         /// </summary>
@@ -56,7 +64,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            HttpContextBase context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
 
             if (context.Application == null)
             {
@@ -65,5 +73,8 @@ namespace NLog.Web.LayoutRenderers
 
             builder.Append(Convert.ToString(context.Application[this.Variable], CultureInfo.CurrentUICulture));
         }
+
+    
     }
 }
+#endif

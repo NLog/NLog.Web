@@ -2,7 +2,12 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+#if NET451
 using System.Web;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
@@ -38,6 +43,16 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-item")]
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
+
+#if DOTNET5_4
+        /// <summary>
+        /// Initializes the <see cref="AspNetItemValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
+        /// </summary>
+        public AspNetItemValueLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
+        {
+        }
+#endif
+
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
@@ -63,7 +78,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            HttpContextBase context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
 
             var value = PropertyReader.GetValue(Variable, k => context.Items[k], EvaluateAsNestedProperties);
 

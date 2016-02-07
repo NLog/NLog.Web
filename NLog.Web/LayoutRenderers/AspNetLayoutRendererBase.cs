@@ -1,5 +1,11 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
+#if NET451
+using System.Web;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -8,14 +14,29 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     public abstract class AspNetLayoutRendererBase : LayoutRenderer
     {
+
+#if DOTNET5_4
         /// <summary>
-        /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="DefaultHttpContextAccessor"/>.
+        /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="IHttpContextAccessor"/>.
+        /// </summary>
+        protected AspNetLayoutRendererBase(IHttpContextAccessor accessor)
+        {
+            HttpContextAccessor = accessor;
+
+        }
+#endif
+#if NET451
+
+        /// <summary>
+        /// Initializes the <see cref="AspNetLayoutRendererBase"/>.
         /// </summary>
         protected AspNetLayoutRendererBase()
         {
-            HttpContextAccessor = new DefaultHttpContextAccessor();
-        }
 
+            HttpContextAccessor = new DefaultHttpContextAccessor();
+
+    }
+#endif
         /// <summary>
         /// Provides access to the current request HttpContext.
         /// </summary>
