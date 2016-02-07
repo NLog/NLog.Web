@@ -24,7 +24,7 @@ build:
 deploy: off
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion
-  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:coverage.xml
+  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\net451\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:coverage.xml
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
   - codecov -f "coverage.xml"
