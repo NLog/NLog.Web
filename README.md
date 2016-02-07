@@ -9,6 +9,9 @@ This package is an extension to [NLog](https://github.com/NLog/NLog/).
 This package contains 
 targets and layout-renderes specific to ASP.Net and IIS. 
 
+###ASP.NET 5
+Note: this package isn't ASP.NET 5 compatible, yet. 
+
 ###Targets
 * AspNetTrace
 * AspNetBufferingWrapper
