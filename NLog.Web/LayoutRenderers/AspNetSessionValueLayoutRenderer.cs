@@ -1,9 +1,7 @@
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Web;
-using System.Web.SessionState;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
