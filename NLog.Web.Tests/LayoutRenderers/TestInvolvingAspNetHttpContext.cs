@@ -3,6 +3,8 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Web;
+using System.Xml;
+using NLog.Config;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -26,6 +28,16 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected virtual void CleanUp()
         {
+        }
+
+        protected XmlLoggingConfiguration CreateConfigurationFromString(string configXml)
+        {
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(configXml);
+            using (var stringReader = new StringReader(doc.DocumentElement.OuterXml))
+            using (XmlReader reader = XmlReader.Create(stringReader))
+                return new XmlLoggingConfiguration(reader, null);
         }
 
         protected HttpContext SetupFakeHttpContext()
@@ -57,7 +69,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             item.Add(headerValue);
             t.InvokeMember("BaseAdd", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null,
                 headers,
-                new object[] {headerName, item});
+                new object[] { headerName, item });
             t.InvokeMember("MakeReadOnly", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance,
                 null,
                 headers, null);
