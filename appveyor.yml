@@ -21,6 +21,11 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: quiet
+
+build_script:
+- dnu build NLog.Web\project.json --configuration release --quiet
+- dnu build NLog.Web.Tests\project.json --configuration release --quiet   
+  
 deploy: off
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion
