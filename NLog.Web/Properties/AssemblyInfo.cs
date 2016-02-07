@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NLog")]
 [assembly: AssemblyProduct("NLog.Web")]
-[assembly: AssemblyCopyright("Copyright © NLog 2015")]
+[assembly: AssemblyCopyright("Copyright © NLog 2015-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
