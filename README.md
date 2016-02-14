@@ -9,8 +9,20 @@ This package is an extension to [NLog](https://github.com/NLog/NLog/).
 This package contains 
 targets and layout-renderes specific to ASP.Net and IIS. 
 
-###ASP.NET 5
-Note: this package isn't ASP.NET 5 compatible, yet. 
+##ASP.NET 5
+There is a special package for ASP.NET 5 / MVC 6. This is needed because `HttpContext.Current` isn't available in ASP.NET 5 and we can't detect if ASP.NET 4 or 5 is used.
+
+The following parts are supported in ASP.NET 5:
+
+* aspnet-item
+* aspnet-request
+* aspnet-session
+* aspnet-user-authtype
+* aspnet-user-identity
+* iis-site-name
+
+##Content
+This package contains one target, one target-wrapper, multiple layout renderers and one httpmodule. 
 
 ###Targets
 * AspNetTrace
