@@ -10,14 +10,28 @@ assembly_info:
   assembly_informational_version: '4.2'
 nuget:
   project_feed: true
-before_build:
-  - nuget restore -DisableParallelProcessing
 matrix:
   fast_finish: true
 build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: quiet
+
+build_script:
+- cmd: >-
+    nuget restore NLog.Web.sln
+
+    msbuild NLog.Web.sln /verbosity:minimal /t:rebuild /p:configuration=release
+
+    dnvm install 1.0.0-rc1-update1
+
+    dnu restore --quiet
+
+    dnu build NLog.Web.ASPNET5/project.json --configuration release --quiet
+
+after_build:
+  - dnu pack NLog.Web.ASPNET5\project.json --configuration release --quiet
+
 deploy: off
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion
@@ -25,4 +39,8 @@ test_script:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
   - codecov -f "coverage.xml"
+  
+artifacts:
+- path: 'NLog*\*.nupkg'
+
  

@@ -1,5 +1,11 @@
 ﻿using System.Text;
+
+#if !DNX
 using System.Web.Hosting;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -11,6 +17,14 @@ namespace NLog.Web.LayoutRenderers
     // ReSharper disable once InconsistentNaming
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
+
+#if DNX
+        private readonly IHostingEnvironment _env;
+        public IISInstanceNameLayoutRenderer(IHostingEnvironment env)
+        {
+            _env = env;
+        }
+#endif
         /// <summary>
         /// Append to target
         /// </summary>
@@ -18,7 +32,13 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
+            
+#if DNX
+            builder.Append(_env.EnvironmentName);
+#else
             builder.Append(HostingEnvironment.SiteName);
+#endif
+
         }
     }
 }

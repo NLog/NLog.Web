@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Web;
 using System.Web.SessionState;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
@@ -11,6 +12,9 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetSessionValueLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
+
+
+
         public AspNetSessionValueLayoutRendererTests()
         {
             SetUp();
@@ -18,6 +22,13 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         public void SetUp()
         {
+            //auto load won't work yet (in DNX), so use <extensions>
+            LogManager.Configuration = CreateConfigurationFromString(@"
+<nlog throwExceptions='true'>
+    <extensions>
+        <add assembly='NLog.Web' />
+    </extensions>
+</nlog>");
             SetupFakeSession();
         }
 

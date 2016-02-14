@@ -1,5 +1,11 @@
+using System;
 using System.Text;
+#if !DNX
 using System.Web;
+#else
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 
@@ -26,6 +32,14 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request")]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
+#if DNX
+        /// <summary>
+        /// Initializes the <see cref="AspNetRequestValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
+        /// </summary>
+        public AspNetRequestValueLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
+        {
+        }
+#endif
         /// <summary>
         /// Gets or sets the item name. The QueryString, Form, Cookies, or ServerVariables collection variables having the specified name are rendered.
         /// </summary>
@@ -70,7 +84,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            HttpContextBase context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
             var httpRequest = context.Request;
             if (httpRequest == null)
             {
@@ -79,7 +93,11 @@ namespace NLog.Web.LayoutRenderers
 
             if (this.QueryString != null)
             {
+#if !DNX
                 builder.Append(httpRequest.QueryString[this.QueryString]);
+#else
+                builder.Append(httpRequest.Query[this.QueryString]);
+#endif
             }
             else if (this.Form != null)
             {
@@ -87,16 +105,27 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Cookie != null)
             {
-                HttpCookie cookie = httpRequest.Cookies[this.Cookie];
+#if !DNX
+                var cookie = httpRequest.Cookies[this.Cookie];
 
                 if (cookie != null)
                 {
                     builder.Append(cookie.Value);
                 }
+#else
+                var cookie = httpRequest.Cookies[this.Cookie];
+                builder.Append(cookie);
+#endif
+
             }
             else if (this.ServerVariable != null)
             {
+#if !DNX
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
+#else
+            
+                throw new NotSupportedException();
+#endif
             }
             else if (this.Header != null)
             {
@@ -109,7 +138,11 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Item != null)
             {
+#if !DNX
                 builder.Append(httpRequest[this.Item]);
+#else
+                builder.Append(httpRequest.HttpContext.Items[this.Item]);
+#endif
             }
         }
     }

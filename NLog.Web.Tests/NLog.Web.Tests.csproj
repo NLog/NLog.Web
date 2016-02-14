@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props')" />
@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -76,16 +77,16 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="DefaultHttpContextAccessorTests.cs" />
-    <Compile Include="FakeHttpContextAccessor.cs" />
-    <Compile Include="LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
-    <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\DefaultHttpContextAccessorTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\FakeHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,7 +96,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.NLog.Web.Tests.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

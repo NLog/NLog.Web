@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿
+#if !DNX
+using System.Web;
 using NLog.Targets;
 
 namespace NLog.Web.Targets
@@ -13,6 +15,19 @@ namespace NLog.Web.Targets
     [Target("AspNetTrace")]
     public class AspNetTraceTarget : TargetWithLayout
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:NLog.Targets.TargetWithLayout"/> class.
+        /// </summary>
+        /// <remarks>
+        /// The default value of the layout is: 
+        /// <code>
+        /// ${longdate}|${level:uppercase=true}|${logger}|${message}
+        /// </code>
+        /// </remarks>
+        public AspNetTraceTarget()
+        {
+        }
+
         /// <summary>
         /// Writes the specified logging event to the ASP.NET Trace facility. 
         /// If the log level is greater than or equal to <see cref="LogLevel.Warn"/> it uses the
@@ -40,3 +55,4 @@ namespace NLog.Web.Targets
         }
     }
 }
+#endif

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace NLog.Web.Internal
 {
@@ -24,7 +25,7 @@ namespace NLog.Web.Internal
 
                 foreach (var property in path.Skip(1))
                 {
-                    var propertyInfo = value.GetType().GetProperty(property);
+                    var propertyInfo = GetPropertyInfo(value, property);
                     value = propertyInfo.GetValue(value, null);
                 }
             }
@@ -33,6 +34,15 @@ namespace NLog.Web.Internal
                 value = getVal(key);
             }
             return value;
+        }
+
+        private static PropertyInfo GetPropertyInfo(object value, string propertyName)
+        {
+#if !DNX
+            return value.GetType().GetProperty(propertyName);
+#else
+            return value.GetType().GetTypeInfo().GetDeclaredProperty(propertyName);
+#endif
         }
     }
 }
