@@ -41,6 +41,6 @@ test_script:
   - codecov -f "coverage.xml"
   
 artifacts:
-- path: 'NLog*\*.nupkg'
+- path: 'NLog*\**\*.nupkg'
 
  
