@@ -23,8 +23,8 @@ build:
   verbosity: quiet
 
 build_script:
-- dnu build NLog.Web\project.json --configuration release --quiet
-- dnu build NLog.Web.Tests\project.json --configuration release --quiet   
+- dnu build NLog.Web.ASPNET5\project.json --configuration release --quiet
+
   
 deploy: off
 test_script:
