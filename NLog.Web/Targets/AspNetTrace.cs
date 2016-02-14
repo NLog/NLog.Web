@@ -1,5 +1,5 @@
 ﻿
-#if NET451
+#if !DNX
 using System.Web;
 using NLog.Targets;
 

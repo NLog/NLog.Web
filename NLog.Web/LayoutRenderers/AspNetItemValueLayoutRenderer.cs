@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -44,7 +44,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
 
-#if DOTNET5_4
+#if DNX
         /// <summary>
         /// Initializes the <see cref="AspNetItemValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
         /// </summary>

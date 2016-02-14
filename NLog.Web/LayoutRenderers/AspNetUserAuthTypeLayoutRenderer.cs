@@ -1,5 +1,5 @@
 using System.Text;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -15,7 +15,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-user-authtype")]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DOTNET5_4
+#if DNX
         /// <summary>
         /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="IHttpContextAccessor"/>.
         /// </summary>

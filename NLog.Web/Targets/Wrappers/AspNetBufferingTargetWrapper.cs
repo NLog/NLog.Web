@@ -1,4 +1,4 @@
-﻿#if NET451
+﻿#if !DNX
 using System;
 using System.ComponentModel;
 using System.Web;

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-#if NET451
+#if !DNX
 using System.Web.Hosting;
 #else
 using Microsoft.AspNet.Hosting;
@@ -18,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
 
-#if DOTNET5_4
+#if DNX
         private readonly IHostingEnvironment _env;
         public IISInstanceNameLayoutRenderer(IHostingEnvironment env)
         {
@@ -33,7 +33,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             
-#if DOTNET5_4
+#if DNX
             builder.Append(_env.EnvironmentName);
 #else
             builder.Append(HostingEnvironment.SiteName);

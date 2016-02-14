@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Http;
@@ -42,7 +42,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DOTNET5_4
+#if DNX
         /// <summary>
         /// Initializes the <see cref="AspNetSessionValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
         /// </summary>
@@ -81,7 +81,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-#if NET451
+#if !DNX
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 #else
             var value = PropertyReader.GetValue(Variable, k => context.Session.GetString(k), EvaluateAsNestedProperties);

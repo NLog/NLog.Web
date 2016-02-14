@@ -1,4 +1,4 @@
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -10,7 +10,7 @@ using Microsoft.AspNet.Http;
 
 namespace NLog.Web
 {
-#if NET451
+#if !DNX
     /// <summary>
     /// Provides the HttpContext associated with the current request.
     /// </summary>

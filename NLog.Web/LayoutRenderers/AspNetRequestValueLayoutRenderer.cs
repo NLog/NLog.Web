@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -32,7 +32,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request")]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DOTNET5_4
+#if DNX
         /// <summary>
         /// Initializes the <see cref="AspNetRequestValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
         /// </summary>
@@ -93,7 +93,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (this.QueryString != null)
             {
-#if NET451
+#if !DNX
                 builder.Append(httpRequest.QueryString[this.QueryString]);
 #else
                 builder.Append(httpRequest.Query[this.QueryString]);
@@ -105,7 +105,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Cookie != null)
             {
-#if NET451
+#if !DNX
                 var cookie = httpRequest.Cookies[this.Cookie];
 
                 if (cookie != null)
@@ -120,7 +120,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.ServerVariable != null)
             {
-#if NET451
+#if !DNX
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
 #else
             
@@ -138,7 +138,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Item != null)
             {
-#if NET451
+#if !DNX
                 builder.Append(httpRequest[this.Item]);
 #else
                 builder.Append(httpRequest.HttpContext.Items[this.Item]);

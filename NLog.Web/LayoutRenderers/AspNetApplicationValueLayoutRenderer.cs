@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using System.Text;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -11,7 +11,7 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 
 
-#if NET451
+#if !DNX
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>

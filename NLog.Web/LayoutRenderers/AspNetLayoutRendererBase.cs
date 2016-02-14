@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -15,7 +15,7 @@ namespace NLog.Web.LayoutRenderers
     public abstract class AspNetLayoutRendererBase : LayoutRenderer
     {
 
-#if DOTNET5_4
+#if DNX
         /// <summary>
         /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="IHttpContextAccessor"/>.
         /// </summary>
@@ -24,8 +24,7 @@ namespace NLog.Web.LayoutRenderers
             HttpContextAccessor = accessor;
 
         }
-#endif
-#if NET451
+#else
 
         /// <summary>
         /// Initializes the <see cref="AspNetLayoutRendererBase"/>.

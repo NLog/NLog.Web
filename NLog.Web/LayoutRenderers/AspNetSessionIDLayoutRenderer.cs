@@ -1,5 +1,5 @@
 using System.Text;
-#if NET451
+#if !DNX
 using System.Web;
 #else
 using Microsoft.AspNet.Hosting;
@@ -7,7 +7,7 @@ using Microsoft.AspNet.Http;
 #endif
 using NLog.LayoutRenderers;
 
-#if NET451
+#if !DNX
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -16,7 +16,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-sessionid")]
     public class AspNetSessionIDLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DOTNET5_4
+#if DNX
         /// <summary>
         /// Initializes the <see cref="AspNetSessionIDLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
         /// </summary>
