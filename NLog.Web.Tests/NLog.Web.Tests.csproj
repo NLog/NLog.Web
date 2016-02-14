@@ -77,26 +77,28 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="DefaultHttpContextAccessorTests.cs" />
-    <Compile Include="FakeHttpContextAccessor.cs" />
-    <Compile Include="LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
-    <Compile Include="LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
-    <Compile Include="LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\DefaultHttpContextAccessorTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\FakeHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NLog.Web.ASPNET5\NLog.Web.csproj">
+    <ProjectReference Include="..\NLog.Web\NLog.Web.csproj">
       <Project>{E30DC886-8431-4CFA-90FA-38D9BE4203A0}</Project>
       <Name>NLog.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.NLog.Web.Tests.config" />
+    <None Include="packages.NLog.Web.Tests.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
