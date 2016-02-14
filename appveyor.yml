@@ -10,11 +10,6 @@ assembly_info:
   assembly_informational_version: '4.2'
 nuget:
   project_feed: true
-before_build:
-- cmd: >-
-    dnvm install latest
-    
-    dnu restore --quiet
 matrix:
   fast_finish: true
 build:
@@ -23,11 +18,17 @@ build:
   verbosity: quiet
 
 build_script:
-- msbuild NLog.Web.sln /verbosity:minimal /t:rebuild /p:configuration=release
-- dnu build NLog.Web.ASPNET5\project.json --configuration release --quiet
+- cmd: >-
+    nuget restore NLog.Web.sln
 
+    msbuild NLog.Web.sln /verbosity:minimal /t:rebuild /p:configuration=release
 
-  
+    dnvm install 1.0.0-rc1-update1
+
+    dnu restore --quiet
+
+    dnu build NLog.Web.ASPNET5/project.json --configuration release --quiet
+
 deploy: off
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion
