@@ -1,4 +1,4 @@
-# NLog.Web
+# NLog.Web (ASP.NET 4 + 5 + CoreCLR)
 
 ASP.NET 4: [![Version](https://img.shields.io/nuget/v/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
 
