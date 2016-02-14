@@ -67,9 +67,9 @@
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Internal\PropertyReader.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\NLogHttpModule.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\Properties\AssemblyInfo.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Targets\AspNetTrace.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.snk" />
