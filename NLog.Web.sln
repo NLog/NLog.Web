@@ -1,14 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52CA242D-DB20-41D9-8B79-A5A965ECA105}"
-	ProjectSection(SolutionItems) = preProject
-		NLog.Web.Tests\global.json = NLog.Web.Tests\global.json
-		NLog.Web\global.json = NLog.Web\global.json
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Web", "NLog.Web\NLog.Web.csproj", "{E30DC886-8431-4CFA-90FA-38D9BE4203A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Web", "NLog.Web.ASPNET5\NLog.Web.csproj", "{E30DC886-8431-4CFA-90FA-38D9BE4203A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Web.Tests", "NLog.Web.Tests\NLog.Web.Tests.csproj", "{E318FB41-9712-44CA-B792-E865EFE1A564}"
 EndProject

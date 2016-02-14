@@ -1,11 +1,21 @@
 {
+
+    "version": "4.3.0",
+    "summary": "NLog - Advanced .NET and Silverlight Logging",
+    "description": "NLog is a logging platform for .NET with rich log routing and management capabilities. It can help you produce and manage high-quality logs for your application regardless of its size or complexity. This package installs NLog.dll with includes core logging functionality. For your main project also need to install 'NLog Configuration' package.",
+    "authors": [ "J. Verdurmen" ],
+    "tags": [ "logging", "log", "session", "NLog", "web", "aspnet", "aspnet5", "dnx" ],
+    "projectUrl": "https://github.com/NLog/NLog.Web",
+    "licenseUrl": "http://raw.github.com/NLog/NLog.Web/master/LICENSE",
+    "requireLicenseAcceptance": false,
+    "iconUrl": "http://nlog-project.org/N.png",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/NLog/NLog.Web"
+    },
+
     "title": "NLog.Web.ASPNET5",
-    "version": "1.0.0-*",
-    "description": "NLog.Web Class Library",
-    "authors": [ "j.verdurmen" ],
-    "tags": [ "" ],
-    "projectUrl": "",
-    "licenseUrl": "",
+    
     "frameworks": {
         "dnxcore50": {
             "compilationOptions": { "define": [ "DOTNET5_4", "DNX" ] },

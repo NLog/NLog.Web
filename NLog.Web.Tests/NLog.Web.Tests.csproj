@@ -90,7 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NLog.Web\NLog.Web.csproj">
+    <ProjectReference Include="..\NLog.Web.ASPNET5\NLog.Web.csproj">
       <Project>{E30DC886-8431-4CFA-90FA-38D9BE4203A0}</Project>
       <Name>NLog.Web</Name>
     </ProjectReference>
