@@ -29,6 +29,9 @@ build_script:
 
     dnu build NLog.Web.ASPNET5/project.json --configuration release --quiet
 
+after_build:
+  - dnu pack NLog.Web.ASPNET5\project.json --quiet
+
 deploy: off
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion
@@ -36,4 +39,8 @@ test_script:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
   - codecov -f "coverage.xml"
+  
+artifacts:
+- path: '**\*.nupkg'
+
  
