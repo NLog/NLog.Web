@@ -45,5 +45,8 @@
             }
         }
 
+    },
+    "compilationOptions": {
+        "keyFile": "NLog.snk"
     }
 }
