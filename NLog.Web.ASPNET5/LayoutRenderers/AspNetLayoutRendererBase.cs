@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using NLog.LayoutRenderers;
-#if !DNX
-using System.Web;
-#else
+#if DNX
+using NLog.Web.Internal;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
+using Microsoft.Extensions.DependencyInjection;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -14,32 +15,41 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     public abstract class AspNetLayoutRendererBase : LayoutRenderer
     {
-
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        protected AspNetLayoutRendererBase(IHttpContextAccessor accessor)
-        {
-            HttpContextAccessor = accessor;
-
-        }
-#else
-
         /// <summary>
         /// Initializes the <see cref="AspNetLayoutRendererBase"/>.
         /// </summary>
         protected AspNetLayoutRendererBase()
         {
-
+#if !DNX
             HttpContextAccessor = new DefaultHttpContextAccessor();
-
-    }
 #endif
+        }
+
+
+#if DNX
+
+        /// <summary>
+        /// Context for DI
+        /// </summary>
+        private IHttpContextAccessor _httpContextAccessor;
+
+        /// <summary>
+        /// Provides access to the current request HttpContext.
+        /// </summary>
+        /// <returns>HttpContextAccessor or <c>null</c></returns>
+        public IHttpContextAccessor HttpContextAccessor
+        {
+            get { return _httpContextAccessor ?? ServiceLocator.ServiceProvider?.GetService<IHttpContextAccessor>(); }
+            set { _httpContextAccessor = value; }
+        }
+
+#else
         /// <summary>
         /// Provides access to the current request HttpContext.
         /// </summary>
         public IHttpContextAccessor HttpContextAccessor { get; set; }
+
+#endif
 
         /// <summary>
         /// Validates that the HttpContext is available and delegates append to subclasses.<see cref="StringBuilder" />.
@@ -48,7 +58,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (HttpContextAccessor.HttpContext == null)
+            if (HttpContextAccessor?.HttpContext == null)
                 return;
 
             DoAppend(builder, logEvent);
@@ -56,6 +66,8 @@ namespace NLog.Web.LayoutRenderers
 
         /// <summary>
         /// Implemented by subclasses to render request information and append it to the specified <see cref="StringBuilder" />.
+        /// 
+        /// Won't be called if <see cref="HttpContextAccessor"/> of <see cref="IHttpContextAccessor.HttpContext"/> is <c>null</c>.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>

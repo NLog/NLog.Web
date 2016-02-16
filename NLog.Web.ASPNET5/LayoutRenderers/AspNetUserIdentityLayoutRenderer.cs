@@ -15,14 +15,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-user-identity")]
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetUserIdentityLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        public AspNetUserIdentityLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-#endif
         /// <summary>
         /// Renders the specified ASP.NET User.Identity.Name variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -31,13 +23,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
-            
-            if (context.User == null)
-            {
-                return;
-            }
 
-            if (context.User.Identity == null)
+            if (context.User?.Identity == null)
             {
                 return;
             }

@@ -32,14 +32,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request")]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetRequestValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        public AspNetRequestValueLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-#endif
         /// <summary>
         /// Gets or sets the item name. The QueryString, Form, Cookies, or ServerVariables collection variables having the specified name are rendered.
         /// </summary>
@@ -84,8 +76,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-            var httpRequest = context.Request;
+            var httpRequest = HttpContextAccessor.HttpContext.Request;
             if (httpRequest == null)
             {
                 return;
@@ -123,7 +114,7 @@ namespace NLog.Web.LayoutRenderers
 #if !DNX
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
 #else
-            
+
                 throw new NotSupportedException();
 #endif
             }

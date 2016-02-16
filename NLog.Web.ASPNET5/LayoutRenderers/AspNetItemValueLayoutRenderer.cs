@@ -44,15 +44,6 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
 
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetItemValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        public AspNetItemValueLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-#endif
-
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
@@ -77,7 +68,6 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-
             var context = HttpContextAccessor.HttpContext;
 
             var value = PropertyReader.GetValue(Variable, k => context.Items[k], EvaluateAsNestedProperties);
