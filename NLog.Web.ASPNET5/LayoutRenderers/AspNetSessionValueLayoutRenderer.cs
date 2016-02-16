@@ -42,14 +42,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetSessionValueLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        public AspNetSessionValueLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-#endif
+
         /// <summary>
         /// Gets or sets the session variable name.
         /// </summary>
@@ -76,7 +69,6 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-
             if (context.Session == null)
             {
                 return;

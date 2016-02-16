@@ -1,17 +1,10 @@
+#if !DNX
+
 using System;
 using System.Globalization;
 using System.Text;
-#if !DNX
-using System.Web;
-#else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
-
-
-#if !DNX
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -63,7 +56,6 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-
             var context = HttpContextAccessor.HttpContext;
 
             if (context.Application == null)
@@ -73,8 +65,6 @@ namespace NLog.Web.LayoutRenderers
 
             builder.Append(Convert.ToString(context.Application[this.Variable], CultureInfo.CurrentUICulture));
         }
-
-    
     }
 }
 #endif

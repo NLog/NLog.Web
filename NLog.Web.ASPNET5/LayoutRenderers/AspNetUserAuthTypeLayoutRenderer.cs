@@ -15,14 +15,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-user-authtype")]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetLayoutRendererBase"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        public AspNetUserAuthTypeLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-#endif
         /// <summary>
         /// Renders the specified ASP.NET User.Identity.AuthenticationType variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -32,17 +24,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var context = HttpContextAccessor.HttpContext;
 
-            if (context.User == null)
-            {
-                return;
-            }
-
-            if (context.User.Identity == null)
-            {
-                return;
-            }
-
-            if (!context.User.Identity.IsAuthenticated)
+            if (context.User?.Identity?.IsAuthenticated == null)
             {
                 return;
             }
