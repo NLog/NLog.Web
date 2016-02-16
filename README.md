@@ -2,7 +2,7 @@
 
 ASP.NET 4: [![Version](https://img.shields.io/nuget/v/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
 
-ASP.NET 5: [![Version](https://img.shields.io/nuget/v/NLog.Web.ASPNET5.svg)](https://www.nuget.org/packages/NLog.Web.ASPNET5) (note: not working yet due to DI issues)
+ASP.NET 5: [![Version](https://img.shields.io/nuget/v/NLog.Web.ASPNET5.svg)](https://www.nuget.org/packages/NLog.Web.ASPNET5) 
 
 [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 [![codecov.io](https://codecov.io/github/NLog/NLog.Web/coverage.svg?branch=master)](https://codecov.io/github/NLog/NLog.Web?branch=master)
@@ -13,8 +13,6 @@ This package contains
 targets and layout-renderes specific to ASP.Net and IIS. 
 
 ##ASP.NET 5
-(note: not working yet due to DI issues)
-
 There is a special package for ASP.NET 5 / MVC 6. This is needed because `HttpContext.Current` isn't available in ASP.NET 5 and we can't detect if ASP.NET 4 or 5 is used.
 
 The following parts are supported in ASP.NET 5:
@@ -25,6 +23,42 @@ The following parts are supported in ASP.NET 5:
 * aspnet-user-authtype
 * aspnet-user-identity
 * iis-site-name
+
+###Usage
+
+In your nlog.config:
+
+```xml
+  <extensions>
+    <!--enable NLog.Web for ASP.NET5-->
+    <add assembly="NLog.Web.ASPNET5"/>
+  </extensions>
+```
+
+In your startup.cs
+
+```c#
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            //add NLog to aspnet5
+            loggerFactory.AddNLog();
+
+            //add NLog.Web (only needed if NLog.Web.ASPNET5 is needed)
+            app.AddNLogWeb();
+
+            //configure nlog.config in your project root
+            env.ConfigureNLog("nlog.config");
+```
+in project.json:
+
+```json
+    "dependencies": {
+         ...
+        "NLog.Extensions.Logging": "1.0.0-rc1-final-2016-02-06",
+        "NLog.Web.ASPNET5": "4.2.1"
+    },
+    ```
 
 ##Content
 This package contains one target, one target-wrapper, multiple layout renderers and one httpmodule. 
