@@ -12,7 +12,8 @@ This package is an extension to [NLog](https://github.com/NLog/NLog/).
 This package contains 
 targets and layout-renderes specific to ASP.Net and IIS. 
 
-##ASP.NET 5
+## ASP.NET 5
+
 There is a special package for ASP.NET 5 / MVC 6. This is needed because `HttpContext.Current` isn't available in ASP.NET 5 and we can't detect if ASP.NET 4 or 5 is used.
 
 The following parts are supported in ASP.NET 5:
@@ -24,7 +25,7 @@ The following parts are supported in ASP.NET 5:
 * aspnet-user-identity
 * iis-site-name
 
-###Usage
+### Usage
 
 In your nlog.config:
 
@@ -50,26 +51,28 @@ In your startup.cs
             //configure nlog.config in your project root
             env.ConfigureNLog("nlog.config");
 ```
+
 in project.json:
 
 ```json
     "dependencies": {
-         ...
         "NLog.Extensions.Logging": "1.0.0-rc1-final-2016-02-06",
         "NLog.Web.ASPNET5": "4.2.1"
     },
-    ```
+```
 
-##Content
+## Content
+
 This package contains one target, one target-wrapper, multiple layout renderers and one httpmodule. 
 
-###Targets
+### Targets
+
 * AspNetTrace
 * AspNetBufferingWrapper
 
 See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Targets)
 
-###Layout renderers
+### Layout renderers
 
 * [${aspnet-application}](https://github.com/NLog/NLog/wiki/AspNetApplication-Layout-Renderer) - ASP.NET Application variable.
 * [${aspnet-item}](https://github.com/NLog/NLog/wiki/AspNetItem-layout-renderer) - ASP.NET `HttpContext` item variable.
@@ -83,7 +86,7 @@ See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Ta
 
 See [Layout renderers documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Layout-Renderers)
 
-##Configuration
+## Configuration
 For the targets and layout renderers, no additional configuration is needed.
 
 The `NLogHttpModule` needs a registration in the web.config:
@@ -95,7 +98,8 @@ The `NLogHttpModule` needs a registration in the web.config:
 </system.webServer>
 ```
 
-##License
+## License
+
 BSD
 
 
