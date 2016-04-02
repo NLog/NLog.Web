@@ -19,11 +19,16 @@ There is a special package for ASP.NET 5 / MVC 6. This is needed because `HttpCo
 The following parts are supported in ASP.NET 5:
 
 * aspnet-item
-* aspnet-request
+* aspnet-request (except ServerVariable)
 * aspnet-session
 * aspnet-user-authtype
 * aspnet-user-identity
 * iis-site-name
+
+Please note:
+
+* [ServerVariables are non-existing in ASP.NET 5. ](http://stackoverflow.com/questions/25849217/vnext-server-variables-missing)
+* [session-id will be added to ASP.NET 5 in RC2](https://github.com/aspnet/Session/pull/97)
 
 ### Usage
 
