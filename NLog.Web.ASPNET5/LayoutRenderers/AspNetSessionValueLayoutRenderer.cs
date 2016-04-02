@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 #if !DNX
 using System.Web;
 #else
@@ -76,10 +77,37 @@ namespace NLog.Web.LayoutRenderers
 #if !DNX
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 #else
-            var value = PropertyReader.GetValue(Variable, k => context.Session.GetString(k), EvaluateAsNestedProperties);
+            if (context.Items == null)
+            {
+                return;
+            }
+
+            //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
+            //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
+            if (context.Items.ContainsKey(NLogRetrievingSessionValue))
+            {
+                //prevent stackoverflow
+                return;
+            }
+
+            context.Items[NLogRetrievingSessionValue] = true;
+            object value;
+            try
+            {
+                value = PropertyReader.GetValue(Variable, k => context.Session.GetString(k), EvaluateAsNestedProperties);
+            }
+            finally
+            {
+                context.Items.Remove(NLogRetrievingSessionValue);
+            }
+
+
+
 #endif
 
             builder.Append(Convert.ToString(value, CultureInfo.CurrentUICulture));
         }
+
+        private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
     }
 }
