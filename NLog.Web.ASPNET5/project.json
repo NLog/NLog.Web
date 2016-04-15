@@ -21,7 +21,7 @@
             "compilationOptions": { "define": [ "DOTNET5_4", "DNX" ] },
             "dependencies": {
                 "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
-                "NLog": "4.4.0-alpha1"
+                "NLog": "4.4.0-beta1"
 
 
             }
@@ -30,7 +30,14 @@
             "compilationOptions": { "define": [ "DOTNET5_4", "DNX451", "DNX" ] },
             "dependencies": {
                 "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
-                "NLog": "4.4.0-alpha1"
+                "NLog": "4.4.0-beta1"
+            }
+        },
+        "dotnet5.4": {
+            "compilationOptions": { "define": [ "DOTNET5_4", "DNX451", "DNX" ] },
+            "dependencies": {
+                "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
+                "NLog": "4.4.0-beta1"
             }
         }
 
