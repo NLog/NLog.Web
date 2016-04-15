@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using NLog.Common;
 #if !DNX
 using System.Web;
 #else
@@ -95,6 +96,12 @@ namespace NLog.Web.LayoutRenderers
             try
             {
                 value = PropertyReader.GetValue(Variable, k => context.Session.GetString(k), EvaluateAsNestedProperties);
+            }
+            catch (Exception ex)
+            {
+                //TODO change this call for NLog 4.3
+                InternalLogger.Warn("Retrieving session value failed. "  + ex);
+                return;
             }
             finally
             {
