@@ -1,6 +1,6 @@
 {
 
-    "version": "4.2.1",
+    "version": "4.2.2",
     "summary": "NLog for ASP.NET 5 websites",
     "description": "Extend NLog with targets and layout renderers for websites and webapplications. Build for ASP.NET5 (aka ASP.NET Core 1.0)",
     "authors": [ "Julian Verdurmen" ],
