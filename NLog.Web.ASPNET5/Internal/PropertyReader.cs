@@ -16,6 +16,11 @@ namespace NLog.Web.Internal
         /// <returns>value</returns>
         public static object GetValue(string key, Func<string, object> getVal, bool evaluateAsNestedProperties)
         {
+            if (key == null)
+            {
+                return null;
+            }
+
             object value;
             if (evaluateAsNestedProperties)
             {
