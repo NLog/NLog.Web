@@ -7,6 +7,7 @@ using NLog.Common;
 #if !DNX
 using System.Web;
 #else
+using Microsoft.AspNet.Http.Features;
 using Microsoft.AspNet.Http;
 #endif
 using NLog.Config;
@@ -83,6 +84,11 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
+            if (context.Features.Get<ISessionFeature>()?.Session == null)
+            {
+                return;
+            }
+
             //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
             //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
             if (context.Items.ContainsKey(NLogRetrievingSessionValue))
@@ -90,7 +96,7 @@ namespace NLog.Web.LayoutRenderers
                 //prevent stackoverflow
                 return;
             }
-
+            
             context.Items[NLogRetrievingSessionValue] = true;
             object value;
             try
