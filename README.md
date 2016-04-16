@@ -61,8 +61,8 @@ in project.json:
 
 ```json
     "dependencies": {
-        "NLog.Extensions.Logging": "1.0.0-rc1-final-2016-02-06",
-        "NLog.Web.ASPNET5": "4.2.1"
+        "NLog.Extensions.Logging": "1.0.0-rc1-final-2016-03-11",
+        "NLog.Web.ASPNET5": "4.2.2"
     },
 ```
 
