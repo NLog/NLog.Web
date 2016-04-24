@@ -80,6 +80,7 @@
     <Compile Include="..\NLog.Web.ASPNET5.Tests\DefaultHttpContextAccessorTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\FakeHttpContextAccessor.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
+	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetCookieLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
