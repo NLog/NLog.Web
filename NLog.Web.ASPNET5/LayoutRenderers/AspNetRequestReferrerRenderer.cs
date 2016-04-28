@@ -38,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest.UrlReferrer != null)
                 builder.Append(httpRequest.UrlReferrer.ToString());
 #else
-            builder.Append(HttpContextAccessor.HttpContext.Request.Headers["Referrer"]);
+            builder.Append(HttpContextAccessor.HttpContext.Request.Headers["Referer"]);
 #endif
 
         }
