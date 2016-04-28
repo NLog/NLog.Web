@@ -88,6 +88,7 @@
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
+	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestReferrerRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

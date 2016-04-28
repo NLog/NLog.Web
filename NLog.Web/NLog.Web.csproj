@@ -65,6 +65,7 @@
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
+	<Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestReferrerRenderer.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Internal\PropertyReader.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\NLogHttpModule.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Targets\AspNetTrace.cs" />
