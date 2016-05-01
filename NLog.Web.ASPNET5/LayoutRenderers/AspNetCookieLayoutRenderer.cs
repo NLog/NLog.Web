@@ -10,25 +10,31 @@ using Microsoft.Extensions.Primitives;
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
 using NLog.Config;
+using NLog.Web.Enums;
 using System;
-
-
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// ASP.NET Request Cookie
     /// </summary>
+    /// <para>Example usage of ${aspnet-request-cookie}:</para>
+    /// <example>
+    /// <code lang="NLog Layout Renderer">
+    /// ${aspnet-request-cookie:OutputFormat=Flat}
+    /// ${aspnet-request-cookie:OutputFormat=Json}
+    /// </code>
+    /// </example>
     [LayoutRenderer("aspnet-request-cookie")]
     public class AspNetCookieLayoutRenderer : AspNetLayoutRendererBase
     {
-        private static string doubleQuotes = "\"";
-        private static string jsonStartBraces = "{";
-        private static string jsonEndBraces = "}";
-        private static string jsonElementSeparator = ",";
+        private const string doubleQuotes = "\"";
+        private const string jsonStartBraces = "{";
+        private const string jsonEndBraces = "}";
+        private const string jsonElementSeparator = ",";
 
-        private static string flatCookiesSeparator = "=";
-        private static string flatItemSeperator = ",";
+        private const string flatCookiesSeparator = "=";
+        private const string flatItemSeperator = ",";
 
 
         /// <summary>
@@ -40,10 +46,10 @@ namespace NLog.Web.LayoutRenderers
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
         /// </summary>
         [DefaultParameter]
-        public string OutputFormat { get; set; } = "FLAT";
+        public AspNetCookieLayoutOutPutFormat OutputFormat { get; set; } = AspNetCookieLayoutOutPutFormat.Flat;
 
         /// <summary>
-        /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
+        /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -62,14 +68,9 @@ namespace NLog.Web.LayoutRenderers
 
                     for (int i = 0; i < items.Length; i++)
                     {
-#if !DNX
                         var cookie = httpRequest.Cookies[items[i]];
                         this.SerializeCookie(cookie, builder, i);
-
-#else
-                        var cookie = httpRequest.Cookies[items[i]];
                         builder.Append(cookie);
-#endif
                     }
                 }
             }
@@ -80,20 +81,20 @@ namespace NLog.Web.LayoutRenderers
         {
             if (cookie != null)
             {
-                if (this.OutputFormat?.ToUpperInvariant() == "JSON")
+                switch (this.OutputFormat)
                 {
-                    if (index > 0)
-                        builder.Append($"{jsonElementSeparator}");
+                    case AspNetCookieLayoutOutPutFormat.Flat:
+                        if (index > 0)
+                            builder.Append($"{jsonElementSeparator}");
 
-                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
+                        builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
+                        break;
+                    case AspNetCookieLayoutOutPutFormat.Json:
+                        if (index > 0)
+                            builder.Append($"{flatItemSeperator}");
 
-                }
-                else
-                {
-                    if (index > 0)
-                        builder.Append($"{flatItemSeperator}");
-
-                    builder.Append($"{cookie.Name}{flatCookiesSeparator}{cookie.Value}");
+                        builder.Append($"{cookie.Name}{flatCookiesSeparator}{cookie.Value}");
+                        break;
                 }
             }
         }
@@ -102,21 +103,20 @@ namespace NLog.Web.LayoutRenderers
 #if DNX
         private void SerializeCookie(StringValues cookie, StringBuilder builder, int index)
         {
-
-            if (this.OutputFormat?.ToUpperInvariant() == "JSON")
+            switch (this.OutputFormat)
             {
-                if (index > 0)
-                    builder.Append($"{jsonElementSeparator}");
+                case AspNetCookieLayoutOutPutFormat.Flat:
+                    if (index > 0)
+                        builder.Append($"{flatItemSeperator}");
 
-                builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie}{doubleQuotes}{jsonEndBraces}");
+                    builder.Append($"{cookie}");
+                    break;
+                case AspNetCookieLayoutOutPutFormat.Json:
+                    if (index > 0)
+                        builder.Append($"{jsonElementSeparator}");
 
-            }
-            else
-            {
-                if (index > 0)
-                    builder.Append($"{flatItemSeperator}");
-
-                builder.Append($"{cookie}");
+                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie}{doubleQuotes}{jsonEndBraces}");
+                    break;
             }
         }
 #endif

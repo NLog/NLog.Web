@@ -17,6 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET User Agent
     /// </summary>
+    /// <para>Example usage of ${aspnet-useragent}:</para>
     /// <example>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-useragent} - Produces - User Agent String from the Request.
@@ -28,8 +29,8 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the ASP.NET User Agent
         /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.Request;
@@ -38,15 +39,15 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
+            string userAgent = string.Empty;
 #if !DNX
-            if(httpRequest.UserAgent != null)
-            {
-                builder.Append(httpRequest.UserAgent);
-            }
+            userAgent = httpRequest.UserAgent;
 
 #else
-            builder.Append(httpRequest.Headers["User-Agent"].ToString());
+            userAgent = httpRequest.Headers["User-Agent"].ToString();
 #endif
+
+            builder.Append(userAgent);
 
         }
     }
