@@ -46,7 +46,7 @@ namespace NLog.Web.LayoutRenderers
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
         /// </summary>
         [DefaultParameter]
-        public AspNetCookieLayoutOutPutFormat OutputFormat { get; set; } = AspNetCookieLayoutOutPutFormat.Flat;
+        public AspNetCookieLayoutOutputFormat OutputFormat { get; set; } = AspNetCookieLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
@@ -83,13 +83,13 @@ namespace NLog.Web.LayoutRenderers
             {
                 switch (this.OutputFormat)
                 {
-                    case AspNetCookieLayoutOutPutFormat.Flat:
+                    case AspNetCookieLayoutOutputFormat.Flat:
                         if (index > 0)
                             builder.Append($"{jsonElementSeparator}");
 
                         builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
                         break;
-                    case AspNetCookieLayoutOutPutFormat.Json:
+                    case AspNetCookieLayoutOutputFormat.Json:
                         if (index > 0)
                             builder.Append($"{flatItemSeperator}");
 
@@ -105,13 +105,13 @@ namespace NLog.Web.LayoutRenderers
         {
             switch (this.OutputFormat)
             {
-                case AspNetCookieLayoutOutPutFormat.Flat:
+                case AspNetCookieLayoutOutputFormat.Flat:
                     if (index > 0)
                         builder.Append($"{flatItemSeperator}");
 
                     builder.Append($"{cookie}");
                     break;
-                case AspNetCookieLayoutOutPutFormat.Json:
+                case AspNetCookieLayoutOutputFormat.Json:
                     if (index > 0)
                         builder.Append($"{jsonElementSeparator}");
 

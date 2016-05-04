@@ -70,7 +70,7 @@
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestUserAgent.cs" />
 	<Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetCookieLayoutRenderer.cs" />
 	<Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5\Enums\AspNetCookieLayoutOutPutFormat.cs" />
+	<Compile Include="..\NLog.Web.ASPNET5\Enums\AspNetCookieLayoutOutputFormat.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Internal\PropertyReader.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\NLogHttpModule.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Targets\AspNetTrace.cs" />
