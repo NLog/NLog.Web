@@ -3,9 +3,9 @@ using System;
 namespace NLog.Web.Enums
 {
     /// <summary>
-    /// To control the Cooked Renderer Output formatting.
+    /// To control the Cookie Renderer Output formatting.
     /// </summary>
-    public enum AspNetCookieLayoutOutPutFormat
+    public enum AspNetCookieLayoutOutputFormat
     {
         /// <summary>
         /// Use this format for rendering the cookie renderer output value as a flat string.
