@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using NLog.Common;
 #if !DNX
 using System.Web;
 #else
@@ -146,8 +147,9 @@ namespace NLog.Web.LayoutRenderers
             {
                 return context.Request;
             }
-            catch (HttpException)
+            catch (HttpException ex)
             {
+                InternalLogger.Debug("Exception thrown when accessing Request: " + ex);
                 return null;
             }
         }
