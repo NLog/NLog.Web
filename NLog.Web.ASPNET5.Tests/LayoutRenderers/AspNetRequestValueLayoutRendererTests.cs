@@ -1,7 +1,11 @@
 ﻿using System.Collections.Specialized;
+using System.IO;
 using System.Web;
+using NLog.Common;
+using NLog.Config;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
@@ -16,6 +20,25 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Empty(result);
+        }
+
+        [Fact]
+        public void NullRequestRendersEmptyStringWithoutThrowingException()
+        {
+            var internalLog = new StringWriter();
+            InternalLogger.LogWriter = internalLog;
+
+            var httpContext = Substitute.For<HttpContextBase>();
+            httpContext.Request.Returns(x => { throw new HttpException(); });
+
+            var renderer = new AspNetRequestValueLayoutRenderer();
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            renderer.Item = "key";
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Empty(result);
+            Assert.Equal(true, string.IsNullOrEmpty(internalLog.ToString()));
         }
 
         public class ItemTests

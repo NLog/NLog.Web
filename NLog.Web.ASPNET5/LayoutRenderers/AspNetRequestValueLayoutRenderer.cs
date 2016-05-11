@@ -76,7 +76,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.Request;
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
             {
                 return;
@@ -134,6 +134,21 @@ namespace NLog.Web.LayoutRenderers
 #else
                 builder.Append(httpRequest.HttpContext.Items[this.Item]);
 #endif
+            }
+        }
+    }
+
+    internal static class RequestAccessor
+    {
+        internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
+        {
+            try
+            {
+                return context.Request;
+            }
+            catch (HttpException)
+            {
+                return null;
             }
         }
     }
