@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using NLog.Common;
 #if !DNX
 using System.Web;
 #else
@@ -76,7 +77,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.Request;
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
             {
                 return;
@@ -137,4 +138,28 @@ namespace NLog.Web.LayoutRenderers
             }
         }
     }
+
+    internal static class RequestAccessor
+    {
+#if !DNX
+        internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
+        {
+            try
+            {
+                return context.Request;
+            }
+            catch (HttpException ex)
+            {
+                InternalLogger.Debug("Exception thrown when accessing Request: " + ex);
+                return null;
+            }
+        }
+#else
+        internal static HttpRequest TryGetRequest(this HttpContext context)
+        {
+            return context.Request;
+        }
+#endif
+    }
+
 }
