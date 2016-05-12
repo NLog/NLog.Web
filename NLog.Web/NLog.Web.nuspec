@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>NLog.Web</id>
+    <version>$version$</version>
+    <title>NLog.Web</title>
+    <authors>NLog</authors>
+    <owners>NLog</owners>
+    <licenseUrl>https://github.com/NLog/NLog.Web/raw/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/NLog/NLog.Web</projectUrl>
+    <iconUrl>http://nlog-project.org/N.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Extend NLog with targets and layout renderers for websites and web applications.
+This package is for ASP.NET 3.5+
+
+For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.ASPNET5</description>
+    <releaseNotes>Community contributed custom target for NLog.</releaseNotes>
+    <copyright>Copyright 2014-2016</copyright>
+    <tags>nlog log target layoutrenderer web asp.net</tags>
+  </metadata>
+</package>
