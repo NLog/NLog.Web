@@ -19,7 +19,7 @@ build:
 
 build_script:
 - cmd: >-
-    call build_aspnet4.bat 4.2.2
+    call build_aspnet4.bat -nuget_version=4.2.2
 
     call build_aspnet5.bat 
 
