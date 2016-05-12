@@ -23,10 +23,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void NullRequestRendersEmptyStringWithoutThrowingException()
+        public void NullRequestRendersEmptyStringWithoutLoggingError()
         {
             var internalLog = new StringWriter();
             InternalLogger.LogWriter = internalLog;
+            InternalLogger.LogLevel = LogLevel.Error;
 
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Request.Returns(x => { throw new HttpException(); });
