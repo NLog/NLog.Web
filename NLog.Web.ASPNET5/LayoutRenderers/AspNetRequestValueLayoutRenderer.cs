@@ -141,6 +141,7 @@ namespace NLog.Web.LayoutRenderers
 
     internal static class RequestAccessor
     {
+#if !DNX
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
         {
             try
@@ -153,5 +154,12 @@ namespace NLog.Web.LayoutRenderers
                 return null;
             }
         }
+#else
+        internal static HttpRequest TryGetRequest(this HttpContext context)
+        {
+            return context.Request;
+        }
+#endif
     }
+
 }
