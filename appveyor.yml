@@ -19,18 +19,9 @@ build:
 
 build_script:
 - cmd: >-
-    nuget restore NLog.Web.sln
+    call build_aspnet4.bat -nuget_version=4.2.1
 
-    msbuild NLog.Web.sln /verbosity:minimal /t:rebuild /p:configuration=release
-
-    dnvm install 1.0.0-rc1-update1
-
-    dnu restore --quiet
-
-    dnu build NLog.Web.ASPNET5/project.json --configuration release --quiet
-
-after_build:
-  - dnu pack NLog.Web.ASPNET5\project.json --configuration release --quiet
+    call build_aspnet5.bat 
 
 deploy: off
 test_script:
@@ -42,5 +33,9 @@ test_script:
   
 artifacts:
 - path: 'NLog*\**\*.nupkg'
+  name: aspnet5
+  
+- path: '*.nupkg'
+  name: aspnet4 
 
  
