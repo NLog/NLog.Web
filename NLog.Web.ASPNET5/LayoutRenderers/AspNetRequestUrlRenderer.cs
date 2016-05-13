@@ -11,6 +11,7 @@ using NLog.LayoutRenderers;
 using System.Collections.Generic;
 using NLog.Config;
 using System;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -49,12 +50,11 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.Request;
+            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
 
             if (httpRequest == null)
-            {
                 return;
-            }
+
             string url = String.Empty;
             string pathAndQuery = String.Empty;
             string port = String.Empty;

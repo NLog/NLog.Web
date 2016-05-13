@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using NLog.Config;
 using NLog.Web.Enums;
 using System;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -38,15 +39,15 @@ namespace NLog.Web.LayoutRenderers
 
 
         /// <summary>
-        /// Comma separated string of name of the cookies to rendered from Request.
+        /// List Cookie Key as String to be rendered from Request.
         /// </summary>
-        public string CookiesNames { get; set; }
+        public List<String> CookiesNames { get; set; }
 
         /// <summary>
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
         /// </summary>
         [DefaultParameter]
-        public AspNetCookieLayoutOutputFormat OutputFormat { get; set; } = AspNetCookieLayoutOutputFormat.Flat;
+        public AspNetLayoutOutputFormat OutputFormat { get; set; } = AspNetLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
@@ -55,45 +56,46 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (this.CookiesNames != null)
+            if (this.CookiesNames?.Count > 0)
             {
-                var items = this.CookiesNames.Split(new String[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
+                var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
 
-                if (items.Length > 0)
+                if (httpRequest?.Cookies?.Count == 0)
                 {
-                    var httpRequest = HttpContextAccessor.HttpContext.Request;
-
-                    if (httpRequest?.Cookies?.Count == 0)
-                        return;
-
-                    for (int i = 0; i < items.Length; i++)
+                    int i = 0;
+                    foreach (var cookieName in this.CookiesNames)
                     {
-                        var cookie = httpRequest.Cookies[items[i]];
-                        this.SerializeCookie(cookie, builder, i);
-                        builder.Append(cookie);
+                        this.SerializeCookie(httpRequest.Cookies[cookieName], builder, i);
+                        i++;
                     }
                 }
             }
         }
 
 #if !DNX
+        /// <summary>
+        /// To Serialize the HttpCookie based on the configured output format.
+        /// </summary>
+        /// <param name="cookie"></param>
+        /// <param name="builder"></param>
+        /// <param name="index"></param>
         private void SerializeCookie(HttpCookie cookie, StringBuilder builder, int index)
         {
             if (cookie != null)
             {
                 switch (this.OutputFormat)
                 {
-                    case AspNetCookieLayoutOutputFormat.Flat:
-                        if (index > 0)
-                            builder.Append($"{jsonElementSeparator}");
-
-                        builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
-                        break;
-                    case AspNetCookieLayoutOutputFormat.Json:
+                    case AspNetLayoutOutputFormat.Flat:
                         if (index > 0)
                             builder.Append($"{flatItemSeperator}");
 
                         builder.Append($"{cookie.Name}{flatCookiesSeparator}{cookie.Value}");
+                        break;
+                    case AspNetLayoutOutputFormat.Json:
+                        if (index > 0)
+                            builder.Append($"{jsonElementSeparator}");
+
+                        builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
                         break;
                 }
             }
@@ -105,13 +107,13 @@ namespace NLog.Web.LayoutRenderers
         {
             switch (this.OutputFormat)
             {
-                case AspNetCookieLayoutOutputFormat.Flat:
+                case AspNetLayoutOutputFormat.Flat:
                     if (index > 0)
                         builder.Append($"{flatItemSeperator}");
 
                     builder.Append($"{cookie}");
                     break;
-                case AspNetCookieLayoutOutputFormat.Json:
+                case AspNetLayoutOutputFormat.Json:
                     if (index > 0)
                         builder.Append($"{jsonElementSeparator}");
 

@@ -5,7 +5,7 @@ namespace NLog.Web.Enums
     /// <summary>
     /// To control the Cookie Renderer Output formatting.
     /// </summary>
-    public enum AspNetCookieLayoutOutputFormat
+    public enum AspNetLayoutOutputFormat
     {
         /// <summary>
         /// Use this format for rendering the cookie renderer output value as a flat string.

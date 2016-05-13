@@ -32,8 +32,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.Cookies.Returns(new HttpCookieCollection { new HttpCookie("key1", "TEST") });
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key";
-            renderer.CookiesNames = "FLAT";
+            renderer.CookiesNames = new List<string> { "key" };
+            renderer.OutputFormat = AspNetLayoutOutputFormat.Flat;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -47,8 +47,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.Cookies.Returns(new HttpCookieCollection { new HttpCookie("key1", "TEST") });
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key";
-            renderer.OutputFormat = AspNetCookieLayoutOutputFormat.Json;
+            renderer.CookiesNames = new List<string> { "key" };
+            renderer.OutputFormat = AspNetLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -68,7 +68,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key";
+            renderer.CookiesNames = new List<string> { "key" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -87,7 +87,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key";
+            renderer.CookiesNames = new List<string> { "key" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -107,8 +107,8 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key";
-            renderer.OutputFormat = AspNetCookieLayoutOutputFormat.Json;
+            renderer.CookiesNames = new List<string> { "key" };
+            renderer.OutputFormat = AspNetLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -133,7 +133,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key, key2";
+            renderer.CookiesNames = new List<string> { "key", "key2" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -158,8 +158,8 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookiesNames = "key, key2";
-            renderer.OutputFormat = AspNetCookieLayoutOutputFormat.Json;
+            renderer.CookiesNames = new List<string> { "key", "key2" };
+            renderer.OutputFormat = AspNetLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
 
