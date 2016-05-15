@@ -58,11 +58,14 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Cookie { get; set; }
 
+#if !DNX
+        //missing in DNX (at least for ASP.NET 5 RC1)
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public string ServerVariable { get; set; }
+#endif
 
         /// <summary>
         /// Gets or sets the Headers item to be rendered.
@@ -110,15 +113,12 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             }
+#if !DNX
             else if (this.ServerVariable != null)
             {
-#if !DNX
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
-#else
-
-                throw new NotSupportedException();
-#endif
             }
+#endif
             else if (this.Header != null)
             {
                 string header = httpRequest.Headers[this.Header];
