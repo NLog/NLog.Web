@@ -29,10 +29,12 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-querystring")]
     public class AspNetQueryStringLayoutRenderer : AspNetLayoutRendererBase
     {
-        private const string jsonStartBraces = "{";
-        private const string jsonEndBraces = "}";
+        private const string jsonElementStartBraces = "{";
+        private const string jsonElementEndBraces = "}";
         private const string doubleQuotes = "\"";
         private const string jsonElementSeparator = ",";
+        private const string jsonArrayStartBraces = "[";
+        private const string jsonArrayEndBraces = "]";
 
         /// <summary>
         /// List Query Strings' Key to be rendered from Request.
@@ -76,6 +78,8 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="queryStrings"></param>
         private void SerializeQueryString(StringBuilder builder, NameValueCollection queryStrings)
         {
+            var includeArrayEndBraces = false;
+
             if (queryStrings?.Count > 0)
             {
                 var i = 0;
@@ -83,24 +87,33 @@ namespace NLog.Web.LayoutRenderers
                 {
                     var value = queryStrings[configuredKey];
 
-                    if (i > 0)
-                        builder.Append($",{Environment.NewLine}");
-
-                    switch (this.OutputFormat)
+                    if (!String.IsNullOrEmpty(value))
                     {
-                        case AspNetLayoutOutputFormat.Flat:
-                            builder.Append($"{configuredKey}:{value}");
-                            break;
-                        case AspNetLayoutOutputFormat.Json:
-                            builder.Append($"{jsonStartBraces}{doubleQuotes}{configuredKey}{doubleQuotes}:{doubleQuotes}{value}{doubleQuotes}{jsonEndBraces}");
-                            break;
-                        default:
-                            break;
+                        if (i > 0)
+                            builder.Append($",{Environment.NewLine}");
+
+                        switch (this.OutputFormat)
+                        {
+                            case AspNetLayoutOutputFormat.Flat:
+                                builder.Append($"{configuredKey}:{value}");
+                                break;
+                            case AspNetLayoutOutputFormat.Json:
+                                if (queryStrings.Count > 1 && !includeArrayEndBraces)
+                                {
+                                    includeArrayEndBraces = true;
+                                    builder.Append(jsonArrayStartBraces);
+                                }
+                                builder.Append($"{jsonElementStartBraces}{doubleQuotes}{configuredKey}{doubleQuotes}:{doubleQuotes}{value}{doubleQuotes}{jsonElementEndBraces}");
+                                break;
+                            default:
+                                break;
+                        }
+                        i++;
                     }
-
-
-                    i++;
                 }
+
+                if (includeArrayEndBraces)
+                    builder.Append(jsonArrayEndBraces);
             }
         }
 #else

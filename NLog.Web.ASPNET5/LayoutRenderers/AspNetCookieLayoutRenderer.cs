@@ -60,7 +60,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
 
-                if (httpRequest?.Cookies?.Count == 0)
+                if (httpRequest?.Cookies?.Count > 0)
                 {
                     int i = 0;
                     foreach (var cookieName in this.CookiesNames)
