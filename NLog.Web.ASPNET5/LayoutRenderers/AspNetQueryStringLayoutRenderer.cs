@@ -124,6 +124,8 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="queryStrings"></param>
         private void SerializeQueryString(StringBuilder builder, IReadableStringCollection queryStrings)
         {
+            var includeArrayEndBraces = false;
+
             if (queryStrings?.Count > 0)
             {
                 var i = 0;
@@ -131,13 +133,33 @@ namespace NLog.Web.LayoutRenderers
                 {
                     var value = queryStrings[configuredKey];
 
-                    if (i > 0)
-                        builder.Append(",");
+                    if (value.Count > 0)
+                    {
+                        if (i > 0)
+                            builder.Append($",{Environment.NewLine}");
 
-                    builder.Append($"{configuredKey}:{value}");
-
-                    i++;
+                        switch (this.OutputFormat)
+                        {
+                            case AspNetLayoutOutputFormat.Flat:
+                                builder.Append($"{configuredKey}:{value}");
+                                break;
+                            case AspNetLayoutOutputFormat.Json:
+                                if (queryStrings.Count > 1 && !includeArrayEndBraces)
+                                {
+                                    includeArrayEndBraces = true;
+                                    builder.Append(jsonArrayStartBraces);
+                                }
+                                builder.Append($"{jsonElementStartBraces}{doubleQuotes}{configuredKey}{doubleQuotes}:{doubleQuotes}{value}{doubleQuotes}{jsonElementEndBraces}");
+                                break;
+                            default:
+                                break;
+                        }
+                        i++;
+                    }
                 }
+
+                if (includeArrayEndBraces)
+                    builder.Append(jsonArrayEndBraces);
             }
         }
 #endif
