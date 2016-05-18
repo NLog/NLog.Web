@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Xml;
 using NLog.Config;
+using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -17,7 +18,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             HttpContext = SetupFakeHttpContext();
             HttpContext.Current = HttpContext;
         }
-
+        
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -73,6 +74,18 @@ namespace NLog.Web.Tests.LayoutRenderers
             t.InvokeMember("MakeReadOnly", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance,
                 null,
                 headers, null);
+        }
+
+        protected NLog.Targets.DebugTarget GetDebugTarget(string targetName, LoggingConfiguration configuration)
+        {
+            var debugTarget = (NLog.Targets.DebugTarget)configuration.FindTargetByName(targetName);
+            Assert.NotNull(debugTarget);
+            return debugTarget;
+        }
+
+        protected string GetDebugLastMessage(string targetName, LoggingConfiguration configuration)
+        {
+            return GetDebugTarget(targetName, configuration).LastMessage;
         }
     }
 }

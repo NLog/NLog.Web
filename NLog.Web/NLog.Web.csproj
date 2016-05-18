@@ -41,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.0.1\lib\net35\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.5-alpha1\lib\net35\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -68,16 +68,15 @@
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestReferrerRenderer.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestUrlRenderer.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestUserAgent.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetCookieLayoutRenderer.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetQueryStringLayoutRenderer.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5\Enums\AspNetCookieLayoutOutputFormat.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetCookieLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetQueryStringLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5\Enums\AspNetCookieLayoutOutputFormat.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Internal\PropertyReader.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\NLogHttpModule.cs" />
     <Compile Include="..\NLog.Web.ASPNET5\Targets\AspNetTrace.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />    
-	<Compile Include="..\NLog.Web.ASPNET5\Internal\RequestAccessorExtension.cs" />
-	
+    <Compile Include="..\NLog.Web.ASPNET5\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5\Internal\RequestAccessorExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,11 +6,58 @@ using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NLog.Web.Enums;
 using Xunit;
+using System.Web.SessionState;
+using System.Reflection;
+using NLog.Config;
+using NLog.Layouts;
+using NLog.Targets;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetCookieLayoutRendererTests
+    public class AspNetCookieLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
+        public AspNetCookieLayoutRendererTests() : base()
+        {
+            this.SetUp();
+        }
+
+        public void SetUp()
+        {
+            //auto load won't work yet (in DNX), so use <extensions>
+            LogManager.Configuration = CreateConfigurationFromString(@"
+<nlog throwExceptions='true'>
+    <extensions>
+        <add assembly='NLog.Web' />
+    </extensions>
+</nlog>");
+            SetupFakeSession();
+        }
+
+        protected override void CleanUp()
+        {
+            Session.Clear();
+        }
+
+        private HttpSessionState Session
+        {
+            get { return HttpContext.Current.Session; }
+        }
+
+        public void SetupFakeSession()
+        {
+            var sessionContainer = new HttpSessionStateContainer("id", new SessionStateItemCollection(),
+                                                    new HttpStaticObjectsCollection(), 10, true,
+                                                    HttpCookieMode.AutoDetect,
+                                                    SessionStateMode.InProc, false);
+
+            HttpContext.Items["AspSession"] = typeof(HttpSessionState).GetConstructor(
+                                        BindingFlags.NonPublic | BindingFlags.Instance,
+                                        null, CallingConventions.Standard,
+                                        new[] { typeof(HttpSessionStateContainer) },
+                                        null)
+                                .Invoke(new object[] { sessionContainer });
+        }
+
         [Fact]
         public void NullKeyRendersEmptyString()
         {
@@ -164,6 +211,31 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void CommaSeperatedCookieNamesTest()
+        {
+            LogManager.Configuration = CreateConfigurationFromString(@"
+<nlog throwExceptions='true'>
+    <extensions>
+        <add assembly='NLog.Web' />
+    </extensions>
+<targets><target name='debug' type='Debug' layout='${aspnet-request-cookie:CookiesNames=test1}' /></targets>
+    <rules>
+        <logger name='*' minlevel='Debug' writeTo='debug' />
+    </rules>
+</nlog>");
+
+            var cookie = new HttpCookie("key", "TEST");
+            cookie["Key1"] = "TEST1";
+
+            this.HttpContext.Request.Cookies.Add(cookie);
+            var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
+            var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetCookieLayoutRenderer;
+
+            var result = renderer.Render(LogEventInfo.CreateNullEvent());
+
         }
     }
 }
