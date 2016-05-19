@@ -33,7 +33,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected XmlLoggingConfiguration CreateConfigurationFromString(string configXml)
         {
-
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(configXml);
             using (var stringReader = new StringReader(doc.DocumentElement.OuterXml))

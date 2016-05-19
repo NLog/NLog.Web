@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.1.0\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props')" />
@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.5-alpha1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
@@ -80,7 +80,7 @@
     <Compile Include="..\NLog.Web.ASPNET5.Tests\DefaultHttpContextAccessorTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\FakeHttpContextAccessor.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetCookieLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetCookieLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
@@ -88,11 +88,11 @@
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
     <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestReferrerRendererTests.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestUrlRendererTests.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestUserAgentTests.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestHttpMethodRendererTests.cs" />
-	<Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetQueryStringLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestReferrerRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestUrlRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestUserAgentTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestHttpMethodRendererTests.cs" />
+    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetQueryStringLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,11 +7,51 @@ using NSubstitute;
 using NLog.Web.Enums;
 using Xunit;
 using System.Collections.Specialized;
+using System.Web.SessionState;
+using System.Reflection;
+using NLog.Targets;
+using NLog.Layouts;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetQueryStringLayoutRendererTests
+    public class AspNetQueryStringLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
+        public AspNetQueryStringLayoutRendererTests() : base()
+        {
+            this.SetUp();
+        }
+
+        public void SetUp()
+        {
+            //auto load won't work yet (in DNX), so use <extensions>            
+            SetupFakeSession();
+        }
+
+        protected override void CleanUp()
+        {
+            Session.Clear();
+        }
+
+        private HttpSessionState Session
+        {
+            get { return HttpContext.Current.Session; }
+        }
+
+        public void SetupFakeSession()
+        {
+            var sessionContainer = new HttpSessionStateContainer("id", new SessionStateItemCollection(),
+                                                    new HttpStaticObjectsCollection(), 10, true,
+                                                    HttpCookieMode.AutoDetect,
+                                                    SessionStateMode.InProc, false);
+
+            HttpContext.Items["AspSession"] = typeof(HttpSessionState).GetConstructor(
+                                        BindingFlags.NonPublic | BindingFlags.Instance,
+                                        null, CallingConventions.Standard,
+                                        new[] { typeof(HttpSessionStateContainer) },
+                                        null)
+                                .Invoke(new object[] { sessionContainer });
+        }
+
         [Fact]
         public void NullKeyRendersEmptyString()
         {
@@ -138,6 +178,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(expectedResult, result);
-        }
+        }       
     }
 }

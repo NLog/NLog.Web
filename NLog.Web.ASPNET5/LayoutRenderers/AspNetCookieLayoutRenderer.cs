@@ -41,7 +41,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// List Cookie Key as String to be rendered from Request.
         /// </summary>
-        public List<String> CookiesNames { get; set; }
+        public List<string> CookieNames { get; set; }
 
         /// <summary>
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
@@ -56,14 +56,14 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (this.CookiesNames?.Count > 0)
+            if (this.CookieNames?.Count > 0)
             {
                 var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
 
                 if (httpRequest?.Cookies?.Count > 0)
                 {
                     int i = 0;
-                    foreach (var cookieName in this.CookiesNames)
+                    foreach (var cookieName in this.CookieNames)
                     {
                         this.SerializeCookie(httpRequest.Cookies[cookieName], builder, i);
                         i++;
