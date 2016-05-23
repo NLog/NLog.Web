@@ -4,7 +4,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52CA242D-DB20-41D9-8B79-A5A965ECA105}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NLog.Web.aspnet5", "NLog.Web.ASPNET5\NLog.Web.aspnet5.xproj", "{74D5915B-BEA9-404C-B4D0-B663164DEF37}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NLog.Web.AspNet.Core", "NLog.Web.AspNetCore\NLog.Web.AspNetCore.xproj", "{74D5915B-BEA9-404C-B4D0-B663164DEF37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
