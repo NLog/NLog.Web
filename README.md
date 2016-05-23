@@ -1,8 +1,8 @@
-# NLog.Web (ASP.NET 4 + 5 + CoreCLR)
+# NLog.Web (ASP.NET & ASP.NET Core)
 
-ASP.NET 4: [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
+ASP.NET: [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
 
-ASP.NET 5: [![Version](https://badge.fury.io/nu/NLog.Web.ASPNET5.svg)](https://www.nuget.org/packages/NLog.Web.ASPNET5) 
+ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore) 
 
 [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 [![codecov.io](https://codecov.io/github/NLog/NLog.Web/coverage.svg?branch=master)](https://codecov.io/github/NLog/NLog.Web?branch=master)
@@ -12,23 +12,23 @@ This package is an extension to [NLog](https://github.com/NLog/NLog/).
 This package contains 
 targets and layout-renderes specific to ASP.Net and IIS. 
 
-## ASP.NET 5
+## ASP.NET Core
 
-There is a special package for ASP.NET 5 / MVC 6. This is needed because `HttpContext.Current` isn't available in ASP.NET 5 and we can't detect if ASP.NET 4 or 5 is used.
+There is a special package for ASP.NET Core / MVC 6. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used.
 
-The following parts are supported in ASP.NET 5:
+The following parts are supported in ASP.NET Core:
 
 * aspnet-item
 * aspnet-request (except ServerVariable)
 * aspnet-session
+* aspnet-sessionid (new in RC2)
 * aspnet-user-authtype
 * aspnet-user-identity
 * iis-site-name
 
 Please note:
 
-* [ServerVariables are non-existing in ASP.NET 5. ](http://stackoverflow.com/questions/25849217/vnext-server-variables-missing)
-* [session-id will be added to ASP.NET 5 in RC2](https://github.com/aspnet/Session/pull/97)
+* [ServerVariables are non-existing in ASP.NET Core. ](http://stackoverflow.com/questions/25849217/vnext-server-variables-missing)
 
 ### Usage
 
@@ -37,7 +37,7 @@ In your nlog.config:
 ```xml
   <extensions>
     <!--enable NLog.Web for ASP.NET5-->
-    <add assembly="NLog.Web.ASPNET5"/>
+    <add assembly="NLog.Web.AspNetCore"/>
   </extensions>
 ```
 
@@ -47,22 +47,20 @@ In your startup.cs
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //add NLog to aspnet5
+            //add NLog to ASP.NET Core
             loggerFactory.AddNLog();
 
-            //add NLog.Web (only needed if NLog.Web.ASPNET5 is needed)
+            //add NLog.Web
             app.AddNLogWeb();
 
-            //configure nlog.config in your project root
-            env.ConfigureNLog("nlog.config");
 ```
 
 in project.json:
 
 ```json
     "dependencies": {
-        "NLog.Extensions.Logging": "1.0.0-rc1-final-2016-03-11",
-        "NLog.Web.ASPNET5": "4.2.2"
+        "NLog.Extensions.Logging": "1.0.0-rc2-final-2016-05-21",
+        "NLog.Web.AspNetCore": "4.2.3"
     },
 ```
 
