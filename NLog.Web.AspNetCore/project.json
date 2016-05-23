@@ -1,6 +1,6 @@
 {
 
-    "version": "4.2.2",
+    "version": "4.2.3",
     "description": "Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.",
     "authors": [ "Julian Verdurmen" ],
     "packOptions": {
