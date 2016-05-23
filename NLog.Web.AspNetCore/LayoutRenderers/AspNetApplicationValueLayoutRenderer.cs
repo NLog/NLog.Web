@@ -1,4 +1,4 @@
-#if !DNX
+#if !NETSTANDARD_1plus
 
 using System;
 using System.Globalization;

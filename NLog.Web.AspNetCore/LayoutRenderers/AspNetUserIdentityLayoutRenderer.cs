@@ -1,9 +1,7 @@
 using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
 #endif
 using NLog.LayoutRenderers;
 

@@ -19,9 +19,9 @@ build:
 
 build_script:
 - cmd: >-
-    call build_aspnet4.bat -nuget_version=4.2.1
+    call build_aspnet.bat -nuget_version=4.2.1
 
-    call build_aspnet5.bat 
+    call build_aspnetcore.bat 
 
 deploy: off
 test_script:
@@ -33,9 +33,9 @@ test_script:
   
 artifacts:
 - path: 'NLog*\**\*.nupkg'
-  name: aspnet5
+  name: aspnetcore
   
 - path: '*.nupkg'
-  name: aspnet4 
+  name: aspnet
 
  

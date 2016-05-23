@@ -1,5 +1,5 @@
 ﻿
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using NLog.Targets;
 

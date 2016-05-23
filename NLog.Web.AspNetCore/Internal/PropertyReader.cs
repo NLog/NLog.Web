@@ -43,7 +43,7 @@ namespace NLog.Web.Internal
 
         private static PropertyInfo GetPropertyInfo(object value, string propertyName)
         {
-#if !DNX
+#if !NETSTANDARD_1plus
             return value.GetType().GetProperty(propertyName);
 #else
             return value.GetType().GetTypeInfo().GetDeclaredProperty(propertyName);

@@ -1,13 +1,11 @@
 using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+
 #endif
 using NLog.LayoutRenderers;
 
-#if !DNX
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -16,14 +14,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-sessionid")]
     public class AspNetSessionIDLayoutRenderer : AspNetLayoutRendererBase
     {
-#if DNX
-        /// <summary>
-        /// Initializes the <see cref="AspNetSessionIDLayoutRenderer"/> with the <see cref="IHttpContextAccessor"/>.
-        /// </summary>
-        public AspNetSessionIDLayoutRenderer(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-#endif
         /// <summary>
         /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -37,9 +27,11 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-
+#if !NETSTANDARD_1plus
             builder.Append(context.Session.SessionID);
+#else
+            builder.Append(context.Session.Id);
+#endif
         }
     }
 }
-#endif

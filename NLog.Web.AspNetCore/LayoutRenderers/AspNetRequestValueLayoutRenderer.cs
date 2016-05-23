@@ -1,11 +1,10 @@
 using System;
 using System.Text;
+#if !NETSTANDARD_1plus
 using NLog.Common;
-#if !DNX
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -85,7 +84,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (this.QueryString != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 builder.Append(httpRequest.QueryString[this.QueryString]);
 #else
                 builder.Append(httpRequest.Query[this.QueryString]);
@@ -97,7 +96,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Cookie != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 var cookie = httpRequest.Cookies[this.Cookie];
 
                 if (cookie != null)
@@ -112,7 +111,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.ServerVariable != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
 #else
 
@@ -130,7 +129,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Item != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 builder.Append(httpRequest[this.Item]);
 #else
                 builder.Append(httpRequest.HttpContext.Items[this.Item]);
@@ -141,7 +140,7 @@ namespace NLog.Web.LayoutRenderers
 
     internal static class RequestAccessor
     {
-#if !DNX
+#if !NETSTANDARD_1plus
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
         {
             try

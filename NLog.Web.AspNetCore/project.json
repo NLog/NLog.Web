@@ -21,9 +21,10 @@
     "frameworks": {
 
         "netstandard1.3": {
-            "buildOptions": { "define": [ "DOTNET5_4", "DNX451", "DNX" ] },
+            "buildOptions": { "define": [ "NETSTANDARD_1plus" ] },
             "dependencies": {
-                "Microsoft.AspNetCore.Hosting": "1.0.0-rc2-final",
+                "Microsoft.AspNetCore.Http.Extensions": "1.0.0-rc2-final",
+                "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
                 "NLog": "4.4.0-beta8"
             }
         }
@@ -31,6 +32,7 @@
 
     },
     "buildOptions": {
-        "keyFile": "NLog.snk"
+        "keyFile": "NLog.snk",
+        "xmlDoc": true
     }
 }
