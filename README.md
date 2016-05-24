@@ -14,7 +14,7 @@ targets and layout-renderes specific to ASP.Net and IIS.
 
 ## ASP.NET Core
 
-There is a special package for ASP.NET Core / MVC 6. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used.
+There is a special package for ASP.NET Core / MVC Core. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used.
 
 The following parts are supported in ASP.NET Core:
 
@@ -36,7 +36,7 @@ In your nlog.config:
 
 ```xml
   <extensions>
-    <!--enable NLog.Web for ASP.NET5-->
+    <!--enable NLog.Web for ASP.NET Core-->
     <add assembly="NLog.Web.AspNetCore"/>
   </extensions>
 ```
