@@ -16,23 +16,22 @@
         }
     },
 
+    "dependencies": {
+        "Microsoft.AspNetCore.Http.Extensions": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
+        "NLog": "4.4.0-beta9"
+    },
+
     "title": "NLog.Web.AspNetCore",
-
     "frameworks": {
-
-        "netstandard1.3": {
-            "buildOptions": { "define": [ "NETSTANDARD_1plus" ] },
-            "dependencies": {
-                "Microsoft.AspNetCore.Http.Extensions": "1.0.0-rc2-final",
-                "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
-                "NLog": "4.4.0-beta8"
-            }
-        }
+        "netstandard1.3": { },
+        "net451": { }
 
 
     },
     "buildOptions": {
         "keyFile": "NLog.snk",
-        "xmlDoc": true
+        "xmlDoc": true,
+        "define": [ "NETSTANDARD_1plus" ]
     }
 }
