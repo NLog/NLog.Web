@@ -57,11 +57,17 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Cookie { get; set; }
 
+#if !NETSTANDARD_1plus
+
+        //missing in .NET Core (RC2)
+
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public string ServerVariable { get; set; }
+
+#endif
 
         /// <summary>
         /// Gets or sets the Headers item to be rendered.
@@ -109,15 +115,14 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             }
+#if !NETSTANDARD_1plus
             else if (this.ServerVariable != null)
             {
-#if !NETSTANDARD_1plus
-                builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
-#else
 
-                throw new NotSupportedException();
-#endif
+                builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
+
             }
+#endif
             else if (this.Header != null)
             {
                 string header = httpRequest.Headers[this.Header];
