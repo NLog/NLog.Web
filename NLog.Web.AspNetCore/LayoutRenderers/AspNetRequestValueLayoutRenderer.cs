@@ -1,11 +1,10 @@
 using System;
 using System.Text;
+#if !NETSTANDARD_1plus
 using NLog.Common;
-#if !DNX
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -58,11 +57,17 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Cookie { get; set; }
 
+#if !NETSTANDARD_1plus
+
+        //missing in .NET Core (RC2)
+
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public string ServerVariable { get; set; }
+
+#endif
 
         /// <summary>
         /// Gets or sets the Headers item to be rendered.
@@ -85,7 +90,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (this.QueryString != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 builder.Append(httpRequest.QueryString[this.QueryString]);
 #else
                 builder.Append(httpRequest.Query[this.QueryString]);
@@ -97,7 +102,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Cookie != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 var cookie = httpRequest.Cookies[this.Cookie];
 
                 if (cookie != null)
@@ -110,15 +115,14 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             }
+#if !NETSTANDARD_1plus
             else if (this.ServerVariable != null)
             {
-#if !DNX
-                builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
-#else
 
-                throw new NotSupportedException();
-#endif
+                builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
+
             }
+#endif
             else if (this.Header != null)
             {
                 string header = httpRequest.Headers[this.Header];
@@ -130,7 +134,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Item != null)
             {
-#if !DNX
+#if !NETSTANDARD_1plus
                 builder.Append(httpRequest[this.Item]);
 #else
                 builder.Append(httpRequest.HttpContext.Items[this.Item]);
@@ -141,7 +145,7 @@ namespace NLog.Web.LayoutRenderers
 
     internal static class RequestAccessor
     {
-#if !DNX
+#if !NETSTANDARD_1plus
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
         {
             try

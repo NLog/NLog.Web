@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web.Hosting;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 #endif
 using NLog.LayoutRenderers;
@@ -12,15 +11,20 @@ using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
+
+#if NETSTANDARD_1plus
     /// <summary>
-    /// IIS site name - printing <see cref="HostingEnvironment.SiteName"/>
+    /// Rendering site name in IIS. <see cref="IHostingEnvironment"/>
     /// </summary>
+#else
+    /// <summary>
+    /// Rendering site name in IIS. <see cref="HostingEnvironment.SiteName"/>
+    /// </summary>
+ #endif
     [LayoutRenderer("iis-site-name")]
     // ReSharper disable once InconsistentNaming
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
-
-
         /// <summary>
         /// Append to target
         /// </summary>
@@ -30,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
         {
 
 
-#if DNX
+#if NETSTANDARD_1plus
             var env = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>();
             builder.Append(env?.EnvironmentName);
 

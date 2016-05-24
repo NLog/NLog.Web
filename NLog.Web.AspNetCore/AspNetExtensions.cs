@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using NLog.Web.Internal;
 
 namespace NLog.Web

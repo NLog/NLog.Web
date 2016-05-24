@@ -54,21 +54,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\NLog.Web.ASPNET5\DefaultHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\IHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetLayoutRendererBase.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\Internal\PropertyReader.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\NLogHttpModule.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\Targets\AspNetTrace.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\DefaultHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\IHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutRendererBase.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\Internal\PropertyReader.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\NLogHttpModule.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\Targets\AspNetTrace.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -77,16 +77,16 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\DefaultHttpContextAccessorTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\FakeHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
-    <Compile Include="..\NLog.Web.ASPNET5.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\DefaultHttpContextAccessorTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\FakeHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
