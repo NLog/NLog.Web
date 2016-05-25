@@ -98,7 +98,7 @@ namespace NLog.Web.LayoutRenderers
                                 builder.Append($"{configuredKey}:{value}");
                                 break;
                             case AspNetLayoutOutputFormat.Json:
-                                if (queryStrings.Count > 1 && !includeArrayEndBraces)
+                                if (!includeArrayEndBraces)
                                 {
                                     includeArrayEndBraces = true;
                                     builder.Append(jsonArrayStartBraces);
@@ -144,7 +144,7 @@ namespace NLog.Web.LayoutRenderers
                                 builder.Append($"{configuredKey}:{value}");
                                 break;
                             case AspNetLayoutOutputFormat.Json:
-                                if (queryStrings.Count > 1 && !includeArrayEndBraces)
+                                if (!includeArrayEndBraces)
                                 {
                                     includeArrayEndBraces = true;
                                     builder.Append(jsonArrayStartBraces);
