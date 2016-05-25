@@ -1,22 +1,21 @@
 using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+
 #endif
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET User variable.
+    /// ASP.NET Session ID.
     /// </summary>
-    [LayoutRenderer("aspnet-user-identity")]
-    public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-sessionid")]
+    public class AspNetSessionIDLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the specified ASP.NET User.Identity.Name variable and appends it to the specified <see cref="StringBuilder" />.
+        /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -24,12 +23,15 @@ namespace NLog.Web.LayoutRenderers
         {
             var context = HttpContextAccessor.HttpContext;
 
-            if (context.User?.Identity == null)
+            if (context.Session == null)
             {
                 return;
             }
-
-            builder.Append(context.User.Identity.Name);
+#if !NETSTANDARD_1plus
+            builder.Append(context.Session.SessionID);
+#else
+            builder.Append(context.Session.Id);
+#endif
         }
     }
 }

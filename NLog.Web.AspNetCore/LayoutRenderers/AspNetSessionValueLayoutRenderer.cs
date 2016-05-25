@@ -2,13 +2,12 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using NLog.Common;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 #else
-using Microsoft.AspNet.Http.Features;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -76,7 +75,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-#if !DNX
+#if !NETSTANDARD_1plus
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 #else
             if (context.Items == null)
@@ -96,7 +95,7 @@ namespace NLog.Web.LayoutRenderers
                 //prevent stackoverflow
                 return;
             }
-            
+
             context.Items[NLogRetrievingSessionValue] = true;
             object value;
             try
@@ -105,8 +104,7 @@ namespace NLog.Web.LayoutRenderers
             }
             catch (Exception ex)
             {
-                //TODO change this call for NLog 4.3
-                InternalLogger.Warn("Retrieving session value failed. "  + ex);
+                InternalLogger.Warn(ex, "Retrieving session value failed. ");
                 return;
             }
             finally

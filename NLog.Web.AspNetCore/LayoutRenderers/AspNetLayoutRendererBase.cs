@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
 using NLog.LayoutRenderers;
-#if DNX
+#if NETSTANDARD_1plus
 using NLog.Web.Internal;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 #endif
 
@@ -20,13 +19,13 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         protected AspNetLayoutRendererBase()
         {
-#if !DNX
+#if !NETSTANDARD_1plus
             HttpContextAccessor = new DefaultHttpContextAccessor();
 #endif
         }
 
 
-#if DNX
+#if NETSTANDARD_1plus
 
         /// <summary>
         /// Context for DI

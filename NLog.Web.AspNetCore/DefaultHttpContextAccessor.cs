@@ -1,8 +1,6 @@
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
 
 #endif
 
@@ -10,7 +8,7 @@ using Microsoft.AspNet.Http;
 
 namespace NLog.Web
 {
-#if !DNX
+#if !NETSTANDARD_1plus
     /// <summary>
     /// Provides the HttpContext associated with the current request.
     /// </summary>
