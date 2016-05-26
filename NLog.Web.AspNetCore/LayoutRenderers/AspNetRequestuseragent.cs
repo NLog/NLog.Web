@@ -1,11 +1,7 @@
 ﻿using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
-#else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.Extensions.Primitives;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
@@ -16,19 +12,19 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request Referrer
+    /// ASP.NET User Agent
     /// </summary>
+    /// <para>Example usage of ${aspnet-useragent}:</para>
     /// <example>
-    /// <para>Example usage of ${aspnet-request-referrer}:</para>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-referrer} - Produces - Referrer URL String from the Request.
+    /// ${aspnet-useragent} - Produces - User Agent String from the Request.
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-request-referrer")]
-    public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-useragent")]
+    public class AspNetRequestUserAgent : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the Referrer URL from the HttpRequest <see cref="StringBuilder" />.
+        /// Renders the ASP.NET User Agent
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -39,14 +35,15 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            string referrer = String.Empty;
+            string userAgent = string.Empty;
+#if !NETSTANDARD_1plus
+            userAgent = httpRequest.UserAgent;
 
-#if !DNX
-            referrer = httpRequest.UrlReferrer?.ToString();
 #else
-            referrer = httpRequest.Headers["Referer"].ToString();
+            userAgent = httpRequest.Headers["User-Agent"].ToString();
 #endif
-            builder.Append(referrer);
+
+            builder.Append(userAgent);
 
         }
     }

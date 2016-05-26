@@ -1,11 +1,7 @@
 ﻿using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
-#else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.Extensions.Primitives;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
@@ -37,7 +33,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IncludeQueryString { get; set; } = false;
 
-#if !DNX
+#if !NETSTANDARD_1plus
         /// <summary>
         /// To specify whether to exclude / include the Port.
         /// </summary>
@@ -58,7 +54,7 @@ namespace NLog.Web.LayoutRenderers
             string url = String.Empty;
             string pathAndQuery = String.Empty;
             string port = String.Empty;
-#if !DNX
+#if !NETSTANDARD_1plus
             if (httpRequest.Url != null)
             {
                 if (IncludePort && httpRequest.Url?.Port > 0)

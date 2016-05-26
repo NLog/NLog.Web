@@ -1,11 +1,7 @@
 ﻿using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
-#else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.Extensions.Primitives;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
@@ -16,19 +12,19 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Http Request Method.
+    /// ASP.NET Request Referrer
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-method}:</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-referrer}:</para>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-method} - Produces - Post.
+    /// ${aspnet-request-referrer} - Produces - Referrer URL String from the Request.
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-request-method")]
-    public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-referrer")]
+    public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// ASP.NET Http Request Method
+        /// Renders the Referrer URL from the HttpRequest <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -39,16 +35,14 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
+            string referrer = String.Empty;
 
-            string httpMethod = string.Empty;
-#if !DNX
-            httpMethod = httpRequest.HttpMethod;
-
+#if !NETSTANDARD_1plus
+            referrer = httpRequest.UrlReferrer?.ToString();
 #else
-            httpMethod = httpRequest.Method;
+            referrer = httpRequest.Headers["Referer"].ToString();
 #endif
-
-            builder.Append(httpMethod);
+            builder.Append(referrer);
 
         }
     }

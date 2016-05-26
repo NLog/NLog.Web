@@ -1,11 +1,9 @@
 ﻿using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Http;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
@@ -61,7 +59,7 @@ namespace NLog.Web.LayoutRenderers
                 if (httpRequest == null)
                     return;
 
-#if !DNX
+#if !NETSTANDARD_1plus
                 this.SerializeQueryString(builder, httpRequest.QueryString);
 #else
                 this.SerializeQueryString(builder, httpRequest.Query);
@@ -70,7 +68,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-#if !DNX
+#if !NETSTANDARD_1plus
         /// <summary>
         /// To Serialize the QueryString based on the configuration.
         /// </summary>
@@ -122,7 +120,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="queryStrings"></param>
-        private void SerializeQueryString(StringBuilder builder, IReadableStringCollection queryStrings)
+        private void SerializeQueryString(StringBuilder builder, IQueryCollection queryStrings)
         {
             var includeArrayEndBraces = false;
 

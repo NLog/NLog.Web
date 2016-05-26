@@ -1,10 +1,8 @@
 ﻿using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
 using Microsoft.Extensions.Primitives;
 #endif
 using NLog.LayoutRenderers;
@@ -19,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Cookie
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-cookie}:</para>
+    /// <para>Example usage of ${aspnet-request-cookie}</para>
     /// <example>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-cookie:OutputFormat=Flat}
@@ -72,7 +70,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-#if !DNX
+#if !NETSTANDARD_1plus
         /// <summary>
         /// To Serialize the HttpCookie based on the configured output format.
         /// </summary>
@@ -102,7 +100,7 @@ namespace NLog.Web.LayoutRenderers
         }
 #endif
 
-#if DNX
+#if NETSTANDARD_1plus
         private void SerializeCookie(StringValues cookie, StringBuilder builder, int index)
         {
             switch (this.OutputFormat)

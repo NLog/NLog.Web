@@ -1,11 +1,10 @@
 using System;
 using System.Text;
 using NLog.Common;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 #else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -14,7 +13,7 @@ namespace NLog.Web.Internal
 {
     internal static class RequestAccessor
     {
-#if !DNX
+#if !NETSTANDARD_1plus
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
         {
             try

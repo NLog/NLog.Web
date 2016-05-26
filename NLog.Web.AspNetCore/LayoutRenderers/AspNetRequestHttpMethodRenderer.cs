@@ -1,11 +1,7 @@
 ﻿using System.Text;
-#if !DNX
+#if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
-#else
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.Extensions.Primitives;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
@@ -16,19 +12,19 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET User Agent
+    /// ASP.NET Http Request Method.
     /// </summary>
-    /// <para>Example usage of ${aspnet-useragent}:</para>
+    /// <para>Example usage of ${aspnet-request-method}:</para>
     /// <example>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-useragent} - Produces - User Agent String from the Request.
+    /// ${aspnet-request-method} - Produces - Post.
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-useragent")]
-    public class AspNetRequestUserAgent : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-method")]
+    public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the ASP.NET User Agent
+        /// ASP.NET Http Request Method
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -39,15 +35,16 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            string userAgent = string.Empty;
-#if !DNX
-            userAgent = httpRequest.UserAgent;
+
+            string httpMethod = string.Empty;
+#if !NETSTANDARD_1plus
+            httpMethod = httpRequest.HttpMethod;
 
 #else
-            userAgent = httpRequest.Headers["User-Agent"].ToString();
+            httpMethod = httpRequest.Method;
 #endif
 
-            builder.Append(userAgent);
+            builder.Append(httpMethod);
 
         }
     }
