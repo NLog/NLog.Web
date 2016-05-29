@@ -21,8 +21,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.exmaple.com/
     /// ${aspnet-request-url:IncludePort=true} - produces http://www.exmaple.com:80/
     /// ${aspnet-request-url:IncludePort=false} - produces http://www.exmaple.com/
-    /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1
-    /// IncludePort - Is supported only NON ASP.NET CORE Version. After ASP.NET CORE RC2 Release support will be provided for ASP.NET Core as well.
+    /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1    
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-url")]
@@ -33,12 +32,11 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IncludeQueryString { get; set; } = false;
 
-#if !NETSTANDARD_1plus
         /// <summary>
         /// To specify whether to exclude / include the Port.
         /// </summary>
         public bool IncludePort { get; set; } = false;
-#endif
+
         /// <summary>
         /// Renders the Request URL from the HttpRequest
         /// </summary>
@@ -78,7 +76,12 @@ namespace NLog.Web.LayoutRenderers
             if (IncludeQueryString)
                 pathAndQuery = httpRequest.QueryString.ToUriComponent();
 
-            url = $"{httpRequest.Scheme}://{httpRequest.Host.ToUriComponent()}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
+            if (IncludePort && httpRequest.Host.Port > 0)
+            {
+                port = ":" + httpRequest.Host.Port.ToString();
+            }
+
+            url = $"{httpRequest.Scheme}://{httpRequest.Host.ToUriComponent()}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
 #endif
             builder.Append(url);
 
