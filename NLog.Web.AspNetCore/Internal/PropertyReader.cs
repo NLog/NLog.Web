@@ -16,7 +16,7 @@ namespace NLog.Web.Internal
         /// <returns>value</returns>
         public static object GetValue(string key, Func<string, object> getVal, bool evaluateAsNestedProperties)
         {
-            if (key == null)
+            if (String.IsNullOrEmpty(key))
             {
                 return null;
             }
@@ -31,7 +31,7 @@ namespace NLog.Web.Internal
                 foreach (var property in path.Skip(1))
                 {
                     var propertyInfo = GetPropertyInfo(value, property);
-                    value = propertyInfo.GetValue(value, null);
+                    value = propertyInfo?.GetValue(value, null);
                 }
             }
             else

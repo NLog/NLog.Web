@@ -35,11 +35,9 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-
-            string httpMethod = string.Empty;
+            string httpMethod;
 #if !NETSTANDARD_1plus
             httpMethod = httpRequest.HttpMethod;
-
 #else
             httpMethod = httpRequest.Method;
 #endif

@@ -35,7 +35,7 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            string referrer = String.Empty;
+            string referrer;
 
 #if !NETSTANDARD_1plus
             referrer = httpRequest.UrlReferrer?.ToString();

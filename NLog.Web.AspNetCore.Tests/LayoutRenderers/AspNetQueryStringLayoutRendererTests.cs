@@ -124,7 +124,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_QueryString_Single_Item_Json_Formatting()
         {
-            var expectedResult = "{\"Id\":\"1\"}";
+            var expectedResult = "[{\"Id\":\"1\"}]";
             var httpContext = Substitute.For<HttpContextBase>();
             var namedClollection = new NameValueCollection();
             namedClollection.Add("Id", "1");

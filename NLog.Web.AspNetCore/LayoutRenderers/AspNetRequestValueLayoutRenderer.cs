@@ -97,7 +97,7 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(httpRequest.Query[this.QueryString]);
 #endif
             }
-            else if (this.Form != null)
+            else if (this.Form != null && httpRequest.Form != null)
             {
                 builder.Append(httpRequest.Form[this.Form]);
             }

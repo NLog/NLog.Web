@@ -60,11 +60,11 @@ namespace NLog.Web.LayoutRenderers
 
                 if (httpRequest?.Cookies?.Count > 0)
                 {
-                    int i = 0;
+                    bool firstItem = true;
                     foreach (var cookieName in this.CookieNames)
                     {
-                        this.SerializeCookie(httpRequest.Cookies[cookieName], builder, i);
-                        i++;
+                        this.SerializeCookie(httpRequest.Cookies[cookieName], builder, firstItem);
+                        firstItem = false;
                     }
                 }
             }
@@ -74,23 +74,23 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To Serialize the HttpCookie based on the configured output format.
         /// </summary>
-        /// <param name="cookie"></param>
-        /// <param name="builder"></param>
-        /// <param name="index"></param>
-        private void SerializeCookie(HttpCookie cookie, StringBuilder builder, int index)
+        /// <param name="cookie">The current cookie item.</param>
+        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="firstItem">Whether it is first item.</param>
+        private void SerializeCookie(HttpCookie cookie, StringBuilder builder, bool firstItem)
         {
             if (cookie != null)
             {
                 switch (this.OutputFormat)
                 {
                     case AspNetLayoutOutputFormat.Flat:
-                        if (index > 0)
+                        if (!firstItem)
                             builder.Append($"{flatItemSeperator}");
 
                         builder.Append($"{cookie.Name}{flatCookiesSeparator}{cookie.Value}");
                         break;
                     case AspNetLayoutOutputFormat.Json:
-                        if (index > 0)
+                        if (!firstItem)
                             builder.Append($"{jsonElementSeparator}");
 
                         builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
@@ -101,18 +101,24 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
 #if NETSTANDARD_1plus
-        private void SerializeCookie(StringValues cookie, StringBuilder builder, int index)
+        /// <summary>
+        /// To Serialize the HttpCookie based on the configured output format.
+        /// </summary>
+        /// <param name="cookie">The current cookie item.</param>
+        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="firstItem">Whether it is first item.</param>
+        private void SerializeCookie(StringValues cookie, StringBuilder builder, bool firstItem)
         {
             switch (this.OutputFormat)
             {
                 case AspNetLayoutOutputFormat.Flat:
-                    if (index > 0)
+                    if (!firstItem)
                         builder.Append($"{flatItemSeperator}");
 
                     builder.Append($"{cookie}");
                     break;
                 case AspNetLayoutOutputFormat.Json:
-                    if (index > 0)
+                    if (!firstItem)
                         builder.Append($"{jsonElementSeparator}");
 
                     builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie}{doubleQuotes}{jsonEndBraces}");
