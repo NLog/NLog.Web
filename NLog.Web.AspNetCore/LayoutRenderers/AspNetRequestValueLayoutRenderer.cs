@@ -92,16 +92,22 @@ namespace NLog.Web.LayoutRenderers
             if (this.QueryString != null)
             {
 #if !NETSTANDARD_1plus
-                builder.Append(httpRequest.QueryString[this.QueryString]);
+                if (httpRequest.QueryString != null)
+                {
+                    builder.Append(httpRequest.QueryString[this.QueryString]);
+                }
 #else
-                builder.Append(httpRequest.Query[this.QueryString]);
+                if (httpRequest.Query != null)
+                {
+                    builder.Append(httpRequest.Query[this.QueryString]);
+                }
 #endif
             }
             else if (this.Form != null && httpRequest.Form != null)
             {
                 builder.Append(httpRequest.Form[this.Form]);
             }
-            else if (this.Cookie != null)
+            else if (this.Cookie != null && httpRequest.Cookies != null)
             {
 #if !NETSTANDARD_1plus
                 var cookie = httpRequest.Cookies[this.Cookie];
@@ -117,14 +123,12 @@ namespace NLog.Web.LayoutRenderers
 
             }
 #if !NETSTANDARD_1plus
-            else if (this.ServerVariable != null)
+            else if (this.ServerVariable != null && httpRequest.ServerVariables != null)
             {
-
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
-
             }
 #endif
-            else if (this.Header != null)
+            else if (this.Header != null && httpRequest.Headers != null)
             {
                 string header = httpRequest.Headers[this.Header];
 
