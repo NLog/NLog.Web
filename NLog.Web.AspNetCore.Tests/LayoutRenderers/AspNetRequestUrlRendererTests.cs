@@ -10,7 +10,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetRequestUrlRendererTests
     {
-
         [Fact]
         public void NullUrlRendersEmptyString()
         {

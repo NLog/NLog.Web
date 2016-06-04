@@ -59,28 +59,29 @@ namespace NLog.Web.LayoutRenderers
 
 #if !NETSTANDARD_1plus
 
-            if (IncludePort && httpRequest.Url?.Port > 0)
+            if (httpRequest.Url == null)
+                return;
+
+            if (IncludePort && httpRequest.Url.Port > 0)
             {
                 port = ":" + httpRequest.Url.Port.ToString();
             }
 
-            if (IncludeQueryString && httpRequest.Url?.PathAndQuery != null)
+            if (IncludeQueryString && httpRequest.Url.PathAndQuery != null)
             {
                 pathAndQuery = httpRequest.Url.PathAndQuery;
             }
             else
             {
-                pathAndQuery = httpRequest.Url?.AbsolutePath;                
+                pathAndQuery = httpRequest.Url.AbsolutePath;                
             }
 
             if (IncludeHost)
             {
-                host = httpRequest.Url?.Host?.ToString();
+                host = httpRequest.Url.Host?.ToString();
             }
 
             url = $"{httpRequest.Url.Scheme}://{host}{port}{pathAndQuery}";
-
-
 #else
             if (IncludeQueryString)
             {
