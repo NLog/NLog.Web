@@ -27,13 +27,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-querystring")]
     public class AspNetQueryStringLayoutRenderer : AspNetLayoutRendererBase
     {
-        private const string jsonElementStartBraces = "{";
-        private const string jsonElementEndBraces = "}";
-        private const string doubleQuotes = "\"";
-        private const string jsonElementSeparator = ",";
-        private const string jsonArrayStartBraces = "[";
-        private const string jsonArrayEndBraces = "]";
-
         /// <summary>
         /// List Query Strings' Key to be rendered from Request.
         /// </summary>
@@ -46,120 +39,79 @@ namespace NLog.Web.LayoutRenderers
         public AspNetLayoutOutputFormat OutputFormat { get; set; } = AspNetLayoutOutputFormat.Flat;
 
         /// <summary>
-        /// 
+        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="logEvent"></param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
+            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
+
             if (this.QueryStringKeys?.Count > 0)
             {
-                var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
-
                 if (httpRequest == null)
                     return;
 
+                var includeArrayEndBraces = false;
+                var firstItem = true;
+
 #if !NETSTANDARD_1plus
-                this.SerializeQueryString(builder, httpRequest.QueryString);
+                var queryStrings = httpRequest.QueryString;
 #else
-                this.SerializeQueryString(builder, httpRequest.Query);
+                var queryStrings = httpRequest.Query;
 #endif
-
-            }
-        }
-
-#if !NETSTANDARD_1plus
-        /// <summary>
-        /// To Serialize the QueryString based on the configuration.
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="queryStrings"></param>
-        private void SerializeQueryString(StringBuilder builder, NameValueCollection queryStrings)
-        {
-            var includeArrayEndBraces = false;
-
-            if (queryStrings?.Count > 0)
-            {
-                var i = 0;
-                foreach (var configuredKey in this.QueryStringKeys)
+                if (queryStrings?.Count > 0)
                 {
-                    var value = queryStrings[configuredKey];
-
-                    if (!String.IsNullOrEmpty(value))
+                    foreach (var configuredKey in this.QueryStringKeys)
                     {
-                        if (i > 0)
-                            builder.Append($",{Environment.NewLine}");
-
-                        switch (this.OutputFormat)
+                        // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
+#if !NETSTANDARD_1plus
+                        var value = queryStrings[configuredKey];
+#else
+                        var value = queryStrings[configuredKey].ToString();
+#endif
+                        if (!String.IsNullOrEmpty(value))
                         {
-                            case AspNetLayoutOutputFormat.Flat:
-                                builder.Append($"{configuredKey}:{value}");
-                                break;
-                            case AspNetLayoutOutputFormat.Json:
-                                if (!includeArrayEndBraces)
-                                {
-                                    includeArrayEndBraces = true;
-                                    builder.Append(jsonArrayStartBraces);
-                                }
-                                builder.Append($"{jsonElementStartBraces}{doubleQuotes}{configuredKey}{doubleQuotes}:{doubleQuotes}{value}{doubleQuotes}{jsonElementEndBraces}");
-                                break;
-                            default:
-                                break;
+                            this.AppendKeyAndValue(builder, configuredKey, value, firstItem, ref includeArrayEndBraces);
+                            firstItem = false;
                         }
-                        i++;
                     }
                 }
 
                 if (includeArrayEndBraces)
-                    builder.Append(jsonArrayEndBraces);
+                    builder.Append(GlobalConstants.jsonArrayEndBraces);
             }
         }
-#else
+
         /// <summary>
-        /// To Serialize the QueryString based on the configuration.
+        /// Renders the specified Key and Value to the string builder <see cref="StringBuilder" />. Also sets whether to append the Array braces for json <see cref="bool"/>.
         /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="queryStrings"></param>
-        private void SerializeQueryString(StringBuilder builder, IQueryCollection queryStrings)
+        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="configuredKey">The Key <see cref="String"/> to append to the specified StringBuilder.</param>
+        /// <param name="value">The Value <see cref="String"/> to append to the specified StringBuilder.</param>
+        /// <param name="isFirsItem">The <see cref="bool"/> to specify if the Specified Key, Value is a first Item in the collection.</param>
+        /// <param name="includeArrayEndBraces">The <see cref="bool"/> to specify if the builder needs to append the Json Array End braces.</param>
+        private void AppendKeyAndValue(StringBuilder builder, string configuredKey, string value, bool isFirsItem, ref bool includeArrayEndBraces)
         {
-            var includeArrayEndBraces = false;
+            if (!isFirsItem)
+                builder.Append($",{Environment.NewLine}");
 
-            if (queryStrings?.Count > 0)
+            switch (this.OutputFormat)
             {
-                var i = 0;
-                foreach (var configuredKey in this.QueryStringKeys)
-                {
-                    var value = queryStrings[configuredKey];
-
-                    if (value.Count > 0)
+                case AspNetLayoutOutputFormat.Flat:
+                    builder.Append($"{configuredKey}:{value}");
+                    break;
+                case AspNetLayoutOutputFormat.Json:
+                    if (!includeArrayEndBraces)
                     {
-                        if (i > 0)
-                            builder.Append($",{Environment.NewLine}");
-
-                        switch (this.OutputFormat)
-                        {
-                            case AspNetLayoutOutputFormat.Flat:
-                                builder.Append($"{configuredKey}:{value}");
-                                break;
-                            case AspNetLayoutOutputFormat.Json:
-                                if (!includeArrayEndBraces)
-                                {
-                                    includeArrayEndBraces = true;
-                                    builder.Append(jsonArrayStartBraces);
-                                }
-                                builder.Append($"{jsonElementStartBraces}{doubleQuotes}{configuredKey}{doubleQuotes}:{doubleQuotes}{value}{doubleQuotes}{jsonElementEndBraces}");
-                                break;
-                            default:
-                                break;
-                        }
-                        i++;
+                        builder.Append(GlobalConstants.jsonArrayStartBraces);
+                        includeArrayEndBraces = true;
                     }
-                }
-
-                if (includeArrayEndBraces)
-                    builder.Append(jsonArrayEndBraces);
+                    builder.Append($"{GlobalConstants.jsonElementStartBraces}{GlobalConstants.doubleQuotes}{configuredKey}{GlobalConstants.doubleQuotes}:{GlobalConstants.doubleQuotes}{value}{GlobalConstants.doubleQuotes}{GlobalConstants.jsonElementEndBraces}");
+                    break;
+                default:
+                    break;
             }
         }
-#endif
     }
 }

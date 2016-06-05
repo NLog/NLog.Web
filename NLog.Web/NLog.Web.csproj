@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NLog.Web.AspNetCore\DefaultHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\IHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\IHttpContextAccessor.cs" />	
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutRendererBase.cs" />
@@ -81,6 +81,7 @@
     <Compile Include="..\NLog.Web.AspNetCore\Targets\AspNetTrace.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Internal\RequestAccessorExtension.cs" />
+	<Compile Include="..\NLog.Web.AspNetCore\Internal\GlobalConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

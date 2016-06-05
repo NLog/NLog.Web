@@ -27,14 +27,8 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-cookie")]
     public class AspNetCookieLayoutRenderer : AspNetLayoutRendererBase
     {
-        private const string doubleQuotes = "\"";
-        private const string jsonStartBraces = "{";
-        private const string jsonEndBraces = "}";
-        private const string jsonElementSeparator = ",";
-
         private const string flatCookiesSeparator = "=";
         private const string flatItemSeperator = ",";
-
 
         /// <summary>
         /// List Cookie Key as String to be rendered from Request.
@@ -101,9 +95,9 @@ namespace NLog.Web.LayoutRenderers
                     break;
                 case AspNetLayoutOutputFormat.Json:
                     if (!firstItem)
-                        builder.Append($"{jsonElementSeparator}");
+                        builder.Append($"{GlobalConstants.jsonElementSeparator}");
 
-                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookieRaw}{doubleQuotes}{jsonEndBraces}");
+                    builder.Append($"{GlobalConstants.jsonElementStartBraces}{GlobalConstants.doubleQuotes}{cookieRaw}{GlobalConstants.doubleQuotes}{GlobalConstants.jsonElementEndBraces}");
                     break;
             }
         }
