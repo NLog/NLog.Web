@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionIDLayoutRendererTests
+    public class AspNetSessionIDLayoutRendererTests : TestBase
     {
         [Fact]
         public void NullHttpContextRendersEmptyString()

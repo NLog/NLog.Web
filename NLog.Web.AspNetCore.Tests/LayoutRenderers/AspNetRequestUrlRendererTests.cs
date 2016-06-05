@@ -31,7 +31,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.Url.Returns(new Uri("http://www.google.com/?t=1"));
             var renderer = new AspNetRequestUrlRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            
+
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(result, "http://www.google.com/");
@@ -96,7 +96,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Request.Url.Returns(new Uri(testUrl));
             var renderer = new AspNetRequestUrlRenderer();
-            
+
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());

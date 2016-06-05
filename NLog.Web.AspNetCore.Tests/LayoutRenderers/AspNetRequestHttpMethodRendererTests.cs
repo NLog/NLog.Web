@@ -8,7 +8,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestHttpMethodRendererTests
+    public class AspNetRequestHttpMethodRendererTests : TestBase
     {
         [Fact]
         public void NullUrlRendersEmptyString()

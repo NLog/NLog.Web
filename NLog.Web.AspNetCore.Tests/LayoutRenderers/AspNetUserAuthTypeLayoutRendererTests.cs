@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetUserAuthTypeLayoutRendererTests
+    public class AspNetUserAuthTypeLayoutRendererTests : TestBase
     {
         [Fact]
         public void NullHttpContextRendersEmptyString()

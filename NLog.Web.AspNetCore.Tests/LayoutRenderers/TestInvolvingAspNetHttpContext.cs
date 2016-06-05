@@ -9,7 +9,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public abstract class TestInvolvingAspNetHttpContext : IDisposable
+    public abstract class TestInvolvingAspNetHttpContext : TestBase, IDisposable
     {
         protected HttpContext HttpContext;
 

@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using System.Text;
 using System.Web;
+using NLog.Web.Tests.LayoutRenderers;
 using Xunit;
 
 namespace NLog.Web.Tests
 {
-    public class DefaultHttpContextAccessorTests
+    public class DefaultHttpContextAccessorTests: TestBase
     {
         [Fact]
         public void UnavailableHttpContextReturnsNull()
