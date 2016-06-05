@@ -81,50 +81,32 @@ namespace NLog.Web.LayoutRenderers
         {
             if (cookie != null)
             {
-                switch (this.OutputFormat)
-                {
-                    case AspNetLayoutOutputFormat.Flat:
-                        if (!firstItem)
-                            builder.Append($"{flatItemSeperator}");
+                var cookieRaw = $"{cookie.Name}{flatCookiesSeparator}{cookie.Value}";
 
-                        builder.Append($"{cookie.Name}{flatCookiesSeparator}{cookie.Value}");
-                        break;
-                    case AspNetLayoutOutputFormat.Json:
-                        if (!firstItem)
-                            builder.Append($"{jsonElementSeparator}");
-
-                        builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
-                        break;
-                }
+                SerializeCookie(cookieRaw, builder, firstItem);
             }
         }
+        
 #endif
 
-#if NETSTANDARD_1plus
-        /// <summary>
-        /// To Serialize the HttpCookie based on the configured output format.
-        /// </summary>
-        /// <param name="cookie">The current cookie item.</param>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-        /// <param name="firstItem">Whether it is first item.</param>
-        private void SerializeCookie(StringValues cookie, StringBuilder builder, bool firstItem)
+
+
+        private void SerializeCookie(string cookieRaw, StringBuilder builder, bool firstItem)
         {
             switch (this.OutputFormat)
             {
                 case AspNetLayoutOutputFormat.Flat:
                     if (!firstItem)
                         builder.Append($"{flatItemSeperator}");
-
-                    builder.Append($"{cookie}");
+                    builder.Append(cookieRaw);
                     break;
                 case AspNetLayoutOutputFormat.Json:
                     if (!firstItem)
                         builder.Append($"{jsonElementSeparator}");
 
-                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie}{doubleQuotes}{jsonEndBraces}");
+                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookieRaw}{doubleQuotes}{jsonEndBraces}");
                     break;
             }
         }
-#endif
     }
 }
