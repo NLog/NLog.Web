@@ -57,17 +57,21 @@ namespace NLog.Web.LayoutRenderers
             string url, pathAndQuery, port, host;
             url = pathAndQuery = port = host = null;
 
+
 #if !NETSTANDARD_1plus
 
+            
             if (httpRequest.Url == null)
+            {
                 return;
+            }
 
             if (IncludePort && httpRequest.Url.Port > 0)
             {
-                port = ":" + httpRequest.Url.Port.ToString();
+                port = ":" + httpRequest.Url.Port;
             }
 
-            if (IncludeQueryString && httpRequest.Url.PathAndQuery != null)
+            if (IncludeQueryString)
             {
                 pathAndQuery = httpRequest.Url.PathAndQuery;
             }
@@ -78,10 +82,14 @@ namespace NLog.Web.LayoutRenderers
 
             if (IncludeHost)
             {
-                host = httpRequest.Url.Host?.ToString();
+                host = httpRequest.Url?.Host;
             }
 
-            url = $"{httpRequest.Url.Scheme}://{host}{port}{pathAndQuery}";
+            var scheme = httpRequest.Url.Scheme;
+
+            url = $"{scheme}://{host}{port}{pathAndQuery}";
+
+
 #else
             if (IncludeQueryString)
             {
@@ -98,7 +106,9 @@ namespace NLog.Web.LayoutRenderers
                 host = httpRequest.Host.Host?.ToString();
             }
 
-            url = $"{httpRequest.Scheme}://{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
+            var scheme = httpRequest.Scheme;
+
+            url = $"{scheme}://{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
 #endif
             builder.Append(url);
 

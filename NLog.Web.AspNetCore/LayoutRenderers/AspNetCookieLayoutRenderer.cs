@@ -54,18 +54,20 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (this.CookieNames?.Count > 0)
-            {
-                var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
+            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
 
-                if (httpRequest?.Cookies?.Count > 0)
+            if (httpRequest == null)
+            {
+                return;
+            }
+
+            if (this.CookieNames?.Count > 0 && httpRequest?.Cookies?.Count > 0)
+            {
+                bool firstItem = true;
+                foreach (var cookieName in this.CookieNames)
                 {
-                    bool firstItem = true;
-                    foreach (var cookieName in this.CookieNames)
-                    {
-                        this.SerializeCookie(httpRequest.Cookies[cookieName], builder, firstItem);
-                        firstItem = false;
-                    }
+                    this.SerializeCookie(httpRequest.Cookies[cookieName], builder, firstItem);
+                    firstItem = false;
                 }
             }
         }
@@ -81,50 +83,29 @@ namespace NLog.Web.LayoutRenderers
         {
             if (cookie != null)
             {
-                switch (this.OutputFormat)
-                {
-                    case AspNetLayoutOutputFormat.Flat:
-                        if (!firstItem)
-                            builder.Append($"{flatItemSeperator}");
+                var cookieRaw = $"{cookie.Name}{flatCookiesSeparator}{cookie.Value}";
 
-                        builder.Append($"{cookie.Name}{flatCookiesSeparator}{cookie.Value}");
-                        break;
-                    case AspNetLayoutOutputFormat.Json:
-                        if (!firstItem)
-                            builder.Append($"{jsonElementSeparator}");
-
-                        builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie.Name}{flatCookiesSeparator}{cookie.Value}{doubleQuotes}{jsonEndBraces}");
-                        break;
-                }
+                SerializeCookie(cookieRaw, builder, firstItem);
             }
         }
-#endif
 
-#if NETSTANDARD_1plus
-        /// <summary>
-        /// To Serialize the HttpCookie based on the configured output format.
-        /// </summary>
-        /// <param name="cookie">The current cookie item.</param>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-        /// <param name="firstItem">Whether it is first item.</param>
-        private void SerializeCookie(StringValues cookie, StringBuilder builder, bool firstItem)
+#endif
+        private void SerializeCookie(string cookieRaw, StringBuilder builder, bool firstItem)
         {
             switch (this.OutputFormat)
             {
                 case AspNetLayoutOutputFormat.Flat:
                     if (!firstItem)
                         builder.Append($"{flatItemSeperator}");
-
-                    builder.Append($"{cookie}");
+                    builder.Append(cookieRaw);
                     break;
                 case AspNetLayoutOutputFormat.Json:
                     if (!firstItem)
                         builder.Append($"{jsonElementSeparator}");
 
-                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookie}{doubleQuotes}{jsonEndBraces}");
+                    builder.Append($"{jsonStartBraces}{doubleQuotes}{cookieRaw}{doubleQuotes}{jsonEndBraces}");
                     break;
             }
         }
-#endif
     }
 }

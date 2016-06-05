@@ -8,7 +8,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetMvcActionRendererTests
+    public class AspNetMvcActionRendererTests : TestBase
     {
         [Fact]
         public void NullRoutesRenderersEmptyString()

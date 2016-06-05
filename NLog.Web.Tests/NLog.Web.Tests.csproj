@@ -82,7 +82,7 @@
     <Compile Include="..\NLog.Web.AspNetCore.Tests\FakeHttpContextAccessor.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetApplicationValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetMvcControllerRendererTests.cs" />
-	<Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetMvcActionRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetMvcActionRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetCookieLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestHttpMethodRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetQueryStringLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLog.Web\NLog.Web.csproj">

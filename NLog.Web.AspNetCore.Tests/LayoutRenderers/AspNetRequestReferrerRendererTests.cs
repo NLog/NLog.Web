@@ -8,7 +8,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestReferrerRendererTests
+    public class AspNetRequestReferrerRendererTests : TestBase
     {
 
         [Fact]

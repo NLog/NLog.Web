@@ -8,7 +8,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUserAgentTests
+    public class AspNetRequestUserAgentTests : TestBase
     {
         [Fact]
         public void NullUserAgentRendersEmptyString()

@@ -11,7 +11,7 @@ using NLog.Layouts;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetMvcControllerRendererTests
+    public class AspNetMvcControllerRendererTests : TestBase
     {
         [Fact]
         public void NullRoutesRenderersEmptyString()
