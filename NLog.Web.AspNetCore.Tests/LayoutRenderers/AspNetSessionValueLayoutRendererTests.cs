@@ -1,7 +1,18 @@
-﻿using System;
+﻿#if !NETSTANDARD_1plus
+//TODO test .NET Core
+
+using System;
 using System.Reflection;
+#if !NETSTANDARD_1plus
 using System.Web;
+using System.Web.Routing;
+using System.Collections.Specialized;
 using System.Web.SessionState;
+#else
+using Microsoft.Extensions.Primitives;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using HttpSessionState = Microsoft.AspNetCore.Http.ISession;
+#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
@@ -237,3 +248,4 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
     }
 }
+#endif

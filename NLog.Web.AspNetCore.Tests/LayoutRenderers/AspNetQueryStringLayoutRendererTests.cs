@@ -1,13 +1,24 @@
-﻿using System;
+﻿#if !NETSTANDARD_1plus
+//todo nsubstitute
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+#if !NETSTANDARD_1plus
 using System.Web;
+using System.Web.Routing;
+using System.Collections.Specialized;
+using System.Web.SessionState;
+#else
+using Microsoft.Extensions.Primitives;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using HttpSessionState = Microsoft.AspNetCore.Http.ISession;
+#endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NLog.Web.Enums;
 using Xunit;
 using System.Collections.Specialized;
-using System.Web.SessionState;
 using System.Reflection;
 using NLog.Targets;
 using NLog.Layouts;
@@ -34,7 +45,14 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         private HttpSessionState Session
         {
-            get { return HttpContext.Current.Session; }
+            get
+            {
+#if NETSTANDARD_1plus
+                return HttpContext.Session;
+#else
+                return HttpContext.Current.Session;
+#endif
+            }
         }
 
         public void SetupFakeSession()
@@ -181,3 +199,4 @@ namespace NLog.Web.Tests.LayoutRenderers
         }       
     }
 }
+#endif
