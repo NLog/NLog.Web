@@ -59,7 +59,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void VariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Items["key"].Returns(expectedValue);
+#if NETSTANDARD_1plus
+            httpContext.Items = new Dictionary<object, object>();
+#endif
+            httpContext.Items.Add("key", expectedValue);
 
             var renderer = new AspNetItemValueLayoutRenderer();
             renderer.Variable = "key";

@@ -2,6 +2,8 @@
 #if !NETSTANDARD_1plus
 using System.Web;
 using System.Collections.Specialized;
+#else
+using Microsoft.AspNetCore.Http.Extensions;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
@@ -54,13 +56,11 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            string url, pathAndQuery, port, host;
-            url = pathAndQuery = port = host = null;
-
+            string url, pathAndQuery, port, host, scheme;
+            url = pathAndQuery = port = host = scheme = null;
 
 #if !NETSTANDARD_1plus
-
-            
+                        
             if (httpRequest.Url == null)
             {
                 return;
@@ -85,7 +85,7 @@ namespace NLog.Web.LayoutRenderers
                 host = httpRequest.Url?.Host;
             }
 
-            var scheme = httpRequest.Url.Scheme;
+            scheme = httpRequest.Url.Scheme;
 
             url = $"{scheme}://{host}{port}{pathAndQuery}";
 
@@ -93,7 +93,7 @@ namespace NLog.Web.LayoutRenderers
 #else
             if (IncludeQueryString)
             {
-                pathAndQuery = httpRequest.QueryString.ToUriComponent();
+                pathAndQuery = httpRequest.QueryString.Value;
             }
 
             if (IncludePort && httpRequest.Host.Port > 0)
@@ -103,12 +103,16 @@ namespace NLog.Web.LayoutRenderers
 
             if (IncludeHost)
             {
-                host = httpRequest.Host.Host?.ToString();
+                host = httpRequest.Host.Host;
             }
 
-            var scheme = httpRequest.Scheme;
+            if (!String.IsNullOrEmpty(httpRequest.Scheme))
+                scheme = httpRequest.Scheme + "://";
 
-            url = $"{scheme}://{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
+            url = $"{scheme}{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
+
+
+
 #endif
             builder.Append(url);
 

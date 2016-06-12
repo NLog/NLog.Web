@@ -6,6 +6,7 @@ using NLog.Web.Internal;
 using System.Web.Routing;
 using System.Web;
 #else
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
 #endif
 
@@ -36,10 +37,6 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         /// <param name="context">The current http context.</param>        
-#if !NETSTANDARD_1plus
         protected abstract void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContextBase context);
-#else
-        protected abstract void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContext context);
-#endif
     }
 }

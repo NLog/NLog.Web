@@ -8,6 +8,8 @@ using System.Web.SessionState;
 #else
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
@@ -21,13 +23,18 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullRoutesRenderersEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-
+#if NETSTANDARD_1plus
+            var routingFeature = Substitute.For<IRoutingFeature>();
+            var collection = new FeatureCollection();
+            collection.Set<IRoutingFeature>(routingFeature);
+            httpContext.Features.Returns(collection);
+#endif
             var renderer = new AspNetMvcActionRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
-            string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Empty(result);
-        }        
+        }
     }
 }
