@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using NLog.Web.Internal;
 
 namespace NLog.Web
@@ -19,8 +15,7 @@ namespace NLog.Web
 
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
-            ServiceLocator.ServiceProvider = app.ApplicationServices;
+            ServiceLocator.ServiceProvider = app.ApplicationServices;            
         }
-
     }
 }
