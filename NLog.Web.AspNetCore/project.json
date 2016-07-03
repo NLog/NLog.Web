@@ -1,6 +1,6 @@
 {
 
-    "version": "4.2.3",
+    "version": "4.2.4",
     "description": "Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.",
     "authors": [ "Julian Verdurmen" ],
     "packOptions": {
@@ -17,8 +17,8 @@
     },
 
     "dependencies": {
-        "Microsoft.AspNetCore.Http.Extensions": "1.0.0-rc2-final",
-        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Http.Extensions": "1.0.0",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
         "NLog": "4.4.0-beta9"
     },
 
@@ -26,8 +26,6 @@
     "frameworks": {
         "netstandard1.3": { },
         "net451": { }
-
-
     },
     "buildOptions": {
         "keyFile": "NLog.snk",
