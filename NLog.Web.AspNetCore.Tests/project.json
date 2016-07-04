@@ -3,11 +3,11 @@
     "testRunner": "xunit",
   "dependencies": {
     "dotnet-test-xunit": "1.0.0-rc2-build10025",
-    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0-rc2-final",
-    "Microsoft.AspNetCore.Http.Extensions": "1.0.0-rc2-final",
-    "Microsoft.AspNetCore.Routing": "1.0.0-rc2-final",
-    "NLog": "4.4.0-beta9",
-    "NLog.Web.AspNetCore": "4.2.3",
+    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
+    "Microsoft.AspNetCore.Http.Extensions": "1.0.0",
+    "Microsoft.AspNetCore.Routing.Abstractions": "1.0.0",
+    "NLog": "4.4.0-beta13",
+    "NLog.Web.AspNetCore": "4.2.4",
     "NSubstitute": "2.0.0-alpha001",
     "xunit": "2.1.0"
   },
