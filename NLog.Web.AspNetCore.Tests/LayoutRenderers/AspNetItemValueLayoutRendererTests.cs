@@ -61,9 +61,11 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
 #if NETSTANDARD_1plus
             httpContext.Items = new Dictionary<object, object>();
-#endif
             httpContext.Items.Add("key", expectedValue);
-
+#else
+            httpContext.Items["key"].Returns(expectedValue); 
+#endif
+            
             var renderer = new AspNetItemValueLayoutRenderer();
             renderer.Variable = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
