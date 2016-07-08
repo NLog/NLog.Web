@@ -16,11 +16,12 @@
         }
     },
 
-    "dependencies": {
-        "Microsoft.AspNetCore.Http.Extensions": "1.0.0",
-        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
-        "NLog": "4.4.0-beta13"
-    },
+  "dependencies": {
+    "Microsoft.AspNetCore.Http.Extensions": "1.0.0",
+    "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
+    "Microsoft.AspNetCore.Routing.Abstractions": "1.0.0",
+    "NLog": "4.4.0-beta13"
+  },
 
     "title": "NLog.Web.AspNetCore",
     "frameworks": {

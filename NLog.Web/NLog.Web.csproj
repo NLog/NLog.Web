@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -41,13 +41,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.0.1\lib\net35\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.5-alpha1\lib\net35\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -55,20 +56,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NLog.Web.AspNetCore\DefaultHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\IHttpContextAccessor.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\IHttpContextAccessor.cs" />	
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutRendererBase.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcControllerRenderer.cs" />
+	<Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcActionRenderer.cs" />
+	<Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcLayoutRendererBase.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestReferrerRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUrlRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUserAgent.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetCookieLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetQueryStringLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\Enums\AspNetCookieLayoutOutputFormat.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Internal\PropertyReader.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\NLogHttpModule.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Targets\AspNetTrace.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\Internal\RequestAccessorExtension.cs" />
+	<Compile Include="..\NLog.Web.AspNetCore\Internal\GlobalConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

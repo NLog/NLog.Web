@@ -1,5 +1,6 @@
-﻿#if !NETSTANDARD_1plus
-//TODO test .NET Core
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 #if !NETSTANDARD_1plus
 using System.Web;
 using System.Web.Routing;
@@ -15,12 +16,16 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionIDLayoutRendererTests : TestBase
+    public class AspNetRequestHttpMethodRendererTests : TestBase
     {
         [Fact]
-        public void NullHttpContextRendersEmptyString()
+        public void NullUrlRendersEmptyString()
         {
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var httpContext = Substitute.For<HttpContextBase>();
+            
+            var renderer = new AspNetRequestHttpMethodRenderer();
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -28,33 +33,22 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void NullSessionRendersEmptyString()
+        public void HttpMethod_Set_Renderer()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Session.Returns(null as HttpSessionStateWrapper);
+#if NETSTANDARD_1plus
+            httpContext.Request.Method.Returns("POST");
+#else
+            httpContext.Request.HttpMethod.Returns("POST");
+#endif
 
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var renderer = new AspNetRequestHttpMethodRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+
 
             string result = renderer.Render(new LogEventInfo());
 
-            Assert.Empty(result);
-        }
-
-        [Fact]
-        public void AvailableSessionRendersSessionId()
-        {
-            var expectedResult = "value";
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Session.SessionID.Returns(expectedResult);
-
-            var renderer = new AspNetSessionIDLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Equal(expectedResult, result);
+            Assert.Equal("POST", result);
         }
     }
 }
-#endif

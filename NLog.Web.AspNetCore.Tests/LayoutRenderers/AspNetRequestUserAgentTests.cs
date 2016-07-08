@@ -1,5 +1,6 @@
-﻿#if !NETSTANDARD_1plus
-//TODO test .NET Core
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 #if !NETSTANDARD_1plus
 using System.Web;
 using System.Web.Routing;
@@ -15,25 +16,14 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionIDLayoutRendererTests : TestBase
+    public class AspNetRequestUserAgentTests : TestBase
     {
         [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetSessionIDLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
-
-        [Fact]
-        public void NullSessionRendersEmptyString()
+        public void NullUserAgentRendersEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Session.Returns(null as HttpSessionStateWrapper);
 
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var renderer = new AspNetRequestUserAgent();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
@@ -42,19 +32,25 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void AvailableSessionRendersSessionId()
+        public void NotNullUserAgentRendersEmptyString()
         {
-            var expectedResult = "value";
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Session.SessionID.Returns(expectedResult);
+            
 
-            var renderer = new AspNetSessionIDLayoutRenderer();
+#if !NETSTANDARD_1plus
+             httpContext.Request.UserAgent.Returns("TEST");
+#else
+            var headers = new HeaderDict();
+            headers.Add("User-Agent", new StringValues("TEST"));
+            httpContext.Request.Headers.Returns((callinfo) => headers);
+#endif
+
+            var renderer = new AspNetRequestUserAgent();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
 
-            Assert.Equal(expectedResult, result);
+            Assert.Equal(result, "TEST");
         }
     }
 }
-#endif

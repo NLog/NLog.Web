@@ -1,6 +1,8 @@
-﻿using System;
+﻿#if !NETSTANDARD_1plus
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+
 using System.Web;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
@@ -8,7 +10,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetApplicationValueLayoutRendererTests
+    public class AspNetApplicationValueLayoutRendererTests : TestBase
     {
         [Fact]
         public void NullHttpContextRendersEmptyString()
@@ -76,3 +78,4 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
     }
 }
+#endif

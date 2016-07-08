@@ -1,4 +1,12 @@
-﻿using System.Web;
+﻿#if !NETSTANDARD_1plus
+using System.Web;
+using System.Collections.Specialized;
+using System.Web.SessionState;
+#else
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+#endif
 
 namespace NLog.Web.Tests
 {
@@ -7,7 +15,7 @@ namespace NLog.Web.Tests
     /// </summary>
     public class FakeHttpContextAccessor : IHttpContextAccessor
     {
-        public HttpContextBase HttpContext { get; private set; }
+        public HttpContextBase HttpContext { get; set; }
 
         public FakeHttpContextAccessor(HttpContextBase httpContext)
         {

@@ -1,11 +1,14 @@
-﻿#if !NETSTANDARD_1plus
-//TODO test .NET Core
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+
 #if !NETSTANDARD_1plus
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
 using System.Web.SessionState;
 #else
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
@@ -15,25 +18,15 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionIDLayoutRendererTests : TestBase
+    public class AspNetRequestReferrerRendererTests : TestBase
     {
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetSessionIDLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
 
         [Fact]
-        public void NullSessionRendersEmptyString()
+        public void NullReferrerRendersEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Session.Returns(null as HttpSessionStateWrapper);
 
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var renderer = new AspNetRequestReferrerRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
@@ -42,19 +35,26 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void AvailableSessionRendersSessionId()
+        public void ReferrerPresentRenderNonEmptyString()
         {
-            var expectedResult = "value";
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Session.SessionID.Returns(expectedResult);
-
-            var renderer = new AspNetSessionIDLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Equal(expectedResult, result);
-        }
-    }
-}
+#if !NETSTANDARD_1plus
+            httpContext.Request.UrlReferrer.Returns(new Uri("http://www.google.com/"));
+#else
+            var headers = new HeaderDict();
+            headers.Add("Referer", new StringValues("http://www.google.com/"));
+            httpContext.Request.Headers.Returns((callinfo) => headers);
 #endif
+            var renderer = new AspNetRequestReferrerRenderer();
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(result, "http://www.google.com/");
+        }
+
+
+    }
+
+
+}
