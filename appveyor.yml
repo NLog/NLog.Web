@@ -21,7 +21,7 @@ build_script:
 - cmd: >-
     call build_aspnet.bat -nuget_version=4.2.1
 
-    call build_aspnetcore.bat 
+    call build_aspnetcore.bat
 
 deploy: off
 test_script:
@@ -30,12 +30,11 @@ test_script:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
   - codecov -f "coverage.xml"
-  
+  - call test_aspnetcore.bat
+
 artifacts:
 - path: 'NLog*\**\*.nupkg'
   name: aspnetcore
-  
+
 - path: '*.nupkg'
   name: aspnet
-
- 

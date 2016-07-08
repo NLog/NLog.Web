@@ -2,9 +2,21 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Reflection;
+#if !NETSTANDARD_1plus
 using System.Web;
+using System.Web.Routing;
+using System.Collections.Specialized;
+using System.Web.SessionState;
+#else
+using Microsoft.Extensions.Primitives;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
+using Microsoft.AspNetCore.Http;
+#endif
 using System.Xml;
+
 using NLog.Config;
+
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
@@ -16,7 +28,9 @@ namespace NLog.Web.Tests.LayoutRenderers
         protected TestInvolvingAspNetHttpContext()
         {
             HttpContext = SetupFakeHttpContext();
+#if !NETSTANDARD_1plus
             HttpContext.Current = HttpContext;
+#endif
         }
         
         /// <summary>
@@ -42,16 +56,21 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected HttpContext SetupFakeHttpContext()
         {
+#if !NETSTANDARD_1plus
             var httpRequest = SetUpHttpRequest();
             var stringWriter = new StringWriter();
             var httpResponse = new HttpResponse(stringWriter);
             return new HttpContext(httpRequest, httpResponse);
+#else
+            return null;
+#endif
         }
-
+#if !NETSTANDARD_1plus
         protected virtual HttpRequest SetUpHttpRequest(string query = "")
         {
             return new HttpRequest("", "http://stackoverflow/", query);
         }
+
 
         protected void AddHeader(HttpRequest request, string headerName, string headerValue)
         {
@@ -74,6 +93,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 null,
                 headers, null);
         }
+      #endif
 
         protected NLog.Targets.DebugTarget GetDebugTarget(string targetName, LoggingConfiguration configuration)
         {

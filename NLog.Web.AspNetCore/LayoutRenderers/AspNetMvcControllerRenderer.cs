@@ -4,6 +4,7 @@ using System.Text;
 using System.Web.Routing;
 using System.Web;
 #else
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
 #endif
@@ -31,11 +32,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         /// <param name="context">The current http context.</param>
-#if !NETSTANDARD_1plus
         protected override void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContextBase context)
-#else
-        protected override void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContext context)
-#endif
         {
             string key = "controller";
             string controller;
@@ -43,7 +40,7 @@ namespace NLog.Web.LayoutRenderers
 #if !NETSTANDARD_1plus
             controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
 #else
-            controller = context.GetRouteValue(key)?.ToString();
+            controller = context?.GetRouteData()?.Values?[key]?.ToString();
 #endif
             if (!string.IsNullOrEmpty(controller))
                 builder.Append(controller);

@@ -68,7 +68,9 @@ namespace NLog.Web.LayoutRenderers
             }
             var context = HttpContextAccessor.HttpContext;
 
-            var value = PropertyReader.GetValue(Variable, k => context.Items[k], EvaluateAsNestedProperties);
+            Func<string, object> getVal = k => context.Items[k];
+
+            var value = PropertyReader.GetValue(Variable, getVal, EvaluateAsNestedProperties);
 
             builder.Append(Convert.ToString(value, CultureInfo.CurrentUICulture));
         }

@@ -1,16 +1,29 @@
-﻿using System;
+﻿
+#if !NETSTANDARD_1plus
+//TODO test .NET Core
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Web;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NLog.Web.Enums;
 using Xunit;
-using System.Web.SessionState;
+
 using System.Reflection;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
+
+#if !NETSTANDARD_1plus
+using System.Web;
+using System.Collections.Specialized;
+using System.Web.SessionState;
+#else
+using Microsoft.Extensions.Primitives;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+#endif
+
+
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -230,3 +243,4 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
     }
 }
+#endif

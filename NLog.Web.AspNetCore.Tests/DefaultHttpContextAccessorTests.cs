@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if !NETSTANDARD_1plus
+using System.IO;
 using System.Text;
 using System.Web;
 using NLog.Web.Tests.LayoutRenderers;
@@ -28,3 +29,4 @@ namespace NLog.Web.Tests
         }
     }
 }
+#endif

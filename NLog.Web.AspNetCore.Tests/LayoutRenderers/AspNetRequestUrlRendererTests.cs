@@ -1,7 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+#if !NETSTANDARD_1plus
 using System.Web;
+using System.Web.Routing;
+using System.Collections.Specialized;
+using System.Web.SessionState;
+#else
+using Microsoft.Extensions.Primitives;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using Microsoft.AspNetCore.Http;
+#endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
@@ -18,7 +27,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetRequestUrlRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
-            string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Empty(result);
         }
@@ -26,12 +35,9 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void UrlPresentRenderNonEmpty_ExcludeQueryString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Request.Url.Returns(new Uri("http://www.google.com/?t=1"));
-            var renderer = new AspNetRequestUrlRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http");
 
-            string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(result, "http://www.google.com/");
         }
@@ -39,13 +45,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void UrlPresentRenderNonEmpty_IncludeQueryString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Request.Url.Returns(new Uri("http://www.google.com/?t=1"));
-            var renderer = new AspNetRequestUrlRenderer();
-            renderer.IncludeQueryString = true;
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http");
 
-            string result = renderer.Render(new LogEventInfo());
+            renderer.IncludeQueryString = true;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(result, "http://www.google.com/?t=1");
         }
@@ -54,14 +58,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void UrlPresentRenderNonEmpty_IncludeQueryString_IncludePort()
         {
             var expected = "http://www.google.com:80/Test.asp?t=1";
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Request.Url.Returns(new Uri(expected));
-            var renderer = new AspNetRequestUrlRenderer();
+
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
             renderer.IncludeQueryString = true;
             renderer.IncludePort = true;
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
-            string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(result, expected);
         }
@@ -69,18 +71,14 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_ExcludePort()
         {
-            var testUrl = "http://www.google.com:80/Test.asp?t=1";
             var expected = "http://www.google.com/Test.asp?t=1";
 
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Request.Url.Returns(new Uri(testUrl));
-            var renderer = new AspNetRequestUrlRenderer();
             renderer.IncludeQueryString = true;
             renderer.IncludePort = false;
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
-            string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(result, expected);
         }
@@ -88,19 +86,33 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void UrlPresentRenderNonEmpty_ExcludeQueryString_ExcludePort()
         {
-            var testUrl = "http://www.google.com:80/Test.asp?t=1";
             var expected = "http://www.google.com/Test.asp";
 
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal(result, expected);
+        }
+
+        private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "")
+        {
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Request.Url.Returns(new Uri(testUrl));
+
+#if !NETSTANDARD_1plus
+            var url = $"{scheme}://{hostBase}{pathBase}{page}{queryString}";
+            httpContext.Request.Url.Returns(new Uri(url));
+#else
+            httpContext.Request.Path.Returns(new PathString(page));
+            httpContext.Request.PathBase.Returns(new PathString(pathBase));
+            httpContext.Request.QueryString.Returns(new QueryString(queryString));
+            httpContext.Request.Host.Returns(new HostString(hostBase));
+            httpContext.Request.Scheme.Returns(scheme);
+#endif
             var renderer = new AspNetRequestUrlRenderer();
 
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Equal(result, expected);
+            return renderer;
         }
     }
 }
