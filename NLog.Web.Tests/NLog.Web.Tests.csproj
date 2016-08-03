@@ -99,6 +99,7 @@
     <Compile Include="..\NLog.Web.AspNetCore.Tests\TestBase.cs">
       <Link>TestBase.cs</Link>
     </Compile>
+    <Compile Include="AssemblyVersionLayoutRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
