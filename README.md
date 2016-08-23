@@ -23,7 +23,7 @@ The following parts are supported in ASP.NET Core:
 * aspnet-item
 * aspnet-request (except ServerVariable)
 * aspnet-session
-* aspnet-sessionid (new in RC2)
+* aspnet-sessionid
 * aspnet-user-authtype
 * aspnet-user-identity
 * iis-site-name
@@ -60,10 +60,10 @@ In your startup.cs
 in project.json:
 
 ```json
-    "dependencies": {
-        "NLog.Extensions.Logging": "1.0.0-rc2-final-2016-05-21",
-        "NLog.Web.AspNetCore": "4.2.3"
-    },
+	"dependencies": {
+	    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
+	    "NLog.Web.AspNetCore": "4.2.3"
+	},
 ```
 
 ## Content
