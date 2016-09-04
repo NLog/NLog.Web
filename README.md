@@ -1,6 +1,5 @@
 # NLog.Web (ASP.NET & ASP.NET Core)
 
-Note: the package NLog.Web.ASPNET5 has been upgraded to ASP.NET Core RC2 and renamed to Log.Web.AspNetCore. The code is 99% backwardscompatible. 
 
 ASP.NET: [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
 
