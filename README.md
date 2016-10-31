@@ -10,7 +10,9 @@ ASP.NET:  [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.
 ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore) 
 
 
+## ASP.NET
 
+Simply install the package.
 
 
 ## ASP.NET Core
