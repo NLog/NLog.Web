@@ -47,9 +47,16 @@ In your nlog.config:
 In your startup.cs
 
 ```c#
+        public void ConfigureServices(IServiceCollection Services)
+        {
+    	    //call this in case you need aspnet-user-authtype/aspnet-user-identity
+	    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
             //add NLog to ASP.NET Core
             loggerFactory.AddNLog();
 
