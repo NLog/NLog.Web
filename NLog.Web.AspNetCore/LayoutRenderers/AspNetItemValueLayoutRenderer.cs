@@ -68,6 +68,11 @@ namespace NLog.Web.LayoutRenderers
             }
             var context = HttpContextAccessor.HttpContext;
 
+            if (context == null)
+            {
+                return;
+            }
+
             Func<string, object> getVal = k => context.Items[k];
 
             var value = PropertyReader.GetValue(Variable, getVal, EvaluateAsNestedProperties);

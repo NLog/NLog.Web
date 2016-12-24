@@ -28,10 +28,18 @@ namespace NLog.Web.Internal
 
                 value = getVal(path.First());
 
-                foreach (var property in path.Skip(1))
+                if (value != null)
                 {
-                    var propertyInfo = GetPropertyInfo(value, property);
-                    value = propertyInfo?.GetValue(value, null);
+                    foreach (var property in path.Skip(1))
+                    {
+                        var propertyInfo = GetPropertyInfo(value, property);
+                        value = propertyInfo?.GetValue(value, null);
+                        if (value == null)
+                        {
+                            //done
+                            break;
+                        }
+                    }
                 }
             }
             else
@@ -44,9 +52,9 @@ namespace NLog.Web.Internal
         private static PropertyInfo GetPropertyInfo(object value, string propertyName)
         {
 #if !NETSTANDARD_1plus
-            return value.GetType().GetProperty(propertyName);
+            return value?.GetType().GetProperty(propertyName);
 #else
-            return value.GetType().GetTypeInfo().GetDeclaredProperty(propertyName);
+            return value?.GetType().GetTypeInfo().GetDeclaredProperty(propertyName);
 #endif
         }
     }

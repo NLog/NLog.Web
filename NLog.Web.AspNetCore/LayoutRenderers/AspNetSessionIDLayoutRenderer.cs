@@ -23,7 +23,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var context = HttpContextAccessor.HttpContext;
 
-            if (context.Session == null)
+            if (context?.Session == null)
             {
                 return;
             }
