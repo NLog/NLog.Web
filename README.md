@@ -29,6 +29,14 @@ The following parts are supported in ASP.NET Core:
 * aspnet-user-identity
 * iis-site-name
 
+introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
+
+- aspnet-request-cookie - To Render cookie(s) from the request. Allows comma separated to get multiple cookie values. Can also allow json formatting.
+- aspnet-request-referrer - To Render the Referrer URL.
+- aspnet-request-url - To Render the Request URL.
+- aspnet-useragent - To Capture the Useragent of the request.
+
+
 Please note:
 
 * [ServerVariables are non-existing in ASP.NET Core. ](http://stackoverflow.com/questions/25849217/vnext-server-variables-missing)
