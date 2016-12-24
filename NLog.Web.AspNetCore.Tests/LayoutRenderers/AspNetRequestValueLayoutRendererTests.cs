@@ -5,7 +5,6 @@ using System.IO;
 #if !NETSTANDARD_1plus
 using System.Web;
 using System.Web.Routing;
-using System.Collections.Specialized;
 using System.Web.SessionState;
 #else
 using Microsoft.Extensions.Primitives;
