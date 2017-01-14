@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Web", "NLog.Web\NLog.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Web.Tests", "NLog.Web.Tests\NLog.Web.Tests.csproj", "{E318FB41-9712-44CA-B792-E865EFE1A564}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit tests", "Unit tests", "{FA9A13E8-ADC4-4830-BAA7-CFC3C7EF42A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,5 +75,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE6878A3-8375-44DD-B161-81742056DC10} = {FA9A13E8-ADC4-4830-BAA7-CFC3C7EF42A8}
+		{E318FB41-9712-44CA-B792-E865EFE1A564} = {FA9A13E8-ADC4-4830-BAA7-CFC3C7EF42A8}
 	EndGlobalSection
 EndGlobal
