@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -64,7 +64,7 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcActionRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcLayoutRendererBase.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIDLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIdLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUrlRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUserAgent.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetCookieLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetQueryStringLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestQueryStringLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Enums\AspNetCookieLayoutOutputFormat.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Internal\PropertyReader.cs" />

@@ -20,7 +20,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NullHttpContextRendersEmptyString()
         {
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var renderer = new AspNetSessionIdLayoutRenderer();
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -33,7 +33,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Session.Returns(null as HttpSessionStateWrapper);
 
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var renderer = new AspNetSessionIdLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
@@ -48,7 +48,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Session.SessionID.Returns(expectedResult);
 
-            var renderer = new AspNetSessionIDLayoutRenderer();
+            var renderer = new AspNetSessionIdLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());

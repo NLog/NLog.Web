@@ -14,13 +14,13 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET User Agent
     /// </summary>
-    /// <para>Example usage of ${aspnet-useragent}:</para>
+    /// <para>Example usage of ${aspnet-request-useragent}:</para>
     /// <example>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-useragent} - Produces - User Agent String from the Request.
+    /// ${aspnet-request-useragent} - Produces - User Agent String from the Request.
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-useragent")]
+    [LayoutRenderer("aspnet-request-useragent")]
     public class AspNetRequestUserAgent : AspNetLayoutRendererBase
     {
         /// <summary>

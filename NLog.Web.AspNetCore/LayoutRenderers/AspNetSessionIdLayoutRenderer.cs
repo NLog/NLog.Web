@@ -12,7 +12,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Session ID.
     /// </summary>
     [LayoutRenderer("aspnet-sessionid")]
-    public class AspNetSessionIDLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetSessionIdLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
