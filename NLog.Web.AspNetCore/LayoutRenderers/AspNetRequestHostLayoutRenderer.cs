@@ -1,13 +1,15 @@
-#if NETSTANDARD_1plus
+
 using NLog.LayoutRenderers;
 using System.Text;
+#if NETSTANDARD_1plus
 using Microsoft.AspNetCore.Routing;
+#endif
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET CORE host.
+    /// ASP.NET host.
     /// </summary>
     /// <remarks>
     /// Use this layout renderer host.
@@ -17,8 +19,8 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-host}    
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-host")]
-    public class AspNetCoreHostLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-host")]
+    public class AspNetRequestHostLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
@@ -27,7 +29,12 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var host = HttpContextAccessor?.HttpContext?.TryGetRequest()?.Host;
+            var request = HttpContextAccessor?.HttpContext?.TryGetRequest();
+#if NETSTANDARD_1plus
+            var host = request?.Host;
+#else
+            var host = request?.UserHostName;
+#endif
 
             if (host != null)
             {
@@ -39,4 +46,3 @@ namespace NLog.Web.LayoutRenderers
         }
     }
 }
-#endif

@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
         /// </summary>
         [DefaultParameter]
-        public AspNetLayoutOutputFormat OutputFormat { get; set; } = AspNetLayoutOutputFormat.Flat;
+        public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
@@ -98,10 +98,10 @@ namespace NLog.Web.LayoutRenderers
 
             switch (this.OutputFormat)
             {
-                case AspNetLayoutOutputFormat.Flat:
+                case AspNetRequestLayoutOutputFormat.Flat:
                     builder.Append($"{configuredKey}:{value}");
                     break;
-                case AspNetLayoutOutputFormat.Json:
+                case AspNetRequestLayoutOutputFormat.Json:
                     if (!includeArrayEndBraces)
                     {
                         builder.Append(GlobalConstants.jsonArrayStartBraces);

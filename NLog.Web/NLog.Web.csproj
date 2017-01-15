@@ -72,7 +72,8 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestReferrerRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUrlRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUserAgent.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetCookieLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestCookieLayoutRenderer.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHostLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestQueryStringLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Enums\AspNetCookieLayoutOutputFormat.cs" />

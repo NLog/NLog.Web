@@ -25,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-cookie")]
-    public class AspNetCookieLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestCookieLayoutRenderer : AspNetLayoutRendererBase
     {
         private const string flatCookiesSeparator = "=";
         private const string flatItemSeperator = ",";
@@ -39,7 +39,7 @@ namespace NLog.Web.LayoutRenderers
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
         /// </summary>
         [DefaultParameter]
-        public AspNetLayoutOutputFormat OutputFormat { get; set; } = AspNetLayoutOutputFormat.Flat;
+        public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
@@ -88,12 +88,12 @@ namespace NLog.Web.LayoutRenderers
         {
             switch (this.OutputFormat)
             {
-                case AspNetLayoutOutputFormat.Flat:
+                case AspNetRequestLayoutOutputFormat.Flat:
                     if (!firstItem)
                         builder.Append($"{flatItemSeperator}");
                     builder.Append(cookieRaw);
                     break;
-                case AspNetLayoutOutputFormat.Json:
+                case AspNetRequestLayoutOutputFormat.Json:
                     if (!firstItem)
                         builder.Append($"{GlobalConstants.jsonElementSeparator}");
 

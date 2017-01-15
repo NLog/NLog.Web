@@ -95,7 +95,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.QueryStringKeys = new List<string> { "key" };
-            renderer.OutputFormat = AspNetLayoutOutputFormat.Flat;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -113,7 +113,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.QueryStringKeys = new List<string> { "key" };
-            renderer.OutputFormat = AspNetLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -132,7 +132,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.QueryStringKeys = new List<string> { "Id" };
-            renderer.OutputFormat = AspNetLayoutOutputFormat.Flat;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -151,7 +151,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.QueryStringKeys = new List<string> { "Id" };
-            renderer.OutputFormat = AspNetLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -171,7 +171,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.QueryStringKeys = new List<string> { "Id", "Id2" };
-            renderer.OutputFormat = AspNetLayoutOutputFormat.Flat;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -191,7 +191,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = new AspNetQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.QueryStringKeys = new List<string> { "Id", "Id2" };
-            renderer.OutputFormat = AspNetLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
 
