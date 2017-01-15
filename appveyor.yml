@@ -2,6 +2,7 @@ version: 4.2.0.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
 platform: Any CPU
+image: Visual Studio 2017 RC
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'

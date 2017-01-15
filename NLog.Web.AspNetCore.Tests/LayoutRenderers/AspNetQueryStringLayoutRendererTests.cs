@@ -18,7 +18,6 @@ using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NLog.Web.Enums;
 using Xunit;
-using System.Collections.Specialized;
 using System.Reflection;
 using NLog.Targets;
 using NLog.Layouts;
