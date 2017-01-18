@@ -22,7 +22,7 @@
     "Microsoft.AspNetCore.Http.Extensions": "1.0.0",
     "Microsoft.AspNetCore.Routing.Abstractions": "1.0.0",
     "NLog": "5.0.0-beta04",
-    "NLog.Extensions.Logging": "1.0.0-rtm-alpha5"
+    "NLog.Extensions.Logging": "1.0.0-rtm-beta1"
   },
 
   "title": "NLog.Web.AspNetCore",
