@@ -12,7 +12,7 @@ ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](htt
 
 ## ASP.NET
 
-Simply install the package.
+Simply install the package. NLog will detect the extension automatically. 
 
 
 ## ASP.NET Core
