@@ -31,7 +31,7 @@ ServerVariable)
 * [${aspnet-UserIdentity}](https://github.com/NLog/NLog/wiki/AspNetUserIdentity-layout-renderer) - ASP.NET User variable.
 * [${iis-site-name}](https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer) - IIS site name.
 
-introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
+Introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
 
 * [${aspnet-MVC-Action}](https://github.com/NLog/NLog/wiki/AspNet-MVC-Action-Layout-Renderer) - ASP.NET MVC action name
 * [${aspnet-MVC-Controller}](https://github.com/NLog/NLog/wiki/AspNet-MVC-Controller-Layout-Renderer) - ASP.NET MVC controller name
