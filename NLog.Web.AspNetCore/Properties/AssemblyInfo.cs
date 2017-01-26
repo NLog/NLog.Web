@@ -5,14 +5,14 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NLog.Web.ASPNET5")]
-[assembly: AssemblyProduct("NLog.Web for ASP.NET5")]
+[assembly: AssemblyTitle("NLog.Web.AspNetCore")]
+[assembly: AssemblyProduct("NLog.Web for ASP.NET Core")]
 
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 
-[assembly: AssemblyCopyright("Copyright © NLog 2015-2016")]
+[assembly: AssemblyCopyright("Copyright © NLog 2015-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("4.0.0.0")] //fixed
