@@ -44,44 +44,7 @@ Introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
 * [${aspnet-Request-Url}](https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer) - ASP.NET Request URL.
 
 ### Usage
-
-In your nlog.config:
-
-```xml
-  <extensions>
-    <!--enable NLog.Web for ASP.NET Core-->
-    <add assembly="NLog.Web.AspNetCore"/>
-  </extensions>
-```
-
-In your startup.cs
-
-```c#
-public void ConfigureServices(IServiceCollection Services)
-{
-    //call this in case you need aspnet-user-authtype/aspnet-user-identity
-    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-}
-
-// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-{
-
-    //add NLog to ASP.NET Core
-    loggerFactory.AddNLog();
-
-    //add NLog.Web
-    app.AddNLogWeb();
-
-```
-
-in project.json:
-
-```json
-  "dependencies": {
-      "NLog.Web.AspNetCore": "4.3.0"
-  },
-```
+- [Getting Started with ASP.NET Core (project json)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
 
 ## Content
 
