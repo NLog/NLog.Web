@@ -45,6 +45,7 @@ Introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
 
 ### Usage
 - [Getting Started with ASP.NET Core (project json)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
+- [ASP.NET Core examples with Microsoft SQL Server, text and Elasticsearch](https://github.com/damienbod/AspNetCoreNlog)
 
 ## Content
 
