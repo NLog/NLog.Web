@@ -27,7 +27,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-cookie")]
     public class AspNetRequestCookieLayoutRenderer : AspNetLayoutRendererBase
     {
-        private const string flatCookiesSeparator = "=";
+        private const string cookiesNameSeparator = "=";
         private const string flatItemSeperator = ",";
 
         /// <summary>
@@ -60,7 +60,8 @@ namespace NLog.Web.LayoutRenderers
                 bool firstItem = true;
                 foreach (var cookieName in this.CookieNames)
                 {
-                    this.SerializeCookie(httpRequest.Cookies[cookieName], builder, firstItem);
+                    var cookieValue = httpRequest.Cookies[cookieName];
+                    this.SerializeCookie(cookieName, cookieValue, builder, firstItem);
                     firstItem = false;
                 }
             }
@@ -70,22 +71,23 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To Serialize the HttpCookie based on the configured output format.
         /// </summary>
+        /// <param name="cookieName">Name of the cookie</param>
         /// <param name="cookie">The current cookie item.</param>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="firstItem">Whether it is first item.</param>
-        private void SerializeCookie(HttpCookie cookie, StringBuilder builder, bool firstItem)
+        private void SerializeCookie(string cookieName, HttpCookie cookie, StringBuilder builder, bool firstItem)
         {
             if (cookie != null)
             {
-                var cookieRaw = $"{cookie.Name}{flatCookiesSeparator}{cookie.Value}";
-
-                SerializeCookie(cookieRaw, builder, firstItem);
+                this.SerializeCookie(cookieName, cookie.Value, builder, firstItem);
             }
         }
 
 #endif
-        private void SerializeCookie(string cookieRaw, StringBuilder builder, bool firstItem)
+        private void SerializeCookie(string cookieName, string cookieValue, StringBuilder builder, bool firstItem)
         {
+            var cookieRaw = $"{cookieName}{cookiesNameSeparator}{cookieValue}";
+
             switch (this.OutputFormat)
             {
                 case AspNetRequestLayoutOutputFormat.Flat:
