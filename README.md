@@ -43,6 +43,10 @@ Introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
 * [${aspnet-Request-UserAgent}](https://github.com/NLog/NLog/wiki/AspNetRequest-UserAgent-Layout-Renderer) - ASP.NET Request useragent.
 * [${aspnet-Request-Url}](https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer) - ASP.NET Request URL.
 
+Introduced in NLog.Web.AspNetCore 4.3.1
+
+* [${aspnet-TraceIdentifier}](https://github.com/NLog/NLog/wiki/AspNetTraceIdentifier-Layout-Renderer) - ASP.NET trace identifier
+
 ### Usage
 - [Getting Started with ASP.NET Core (project json)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
 - [ASP.NET Core examples with Microsoft SQL Server, text and Elasticsearch](https://github.com/damienbod/AspNetCoreNlog)
@@ -74,6 +78,7 @@ See [Target documentation at the NLog wiki](https://github.com/NLog/NLog/wiki/Ta
 * [${aspnet-Request-Url}](https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer) - ASP.NET Request URL.
 * [${aspnet-Session}](https://github.com/NLog/NLog/wiki/AspNetSession-layout-renderer) - ASP.NET Session variable. 
 * [${aspnet-SessionId}](https://github.com/NLog/NLog/wiki/AspNetSessionId-layout-renderer) - ASP.NET Session ID variable.
+* [${aspnet-TraceIdentifier}](https://github.com/NLog/NLog/wiki/AspNetTraceIdentifier-Layout-Renderer) - ASP.NET trace identifier
 * [${aspnet-UserAuthType}](https://github.com/NLog/NLog/wiki/AspNetUserAuthType-layout-renderer) - ASP.NET User auth.
 * [${aspnet-UserIdentity}](https://github.com/NLog/NLog/wiki/AspNetUserIdentity-layout-renderer) - ASP.NET User variable.
 * [${iis-site-name}](https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer) - IIS site name.
