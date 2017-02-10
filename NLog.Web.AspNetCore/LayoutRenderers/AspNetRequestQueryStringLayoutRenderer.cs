@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using NLog.Config;
 using NLog.Web.Enums;
 using System;
+using System.Linq;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -29,6 +30,7 @@ namespace NLog.Web.LayoutRenderers
     {
         /// <summary>
         /// List Query Strings' Key to be rendered from Request.
+        /// If empty, then render all querystrings
         /// </summary>
         public List<String> QueryStringKeys { get; set; }
 
@@ -46,41 +48,70 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
+            if (httpRequest == null)
+                return;
 
-            if (this.QueryStringKeys?.Count > 0)
+ 
+
+           
+            var allQueryStrings = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
+            var queryStringKeys = this.QueryStringKeys;
+#if !NETSTANDARD_1plus
+            var queryStrings = httpRequest.QueryString;
+
+            if (queryStrings == null)
+                return;
+
+
+            if (allQueryStrings)
             {
-                if (httpRequest == null)
-                    return;
+                queryStringKeys = new List<string>(queryStrings.Keys.Count);
 
-                var includeArrayEndBraces = false;
-                var firstItem = true;
-
-#if !NETSTANDARD_1plus
-                var queryStrings = httpRequest.QueryString;
-#else
-                var queryStrings = httpRequest.Query;
-#endif
-                if (queryStrings?.Count > 0)
+                foreach (var key in queryStrings.Keys)
                 {
-                    foreach (var configuredKey in this.QueryStringKeys)
+                    if (key != null)
                     {
-                        // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
-#if !NETSTANDARD_1plus
-                        var value = queryStrings[configuredKey];
-#else
-                        var value = queryStrings[configuredKey].ToString();
-#endif
-                        if (!String.IsNullOrEmpty(value))
-                        {
-                            this.AppendKeyAndValue(builder, configuredKey, value, firstItem, ref includeArrayEndBraces);
-                            firstItem = false;
-                        }
+                        queryStringKeys.Add(key.ToString());
                     }
                 }
-
-                if (includeArrayEndBraces)
-                    builder.Append(GlobalConstants.jsonArrayEndBraces);
             }
+#else
+            var queryStrings = httpRequest.Query;
+
+            if (queryStrings == null)
+                return;
+
+            if (allQueryStrings)
+            {
+                queryStringKeys = queryStrings.Keys.ToList();
+            }
+#endif
+
+
+            var includeArrayEndBraces = false;
+            
+            if (queryStrings.Count > 0)
+            {
+                var firstItem = true;
+
+                foreach (var configuredKey in queryStringKeys)
+                {
+                    // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
+#if !NETSTANDARD_1plus
+                    var value = queryStrings[configuredKey];
+#else
+                    var value = queryStrings[configuredKey].ToString();
+#endif
+                    if (!String.IsNullOrEmpty(value))
+                    {
+                        this.AppendKeyAndValue(builder, configuredKey, value, firstItem, ref includeArrayEndBraces);
+                        firstItem = false;
+                    }
+                }
+            }
+
+            if (includeArrayEndBraces)
+                builder.Append(GlobalConstants.jsonArrayEndBraces);
         }
 
         /// <summary>
