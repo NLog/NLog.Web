@@ -51,14 +51,18 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            var includeArrayEndBraces = false;
-            var firstItem = true;
+ 
 
            
             var allQueryStrings = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
             var queryStringKeys = this.QueryStringKeys;
 #if !NETSTANDARD_1plus
             var queryStrings = httpRequest.QueryString;
+
+            if (queryStrings == null)
+                return;
+
+
             if (allQueryStrings)
             {
                 queryStringKeys = new List<string>(queryStrings.Keys.Count);
@@ -73,6 +77,10 @@ namespace NLog.Web.LayoutRenderers
             }
 #else
             var queryStrings = httpRequest.Query;
+
+            if (queryStrings == null)
+                return;
+
             if (allQueryStrings)
             {
                 queryStringKeys = queryStrings.Keys.ToList();
@@ -80,10 +88,12 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
 
-
-
-            if (queryStrings?.Count > 0)
+            var includeArrayEndBraces = false;
+            
+            if (queryStrings.Count > 0)
             {
+                var firstItem = true;
+
                 foreach (var configuredKey in queryStringKeys)
                 {
                     // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
