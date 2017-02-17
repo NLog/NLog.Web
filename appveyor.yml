@@ -1,4 +1,5 @@
 version: 4.4.0.{build}
+image: Visual Studio 2017 RC
 clone_folder: c:\projects\nlogweb
 configuration: Release
 platform: Any CPU
