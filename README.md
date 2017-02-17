@@ -1,9 +1,9 @@
 # NLog.Web (ASP.NET & ASP.NET Core)  [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master) [![codecov.io](https://codecov.io/github/NLog/NLog.Web/coverage.svg?branch=master)](https://codecov.io/github/NLog/NLog.Web?branch=master)
 
-This package is an extension to [NLog](https://github.com/NLog/NLog/). 
+These packages are extensions to [NLog](https://github.com/NLog/NLog/). 
 
-This package contains 
-targets and layout-renderes specific to ASP.Net and IIS. 
+The packages contain 
+targets and layout-renderes specific to ASP.NET (Core), MVC and IIS. 
 
 ASP.NET:  [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web)
 
