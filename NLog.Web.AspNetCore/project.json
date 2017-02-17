@@ -5,7 +5,7 @@
   "authors": [ "Julian Verdurmen" ],
   "packOptions": {
     "summary": "NLog for ASP.NET Core",
-    "tags": [ "logging", "log", "session", "NLog", "web", "aspnet", "aspnetcore" ],
+    "tags": [ "logging", "log", "session", "NLog", "web", "aspnet", "aspnetcore", "MVC" ],
     "projectUrl": "https://github.com/NLog/NLog.Web",
     "licenseUrl": "http://raw.github.com/NLog/NLog.Web/master/LICENSE",
     "requireLicenseAcceptance": false,
