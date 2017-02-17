@@ -1,6 +1,6 @@
 {
 
-  "version": "4.4.0",
+  "version": "4.3.2",
   "description": "Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.",
   "authors": [ "Julian Verdurmen" ],
   "packOptions": {
@@ -14,7 +14,7 @@
       "type": "git",
       "url": "git://github.com/NLog/NLog.Web"
     },
-      "releaseNotes":"Enabled strong naming with correct version"
+      "releaseNotes":"Update dependencies"
   },
 
   "dependencies": {
