@@ -27,8 +27,8 @@ The following parts are supported in ASP.NET Core:
 ServerVariable)
 * [${aspnet-Session}](https://github.com/NLog/NLog/wiki/AspNetSession-layout-renderer) - ASP.NET Session variable. 
 * [${aspnet-SessionId}](https://github.com/NLog/NLog/wiki/AspNetSessionId-layout-renderer) - ASP.NET Session ID variable.
-* [${aspnet-UserAuthType}](https://github.com/NLog/NLog/wiki/AspNetUserAuthType-layout-renderer) - ASP.NET User auth.
-* [${aspnet-UserIdentity}](https://github.com/NLog/NLog/wiki/AspNetUserIdentity-layout-renderer) - ASP.NET User variable.
+* [${aspnet-User-AuthType}](https://github.com/NLog/NLog/wiki/AspNetUserAuthType-layout-renderer) - ASP.NET User auth.
+* [${aspnet-User-Identity}](https://github.com/NLog/NLog/wiki/AspNetUserIdentity-layout-renderer) - ASP.NET User variable.
 * [${iis-site-name}](https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer) - IIS site name.
 
 Introduced in NLog.Web 4.3 & NLog.Web.AspNetCore 4.3
