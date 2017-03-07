@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
 
 #if NETSTANDARD_1plus
             var env = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>();
-            builder.Append(env?.EnvironmentName);
+            builder.Append(env?.ApplicationName);
 
 #else
             builder.Append(HostingEnvironment.SiteName);
