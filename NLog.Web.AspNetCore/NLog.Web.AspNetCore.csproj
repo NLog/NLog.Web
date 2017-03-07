@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.</Description>
+    <AssemblyTitle>NLog.Web.AspNetCore</AssemblyTitle>
+    <VersionPrefix>4.3.1</VersionPrefix>
+    <Authors>Julian Verdurmen</Authors>
+    <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);NETSTANDARD_1plus</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
+    <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>NLog.Web.AspNetCore</PackageId>
+    <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
+    <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
+    <PackageLicenseUrl>http://raw.github.com/NLog/NLog.Web/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.0.2" />
+    <PackageReference Include="NLog" Version="5.0.0-*" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta3" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

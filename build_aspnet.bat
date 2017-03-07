@@ -5,8 +5,7 @@ set nuget_version=2.2.0
 
 call :read_params %*
 
-nuget restore NLog.Web.sln -verbosity quiet
-msbuild NLog.Web.sln /verbosity:minimal /t:rebuild /p:configuration=release
+msbuild NLog.Web.sln /verbosity:minimal /t:restore /t:rebuild /p:configuration=release
 nuget pack NLog.Web\NLog.Web.csproj -properties Configuration=Release;Platform=AnyCPU -version %nuget_version%
 nuget pack NLog.Web\NLog.Web.csproj -properties Configuration=Release;Platform=AnyCPU -version %nuget_version% -symbols
 
