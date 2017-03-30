@@ -41,6 +41,13 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-item")]
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AspNetItemValueLayoutRenderer" /> class.
+		/// </summary>
+		public AspNetItemValueLayoutRenderer()
+	    {
+			this.Culture = CultureInfo.CurrentUICulture;
+		}
 
         /// <summary>
         /// Gets or sets the item variable name.
@@ -55,12 +62,18 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public bool EvaluateAsNestedProperties { get; set; }
 
-        /// <summary>
-        /// Renders the specified ASP.NET Item value and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+		/// <summary>
+		/// Gets or sets the culture used for rendering. 
+		/// </summary>
+		/// <docgen category='Rendering Options' order='10' />
+		public CultureInfo Culture { get; set; }
+
+		/// <summary>
+		/// Renders the specified ASP.NET Item value and appends it to the specified <see cref="StringBuilder" />.
+		/// </summary>
+		/// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+		/// <param name="logEvent">Logging event.</param>
+		protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             if (Variable == null)
             {
@@ -76,8 +89,9 @@ namespace NLog.Web.LayoutRenderers
             Func<string, object> getVal = k => context.Items[k];
 
             var value = PropertyReader.GetValue(Variable, getVal, EvaluateAsNestedProperties);
+			var formatProvider = GetFormatProvider(logEvent, Culture);
 
-            builder.Append(Convert.ToString(value, CultureInfo.CurrentUICulture));
+			builder.Append(Convert.ToString(value, formatProvider));
         }
     }
 }
