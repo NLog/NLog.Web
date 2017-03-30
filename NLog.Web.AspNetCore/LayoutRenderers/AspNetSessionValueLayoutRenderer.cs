@@ -44,13 +44,13 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AspNetSessionValueLayoutRenderer" /> class.
-		/// </summary>
-		public AspNetSessionValueLayoutRenderer()
-		{
-			this.Culture = CultureInfo.CurrentUICulture;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AspNetSessionValueLayoutRenderer" /> class.
+        /// </summary>
+        public AspNetSessionValueLayoutRenderer()
+        {
+            this.Culture = CultureInfo.CurrentUICulture;
+        }
 
         /// <summary>
         /// Gets or sets the session variable name.
@@ -65,18 +65,18 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public bool EvaluateAsNestedProperties { get; set; }
 
-		/// <summary>
-		/// Gets or sets the culture used for rendering. 
-		/// </summary>
-		/// <docgen category='Rendering Options' order='10' />
-		public CultureInfo Culture { get; set; }
+        /// <summary>
+        /// Gets or sets the culture used for rendering. 
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public CultureInfo Culture { get; set; }
 
-		/// <summary>
-		/// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
-		/// </summary>
-		/// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-		/// <param name="logEvent">Logging event.</param>
-		protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        /// <summary>
+        /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
+        /// </summary>
+        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="logEvent">Logging event.</param>
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             if (this.Variable == null)
             {
@@ -128,8 +128,8 @@ namespace NLog.Web.LayoutRenderers
 
 
 #endif
-			var formatProvider = GetFormatProvider(logEvent, Culture);
-			builder.Append(Convert.ToString(value, formatProvider));
+            var formatProvider = GetFormatProvider(logEvent, Culture);
+            builder.Append(Convert.ToString(value, formatProvider));
         }
 
         private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
