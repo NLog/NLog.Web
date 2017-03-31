@@ -192,7 +192,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var o = new { b = new DateTime(2015, 11, 24, 2, 30, 23) };
             //set in "a"
-            ExecTest("a", o, "11/24/2015 2:30:23 AM", layout);
+            ExecTest("a", o, "24/11/2015 02:30:23", layout);
         }
 
         /// <summary>

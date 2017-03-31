@@ -56,6 +56,28 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Theory, MemberData("VariableFoundData")]
+        public void CulturedVariableFoundRendersValue(object expectedValue)
+        {
+            var httpContext = Substitute.For<HttpContextBase>();
+#if NETSTANDARD_1plus
+			httpContext.Items = new Dictionary<object, object>();
+			httpContext.Items.Add("key", expectedValue);
+#else
+            httpContext.Items["key"].Returns(expectedValue);
+#endif
+            var cultureInfo = new CultureInfo("nl-NL");
+            var renderer = new AspNetItemValueLayoutRenderer();
+            renderer.Variable = "key";
+            renderer.Culture = cultureInfo;
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(Convert.ToString(expectedValue, cultureInfo), result);
+        }
+
+
+        [Theory, MemberData("VariableFoundData")]
         public void VariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
@@ -63,9 +85,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items = new Dictionary<object, object>();
             httpContext.Items.Add("key", expectedValue);
 #else
-            httpContext.Items["key"].Returns(expectedValue); 
+            httpContext.Items["key"].Returns(expectedValue);
 #endif
-            
+
             var renderer = new AspNetItemValueLayoutRenderer();
             renderer.Variable = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);

@@ -44,6 +44,13 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AspNetSessionValueLayoutRenderer" /> class.
+        /// </summary>
+        public AspNetSessionValueLayoutRenderer()
+        {
+            this.Culture = CultureInfo.CurrentUICulture;
+        }
 
         /// <summary>
         /// Gets or sets the session variable name.
@@ -57,6 +64,12 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public bool EvaluateAsNestedProperties { get; set; }
+
+        /// <summary>
+        /// Gets or sets the culture used for rendering. 
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public CultureInfo Culture { get; set; }
 
         /// <summary>
         /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
@@ -115,8 +128,8 @@ namespace NLog.Web.LayoutRenderers
 
 
 #endif
-
-            builder.Append(Convert.ToString(value, CultureInfo.CurrentUICulture));
+            var formatProvider = GetFormatProvider(logEvent, Culture);
+            builder.Append(Convert.ToString(value, formatProvider));
         }
 
         private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
