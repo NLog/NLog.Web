@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <DefineConstants>$(DefineConstants);NETSTANDARD_1plus</DefineConstants>
+    <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta1-build1309" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.1" />
+    <PackageReference Include="NLog" Version="5.0.0-beta06" />
+    <PackageReference Include="NSubstitute" Version="2.0.2" />
+    <PackageReference Include="xunit" Version="2.3.0-beta1-build3642" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta1-build3642" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+
+
+</Project>
