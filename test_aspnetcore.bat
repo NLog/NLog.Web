@@ -1,6 +1,8 @@
 echo off
 
 rem update project.json for version number
-
-call dotnet restore NLog.Web.AspNetCore.Tests 
-call dotnet test NLog.Web.AspNetCore.Tests --configuration release 
+cd NLog.Web.AspNetCore.Tests 
+call dotnet restore 
+call dotnet build  --configuration release 
+call dotnet xunit  
+cd ..
