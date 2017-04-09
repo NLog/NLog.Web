@@ -51,10 +51,10 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
- 
 
-           
-            var allQueryStrings = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
+
+
+            var printAllQueryString = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
             var queryStringKeys = this.QueryStringKeys;
 #if !NETSTANDARD_1plus
             var queryStrings = httpRequest.QueryString;
@@ -63,7 +63,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
 
-            if (allQueryStrings)
+            if (printAllQueryString)
             {
                 queryStringKeys = new List<string>(queryStrings.Keys.Count);
 
@@ -81,67 +81,40 @@ namespace NLog.Web.LayoutRenderers
             if (queryStrings == null)
                 return;
 
-            if (allQueryStrings)
+            if (printAllQueryString)
             {
                 queryStringKeys = queryStrings.Keys.ToList();
             }
 #endif
 
+            var values = GetValues(queryStrings, queryStringKeys);
+            SerializeValues(values, builder, this.OutputFormat);
+        }
 
-            var includeArrayEndBraces = false;
-            
+        private static IEnumerable<KeyValuePair<string, string>> GetValues(
+#if NETSTANDARD_1plus
+            IQueryCollection queryStrings,
+#else
+            NameValueCollection queryStrings,
+#endif
+            IEnumerable<string> queryStringKeys)
+
+        {
             if (queryStrings.Count > 0)
             {
-                var firstItem = true;
-
-                foreach (var configuredKey in queryStringKeys)
+                foreach (var key in queryStringKeys)
                 {
                     // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
 #if !NETSTANDARD_1plus
-                    var value = queryStrings[configuredKey];
+                    var value = queryStrings[key];
 #else
-                    var value = queryStrings[configuredKey].ToString();
+                    var value = queryStrings[key].ToString();
 #endif
                     if (!String.IsNullOrEmpty(value))
                     {
-                        this.AppendKeyAndValue(builder, configuredKey, value, firstItem, ref includeArrayEndBraces);
-                        firstItem = false;
+                        yield return new KeyValuePair<string, string>(key, value);
                     }
                 }
-            }
-
-            if (includeArrayEndBraces)
-                builder.Append(GlobalConstants.jsonArrayEndBraces);
-        }
-
-        /// <summary>
-        /// Renders the specified Key and Value to the string builder <see cref="StringBuilder" />. Also sets whether to append the Array braces for json <see cref="bool"/>.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-        /// <param name="configuredKey">The Key <see cref="String"/> to append to the specified StringBuilder.</param>
-        /// <param name="value">The Value <see cref="String"/> to append to the specified StringBuilder.</param>
-        /// <param name="isFirsItem">The <see cref="bool"/> to specify if the Specified Key, Value is a first Item in the collection.</param>
-        /// <param name="includeArrayEndBraces">The <see cref="bool"/> to specify if the builder needs to append the Json Array End braces.</param>
-        private void AppendKeyAndValue(StringBuilder builder, string configuredKey, string value, bool isFirsItem, ref bool includeArrayEndBraces)
-        {
-            if (!isFirsItem)
-                builder.Append($",{Environment.NewLine}");
-
-            switch (this.OutputFormat)
-            {
-                case AspNetRequestLayoutOutputFormat.Flat:
-                    builder.Append($"{configuredKey}:{value}");
-                    break;
-                case AspNetRequestLayoutOutputFormat.Json:
-                    if (!includeArrayEndBraces)
-                    {
-                        builder.Append(GlobalConstants.jsonArrayStartBraces);
-                        includeArrayEndBraces = true;
-                    }
-                    builder.Append($"{GlobalConstants.jsonElementStartBraces}{GlobalConstants.doubleQuotes}{configuredKey}{GlobalConstants.doubleQuotes}:{GlobalConstants.doubleQuotes}{value}{GlobalConstants.doubleQuotes}{GlobalConstants.jsonElementEndBraces}");
-                    break;
-                default:
-                    break;
             }
         }
     }

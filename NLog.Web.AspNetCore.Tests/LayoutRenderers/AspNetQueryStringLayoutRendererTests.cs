@@ -68,7 +68,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_QueryString_Single_Item_Flat_Formatting()
         {
-            var expectedResult = "Id:1";
+            var expectedResult = "Id=1";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"));
 
@@ -98,7 +98,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_QueryString_Multiple_Item_Flat_Formatting()
         {
-            var expectedResult = "Id:1," + Environment.NewLine + "Id2:2";
+            var expectedResult = "Id=1,Id2=2";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
 
@@ -113,7 +113,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void EmptyProperyShouldListAll()
         {
-            var expectedResult = "Id:1," + Environment.NewLine + "Id2:2";
+            var expectedResult = "Id=1,Id2=2";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
 
@@ -128,7 +128,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NullProperyShouldListAll()
         {
-            var expectedResult = "Id:1," + Environment.NewLine + "Id2:2";
+            var expectedResult = "Id=1,Id2=2";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
 
@@ -142,7 +142,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void MultipleValuesForOneKeyShouldWork()
         {
-            var expectedResult = "Id:1,2,3";
+            var expectedResult = "Id=1,2,3";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1", "2", "3"));
 
@@ -157,7 +157,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_QueryString_Multiple_Item_Json_Formatting()
         {
-            var expectedResult = "[" + "{\"Id\":\"1\"}," + Environment.NewLine + "{\"Id2\":\"2\"}" + "]";
+            var expectedResult = "[{\"Id\":\"1\"},{\"Id2\":\"2\"}]";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
 

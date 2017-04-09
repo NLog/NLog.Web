@@ -1,15 +1,18 @@
 ﻿using System.Text;
 #if !NETSTANDARD_1plus
-using System.Web;
 using System.Collections.Specialized;
+using System.Web;
 #else
 using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Http;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
 using NLog.Config;
 using NLog.Web.Enums;
 using System;
+using System.Linq;
+
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -27,9 +30,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-cookie")]
     public class AspNetRequestCookieLayoutRenderer : AspNetLayoutRendererBase
     {
-        private const string cookiesNameSeparator = "=";
-        private const string flatItemSeperator = ",";
-
         /// <summary>
         /// List Cookie Key as String to be rendered from Request.
         /// </summary>
@@ -55,53 +55,72 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            if (this.CookieNames?.Count > 0 && httpRequest?.Cookies?.Count > 0)
+            var cookies = httpRequest.Cookies;
+
+            if (this.CookieNames?.Count > 0 && cookies?.Count > 0)
             {
-                bool firstItem = true;
-                foreach (var cookieName in this.CookieNames)
+                var cookieValues = GetCookies(cookies);
+                SerializeValues(cookieValues, builder, this.OutputFormat);
+            }
+        }
+
+
+#if !NETSTANDARD_1plus
+
+        private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
+        {
+            var cookieNames = this.CookieNames;
+            if (cookieNames != null)
+            {
+                foreach (var cookieName in cookieNames)
                 {
-                    var cookieValue = httpRequest.Cookies[cookieName];
-                    this.SerializeCookie(cookieName, cookieValue, builder, firstItem);
-                    firstItem = false;
+                    var value = cookies[cookieName];
+
+                   
+
+                    if (value != null)
+                    {
+                        if (this.OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                        {
+                            //split
+                            var isFirst = true;
+                            foreach (var key in value.Values.AllKeys)
+                            {
+                                var key2 = key;
+                                if (isFirst)
+                                {
+                                    key2 = cookieName;
+                                    isFirst = false;
+                                }
+                                yield return new KeyValuePair<string, string>(key2, value.Values[key]);
+                            }
+                        }
+                        else
+                        {
+                            yield return new KeyValuePair<string, string>(cookieName, value.Value);
+                        }
+                    }
                 }
             }
         }
+#else
 
-#if !NETSTANDARD_1plus
-        /// <summary>
-        /// To Serialize the HttpCookie based on the configured output format.
-        /// </summary>
-        /// <param name="cookieName">Name of the cookie</param>
-        /// <param name="cookie">The current cookie item.</param>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-        /// <param name="firstItem">Whether it is first item.</param>
-        private void SerializeCookie(string cookieName, HttpCookie cookie, StringBuilder builder, bool firstItem)
+        private IEnumerable<KeyValuePair<string, string>> GetCookies(IRequestCookieCollection cookies)
         {
-            if (cookie != null)
+            var cookieNames = this.CookieNames;
+            if (cookieNames != null)
             {
-                this.SerializeCookie(cookieName, cookie.Value, builder, firstItem);
+                foreach (var cookieName in cookieNames)
+                {
+                    if (cookies.TryGetValue(cookieName, out var cookieValue))
+                    {
+                        yield return new KeyValuePair<string, string>(cookieName, cookieValue);
+                    }
+                }
             }
         }
-
 #endif
-        private void SerializeCookie(string cookieName, string cookieValue, StringBuilder builder, bool firstItem)
-        {
-            var cookieRaw = $"{cookieName}{cookiesNameSeparator}{cookieValue}";
 
-            switch (this.OutputFormat)
-            {
-                case AspNetRequestLayoutOutputFormat.Flat:
-                    if (!firstItem)
-                        builder.Append($"{flatItemSeperator}");
-                    builder.Append(cookieRaw);
-                    break;
-                case AspNetRequestLayoutOutputFormat.Json:
-                    if (!firstItem)
-                        builder.Append($"{GlobalConstants.jsonElementSeparator}");
 
-                    builder.Append($"{GlobalConstants.jsonElementStartBraces}{GlobalConstants.doubleQuotes}{cookieRaw}{GlobalConstants.doubleQuotes}{GlobalConstants.jsonElementEndBraces}");
-                    break;
-            }
-        }
     }
 }
