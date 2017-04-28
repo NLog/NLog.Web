@@ -48,8 +48,10 @@ Introduced in NLog.Web.AspNetCore 4.3.1
 * [${aspnet-TraceIdentifier}](https://github.com/NLog/NLog/wiki/AspNetTraceIdentifier-Layout-Renderer) - ASP.NET trace identifier
 
 ### Usage
-- [Getting Started with ASP.NET Core (project json)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
-- [ASP.NET Core examples with Microsoft SQL Server, text and Elasticsearch](https://github.com/damienbod/AspNetCoreNlog)
+
+- [Getting Started with ASP.NET Core (project.json - vs2015)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
+- [Getting started with ASP.NET Core (csproj - vs2017)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(csproj---vs2017))
+- [Multiple blogs to get started with ASP.NET Core and NLog](https://github.com/damienbod/AspNetCoreNlog)
 
 ## Content
 
