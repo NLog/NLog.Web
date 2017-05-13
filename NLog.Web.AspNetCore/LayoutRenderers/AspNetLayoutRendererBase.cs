@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using NLog.LayoutRenderers;
 #if NETSTANDARD_1plus
@@ -82,5 +84,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
+
+
     }
 }
