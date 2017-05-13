@@ -16,6 +16,10 @@ namespace NLog.Web.LayoutRenderers
     // ReSharper disable once InconsistentNaming
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
+        private static IHostingEnvironment _hostingEnvironment;
+
+        private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
+        
         /// <summary>
         /// Append to target
         /// </summary>
@@ -23,8 +27,14 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var env = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>();
-            builder.Append(env?.EnvironmentName);
+            builder.Append(HostingEnvironment?.EnvironmentName);
+        }
+
+        /// <inheritdoc />
+        protected override void CloseLayoutRenderer()
+        {
+            _hostingEnvironment = null;
+            base.CloseLayoutRenderer();
         }
     }
 }

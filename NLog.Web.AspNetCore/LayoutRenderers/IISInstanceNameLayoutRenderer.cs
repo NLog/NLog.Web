@@ -25,6 +25,12 @@ namespace NLog.Web.LayoutRenderers
     // ReSharper disable once InconsistentNaming
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
+#if NETSTANDARD_1plus
+        private static IHostingEnvironment _hostingEnvironment;
+
+        private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
+#endif
+
         /// <summary>
         /// Append to target
         /// </summary>
@@ -35,13 +41,21 @@ namespace NLog.Web.LayoutRenderers
 
 
 #if NETSTANDARD_1plus
-            var env = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>();
-            builder.Append(env?.ApplicationName);
+            builder.Append(HostingEnvironment?.ApplicationName);
 
 #else
             builder.Append(HostingEnvironment.SiteName);
 #endif
 
         }
+#if NETSTANDARD_1plus
+
+        /// <inheritdoc />
+        protected override void CloseLayoutRenderer()
+        {
+            _hostingEnvironment = null;
+            base.CloseLayoutRenderer();
+        }
+#endif
     }
 }

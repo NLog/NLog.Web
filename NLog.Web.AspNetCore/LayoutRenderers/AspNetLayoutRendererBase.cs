@@ -85,6 +85,16 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
 
+#if NETSTANDARD_1plus
+
+/// <inheritdoc />
+        protected override void CloseLayoutRenderer()
+        {
+            _httpContextAccessor = null;
+            base.CloseLayoutRenderer();
+        }
+#endif
+
 
     }
 }
