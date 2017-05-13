@@ -1,13 +1,14 @@
-version: 4.4.0.{build}
+version: 4.5.0.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
+image: Visual Studio 2017
 platform: Any CPU
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
   assembly_version: '4.0.0'
   assembly_file_version: '{version}'
-  assembly_informational_version: '4.3'
+  assembly_informational_version: '4.5' #NLog.Web
 nuget:
   project_feed: true
 matrix:
@@ -19,7 +20,7 @@ build:
 
 build_script:
 - cmd: >-
-    call build_aspnet.bat -nuget_version=4.4.0
+    call build_aspnet.bat -nuget_version=4.5.0 #NLog.Web.AspNetCore package
 
     call build_aspnetcore.bat
 
@@ -33,8 +34,4 @@ test_script:
   - call test_aspnetcore.bat
 
 artifacts:
-- path: 'NLog*\**\*.nupkg'
-  name: aspnetcore
-
-- path: '*.nupkg'
-  name: aspnet
+- path: '**\NLog.Web.*.nupkg'
