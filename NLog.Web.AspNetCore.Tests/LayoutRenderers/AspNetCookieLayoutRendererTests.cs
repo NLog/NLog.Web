@@ -93,7 +93,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 
         [Fact]
-        public void KeyFoundRendersValue_Cookie_Mulitple_Items_Flat_Formatting_separators()
+        public void KeyFoundRendersValue_Cookie_Multiple_Items_Flat_Formatting_separators()
         {
 #if NETSTANDARD_1plus
             //no multivalue keys in ASP.NET core
