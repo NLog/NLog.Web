@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 #if !NETSTANDARD_1plus
 using System.Web;
@@ -20,14 +21,21 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-
-            if (context.User?.Identity?.IsAuthenticated == null)
+            try
             {
-                return;
-            }
+                var context = HttpContextAccessor.HttpContext;
 
-            builder.Append(context.User.Identity.AuthenticationType);
+                if (context.User?.Identity?.IsAuthenticated == null)
+                {
+                    return;
+                }
+
+                builder.Append(context.User.Identity.AuthenticationType);
+            }
+            catch (ObjectDisposedException)
+            {
+                //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83
+            }
         }
     }
 }
