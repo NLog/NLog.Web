@@ -3,7 +3,6 @@
 using System.Web;
 using System.Collections.Specialized;
 #else
-using Microsoft.AspNetCore.Http.Extensions;
 #endif
 using NLog.LayoutRenderers;
 using System.Collections.Generic;
