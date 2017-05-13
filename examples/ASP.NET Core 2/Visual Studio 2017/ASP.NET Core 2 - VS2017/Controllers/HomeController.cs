@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NLog.Web.AspNetCore2.Example.Models;
+using NLog.Web.LayoutRenderers;
 
 namespace NLog.Web.AspNetCore2.Example.Controllers
 {
