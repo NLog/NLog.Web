@@ -155,6 +155,23 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void MultipleValuesJsonQuoted()
+        {
+            
+            var expectedResult = @"{""Id"":""a'b,\""c\""""}";
+
+            var renderer = CreateAndMockRenderer(CreateTuple("Id", "a'b", "\"c\""));
+
+            renderer.QueryStringKeys = null;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.SingleAsArray = false;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
         public void KeyFoundRendersValue_QueryString_Multiple_Item_Json_Formatting()
         {
             var expectedResult = "[{\"Id\":\"1\"},{\"Id2\":\"2\"}]";

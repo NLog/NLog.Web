@@ -99,7 +99,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             //no multivalue keys in ASP.NET core
             var expectedResult = "key:TEST|Key1:TEST1";
 #else
-            var expectedResult = "key:TEST&Key1:TEST1";
+            var expectedResult = "key:TEST&Key1=TEST1"; 
 #endif
 
             var renderer = CreateRenderer();

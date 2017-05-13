@@ -90,18 +90,11 @@ namespace NLog.Web.LayoutRenderers
 
                             //quoted key
                             builder.Append('{');
-                            builder.Append('"');
-                            //todo escape quotes
-                            builder.Append(key);
-                            builder.Append('"');
+                            AppendQuoted(builder, key);
 
                             builder.Append(':');
-
                             //quoted value;
-                            builder.Append('"');
-                            //todo escape quotes
-                            builder.Append(value);
-                            builder.Append('"');
+                            AppendQuoted(builder, value);
                             builder.Append('}');
                         }
                         if (addArray)
@@ -111,6 +104,26 @@ namespace NLog.Web.LayoutRenderers
                     }
                     break;
             }
+        }
+
+        /// <summary>
+        /// Append the value quoted, escape quotes when needed
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="value"></param>
+        private static void AppendQuoted(StringBuilder builder, string value)
+        {
+            builder.Append('"');
+            if (!string.IsNullOrEmpty(value) && value.Contains('"'))
+            {
+                //escape quotes
+                builder.Append(value.Replace("\"", "\\\""));
+            }
+            else
+            {
+                builder.Append(value);
+            }
+            builder.Append('"');
         }
     }
 }
