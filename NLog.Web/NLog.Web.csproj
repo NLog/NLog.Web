@@ -60,6 +60,8 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutRendererBase.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutMultiValueRendererBase.cs" />
+    
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcControllerRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcActionRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcLayoutRendererBase.cs" />
@@ -76,7 +78,7 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHostLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestQueryStringLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\Enums\AspNetCookieLayoutOutputFormat.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\Enums\AspNetRequestLayoutOutputFormat.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Internal\PropertyReader.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\NLogHttpModule.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Targets\AspNetTrace.cs" />

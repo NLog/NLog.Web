@@ -26,19 +26,13 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-querystring")]
-    public class AspNetQueryStringLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// List Query Strings' Key to be rendered from Request.
         /// If empty, then render all querystrings
         /// </summary>
         public List<String> QueryStringKeys { get; set; }
-
-        /// <summary>
-        /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
-        /// </summary>
-        [DefaultParameter]
-        public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
@@ -88,7 +82,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             var values = GetValues(queryStrings, queryStringKeys);
-            SerializeValues(values, builder, this.OutputFormat);
+            SerializeValues(values, builder);
         }
 
         private static IEnumerable<KeyValuePair<string, string>> GetValues(

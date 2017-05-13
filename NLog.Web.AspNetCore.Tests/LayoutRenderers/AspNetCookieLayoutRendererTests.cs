@@ -91,6 +91,26 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
+
+        [Fact]
+        public void KeyFoundRendersValue_Cookie_Mulitple_Items_Flat_Formatting_separators()
+        {
+#if NETSTANDARD_1plus
+            //no multivalue keys in ASP.NET core
+            var expectedResult = "key:TEST|Key1:TEST1";
+#else
+            var expectedResult = "key:TEST&Key1:TEST1";
+#endif
+
+            var renderer = CreateRenderer();
+            renderer.ValueSeparator = ":";
+            renderer.ItemSeparator = "|";
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
         [Fact]
         public void KeyFoundRendersValue_Single_Item_Flat_Formatting()
         {
@@ -118,13 +138,31 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void KeyFoundRendersValue_Cookie_Mulitple_Items_Json_Formatting()
+        public void KeyFoundRendersValue_Single_Item_Json_Formatting_no_array()
+        {
+            var expectedResult = "{\"key\":\"TEST\"}";
+
+            var renderer = CreateRenderer(addKey: false);
+
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.SingleAsArray = false;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void KeyFoundRendersValue_Cookie_Mulitple_Items_Json_Formatting(bool singleAsArray)
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
 
             var renderer = CreateRenderer();
 
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.SingleAsArray = singleAsArray;
 
             string result = renderer.Render(new LogEventInfo());
 

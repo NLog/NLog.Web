@@ -28,18 +28,12 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-cookie")]
-    public class AspNetRequestCookieLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// List Cookie Key as String to be rendered from Request.
         /// </summary>
         public List<string> CookieNames { get; set; }
-
-        /// <summary>
-        /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
-        /// </summary>
-        [DefaultParameter]
-        public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
@@ -60,7 +54,7 @@ namespace NLog.Web.LayoutRenderers
             if (this.CookieNames?.Count > 0 && cookies?.Count > 0)
             {
                 var cookieValues = GetCookies(cookies);
-                SerializeValues(cookieValues, builder, this.OutputFormat);
+                SerializeValues(cookieValues, builder);
             }
         }
 
