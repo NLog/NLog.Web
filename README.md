@@ -9,6 +9,8 @@ ASP.NET:  [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.
 
 ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore) 
 
+[![Rager Releases](http://rager.io/badge.svg?url=https%3A%2F%2Fgithub.com%2FNLog%2FNLog.Web)](http://rager.io/projects/search?badge=1&query=github.com/nlog/nlog.web)
+
 ## Updates
 
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
