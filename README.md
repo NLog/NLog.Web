@@ -11,7 +11,7 @@ ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](htt
 
 ## Updates
 
-For updates and releases, check [CHANGELOG.MD]([CHANGELOG.MD]) or [Releases](https://github.com/NLog/NLog.Web/releases)
+For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
 
 ## ASP.NET
