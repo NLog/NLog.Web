@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>net452;netcoreapp1.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);NETSTANDARD_1plus</DefineConstants>
     <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.0" />
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta1-build1309" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
