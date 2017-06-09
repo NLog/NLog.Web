@@ -42,7 +42,6 @@
     <PackageReference Include="NLog" Version="5.0.0-beta05" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta3" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
-    <DotNetCliToolReference Include="dotnet-retire" Version="1.0.4" />
 
   </ItemGroup>
 
