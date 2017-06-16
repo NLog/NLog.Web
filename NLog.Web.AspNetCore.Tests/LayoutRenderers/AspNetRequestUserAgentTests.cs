@@ -50,7 +50,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(new LogEventInfo());
 
-            Assert.Equal(result, "TEST");
+            Assert.Equal("TEST", result);
         }
     }
 }

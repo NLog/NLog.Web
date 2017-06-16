@@ -39,7 +39,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(result, "http://www.google.com/");
+            Assert.Equal("http://www.google.com/", result);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(result, "http://www.google.com/?t=1");
+            Assert.Equal("http://www.google.com/?t=1", result);
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(result, expected);
+            Assert.Equal(expected, result);
         }
 
         private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "")

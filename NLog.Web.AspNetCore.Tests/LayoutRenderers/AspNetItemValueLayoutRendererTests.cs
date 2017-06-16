@@ -55,7 +55,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Empty(result);
         }
 
-        [Theory, MemberData("VariableFoundData")]
+        [Theory, MemberData(nameof(VariableFoundData))]
         public void CulturedVariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
@@ -77,7 +77,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
 
-        [Theory, MemberData("VariableFoundData")]
+        [Theory, MemberData(nameof(VariableFoundData))]
         public void VariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
@@ -97,7 +97,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(Convert.ToString(expectedValue, CultureInfo.CurrentUICulture), result);
         }
 
-        [Theory, MemberData("NestedPropertyData")]
+        [Theory, MemberData(nameof(NestedPropertyData))]
         public void NestedPropertyRendersValue(string itemKey, string variable, object data, object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
