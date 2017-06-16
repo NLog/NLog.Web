@@ -24,7 +24,13 @@ build_script:
 
     call build_aspnetcore.bat
 
-deploy: off
+deploy:
+- provider: NuGet
+  api_key:
+    secure: DtVDH1ZfIR8E2oDLeSPxfn0WFXw3MCv4WhLkkQQl9LfEHswb5sdxdCYodNKhrKik
+  artifact: /.*\.nupkg/
+  on:
+    branch: master
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion
   - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:coverage.xml
