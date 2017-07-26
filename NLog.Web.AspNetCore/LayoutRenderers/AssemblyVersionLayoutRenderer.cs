@@ -23,7 +23,9 @@ namespace NLog.Web.LayoutRenderers
     public class AssemblyVersionLayoutRenderer : LayoutRenderer
     {
         /// <summary>
-        /// The (full) name of the assembly. If <c>null</c>, using the entry assembly.
+        /// The (full) name of the assembly. If <c>null</c>, using:
+        /// 1) for .NET Standard - the runtime framework (for example, for .NET Core 1.1 this layout renderer returned value "1.1"),
+        /// 2) for .NET Full - the entry assembly.
         /// </summary>
         [DefaultParameter]
         public string Name { get; set; }
