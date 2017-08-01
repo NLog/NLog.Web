@@ -22,6 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.exmaple.com/
     /// ${aspnet-request-url:IncludePort=true} - produces http://www.exmaple.com:80/
     /// ${aspnet-request-url:IncludePort=false} - produces http://www.exmaple.com/
+    /// ${aspnet-request-url:IncludeScheme=false} - produces www.exmaple.com/
     /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1    
     /// </code>
     /// </example>
@@ -42,6 +43,12 @@ namespace NLog.Web.LayoutRenderers
         /// To specify whether to exclude / include the host. Default is true.
         /// </summary>
         public bool IncludeHost { get; set; } = true;
+
+
+        /// <summary>
+        /// To specify whether to exclude / include the scheme. Default is true.
+        /// </summary>
+        public bool IncludeScheme { get; set; } = true;
 
         /// <summary>
         /// Renders the Request URL from the HttpRequest
@@ -84,11 +91,12 @@ namespace NLog.Web.LayoutRenderers
                 host = httpRequest.Url?.Host;
             }
 
-            scheme = httpRequest.Url.Scheme;
+            if (IncludeScheme)
+            {
+                scheme = httpRequest.Url.Scheme + "://";
+            }
 
-            url = $"{scheme}://{host}{port}{pathAndQuery}";
-
-
+            url = $"{scheme}{host}{port}{pathAndQuery}";
 #else
             if (IncludeQueryString)
             {
@@ -105,16 +113,14 @@ namespace NLog.Web.LayoutRenderers
                 host = httpRequest.Host.Host;
             }
 
-            if (!String.IsNullOrEmpty(httpRequest.Scheme))
+            if (IncludeScheme && !String.IsNullOrWhiteSpace(httpRequest.Scheme))
+            { 
                 scheme = httpRequest.Scheme + "://";
+            }
 
             url = $"{scheme}{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
-
-
-
 #endif
             builder.Append(url);
-
         }
     }
 }

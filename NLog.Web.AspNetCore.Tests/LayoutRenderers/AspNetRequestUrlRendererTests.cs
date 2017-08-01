@@ -33,7 +33,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void UrlPresentRenderNonEmpty_ExcludeQueryString()
+        public void UrlPresentRenderNonEmpty_Default()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http");
 
@@ -57,22 +57,18 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_IncludePort()
         {
-            var expected = "http://www.google.com:80/Test.asp?t=1";
-
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
             renderer.IncludeQueryString = true;
             renderer.IncludePort = true;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(expected, result);
+            Assert.Equal("http://www.google.com:80/Test.asp?t=1", result);
         }
 
         [Fact]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_ExcludePort()
         {
-            var expected = "http://www.google.com/Test.asp?t=1";
-
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
             renderer.IncludeQueryString = true;
@@ -80,19 +76,88 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(expected, result);
+            Assert.Equal("http://www.google.com/Test.asp?t=1", result);
         }
 
         [Fact]
         public void UrlPresentRenderNonEmpty_ExcludeQueryString_ExcludePort()
         {
-            var expected = "http://www.google.com/Test.asp";
-
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-            Assert.Equal(expected, result);
+            Assert.Equal("http://www.google.com/Test.asp", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_ExcludeScheme()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
+            renderer.IncludeScheme = false;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("www.google.com/Test.asp", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_ExcludeScheme_IncludePort_IncludeQueryString()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
+            renderer.IncludeScheme = false;
+            renderer.IncludePort = true;
+            renderer.IncludeQueryString = true;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("www.google.com:80/Test.asp?t=1", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_ExcludeScheme_IncludePort()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
+            renderer.IncludeScheme = false;
+            renderer.IncludePort = true;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("www.google.com:80/Test.asp", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_ExcludeScheme_ExcludeHost()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
+            renderer.IncludeScheme = false;
+            renderer.IncludeHost = false;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("/Test.asp", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_ExcludeHost()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
+            renderer.IncludeHost = false;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("http:///Test.asp", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_ExcludeHost_IncludeQueryString()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
+            renderer.IncludeHost = false;
+            renderer.IncludeQueryString = true;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("http:///Test.asp?t=1", result);
         }
 
         private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "")
