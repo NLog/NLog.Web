@@ -25,6 +25,15 @@ Simply install the package. NLog will detect the extension automatically.
 
 ## ASP.NET Core
 
+------
+ ℹ️  Missing the trace en debug logs in .NET Core 2? Set `ILoggingBuilder.SetMinimumLevel()`
+
+-----
+
+:warning: Not all targets and layout renders are implemented for .NET Standard. See the [Platform support table](https://github.com/NLog/NLog/wiki/platform-support)
+
+-----
+
 There is a special package for ASP.NET Core / MVC Core. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging)
 
 The following parts are supported in ASP.NET Core:
