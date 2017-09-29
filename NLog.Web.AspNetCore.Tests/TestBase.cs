@@ -25,7 +25,18 @@ namespace NLog.Web.Tests.LayoutRenderers
             }
 
 
+            
+#if NETCOREAPP2_0
+            /// <summary>
+            /// Strongly typed access to the Content-Length header. Implementations must keep this in sync with the string representation.
+            /// </summary>
+            public long? ContentLength
+            {
+                get => throw new NotImplementedException();
+                set => throw new NotImplementedException();
             }
 #endif
         }
+#endif
+    }
 }

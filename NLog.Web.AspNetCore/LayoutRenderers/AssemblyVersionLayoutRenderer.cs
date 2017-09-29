@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 #endif
 
-#if ASP_NET_CORE 
+#if ASP_NET_CORE && !NETSTANDARD2_0
 using Microsoft.Extensions.PlatformAbstractions;
 #endif
 
@@ -61,9 +61,13 @@ namespace NLog.Web.LayoutRenderers
             {
                 //try entry assembly
 
-#if ASP_NET_CORE 
+#if ASP_NET_CORE && !NETSTANDARD2_0
                 string assemblyVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString();
 
+                builder.Append(assemblyVersion);
+
+#elif NETSTANDARD2_0
+                var assemblyVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
                 builder.Append(assemblyVersion);
 #else
 
