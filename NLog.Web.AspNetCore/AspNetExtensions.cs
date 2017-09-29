@@ -23,9 +23,9 @@ namespace NLog.Web
         /// </summary>
         /// <param name="app"></param>
 
-        public static void AddNLogWeb(this IApplicationBuilder app)
+        public static void AddNLogWeb(this ILoggingBuilder builder)
         {
-            ServiceLocator.ServiceProvider = app.ApplicationServices;
+            ServiceLocator.ServiceProvider = builder.Services;
         }
 
         /// <summary>
