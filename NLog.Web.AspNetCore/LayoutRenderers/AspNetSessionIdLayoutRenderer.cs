@@ -1,5 +1,5 @@
 using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 #else
 
@@ -27,7 +27,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             builder.Append(context.Session.SessionID);
 #else
             builder.Append(context.Session.Id);

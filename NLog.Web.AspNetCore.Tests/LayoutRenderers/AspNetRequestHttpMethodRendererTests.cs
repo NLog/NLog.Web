@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -36,7 +36,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void HttpMethod_Set_Renderer()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             httpContext.Request.Method.Returns("POST");
 #else
             httpContext.Request.HttpMethod.Returns("POST");

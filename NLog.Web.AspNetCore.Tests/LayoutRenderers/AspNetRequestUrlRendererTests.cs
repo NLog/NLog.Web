@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -164,7 +164,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var httpContext = Substitute.For<HttpContextBase>();
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             var url = $"{scheme}://{hostBase}{pathBase}{page}{queryString}";
             httpContext.Request.Url.Returns(new Uri(url));
 #else

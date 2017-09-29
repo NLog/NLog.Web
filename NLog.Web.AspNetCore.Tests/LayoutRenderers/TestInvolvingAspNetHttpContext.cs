@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Reflection;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -28,7 +28,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         protected TestInvolvingAspNetHttpContext()
         {
             HttpContext = SetupFakeHttpContext();
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             HttpContext.Current = HttpContext;
 #endif
         }
@@ -56,7 +56,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected HttpContext SetupFakeHttpContext()
         {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             var httpRequest = SetUpHttpRequest();
             var stringWriter = new StringWriter();
             var httpResponse = new HttpResponse(stringWriter);
@@ -65,7 +65,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             return null;
 #endif
         }
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
         protected virtual HttpRequest SetUpHttpRequest(string query = "")
         {
             return new HttpRequest("", "http://stackoverflow/", query);

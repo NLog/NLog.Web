@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -38,7 +38,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void ReferrerPresentRenderNonEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             httpContext.Request.UrlReferrer.Returns(new Uri("http://www.google.com/"));
 #else
             var headers = new HeaderDict();

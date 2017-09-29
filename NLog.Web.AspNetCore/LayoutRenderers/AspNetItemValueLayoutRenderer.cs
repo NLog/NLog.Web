@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 #else
 #endif

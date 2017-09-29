@@ -6,7 +6,7 @@
     <VersionPrefix>4.3.2</VersionPrefix>
     <Authors>Julian Verdurmen</Authors>
     <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
-    <DefineConstants>$(DefineConstants);NETSTANDARD_1plus</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
@@ -37,7 +37,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.0.0" />
-    
+
     <PackageReference Include="NLog" Version="5.0.0-beta07" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta5" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
@@ -47,5 +47,5 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
+    
 </Project>

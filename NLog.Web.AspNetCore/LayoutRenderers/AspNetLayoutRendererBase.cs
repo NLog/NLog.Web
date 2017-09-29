@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog.LayoutRenderers;
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 using NLog.Web.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,13 +21,13 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         protected AspNetLayoutRendererBase()
         {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             HttpContextAccessor = new DefaultHttpContextAccessor();
 #endif
         }
 
 
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 
         /// <summary>
         /// Context for DI
@@ -85,7 +85,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
 
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 
 /// <inheritdoc />
         protected override void CloseLayoutRenderer()

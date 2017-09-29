@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -203,7 +203,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = new AspNetQueryStringLayoutRenderer();
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 
             var httpContext = Substitute.For<HttpContextBase>();
             var namedClollection = new NameValueCollection();

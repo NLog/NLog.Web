@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 using System.Web.SessionState;
@@ -59,7 +59,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void CulturedVariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 			httpContext.Items = new Dictionary<object, object>();
 			httpContext.Items.Add("key", expectedValue);
 #else
@@ -81,7 +81,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void VariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             httpContext.Items = new Dictionary<object, object>();
             httpContext.Items.Add("key", expectedValue);
 #else

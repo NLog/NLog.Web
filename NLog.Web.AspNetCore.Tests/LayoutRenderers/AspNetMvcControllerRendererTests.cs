@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -25,7 +25,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullRoutesRenderersEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             var routingFeature = Substitute.For<IRoutingFeature>();
             var collection = new FeatureCollection();
             collection.Set<IRoutingFeature>(routingFeature);

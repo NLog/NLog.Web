@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net452;netcoreapp1.0</TargetFrameworks>
-    <DefineConstants>$(DefineConstants);NETSTANDARD_1plus</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
   </PropertyGroup>

@@ -1,5 +1,5 @@
 ﻿
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using NLog.Targets;
 

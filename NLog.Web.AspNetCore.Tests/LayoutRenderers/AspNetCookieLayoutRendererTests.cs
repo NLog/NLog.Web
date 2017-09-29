@@ -13,7 +13,7 @@ using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 using System.Web.SessionState;
@@ -77,7 +77,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_Cookie_Mulitple_Items_Flat_Formatting()
         {
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             //no multivalue keys in ASP.NET core
             var expectedResult = "key=TEST,Key1=TEST1";
 #else
@@ -95,7 +95,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_Cookie_Multiple_Items_Flat_Formatting_separators()
         {
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             //no multivalue keys in ASP.NET core
             var expectedResult = "key:TEST|Key1:TEST1";
 #else
@@ -170,7 +170,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
 //no multivalue keys in ASP.NET core
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 
         [Fact]
         public void KeyFoundRendersVakue_Cookie_Mulitple_Cookies_Cookie_Items_Flat_Formatting()
@@ -199,7 +199,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 #endif
 
-#if !NETSTANDARD_1plus //todo
+#if !ASP_NET_CORE //todo
 
         [Fact]
         public void CommaSeperatedCookieNamesTest_Mulitple_FLAT_Formatting()
@@ -268,7 +268,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
 
 
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             IRequestCookieCollection cookies = Substitute.For<IRequestCookieCollection>();
             var cookieDict = new Dictionary<string, string>();
 

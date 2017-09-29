@@ -1,5 +1,5 @@
 ﻿using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 #else
@@ -50,7 +50,7 @@ namespace NLog.Web.LayoutRenderers
 
             var printAllQueryString = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
             var queryStringKeys = this.QueryStringKeys;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             var queryStrings = httpRequest.QueryString;
 
             if (queryStrings == null)
@@ -86,7 +86,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
         private static IEnumerable<KeyValuePair<string, string>> GetValues(
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             IQueryCollection queryStrings,
 #else
             NameValueCollection queryStrings,
@@ -99,7 +99,7 @@ namespace NLog.Web.LayoutRenderers
                 foreach (var key in queryStringKeys)
                 {
                     // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
                     var value = queryStrings[key];
 #else
                     var value = queryStrings[key].ToString();

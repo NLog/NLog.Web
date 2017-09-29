@@ -1,5 +1,5 @@
 ﻿using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 #else
@@ -65,7 +65,7 @@ namespace NLog.Web.LayoutRenderers
             string url, pathAndQuery, port, host, scheme;
             url = pathAndQuery = port = host = scheme = null;
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
                         
             if (httpRequest.Url == null)
             {
