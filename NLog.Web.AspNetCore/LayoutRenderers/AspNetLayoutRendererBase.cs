@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using NLog.Web.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -46,7 +48,13 @@ namespace NLog.Web.LayoutRenderers
 
         private static IHttpContextAccessor RetrieveHttpContextAccessor()
         {
-            var httpContextAccessor = ServiceLocator.ServiceProvider?.GetService<IHttpContextAccessor>();
+            var serviceProvider = ServiceLocator.ServiceProvider;
+            if (serviceProvider == null)
+            {
+                Common.InternalLogger.Debug("Missing serviceProvider, so no HttpContext");
+            }
+
+            var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
             if (httpContextAccessor == null)
             {
                 Common.InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
@@ -86,7 +94,7 @@ namespace NLog.Web.LayoutRenderers
 
 #if ASP_NET_CORE
 
-/// <inheritdoc />
+        /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {
             _httpContextAccessor = null;

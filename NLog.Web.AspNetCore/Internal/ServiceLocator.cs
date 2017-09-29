@@ -18,9 +18,6 @@ namespace NLog.Web.Internal
         /// </summary>
         public static IServiceProvider ServiceProvider { get; set; }
 
-        /// <summary>
-        /// Registering needed services
-        /// </summary>
-        public static IServiceCollection Services { get; set; }
+   
     }
 }

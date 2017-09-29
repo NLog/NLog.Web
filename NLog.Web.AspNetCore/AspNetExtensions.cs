@@ -3,13 +3,13 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NLog.Config;
 using NLog.Web.Internal;
 using NLog.Extensions.Logging;
-
-
+using NLog.Web.AspNetCore;
 #if NETSTANDARD2_0
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -77,18 +77,23 @@ namespace NLog.Web
         /// <param name="builder"></param>
         /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
         /// <returns></returns>
-        public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogProviderOptions options)
+        public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
+            options = options ?? NLogAspNetCoreOptions.Default;
+
             builder.ConfigureServices(services =>
+            {
                 services.AddSingleton<ILoggerFactory>(serviceProvider =>
                 {
                     ServiceLocator.ServiceProvider = serviceProvider;
-                    ServiceLocator.Services = services;
-
-                    return new NLogLoggerFactory();
-                })
-            );
+                    return new NLogLoggerFactory(options);
+                });
+                if (options.RegisterHttpContextAccessor)
+                {
+                    services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                }
+            });
             return builder;
         }
 #endif
