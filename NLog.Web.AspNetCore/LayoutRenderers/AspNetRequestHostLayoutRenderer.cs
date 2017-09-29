@@ -1,7 +1,7 @@
 
 using NLog.LayoutRenderers;
 using System.Text;
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 using Microsoft.AspNetCore.Routing;
 #endif
 using NLog.Web.Internal;
@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var request = HttpContextAccessor?.HttpContext?.TryGetRequest();
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             var host = request?.Host;
 #else
             var host = request?.UserHostName;

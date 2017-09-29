@@ -1,6 +1,6 @@
 using NLog.LayoutRenderers;
 using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web.Routing;
 using System.Web;
 #else
@@ -37,7 +37,7 @@ namespace NLog.Web.LayoutRenderers
             string key = "controller";
             string controller;
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
 #else
             controller = context?.GetRouteData()?.Values?[key]?.ToString();

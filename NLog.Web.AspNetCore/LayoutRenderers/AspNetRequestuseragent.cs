@@ -1,5 +1,5 @@
 ﻿using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 #endif
@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
             string userAgent = string.Empty;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             userAgent = httpRequest.UserAgent;
 
 #else

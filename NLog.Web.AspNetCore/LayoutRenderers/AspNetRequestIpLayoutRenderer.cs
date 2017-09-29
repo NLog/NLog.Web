@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #endif
 using NLog.Config;
@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 
             var ip = httpContext.Request?.ServerVariables["REMOTE_ADDR"];
 #else

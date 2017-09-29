@@ -1,4 +1,4 @@
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 using NLog.LayoutRenderers;
 using System.Text;
 

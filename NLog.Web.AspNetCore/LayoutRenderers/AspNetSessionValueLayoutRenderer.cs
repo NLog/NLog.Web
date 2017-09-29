@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using NLog.Common;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http.Features;
@@ -88,7 +88,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 #else
             if (context.Items == null)

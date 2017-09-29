@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web.Hosting;
 #else
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +12,7 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
 
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
     /// <summary>
     /// Rendering site name in IIS. <see cref="IHostingEnvironment"/>
     /// </summary>
@@ -25,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
     // ReSharper disable once InconsistentNaming
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
         private static IHostingEnvironment _hostingEnvironment;
 
         private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
@@ -40,7 +40,7 @@ namespace NLog.Web.LayoutRenderers
         {
 
 
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
             builder.Append(HostingEnvironment?.ApplicationName);
 
 #else
@@ -48,7 +48,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         }
-#if NETSTANDARD_1plus
+#if ASP_NET_CORE
 
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()

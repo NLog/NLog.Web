@@ -1,8 +1,8 @@
-﻿#if !NETSTANDARD_1plus
+﻿#if !ASP_NET_CORE
 //TODO test .NET Core
 using System.Collections.Specialized;
 using System.IO;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Web.SessionState;

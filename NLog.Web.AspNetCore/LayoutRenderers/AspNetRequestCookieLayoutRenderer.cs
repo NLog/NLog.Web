@@ -1,5 +1,5 @@
 ﻿using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Collections.Specialized;
 using System.Web;
 #else
@@ -59,7 +59,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 
         private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
         {

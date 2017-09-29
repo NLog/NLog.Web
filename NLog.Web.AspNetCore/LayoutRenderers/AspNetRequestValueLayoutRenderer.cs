@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using NLog.Common;
 using System.Web;
 #else
@@ -58,7 +58,7 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Cookie { get; set; }
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 
         //missing in .NET Core (RC2)
 
@@ -91,7 +91,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (this.QueryString != null)
             {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
                 if (httpRequest.QueryString != null)
                 {
                     builder.Append(httpRequest.QueryString[this.QueryString]);
@@ -109,7 +109,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Cookie != null && httpRequest.Cookies != null)
             {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
                 var cookie = httpRequest.Cookies[this.Cookie];
 
                 if (cookie != null)
@@ -122,7 +122,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             }
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             else if (this.ServerVariable != null && httpRequest.ServerVariables != null)
             {
                 builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
@@ -139,7 +139,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (this.Item != null)
             {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
                 builder.Append(httpRequest[this.Item]);
 #else
                 builder.Append(httpRequest.HttpContext.Items[this.Item]);

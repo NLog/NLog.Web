@@ -51,7 +51,7 @@ namespace NLog.Web.Internal
 
         private static PropertyInfo GetPropertyInfo(object value, string propertyName)
         {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             return value?.GetType().GetProperty(propertyName);
 #else
             return value?.GetType().GetTypeInfo().GetDeclaredProperty(propertyName);

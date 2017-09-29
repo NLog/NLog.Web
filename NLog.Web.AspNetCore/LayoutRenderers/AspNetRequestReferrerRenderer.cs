@@ -1,5 +1,5 @@
 ﻿using System.Text;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 #endif
@@ -37,7 +37,7 @@ namespace NLog.Web.LayoutRenderers
 
             string referrer;
 
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
             referrer = httpRequest.UrlReferrer?.ToString();
 #else
             referrer = httpRequest.Headers["Referer"].ToString();

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using NLog.Common;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
@@ -13,7 +13,7 @@ namespace NLog.Web.Internal
 {
     internal static class RequestAccessor
     {
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
         {
             try

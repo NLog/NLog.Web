@@ -1,7 +1,7 @@
 using NLog.LayoutRenderers;
 using System.Text;
 using System;
-#if !NETSTANDARD_1plus
+#if !ASP_NET_CORE
 using NLog.Web.Internal;
 using System.Web.Routing;
 using System.Web;
