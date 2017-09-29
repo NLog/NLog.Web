@@ -40,19 +40,18 @@ namespace NLog.Web.LayoutRenderers
         /// <returns>HttpContextAccessor or <c>null</c></returns>
         public IHttpContextAccessor HttpContextAccessor
         {
-            get { return _httpContextAccessor ?? (_httpContextAccessor = ServiceLocator.ServiceProvider?.GetService<IHttpContextAccessor>()); }
-            set { _httpContextAccessor = value; }
+            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
+            set => _httpContextAccessor = value;
         }
 
-        /// <summary>
-        ///  Initialize
-        /// </summary>
-        protected override void InitializeLayoutRenderer()
+        private static IHttpContextAccessor RetrieveHttpContextAccessor()
         {
-            if (HttpContextAccessor == null)
+            var httpContextAccessor = ServiceLocator.ServiceProvider?.GetService<IHttpContextAccessor>();
+            if (httpContextAccessor == null)
             {
-                Common.InternalLogger.Warn("Missing IHttpContextAccessor. Has it been registered before loading NLog Configuration? Consider reloading NLog Configuration after having registered the IHttpContextAccessor.");
+                Common.InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
             }
+            return httpContextAccessor;
         }
 
 #else
