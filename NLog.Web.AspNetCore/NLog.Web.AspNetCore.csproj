@@ -35,7 +35,7 @@
     
 
     
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta6" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta7" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
 
