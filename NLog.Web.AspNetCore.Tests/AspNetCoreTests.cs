@@ -9,6 +9,7 @@ using Castle.Core.Logging;
 using Xunit;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Config;
@@ -33,14 +34,7 @@ namespace NLog.Web.AspNetCore.Tests
         [Fact]
         public void UseNLogShouldLogTest()
         {
-            var webhost =
-                Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
-                .Configure(c => c.New()) //.New needed, otherwise:
-                                         // Unhandled Exception: System.ArgumentException: A valid non-empty application name must be provided.
-                                         // Parameter name: applicationName
-                    .UseNLog() //use NLog for ILoggers and pass httpcontext
-                    .Build();
-
+            var webhost = CreateWebHost();
 
             var loggerFact = webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
 
@@ -64,6 +58,42 @@ namespace NLog.Web.AspNetCore.Tests
             Assert.Equal("logger1|error1", logged.First());
 
 
+
+
+
+        }
+
+
+
+        [Fact]
+        public void RegisterHttpContext()
+        {
+            var webhost = CreateWebHost();
+            Assert.NotNull(webhost.Services.GetService<IHttpContextAccessor>());
+
+        }
+        [Fact]
+        public void SkipRegisterHttpContext()
+        {
+            var webhost = CreateWebHost(new NLogAspNetCoreOptions { RegisterHttpContextAccessor = false });
+            Assert.Null(webhost.Services.GetService<IHttpContextAccessor>());
+
+        }
+
+        /// <summary>
+        /// Create webhost with UseNlog
+        /// </summary>
+        /// <returns></returns>
+        private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
+        {
+            var webhost =
+                Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
+                    .Configure(c => c.New()) //.New needed, otherwise:
+                                             // Unhandled Exception: System.ArgumentException: A valid non-empty application name must be provided.
+                                             // Parameter name: applicationName
+                    .UseNLog(options) //use NLog for ILoggers and pass httpcontext
+                    .Build();
+            return webhost;
         }
 
     }
