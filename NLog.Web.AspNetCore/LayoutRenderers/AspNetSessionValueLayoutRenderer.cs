@@ -86,6 +86,7 @@ namespace NLog.Web.LayoutRenderers
             var context = HttpContextAccessor.HttpContext;
             if (context?.Session == null)
             {
+                InternalLogger.Debug("Session is null");
                 return;
             }
 #if !ASP_NET_CORE
