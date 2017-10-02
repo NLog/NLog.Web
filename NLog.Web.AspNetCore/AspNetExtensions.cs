@@ -50,7 +50,7 @@ namespace NLog.Web
         /// <summary>
         /// Apply NLog configuration from XML config.
         /// </summary>
-        /// <param name="fileName">absolute path  NLog configuration file.</param>
+        /// <param name="fileName">Path to NLog configuration file, e.g. nlog.config. </param>
         /// <returns>LoggingConfiguration for chaining</returns>
         private static LoggingConfiguration ConfigureNLog(string fileName)
         {
@@ -91,12 +91,18 @@ namespace NLog.Web
                     //register yourself
                     ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).Assembly);
 
+
+                    LogManager.Configuration?.Reload();
                     return new NLogLoggerFactory(options);
+
                 });
+                //note: this one is called before  services.AddSingleton<ILoggerFactory>
                 if (options.RegisterHttpContextAccessor)
                 {
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
+
+                
 
 
 

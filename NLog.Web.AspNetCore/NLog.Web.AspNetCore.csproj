@@ -29,6 +29,7 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>4.4.1</Version>
+    <RootNamespace>NLog.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
