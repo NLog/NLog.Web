@@ -87,12 +87,19 @@ namespace NLog.Web
                 services.AddSingleton<ILoggerFactory>(serviceProvider =>
                 {
                     ServiceLocator.ServiceProvider = serviceProvider;
+
+                    //register yourself
+                    ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).Assembly);
+
                     return new NLogLoggerFactory(options);
                 });
                 if (options.RegisterHttpContextAccessor)
                 {
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
+
+
+
             });
             return builder;
         }
