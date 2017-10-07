@@ -52,6 +52,7 @@ namespace NLog.Web.LayoutRenderers
             if (serviceProvider == null)
             {
                 Common.InternalLogger.Debug("Missing serviceProvider, so no HttpContext");
+                return null;
             }
 
             var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
