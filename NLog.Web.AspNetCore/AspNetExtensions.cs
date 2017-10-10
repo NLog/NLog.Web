@@ -88,10 +88,8 @@ namespace NLog.Web
                 {
                     ServiceLocator.ServiceProvider = serviceProvider;
 
-                    //register yourself
-                    ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).Assembly);
-
-
+                    NLogBuilder.RegisterNLogWebAspNetCore();
+                    
                     LogManager.Configuration?.Reload();
                     return new NLogLoggerFactory(options);
 

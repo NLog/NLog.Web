@@ -56,6 +56,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.0.0" />
+    <PackageReference Include="NLog" Version="4.5.0-beta04" />
     
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@ namespace ASP.NET_Core_2___VS2017
         public static void Main(string[] args)
         {
             // NLog: setup the logger first to catch all errors
-            var logger = NLogStart.InitLogger("NLog.config");
+            var logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
             try
             {
                 logger.Debug("init main");
