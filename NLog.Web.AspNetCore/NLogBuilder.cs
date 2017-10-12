@@ -34,20 +34,20 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog
+        /// Configure NLog from XML config.
         /// </summary>
-        /// <param name="fileName">Path to NLog configuration file, e.g. nlog.config. </param>>
+        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        public static LogFactory ConfigureNLog(string fileName)
+        public static LogFactory ConfigureNLog(string configFileName)
         {
             RegisterNLogWebAspNetCore();
-            return ConfigureNLog(new XmlLoggingConfiguration(fileName));
+            return ConfigureNLog(new XmlLoggingConfiguration(configFileName));
         }
 
         /// <summary>
-        /// Configure NLog
+        /// Configure NLog from API
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
         public static LogFactory ConfigureNLog(LoggingConfiguration configuration)
         {

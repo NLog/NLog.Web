@@ -62,6 +62,31 @@ namespace NLog.Web
 
 #if NETSTANDARD2_0
 
+        /// <summary>
+        /// Apply NLog configuration from XML config.
+        /// 
+        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(string)"/> is used.
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
+        /// <returns>LogFactory to get loggers, add events etc</returns>
+        public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
+        {
+            return NLogBuilder.ConfigureNLog(configFileName);
+        }
+
+        /// <summary>
+        /// Configure NLog from API
+        /// 
+        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(LoggingConfiguration)"/> is used.
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="configuration">Config for NLog</param>
+        /// <returns>LogFactory to get loggers, add events etc</returns>
+        public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
+        {
+            return NLogBuilder.ConfigureNLog(configuration);
+        }
 
         /// <summary>
         /// Use NLog for Dependency Injected loggers. 
@@ -89,7 +114,7 @@ namespace NLog.Web
                     ServiceLocator.ServiceProvider = serviceProvider;
 
                     NLogBuilder.RegisterNLogWebAspNetCore();
-                    
+
                     LogManager.Configuration?.Reload();
                     return new NLogLoggerFactory(options);
 
@@ -100,7 +125,7 @@ namespace NLog.Web
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
 
-                
+
 
 
 
