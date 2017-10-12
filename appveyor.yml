@@ -8,7 +8,7 @@ assembly_info:
   file: '**\AssemblyInfo.cs'
   assembly_version: '4.0.0'
   assembly_file_version: '{version}'
-  assembly_informational_version: '4.5' #NLog.Web
+  assembly_informational_version: '4.5.1' #NLog.Web
 nuget:
   project_feed: true
 matrix:
@@ -20,9 +20,9 @@ build:
 
 build_script:
 - cmd: >-
-    call build_aspnet.bat -nuget_version=4.5.0 #NLog.Web.AspNetCore package
+    call build_aspnet.bat -nuget_version=4.5.1 # NLog.Web package
 
-    call build_aspnetcore.bat
+    call build_aspnetcore.bat # update NLog.Web.AspNetCore.csproj for version number
 
 deploy:
 - provider: NuGet
