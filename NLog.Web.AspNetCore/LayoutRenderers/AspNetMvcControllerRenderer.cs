@@ -35,12 +35,11 @@ namespace NLog.Web.LayoutRenderers
         protected override void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContextBase context)
         {
             string key = "controller";
-            string controller;
 
 #if !ASP_NET_CORE
-            controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
+            var controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
 #else
-            controller = context?.GetRouteData()?.Values?[key]?.ToString();
+            var controller = context?.GetRouteData()?.Values?[key]?.ToString();
 #endif
             if (!string.IsNullOrEmpty(controller))
                 builder.Append(controller);

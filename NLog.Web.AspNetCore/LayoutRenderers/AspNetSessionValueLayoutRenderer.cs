@@ -78,10 +78,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (this.Variable == null)
-            {
-                return;
-            }
+            if (this.Variable == null) { return; }
 
             var context = HttpContextAccessor.HttpContext;
             if (context?.Session == null)
@@ -92,23 +89,11 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
             var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
 #else
-            if (context.Items == null)
-            {
-                return;
-            }
-
-            if (context.Features.Get<ISessionFeature>()?.Session == null)
-            {
-                return;
-            }
+            if (context.Items == null || context.Features.Get<ISessionFeature>()?.Session == null) { return; }
 
             //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
             //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
-            if (context.Items.ContainsKey(NLogRetrievingSessionValue))
-            {
-                //prevent stackoverflow
-                return;
-            }
+            if (context.Items.ContainsKey(NLogRetrievingSessionValue)) { return; }
 
             context.Items[NLogRetrievingSessionValue] = true;
             object value;
@@ -126,13 +111,13 @@ namespace NLog.Web.LayoutRenderers
                 context.Items.Remove(NLogRetrievingSessionValue);
             }
 
-
-
 #endif
             var formatProvider = GetFormatProvider(logEvent, Culture);
             builder.Append(Convert.ToString(value, formatProvider));
         }
 
+#if ASP_NET_CORE
         private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
+#endif
     }
 }

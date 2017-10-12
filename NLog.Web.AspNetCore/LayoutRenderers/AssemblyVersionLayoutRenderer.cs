@@ -59,39 +59,43 @@ namespace NLog.Web.LayoutRenderers
             }
             else
             {
-                //try entry assembly
-
-#if ASP_NET_CORE && !NETSTANDARD2_0
-                string assemblyVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString();
-
-                builder.Append(assemblyVersion);
-
-#elif NETSTANDARD2_0
-                var assemblyVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
-                builder.Append(assemblyVersion);
-#else
-
-                var assembly = Assembly.GetEntryAssembly();
-
-                if (assembly == null)
-                {
-                    assembly = GetAspNetEntryAssembly();
-                }
-                if (assembly == null)
-                {
-                    builder.Append("Could not entry assembly");
-                }
-                else
-                {
-                    builder.Append(assembly.GetName().Version.ToString());
-                }
-#endif
-
+                string assemblyVersion = GetAssemblyVersion();
+                builder.Append(assemblyVersion ?? "Could not entry assembly");
             }
-
         }
 
-#if !ASP_NET_CORE
+
+#if ASP_NET_CORE && !NETSTANDARD2_0
+        private static string GetAssemblyVersion()
+        {
+            return PlatformServices.Default.Application.RuntimeFramework.Version.ToString();
+        }
+#elif NETSTANDARD2_0
+        private static string GetAssemblyVersion()
+        {
+            return System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+        }
+#else
+        private static string GetAssemblyVersion()
+        {
+
+            var assembly = Assembly.GetEntryAssembly();
+            if (assembly == null)
+            {
+                assembly = GetAspNetEntryAssembly();
+            }
+            if (assembly == null)
+            {
+                return null;
+            }
+            else
+            {
+                var version = assembly.GetName().Version.ToString();
+               return version;
+            }
+        }
+
+
         private static Assembly GetAspNetEntryAssembly()
         {
             if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.ApplicationInstance == null)
