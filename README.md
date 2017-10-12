@@ -29,7 +29,7 @@ For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https
 Simply install the package. NLog will detect the extension automatically. 
 
 
-## ASP.NET Core
+## ASP.NET Core 1 / ASP.NET Core 2
 
 ------
  ℹ️  Missing the trace en debug logs in .NET Core 2? Set `ILoggingBuilder.SetMinimumLevel()`
