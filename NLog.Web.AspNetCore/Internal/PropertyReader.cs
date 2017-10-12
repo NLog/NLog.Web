@@ -21,30 +21,28 @@ namespace NLog.Web.Internal
                 return null;
             }
 
-            object value;
-            if (evaluateAsNestedProperties)
+            var value = evaluateAsNestedProperties ? GetValueAsNestedProperties(key, getVal) : getVal(key);
+            return value;
+        }
+
+        private static object GetValueAsNestedProperties(string key, Func<string, object> getVal)
+        {
+            var path = key.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
+
+            var value = getVal(path.First());
+
+            if (value != null)
             {
-                var path = key.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-
-                value = getVal(path.First());
-
-                if (value != null)
+                foreach (var property in path.Skip(1))
                 {
-                    foreach (var property in path.Skip(1))
+                    var propertyInfo = GetPropertyInfo(value, property);
+                    value = propertyInfo?.GetValue(value, null);
+                    if (value == null)
                     {
-                        var propertyInfo = GetPropertyInfo(value, property);
-                        value = propertyInfo?.GetValue(value, null);
-                        if (value == null)
-                        {
-                            //done
-                            break;
-                        }
+                        //done
+                        break;
                     }
                 }
-            }
-            else
-            {
-                value = getVal(key);
             }
             return value;
         }

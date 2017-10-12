@@ -42,67 +42,75 @@ namespace NLog.Web.LayoutRenderers
         protected void SerializeValues(IEnumerable<KeyValuePair<string, string>> values,
             StringBuilder builder)
         {
-            var firstItem = true;
+
             switch (OutputFormat)
             {
                 case AspNetRequestLayoutOutputFormat.Flat:
-
-                    foreach (var kpv in values)
-                    {
-                        var key = kpv.Key;
-                        var value = kpv.Value;
-
-                        if (!firstItem)
-                        {
-                            builder.Append(ItemSeparator);
-                        }
-                        firstItem = false;
-                        builder.Append(key);
-                        builder.Append(ValueSeparator);
-                        builder.Append(value);
-                    }
-
-
+                    SerializValuesFlat(values, builder);
                     break;
                 case AspNetRequestLayoutOutputFormat.Json:
-
-
-                    var valueList = values.ToList();
-
-                    if (valueList.Count > 0)
-                    {
-                        var addArray = valueList.Count > (SingleAsArray ? 0 : 1);
-
-                        if (addArray)
-                        {
-                            builder.Append('[');
-                        }
-
-                        foreach (var kpv in valueList)
-                        {
-                            var key = kpv.Key;
-                            var value = kpv.Value;
-                            if (!firstItem)
-                            {
-                                builder.Append(',');
-                            }
-                            firstItem = false;
-
-                            //quoted key
-                            builder.Append('{');
-                            AppendQuoted(builder, key);
-
-                            builder.Append(':');
-                            //quoted value;
-                            AppendQuoted(builder, value);
-                            builder.Append('}');
-                        }
-                        if (addArray)
-                        {
-                            builder.Append(']');
-                        }
-                    }
+                    SerializeValuesJson(values, builder);
                     break;
+            }
+        }
+
+        private void SerializeValuesJson(IEnumerable<KeyValuePair<string, string>> values, StringBuilder builder)
+        {
+            var firstItem = true;
+            var valueList = values.ToList();
+
+            if (valueList.Count > 0)
+            {
+                var addArray = valueList.Count > (SingleAsArray ? 0 : 1);
+
+                if (addArray)
+                {
+                    builder.Append('[');
+                }
+
+                foreach (var kpv in valueList)
+                {
+                    var key = kpv.Key;
+                    var value = kpv.Value;
+                    if (!firstItem)
+                    {
+                        builder.Append(',');
+                    }
+                    firstItem = false;
+
+                    //quoted key
+                    builder.Append('{');
+                    AppendQuoted(builder, key);
+
+                    builder.Append(':');
+                    //quoted value;
+                    AppendQuoted(builder, value);
+                    builder.Append('}');
+                }
+                if (addArray)
+                {
+                    builder.Append(']');
+                }
+            }
+
+        }
+
+        private void SerializValuesFlat(IEnumerable<KeyValuePair<string, string>> values, StringBuilder builder)
+        {
+            var firstItem = true;
+            foreach (var kpv in values)
+            {
+                var key = kpv.Key;
+                var value = kpv.Value;
+
+                if (!firstItem)
+                {
+                    builder.Append(ItemSeparator);
+                }
+                firstItem = false;
+                builder.Append(key);
+                builder.Append(ValueSeparator);
+                builder.Append(value);
             }
         }
 

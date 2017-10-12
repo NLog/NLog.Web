@@ -62,14 +62,20 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            string url, pathAndQuery, port, host, scheme;
-            url = pathAndQuery = port = host = scheme = null;
+            var url = CreateUrl(httpRequest);
+
+            builder.Append(url);
+        }
 
 #if !ASP_NET_CORE
-                        
+
+        private string CreateUrl(HttpRequestBase httpRequest)
+        {
+            string port = null, host = null, scheme = null;
+
             if (httpRequest.Url == null)
             {
-                return;
+                return null;
             }
 
             if (IncludePort && httpRequest.Url.Port > 0)
@@ -77,14 +83,7 @@ namespace NLog.Web.LayoutRenderers
                 port = ":" + httpRequest.Url.Port;
             }
 
-            if (IncludeQueryString)
-            {
-                pathAndQuery = httpRequest.Url.PathAndQuery;
-            }
-            else
-            {
-                pathAndQuery = httpRequest.Url.AbsolutePath;                
-            }
+            var pathAndQuery = IncludeQueryString ? httpRequest.Url.PathAndQuery : httpRequest.Url.AbsolutePath;
 
             if (IncludeHost)
             {
@@ -96,8 +95,15 @@ namespace NLog.Web.LayoutRenderers
                 scheme = httpRequest.Url.Scheme + "://";
             }
 
-            url = $"{scheme}{host}{port}{pathAndQuery}";
+            var url = $"{scheme}{host}{port}{pathAndQuery}";
+            return url;
+        }
+
 #else
+        private string CreateUrl(Microsoft.AspNetCore.Http.HttpRequest httpRequest)
+        {
+            string pathAndQuery = null, port = null, host = null, scheme = null;
+        
             if (IncludeQueryString)
             {
                 pathAndQuery = httpRequest.QueryString.Value;
@@ -114,13 +120,14 @@ namespace NLog.Web.LayoutRenderers
             }
 
             if (IncludeScheme && !String.IsNullOrWhiteSpace(httpRequest.Scheme))
-            { 
+            {
                 scheme = httpRequest.Scheme + "://";
             }
 
-            url = $"{scheme}{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
-#endif
-            builder.Append(url);
+            var url = $"{scheme}{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
+            return url;
         }
+
+#endif
     }
 }

@@ -63,15 +63,12 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
         {
-            var cookieNames = this.CookieNames;
-            if (cookieNames != null)
+            if (CookieNames != null)
             {
-                foreach (var cookieName in cookieNames)
+                foreach (var cookieName in CookieNames)
                 {
                     var value = cookies[cookieName];
-
-                   
-
+                    
                     if (value != null)
                     {
                         if (this.OutputFormat == AspNetRequestLayoutOutputFormat.Json)

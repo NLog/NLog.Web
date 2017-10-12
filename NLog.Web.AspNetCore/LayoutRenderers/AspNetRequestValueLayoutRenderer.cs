@@ -89,62 +89,85 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            if (this.QueryString != null)
+            if (QueryString != null)
             {
-#if !ASP_NET_CORE
-                if (httpRequest.QueryString != null)
-                {
-                    builder.Append(httpRequest.QueryString[this.QueryString]);
-                }
-#else
-                if (httpRequest.Query != null)
-                {
-                    builder.Append(httpRequest.Query[this.QueryString]);
-                }
-#endif
+                AppendQueryString(builder, httpRequest);
             }
-            else if (this.Form != null && httpRequest.Form != null)
+            else if (Form != null && httpRequest.Form != null)
             {
-                builder.Append(httpRequest.Form[this.Form]);
+                builder.Append(httpRequest.Form[Form]);
             }
-            else if (this.Cookie != null && httpRequest.Cookies != null)
+            else if (Cookie != null && httpRequest.Cookies != null)
             {
-#if !ASP_NET_CORE
-                var cookie = httpRequest.Cookies[this.Cookie];
-
-                if (cookie != null)
-                {
-                    builder.Append(cookie.Value);
-                }
-#else
-                var cookie = httpRequest.Cookies[this.Cookie];
-                builder.Append(cookie);
-#endif
-
+                AppendCookie(builder, httpRequest);
             }
 #if !ASP_NET_CORE
-            else if (this.ServerVariable != null && httpRequest.ServerVariables != null)
+            else if (ServerVariable != null && httpRequest.ServerVariables != null)
             {
-                builder.Append(httpRequest.ServerVariables[this.ServerVariable]);
+                builder.Append(httpRequest.ServerVariables[ServerVariable]);
             }
 #endif
-            else if (this.Header != null && httpRequest.Headers != null)
+            else if (Header != null && httpRequest.Headers != null)
             {
-                string header = httpRequest.Headers[this.Header];
+                string header = httpRequest.Headers[Header];
 
                 if (header != null)
                 {
                     builder.Append(header);
                 }
             }
-            else if (this.Item != null)
+            else if (Item != null)
             {
-#if !ASP_NET_CORE
-                builder.Append(httpRequest[this.Item]);
-#else
-                builder.Append(httpRequest.HttpContext.Items[this.Item]);
-#endif
+                AppendItem(builder, httpRequest);
             }
         }
+
+
+#if !ASP_NET_CORE
+
+
+        private void AppendQueryString(StringBuilder builder, HttpRequestBase httpRequest)
+        {
+            if (httpRequest.QueryString != null)
+            {
+                builder.Append(httpRequest.QueryString[QueryString]);
+            }
+        }
+
+        private void AppendCookie(StringBuilder builder, HttpRequestBase httpRequest)
+        {
+            var cookie = httpRequest.Cookies[Cookie];
+
+            if (cookie != null)
+            {
+                builder.Append(cookie.Value);
+            }
+        }
+
+        private void AppendItem(StringBuilder builder, HttpRequestBase httpRequest)
+        {
+            builder.Append(httpRequest[Item]);
+        }
+#else
+
+        private void AppendQueryString(StringBuilder builder, HttpRequest httpRequest)
+        {
+            if (httpRequest.Query != null)
+            {
+                builder.Append(httpRequest.Query[this.QueryString]);
+            }
+        }
+
+        private void AppendCookie(StringBuilder builder, HttpRequest httpRequest)
+        {
+            var cookie = httpRequest.Cookies[Cookie];
+            builder.Append(cookie);
+        }
+
+        private void AppendItem(StringBuilder builder, HttpRequest httpRequest)
+        {
+            builder.Append(httpRequest.HttpContext.Items[this.Item]);
+        }
+#endif
     }
 }
