@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using NLog.Extensions.Logging;
 
-namespace NLog.Web.AspNetCore
+namespace NLog.Web
 {
     /// <summary>
     /// Options for ASP.NET Core and NLog
