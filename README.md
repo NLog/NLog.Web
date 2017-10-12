@@ -11,6 +11,12 @@ ASP.NET:  [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.
 ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore) 
 [![Rager Releases](http://rager.io/badge.svg)](http://rager.io/projects/search?badge=1&query=www.nuget.org/packages/NLog.web.aspnetcore)
 
+## Getting started
+
+- [Getting started with ASP.NET Core 2](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2))
+- [Getting started with ASP.NET Core 1 (csproj - vs2017)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(csproj---vs2017))
+- [Getting Started with ASP.NET Core 1 (project.json - vs2015)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
+- [Multiple blogs to get started with ASP.NET Core and NLog](https://github.com/damienbod/AspNetCoreNlog)
 
 
 ## Updates
@@ -18,7 +24,7 @@ ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](htt
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
 
-## ASP.NET
+## ASP.NET (non-core)
 
 Simply install the package. NLog will detect the extension automatically. 
 
@@ -64,11 +70,7 @@ Introduced in NLog.Web.AspNetCore 4.3.1
 
 * [${aspnet-TraceIdentifier}](https://github.com/NLog/NLog/wiki/AspNetTraceIdentifier-Layout-Renderer) - ASP.NET trace identifier
 
-### Usage
 
-- [Getting Started with ASP.NET Core (project.json - vs2015)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(project.json))
-- [Getting started with ASP.NET Core (csproj - vs2017)](https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-(csproj---vs2017))
-- [Multiple blogs to get started with ASP.NET Core and NLog](https://github.com/damienbod/AspNetCoreNlog)
 
 ## Content
 
