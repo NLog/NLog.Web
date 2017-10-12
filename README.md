@@ -1,4 +1,5 @@
-# NLog.Web (ASP.NET & ASP.NET Core)  [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master) [![codecov.io](https://codecov.io/github/NLog/NLog.Web/coverage.svg?branch=master)](https://codecov.io/github/NLog/NLog.Web?branch=master)
+# NLog.Web (ASP.NET & ASP.NET Core) 
+[![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master) [![codecov.io](https://codecov.io/github/NLog/NLog.Web/coverage.svg?branch=master)](https://codecov.io/github/NLog/NLog.Web?branch=master) [![BCH compliance](https://bettercodehub.com/edge/badge/NLog/NLog.Web)](https://bettercodehub.com/)
 
 These packages are extensions to [NLog](https://github.com/NLog/NLog/). 
 
