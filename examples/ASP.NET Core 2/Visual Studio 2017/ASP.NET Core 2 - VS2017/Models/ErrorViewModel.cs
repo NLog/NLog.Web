@@ -1,6 +1,6 @@
 using System;
 
-namespace ASP.NET_Core_2___VS2017.Models
+namespace NLog.Web.AspNetCore2.Example.Models
 {
     public class ErrorViewModel
     {

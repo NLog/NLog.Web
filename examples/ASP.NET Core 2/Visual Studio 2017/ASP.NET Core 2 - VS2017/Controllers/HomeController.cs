@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ASP.NET_Core_2___VS2017.Models;
 using Microsoft.Extensions.Logging;
+using NLog.Web.AspNetCore2.Example.Models;
 
-namespace ASP.NET_Core_2___VS2017.Controllers
+namespace NLog.Web.AspNetCore2.Example.Controllers
 {
     public class HomeController : Controller
     {
