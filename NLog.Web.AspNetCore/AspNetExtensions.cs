@@ -112,29 +112,30 @@ namespace NLog.Web
 
             builder.ConfigureServices(services =>
             {
-                services.AddSingleton<ILoggerFactory>(serviceProvider =>
+                //note: when registering ILoggerFactory, all non NLog stuff and stuff before this will be removed
+                services.AddSingleton<ILoggerProvider>(serviceProvider =>
                 {
                     ServiceLocator.ServiceProvider = serviceProvider;
 
                     NLogBuilder.RegisterNLogWebAspNetCore();
 
                     LogManager.Configuration?.Reload();
-                    return new NLogLoggerFactory(options);
-
+                    return new NLogLoggerProvider(options);
                 });
+
                 //note: this one is called before  services.AddSingleton<ILoggerFactory>
                 if (options.RegisterHttpContextAccessor)
                 {
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
 
-
-
-
-
             });
+
             return builder;
         }
+
+
+
 #endif
 
 
