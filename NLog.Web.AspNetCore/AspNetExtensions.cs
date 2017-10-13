@@ -72,7 +72,7 @@ namespace NLog.Web
         /// <returns>LogFactory to get loggers, add events etc</returns>
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
-            return NLogBuilder.ConfigureNLog(configFileName);
+            return builder.ConfigureNLog(new XmlLoggingConfiguration(configFileName));
         }
 
         /// <summary>
@@ -85,6 +85,9 @@ namespace NLog.Web
         /// <returns>LogFactory to get loggers, add events etc</returns>
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
+            //ConfigureHiddenAssemblies
+            //todo rename there to ConfigureNLog?
+            builder.AddNLog();
             return NLogBuilder.ConfigureNLog(configuration);
         }
 

@@ -30,6 +30,14 @@ namespace NLog.Web
             {
                 InternalLogger.Error(ex, "Registering NLog.Web.AspNetCore failed");
             }
+            try
+            {
+                LogManager.AddHiddenAssembly(typeof(NLogBuilder).GetTypeInfo().Assembly);
+            }
+            catch (Exception ex)
+            {
+                InternalLogger.Warn(ex, "Hidding assembly of {0} failed", nameof(NLogBuilder));
+            }
 
         }
 
