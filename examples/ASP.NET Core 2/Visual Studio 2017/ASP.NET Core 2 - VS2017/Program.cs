@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Config;
-using NLog.Web;
 
-namespace ASP.NET_Core_2___VS2017
+namespace NLog.Web.AspNetCore2.Example
 {
     public class Program
     {
@@ -35,6 +29,8 @@ namespace ASP.NET_Core_2___VS2017
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+               
+         //   .ConfigureLogging(c => c.AddDebug())
                 .UseNLog() // NLog: setup NLog for Dependency injection
                 .Build();
     }

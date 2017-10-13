@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>NLog.Web.AspNetCore2.Example</AssemblyName>
+    <RootNamespace>NLog.Web.AspNetCore2.Example</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
