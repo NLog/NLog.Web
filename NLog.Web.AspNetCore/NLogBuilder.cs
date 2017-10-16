@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NLog.Common;
 using NLog.Config;
+using NLog.Extensions.Logging;
 
 namespace NLog.Web
 {
@@ -60,8 +61,31 @@ namespace NLog.Web
         public static LogFactory ConfigureNLog(LoggingConfiguration configuration)
         {
             RegisterNLogWebAspNetCore();
+
+            ConfigureHiddenAssemblies();
+
             LogManager.Configuration = configuration;
             return LogManager.LogFactory;
+        }
+
+        private static void ConfigureHiddenAssemblies()
+        {
+            //ignore this
+            LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging")));
+            LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Abstractions")));
+
+            try
+            {
+                //try the Filter ext
+                var filterAssembly = Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Filter"));
+                LogManager.AddHiddenAssembly(filterAssembly);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
+            LogManager.AddHiddenAssembly(typeof(ConfigureExtensions).GetTypeInfo().Assembly);
         }
     }
 }
