@@ -5,7 +5,7 @@
     <AssemblyTitle>NLog.Web.AspNetCore</AssemblyTitle>
     
     <Authors>Julian Verdurmen</Authors>
-    <TargetFrameworks>netstandard1.3;net451;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard1.5;net451;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
@@ -14,7 +14,10 @@
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
-    <PackageReleaseNotes>Beta 3
+    <PackageReleaseNotes>
+ Beta 4: updated dependencies
+      
+  Beta 3
 
 - Fixed ${callsite} in Asp.Net Core 2 when before using UseNLog()      
 
@@ -44,7 +47,7 @@ Beta 1
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>4.5.0-beta03</Version>
+    <Version>4.5.0-beta04</Version>
     <RootNamespace>NLog.Web</RootNamespace>
   </PropertyGroup>
 
@@ -52,7 +55,7 @@ Beta 1
     
 
     
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta7" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc2" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
 
@@ -72,7 +75,7 @@ Beta 1
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.0.0" />
-    <PackageReference Include="NLog" Version="4.5.0-beta06" />
+    
     
   </ItemGroup>
   <ItemGroup>
