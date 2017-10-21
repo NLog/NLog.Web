@@ -5,7 +5,7 @@
     <AssemblyTitle>NLog.Web.AspNetCore</AssemblyTitle>
     
     <Authors>Julian Verdurmen</Authors>
-    <TargetFrameworks>netstandard1.3;net451;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard1.5;net451;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
