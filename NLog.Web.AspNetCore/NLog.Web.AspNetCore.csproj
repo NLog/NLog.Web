@@ -15,11 +15,14 @@
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
+
+      RC 1: Fixed ${callsite} in ASP.NET Core 2, support .NET 4.6.1 + ASP.NET Core 2 (NLogBuilder)
+
       Beta 4: updated dependencies
 
       Beta 3
 
-      - Fixed ${callsite} in Asp.Net Core 2 when before using UseNLog()
+      - Fixed ${callsite} in  ASP.NET Core 2 when before using UseNLog()
 
       Beta 2
       - Better compatiblity with NLog.Web.AspNetCore 4.4
@@ -47,7 +50,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>4.5.0-beta04</Version>
+    <Version>4.5.0-rc1</Version>
     <RootNamespace>NLog.Web</RootNamespace>
   </PropertyGroup>
 
