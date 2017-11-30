@@ -26,7 +26,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 
             
-#if NETCOREAPP2_0
+#if ASP_NET_CORE2
             /// <summary>
             /// Strongly typed access to the Content-Length header. Implementations must keep this in sync with the string representation.
             /// </summary>

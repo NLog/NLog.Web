@@ -1,5 +1,4 @@
-﻿#if NETSTANDARD2_0
-
+﻿#if ASP_NET_CORE2
 
 using System;
 using System.Collections.Generic;
