@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.</Description>
     <AssemblyTitle>NLog.Web.AspNetCore</AssemblyTitle>
-    
+
     <Authors>Julian Verdurmen</Authors>
     <TargetFrameworks>netstandard1.3;netstandard1.5;net451;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
@@ -15,25 +15,25 @@
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
- Beta 4: updated dependencies
-      
-  Beta 3
+      Beta 4: updated dependencies
 
-- Fixed ${callsite} in Asp.Net Core 2 when before using UseNLog()      
+      Beta 3
 
-Beta 2
-- Better compatiblity with NLog.Web.AspNetCore 4.4
-- Fixed ${callsite} in Asp.Net Core 2 when using UseNLog()      
-  
+      - Fixed ${callsite} in Asp.Net Core 2 when before using UseNLog()
 
-Beta 1
-- ASP.NET Core 2 support (UseNLog) - use the new method for configuring NLog! See https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2
-- make &lt;add assembly="NLog.Web.AspNetCore"/&gt; unneeded for ASP.NET Core 2
-- Fix IHttpContextAccessor warning
-- Add IncludeScheme option to ${aspnet-request-url}
-- Updated and limit dependencies
+      Beta 2
+      - Better compatiblity with NLog.Web.AspNetCore 4.4
+      - Fixed ${callsite} in Asp.Net Core 2 when using UseNLog()
 
-</PackageReleaseNotes>
+
+      Beta 1
+      - ASP.NET Core 2 support (UseNLog) - use the new method for configuring NLog! See https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2
+      - make &lt;add assembly="NLog.Web.AspNetCore"/&gt; unneeded for ASP.NET Core 2
+      - Fix IHttpContextAccessor warning
+      - Add IncludeScheme option to ${aspnet-request-url}
+      - Updated and limit dependencies
+
+    </PackageReleaseNotes>
     <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
     <PackageLicenseUrl>http://raw.github.com/NLog/NLog.Web/master/LICENSE</PackageLicenseUrl>
@@ -52,9 +52,9 @@ Beta 1
   </PropertyGroup>
 
   <ItemGroup>
-    
 
-    
+
+
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc2" />
     <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
@@ -68,6 +68,9 @@ Beta 1
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.1" />
+
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
@@ -75,11 +78,11 @@ Beta 1
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.0.0" />
-    
-    
+
+
   </ItemGroup>
   <ItemGroup>
-   
+
   </ItemGroup>
 
 
