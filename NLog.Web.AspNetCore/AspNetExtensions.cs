@@ -10,7 +10,7 @@ using NLog.Config;
 using NLog.Web.Internal;
 using NLog.Extensions.Logging;
 using NLog.Web.AspNetCore;
-#if NETSTANDARD2_0
+#if ASP_NET_CORE2
 using Microsoft.Extensions.DependencyInjection;
 #endif
 
@@ -27,7 +27,7 @@ namespace NLog.Web
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
         /// <param name="app"></param>
-#if NETSTANDARD2_0
+#if ASP_NET_CORE2
         [Obsolete("Use UseNLog() on IWebHostBuilder")]
 #endif
         public static void AddNLogWeb(this IApplicationBuilder app)
@@ -60,7 +60,7 @@ namespace NLog.Web
         }
 
 
-#if NETSTANDARD2_0
+#if ASP_NET_CORE2
 
         /// <summary>
         /// Apply NLog configuration from XML config.

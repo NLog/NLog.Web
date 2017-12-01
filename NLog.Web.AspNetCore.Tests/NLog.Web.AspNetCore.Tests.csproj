@@ -1,33 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;netcoreapp2.0;net461</TargetFrameworks>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+    <TargetFrameworks>netcoreapp1.1;netcoreapp2;net461</TargetFrameworks>
     <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
+  
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' != 'netcoreapp1.1' ">
+    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
+  </PropertyGroup>
+
+  
+  
   <ItemGroup>
     <ProjectReference Include="..\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
     <PackageReference Include="NSubstitute" Version="2.0.3" />
-    <PackageReference Include="Castle.Core" Version="4.2.0" />
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
     <!-- Castle.Core upgrade for  NSubstitute-->
     
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta5-build3769" />
-    <PackageReference Include="xunit" Version="2.3.0-beta5-build3769" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
       <!--
     icrosoft.NET.Test.Sdk needed for xunit.runner.visualstudio
     -->
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta5-build3769" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp2.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.1" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp1.1' ">
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
