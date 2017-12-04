@@ -65,9 +65,6 @@ namespace NLog.Web.LayoutRenderers
 
         private static string GetAssemblyVersion()
         {
-#if ASP_NET_CORE && NETSTANDARD1_3
-            return PlatformServices.Default.Application.ApplicationVersion;
-#else
             var assembly = Assembly.GetEntryAssembly();
 
 #if !ASP_NET_CORE
@@ -79,7 +76,6 @@ namespace NLog.Web.LayoutRenderers
            
             var version = assembly?.GetName().Version.ToString();
             return version;
-#endif
             
         }
 #if !ASP_NET_CORE
