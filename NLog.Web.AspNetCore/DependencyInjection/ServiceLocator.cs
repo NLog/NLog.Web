@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace NLog.Web.Internal
+namespace NLog.Web.DependencyInjection
 {
     /// <summary>
     /// Service provider
     /// </summary>
     /// <remarks>
-    /// This is a anti-pattern, but it works well with NLog
+    /// This is a anti-pattern, but it works well with NLog, and NLog should also support non-DI
     /// </remarks>
     internal static class ServiceLocator
     {

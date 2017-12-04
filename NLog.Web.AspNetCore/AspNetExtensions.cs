@@ -10,6 +10,8 @@ using NLog.Config;
 using NLog.Web.Internal;
 using NLog.Extensions.Logging;
 using NLog.Web.AspNetCore;
+using NLog.Web.DependencyInjection;
+
 #if ASP_NET_CORE2
 using Microsoft.Extensions.DependencyInjection;
 #endif

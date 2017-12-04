@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using NLog.LayoutRenderers;
+using NLog.Web.DependencyInjection;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
