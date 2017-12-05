@@ -70,21 +70,30 @@ namespace NLog.Web
         private static void ConfigureHiddenAssemblies()
         {
             //ignore this
-            LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging")));
-            LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Abstractions")));
+            SafeAddHiddenAssembly("Microsoft.Extensions.Logging");
+            SafeAddHiddenAssembly("Microsoft.Extensions.Logging.Abstractions");
 
-            try
-            {
-                //try the Filter ext
-                var filterAssembly = Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Filter"));
-                LogManager.AddHiddenAssembly(filterAssembly);
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
+            //try the Filter ext, this one is not mandatory so could fail
+            SafeAddHiddenAssembly("Microsoft.Extensions.Logging.Filter", false);
 
             LogManager.AddHiddenAssembly(typeof(ConfigureExtensions).GetTypeInfo().Assembly);
+        }
+
+        private static void SafeAddHiddenAssembly(string assemblyName, bool logOnException = true)
+        {
+            try
+            {
+                InternalLogger.Trace("Hide {0}", assemblyName);
+                var assembly = Assembly.Load(new AssemblyName(assemblyName));
+                LogManager.AddHiddenAssembly(assembly);
+            }
+            catch (Exception ex)
+            {
+                if (logOnException)
+                {
+                    InternalLogger.Debug(ex, "Hiding assembly {0} failed. This could influence the ${callsite}", assemblyName);
+                }
+            }
         }
     }
 }
