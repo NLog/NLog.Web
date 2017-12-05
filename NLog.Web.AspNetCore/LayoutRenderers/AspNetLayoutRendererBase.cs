@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 
 using NLog.LayoutRenderers;
+
 #if ASP_NET_CORE
-using NLog.Web.Internal;
+using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 #endif
 
 namespace NLog.Web.LayoutRenderers

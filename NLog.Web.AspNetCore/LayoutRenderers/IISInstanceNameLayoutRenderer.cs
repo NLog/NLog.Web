@@ -3,11 +3,11 @@ using System.Text;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
 #else
+using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 #endif
 using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
