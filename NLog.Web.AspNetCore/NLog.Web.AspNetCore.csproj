@@ -15,7 +15,16 @@
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
 
-      RC 1: Fixed ${callsite} in ASP.NET Core 2, support .NET 4.6.1 + ASP.NET Core 2 (NLogBuilder)
+      RC 2: 
+      - Updated and improved dependencies 
+      - better support for other DI frameworks
+    
+ 
+      RC 1: 
+      
+      - Fixed ${callsite} in ASP.NET Core 2, 
+      - support .NET 4.6.1 + ASP.NET Core 2 (NLogBuilder), 
+      - fixed ${assembly-version} 
 
       Beta 4: updated dependencies
 
@@ -49,7 +58,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>4.5.0-rc1</Version>
+    <Version>4.5.0-rc2</Version>
     <RootNamespace>NLog.Web</RootNamespace>
   </PropertyGroup>
 
