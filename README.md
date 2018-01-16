@@ -9,7 +9,7 @@ targets and layout-renderes specific to ASP.NET (Core), MVC and IIS.
 ASP.NET:  [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web) 
 
 ASP.NET Core: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore) 
-(ASP.NET Core 2 - install latest beta)
+(ASP.NET Core 2 - install 4.5.x)
 
 ## Getting started
 
