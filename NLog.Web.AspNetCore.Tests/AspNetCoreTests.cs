@@ -72,11 +72,8 @@ namespace NLog.Web.AspNetCore.Tests
         {
             try
             {
-
-
-                //clear everything besides NLog
-                ConfigurationItemFactory.Default.Clear();
-                ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(Logger).Assembly);
+                //clear so next time it's rebuild
+                ConfigurationItemFactory.Default = null;
 
                 var webhost = CreateWebHost();
 
