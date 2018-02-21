@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP2_0
+﻿#if ASP_NET_CORE
 
 using System;
 using System.Collections.Generic;
@@ -12,12 +12,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using NLog.Web.Tests.LayoutRenderers;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
-
 
 namespace NLog.Web.AspNetCore.Tests
 {
@@ -104,22 +104,21 @@ namespace NLog.Web.AspNetCore.Tests
         }
 
 
-
-
         [Fact]
         public void RegisterHttpContext()
         {
             var webhost = CreateWebHost();
             Assert.NotNull(webhost.Services.GetService<IHttpContextAccessor>());
-
         }
+
+#if ASP_NET_CORE2
         [Fact]
         public void SkipRegisterHttpContext()
         {
             var webhost = CreateWebHost(new NLogAspNetCoreOptions { RegisterHttpContextAccessor = false });
             Assert.Null(webhost.Services.GetService<IHttpContextAccessor>());
-
         }
+#endif
 
         /// <summary>
         /// Create webhost with UseNlog
@@ -127,6 +126,7 @@ namespace NLog.Web.AspNetCore.Tests
         /// <returns></returns>
         private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
         {
+#if ASP_NET_CORE2
             var webhost =
                 Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
                     .Configure(c => c.New()) //.New needed, otherwise:
@@ -135,6 +135,13 @@ namespace NLog.Web.AspNetCore.Tests
                     .UseNLog(options) //use NLog for ILoggers and pass httpcontext
                     .Build();
             return webhost;
+#else
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseStartup<Startup>()
+                .Build();
+            return host;
+#endif
         }
 
         private static ILoggerFactory GetLoggerFactory(IWebHost webhost)
@@ -142,6 +149,25 @@ namespace NLog.Web.AspNetCore.Tests
             return webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
         }
 
+#if !ASP_NET_CORE2
+        public class Startup
+        {
+            public Startup()
+            {
+            }
+
+            public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+            {
+                app.AddNLogWeb();
+                loggerFactory.AddNLog();
+            }
+
+            public void ConfigureServices(IServiceCollection services)
+            {
+                services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            }
+        }
+#endif
     }
 }
 

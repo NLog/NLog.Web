@@ -33,6 +33,8 @@ namespace NLog.Web
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
             ServiceLocator.ServiceProvider = app.ApplicationServices;
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
         }
 
         /// <summary>
@@ -43,6 +45,8 @@ namespace NLog.Web
         /// <returns>LoggingConfiguration for chaining</returns>
         public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
         {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             var fileName = Path.Combine(env.ContentRootPath, configFileRelativePath);
             LogManager.LoadConfiguration(fileName);
             return LogManager.Configuration;
