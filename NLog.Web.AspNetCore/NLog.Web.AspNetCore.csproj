@@ -14,14 +14,15 @@
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
+      
+      RC 3:
+      - Updated dependencies
 
       RC 2: 
       - Updated and improved dependencies 
       - better support for other DI frameworks
-    
  
-      RC 1: 
-      
+      RC 1:     
       - Fixed ${callsite} in ASP.NET Core 2, 
       - support .NET 4.6.1 + ASP.NET Core 2 (NLogBuilder), 
       - fixed ${assembly-version} 
@@ -29,7 +30,6 @@
       Beta 4: updated dependencies
 
       Beta 3
-
       - Fixed ${callsite} in  ASP.NET Core 2 when before using UseNLog()
 
       Beta 2
@@ -58,7 +58,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>4.5.0-rc2</Version>
+    <Version>4.5.0-rc3</Version>
     <RootNamespace>NLog.Web</RootNamespace>
   </PropertyGroup>
 
@@ -70,7 +70,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc7" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
