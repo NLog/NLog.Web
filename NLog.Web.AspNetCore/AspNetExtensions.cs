@@ -23,8 +23,6 @@ namespace NLog.Web
     /// </summary>
     public static class AspNetExtensions
     {
-
-
         /// <summary>
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
@@ -46,21 +44,9 @@ namespace NLog.Web
         public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
         {
             var fileName = Path.Combine(env.ContentRootPath, configFileRelativePath);
-            return ConfigureNLog(fileName);
+            LogManager.LoadConfiguration(fileName);
+            return LogManager.Configuration;
         }
-
-        /// <summary>
-        /// Apply NLog configuration from XML config.
-        /// </summary>
-        /// <param name="fileName">Path to NLog configuration file, e.g. nlog.config. </param>
-        /// <returns>LoggingConfiguration for chaining</returns>
-        private static LoggingConfiguration ConfigureNLog(string fileName)
-        {
-            var configuration = new XmlLoggingConfiguration(fileName, true);
-            LogManager.Configuration = configuration;
-            return configuration;
-        }
-
 
 #if ASP_NET_CORE2
 
@@ -74,7 +60,8 @@ namespace NLog.Web
         /// <returns>LogFactory to get loggers, add events etc</returns>
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
-            return builder.ConfigureNLog(new XmlLoggingConfiguration(configFileName));
+            builder.AddNLog();
+            return LogManager.LoadConfiguration(configFileName);
         }
 
         /// <summary>
@@ -87,10 +74,9 @@ namespace NLog.Web
         /// <returns>LogFactory to get loggers, add events etc</returns>
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
-            //ConfigureHiddenAssemblies
-            //todo rename there to ConfigureNLog?
             builder.AddNLog();
-            return NLogBuilder.ConfigureNLog(configuration);
+            LogManager.Configuration = configuration;
+            return LogManager.LogFactory;
         }
 
         /// <summary>
@@ -118,10 +104,6 @@ namespace NLog.Web
                 services.AddSingleton<ILoggerProvider>(serviceProvider =>
                 {
                     ServiceLocator.ServiceProvider = serviceProvider;
-
-                    NLogBuilder.RegisterNLogWebAspNetCore();
-
-                    LogManager.Configuration?.Reload();
                     return new NLogLoggerProvider(options);
                 });
 
@@ -136,10 +118,7 @@ namespace NLog.Web
             return builder;
         }
 
-
-
 #endif
-
 
     }
 }
