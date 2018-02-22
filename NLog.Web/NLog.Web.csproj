@@ -85,7 +85,7 @@
     <Compile Include="..\NLog.Web.AspNetCore\Targets\AspNetTrace.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\Internal\RequestAccessorExtension.cs" />
-    <Compile Include="Properties\AssemblyInfo-test.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.snk" />

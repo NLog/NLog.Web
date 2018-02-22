@@ -1,16 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.</Description>
-    <AssemblyTitle>NLog.Web.AspNetCore</AssemblyTitle>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 
-    <Authors>Julian Verdurmen</Authors>
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <VersionPrefix>4.5.0</VersionPrefix>
+    <VersionSuffix>-rc3</VersionSuffix>
+    <Version>$(VersionPrefix)$(VersionSuffix)</Version>
+    <InformationalVersion>$(Version)</InformationalVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <FileVersion Condition="'$(APPVEYOR_BUILD_NUMBER)' != ''">$(VersionPrefix).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
+
+    <Product>NLog.Web.AspNetCore v$(Version)</Product>
+    <Description>Extend NLog with targets and layout renderers for websites and webapplications on the ASP.NET Core platform.</Description>
+    <Authors>Julian Verdurmen</Authors>
+    <Company>NLog</Company>
+    <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
+    <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - http://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
-    <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
@@ -50,22 +58,34 @@
     <PackageLicenseUrl>http://raw.github.com/NLog/NLog.Web/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>4.5.0-rc3</Version>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+
     <RootNamespace>NLog.Web</RootNamespace>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' and '$(TargetFramework)' != 'net461' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
+    <Title>NLog.Web.AspNetCore for .NET Framework 4.5.1</Title>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Title>NLog.Web.AspNetCore for .NET Framework 4.6.1</Title>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
+    <Title>NLog.Web.AspNetCore for NetStandard 1.5</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Title>NLog.Web.AspNetCore for NetStandard 2.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
 
@@ -83,7 +103,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.1" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
@@ -92,5 +111,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.0.0" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
+  </PropertyGroup>
 
 </Project>

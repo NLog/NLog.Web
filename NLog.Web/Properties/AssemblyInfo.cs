@@ -5,21 +5,16 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-#if DNX
-[assembly: AssemblyTitle("NLog.Web.ASPNET5")]
-[assembly: AssemblyProduct("NLog.Web for ASP.NET Core")]
-#else
 [assembly: AssemblyTitle("NLog.Web")]
 [assembly: AssemblyProduct("NLog.Web")]
-#endif
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-
-[assembly: AssemblyCopyright("Copyright © NLog 2015-2017")]
+[assembly: AssemblyCopyright("Copyright © NLog 2015-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("4.0.0.0")] //fixed
+[assembly: AssemblyFileVersion("1.0.0.0")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
