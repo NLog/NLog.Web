@@ -1,34 +1,37 @@
 ﻿using System;
 using System.Text;
-#if !ASP_NET_CORE
-using System.Web.Hosting;
-#else
-using NLog.Web.DependencyInjection;
+#if ASP_NET_CORE
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using NLog.Web.DependencyInjection;
+#else
+using System.Web.Hosting;
 #endif
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
-
 #if ASP_NET_CORE
     /// <summary>
-    /// Rendering site name in IIS. <see cref="IHostingEnvironment"/>
+    /// Rendering WebRootPath. <see cref="IHostingEnvironment"/>
     /// </summary>
 #else
     /// <summary>
-    /// Rendering site name in IIS. <see cref="HostingEnvironment.SiteName"/>
+    /// Rendering WebRootPath. <see cref="HostingEnvironment.MapPath"/>("/")
     /// </summary>
 #endif
-    [LayoutRenderer("iis-site-name")]
-    // ReSharper disable once InconsistentNaming
-    public class IISInstanceNameLayoutRenderer : LayoutRenderer
+    [LayoutRenderer("aspnet-webrootpath")]
+    public class AspNetWebRootPathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
         private static IHostingEnvironment _hostingEnvironment;
 
         private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
+
+        private string WebRootPath => HostingEnvironment?.WebRootPath;
+#else
+        private string WebRootPath => _webRootPath ?? (_webRootPath = HostingEnvironment.MapPath("/"));
+        private static string _webRootPath;
 #endif
 
         /// <summary>
@@ -38,20 +41,18 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-#if ASP_NET_CORE
-            builder.Append(HostingEnvironment?.ApplicationName);
-#else
-            builder.Append(HostingEnvironment.SiteName);
-#endif
+            builder.Append(WebRootPath);
         }
 
-#if ASP_NET_CORE
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {
+#if ASP_NET_CORE
             _hostingEnvironment = null;
+#else
+            _webRootPath = null;
+#endif
             base.CloseLayoutRenderer();
         }
-#endif
     }
 }
