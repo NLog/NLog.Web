@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using NLog.LayoutRenderers;
 using NLog.Web.DependencyInjection;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -14,7 +13,6 @@ namespace NLog.Web.LayoutRenderers
     /// Rendering development environment. <see cref="IHostingEnvironment"/>
     /// </summary>
     [LayoutRenderer("aspnet-environment")]
-    // ReSharper disable once InconsistentNaming
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
         private static IHostingEnvironment _hostingEnvironment;
