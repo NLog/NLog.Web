@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NLog.Config;
-using NLog.Web.Internal;
 using NLog.Extensions.Logging;
-using NLog.Web.AspNetCore;
 using NLog.Web.DependencyInjection;
 
 #if ASP_NET_CORE2
@@ -62,6 +60,7 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
         /// <returns>LogFactory to get loggers, add events etc</returns>
+        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.LogManager.LoadConfiguration()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
             builder.AddNLog();
@@ -76,6 +75,7 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
+        [Obsolete("Use UseNLog() on IWebHostBuilder, and assign property NLog.LogManager.Configuration")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
             builder.AddNLog();
@@ -116,12 +116,9 @@ namespace NLog.Web
                 {
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
-
             });
-
             return builder;
         }
-
 #endif
 
     }
