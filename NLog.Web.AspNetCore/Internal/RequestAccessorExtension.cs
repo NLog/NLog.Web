@@ -22,7 +22,7 @@ namespace NLog.Web.Internal
             }
             catch (HttpException ex)
             {
-                InternalLogger.Debug("Exception thrown when accessing Request: " + ex);
+                InternalLogger.Debug(ex, "Exception thrown when accessing Request: " + ex.Message);
                 return null;
             }
         }
