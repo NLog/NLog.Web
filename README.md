@@ -34,8 +34,7 @@ Simply install the package. NLog will detect the extension automatically.
 ## ASP.NET Core 1 / ASP.NET Core 2
 
 ------
- ℹ️  Missing the trace en debug logs in .NET Core 2? Set `ILoggingBuilder.SetMinimumLevel()`
-
+ℹ️  Missing the trace and debug logs in .NET Core 2? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-2%3F)
 -----
 
 :warning: Not all targets and layout renders are implemented for .NET Standard. See the [Platform support table](https://github.com/NLog/NLog/wiki/platform-support)
