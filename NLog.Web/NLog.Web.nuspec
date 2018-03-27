@@ -15,12 +15,10 @@ This package is for ASP.NET 3.5+
 
 For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore</description>
     <releaseNotes>
-- Fix IHttpContextAccessor warning
-- Add IncludeScheme option to ${aspnet-request-url}
+- Add Assembly file version to NLog.Web        
 - Updated dependencies    
-    
     </releaseNotes>
-    <copyright>Copyright 2014-2017</copyright>
+    <copyright>Copyright 2014-2018</copyright>
     <tags>nlog log target layoutrenderer web asp.net</tags>
   </metadata>
 </package>
