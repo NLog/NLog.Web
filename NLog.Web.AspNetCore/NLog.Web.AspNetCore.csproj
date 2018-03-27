@@ -6,7 +6,7 @@
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
     <VersionPrefix>4.5.0</VersionPrefix>
-    <VersionSuffix>-rc3</VersionSuffix>
+    <VersionSuffix></VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
@@ -22,36 +22,6 @@
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
-      
-      RC 3:
-      - Updated dependencies
-
-      RC 2: 
-      - Updated and improved dependencies 
-      - better support for other DI frameworks
- 
-      RC 1:     
-      - Fixed ${callsite} in ASP.NET Core 2, 
-      - support .NET 4.6.1 + ASP.NET Core 2 (NLogBuilder), 
-      - fixed ${assembly-version} 
-
-      Beta 4: updated dependencies
-
-      Beta 3
-      - Fixed ${callsite} in  ASP.NET Core 2 when before using UseNLog()
-
-      Beta 2
-      - Better compatiblity with NLog.Web.AspNetCore 4.4
-      - Fixed ${callsite} in Asp.Net Core 2 when using UseNLog()
-
-
-      Beta 1
-      - ASP.NET Core 2 support (UseNLog) - use the new method for configuring NLog! See https://github.com/NLog/NLog.Web/wiki/Getting-started-with-ASP.NET-Core-2
-      - make &lt;add assembly="NLog.Web.AspNetCore"/&gt; unneeded for ASP.NET Core 2
-      - Fix IHttpContextAccessor warning
-      - Add IncludeScheme option to ${aspnet-request-url}
-      - Updated and limit dependencies
-
     </PackageReleaseNotes>
     <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
@@ -90,7 +60,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-rc7" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
