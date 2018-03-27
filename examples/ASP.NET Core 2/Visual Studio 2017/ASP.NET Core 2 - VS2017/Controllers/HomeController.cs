@@ -15,8 +15,8 @@ namespace NLog.Web.AspNetCore2.Example.Controllers
         //NLog: inject logger
         public HomeController(ILogger<HomeController> logger)
         {
-            
             _logger = logger;
+            _logger.LogDebug(1, "NLog injected into HomeController");
         }
 
         public IActionResult Index()
