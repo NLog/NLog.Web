@@ -1,5 +1,55 @@
 ## Change Log
 
+
+### v4.5.0-aspnetcore (2018/03/27)
+- [#257](https://github.com/nlog/nlog.web/pull/257) ConfigureNLog should not be used together with UseNLog (@snakefoot)
+- [#256](https://github.com/nlog/nlog.web/pull/256) ASP.NET Core2 Example - Updated with NLog.LogManager.Shutdown() (@snakefoot)
+- [#253](https://github.com/nlog/nlog.web/pull/253) ASP.NET Core2 Example - Updated blackhole configuration + ${aspnet-appbasepath} + ${aspnet-webrootpath} (@snakefoot)
+- [#252](https://github.com/nlog/nlog.web/pull/252) Configured xunit DisableTestParallelization to make tests more stable (@snakefoot)
+- [#250](https://github.com/nlog/nlog.web/pull/250) Removed System.ValueTuple as dependency for .NET Core app 1, add file version to assembly (@snakefoot)
+- [#249](https://github.com/nlog/nlog.web/pull/249) Automatically register NLog.Web LayoutRenders for NetCoreApp1 (@snakefoot)
+- [#245](https://github.com/nlog/nlog.web/pull/245) Use LogManager.LoadConfiguration + RC3 (@snakefoot)
+- [#236](https://github.com/nlog/nlog.web/pull/236) AspNetCore 4.5 RC2 - Update changelog and version (@304NotModified)
+- [#232](https://github.com/nlog/nlog.web/pull/232) Updated dependencies (@304NotModified)
+- [#233](https://github.com/nlog/nlog.web/pull/233) Better hide assemblies for ${callsite} (@304NotModified)
+- [#231](https://github.com/nlog/nlog.web/pull/231) Made ServiceLocator public (@304NotModified)
+- [#226](https://github.com/nlog/nlog.web/pull/226) ASP.NET core: 4.5 rc1 + changelog (@304NotModified)
+- [#223](https://github.com/nlog/nlog.web/pull/223) .NET 4.6.1 + ASP.NET Core 2 support (@304NotModified)
+- [#224](https://github.com/nlog/nlog.web/pull/224) Fix assembly-version (@304NotModified)
+- [#212](https://github.com/nlog/nlog.web/pull/212) Beta4 (@304NotModified)
+- [#207](https://github.com/nlog/nlog.web/pull/207) Fix ${callsite} from configure (@304NotModified)
+
+### v4.5.0-aspnetcore-beta02 (2017/10/13)
+- [#205](https://github.com/nlog/nlog.web/pull/205) Register NLogProvider instead of NLogFactory (@304NotModified)
+- [#204](https://github.com/nlog/nlog.web/pull/204) Improve ASP.NET core 2 example - add callsite (@304NotModified)
+- [#202](https://github.com/nlog/nlog.web/pull/202) Fix ${callsite} in Asp.net core 2 (@304NotModified)
+
+### v4.5.1-aspnet4 (2017/10/12)
+- [#198](https://github.com/nlog/nlog.web/pull/198) Refactor code (@304NotModified)
+
+### v4.5.0-aspnetcore-beta01 (2017/10/12)
+- [#197](https://github.com/nlog/nlog.web/pull/197) versions and changelog, updated dependencies: NLog.Web 4.5.1 and NLog.Web.AspNetCore 4.5.0-beta01 (@304NotModified)
+- [#195](https://github.com/nlog/nlog.web/pull/195) add ConfigureNLog on ILoggingBuilder (@304NotModified)
+- [#191](https://github.com/nlog/nlog.web/pull/191) Added  NLogBuilder and  ASP.NET Core 2 example (@304NotModified)
+- [#190](https://github.com/nlog/nlog.web/pull/190) Fix error reporting, fix introduced bug (@304NotModified)
+- [#188](https://github.com/nlog/nlog.web/pull/188) Auto register NLog.Web.AspNetCore (ASP.NET 2 only) (@304NotModified)
+- [#186](https://github.com/nlog/nlog.web/pull/186) Register HttpContextAccessor by default (@304NotModified)
+- [#181](https://github.com/nlog/nlog.web/pull/181) Add UseNLog for ASP.NET Core 2 (@304NotModified)
+- [#182](https://github.com/nlog/nlog.web/pull/182) Codecov tweaks (@304NotModified)
+- [#180](https://github.com/nlog/nlog.web/pull/180) Fix IHttpContextAccessor warning (@304NotModified)
+- [#178](https://github.com/nlog/nlog.web/pull/178) ASP.NET Core 2 support (@304NotModified)
+- [#179](https://github.com/nlog/nlog.web/pull/179) rename NETSTANDARD_1plus => ASP_NET_CORE (@304NotModified)
+- [#156](https://github.com/nlog/nlog.web/pull/156) Remove unneeded path in build script (@304NotModified)
+- [#164](https://github.com/nlog/nlog.web/pull/164) Add IncludeScheme option to ${aspnet-request-url} (@BlaikiC)
+- [#162](https://github.com/nlog/nlog.web/pull/162) Update AssemblyVersionLayoutRenderer docs for .NET core (@Valeriy1991)
+- [#155](https://github.com/nlog/nlog.web/pull/155) fix xUnit warnings (@304NotModified)
+- [#154](https://github.com/nlog/nlog.web/pull/154) deploy to Nuget from AppVeyor (@304NotModified)
+
+### v4.4.1-aspnetcore (2017/06/16)
+- [#152](https://github.com/nlog/nlog.web/pull/152) Run test for asp.net core on full and core framework, fix unit test build (#152) (@johnkors)
+- [#150](https://github.com/nlog/nlog.web/pull/150) Update vulnerable dependency (#150) (@johnkors)
+
+
 ### v4.5.0-aspnet4 (2017/05/14)
 
 #### Features
