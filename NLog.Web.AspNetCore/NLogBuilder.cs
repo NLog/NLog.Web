@@ -1,11 +1,7 @@
-﻿#if ASP_NET_CORE2
-
+﻿#if ASP_NET_CORE
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using NLog.Common;
 using NLog.Config;
-using NLog.Extensions.Logging;
 
 namespace NLog.Web
 {
@@ -19,9 +15,9 @@ namespace NLog.Web
         /// </summary>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Instead use NLog.LogManager.LoadConfiguration()")]
         public static LogFactory ConfigureNLog(string configFileName)
         {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             return LogManager.LoadConfiguration(configFileName);
         }
 
@@ -30,9 +26,9 @@ namespace NLog.Web
         /// </summary>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Instead assign property NLog.LogManager.Configuration")]
         public static LogFactory ConfigureNLog(LoggingConfiguration configuration)
         {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.Configuration = configuration;
             return LogManager.LogFactory;
         }
