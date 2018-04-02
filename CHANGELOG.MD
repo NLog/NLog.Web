@@ -1,5 +1,8 @@
 ## Change Log
 
+### v4.5.1-aspnetcore (2018/04/02)
+- [#268](https://github.com/nlog/nlog.web/pull/268) Improved ConfigureNLog for better out-of-the-box experience (@snakefoot)
+
 
 ### v4.5.0-aspnetcore (2018/03/27)
 - [#257](https://github.com/nlog/nlog.web/pull/257) ConfigureNLog should not be used together with UseNLog (@snakefoot)
