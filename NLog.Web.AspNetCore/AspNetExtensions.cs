@@ -116,8 +116,28 @@ namespace NLog.Web
                 {
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
+
+                RegisterHiddenAssembliesForCallSite();
             });
             return builder;
+        }
+
+        private static void RegisterHiddenAssembliesForCallSite()
+        {
+            var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in allAssemblies)
+            {
+                if ( assembly.FullName.StartsWith("NLog.Extensions.Logging,", StringComparison.OrdinalIgnoreCase)
+                    || assembly.FullName.StartsWith("NLog.Web,", StringComparison.OrdinalIgnoreCase)
+                    || assembly.FullName.StartsWith("NLog.Web.AspNetCore,", StringComparison.OrdinalIgnoreCase)
+                    || assembly.FullName.StartsWith("Microsoft.Extensions.Logging,", StringComparison.OrdinalIgnoreCase)
+                    || assembly.FullName.StartsWith("Microsoft.Extensions.Logging.Abstractions,", StringComparison.OrdinalIgnoreCase)
+                    || assembly.FullName.StartsWith("Microsoft.Extensions.Logging.Filter,", StringComparison.OrdinalIgnoreCase)
+                    || assembly.FullName.StartsWith("Microsoft.Logging,", StringComparison.OrdinalIgnoreCase))
+                {
+                    LogManager.AddHiddenAssembly(assembly);
+                }
+            }
         }
 #endif
 

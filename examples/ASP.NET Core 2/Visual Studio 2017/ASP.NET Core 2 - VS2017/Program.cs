@@ -11,7 +11,7 @@ namespace NLog.Web.AspNetCore2.Example
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Debug("init main");
@@ -38,7 +38,7 @@ namespace NLog.Web.AspNetCore2.Example
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
-                .UseNLog()  // NLog: setup NLog for Dependency injection
+                .UseNLog()  // NLog: Setup NLog for Dependency injection
                 .Build();
     }
 }
