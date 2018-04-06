@@ -60,7 +60,7 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.LogManager.LoadConfiguration()")]
+        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
             builder.AddNLog();
@@ -75,7 +75,7 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IWebHostBuilder, and assign property NLog.LogManager.Configuration")]
+        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
             builder.AddNLog();
