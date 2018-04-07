@@ -60,9 +60,10 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.LogManager.LoadConfiguration()")]
+        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             builder.AddNLog();
             return LogManager.LoadConfiguration(configFileName);
         }
@@ -75,9 +76,10 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IWebHostBuilder, and assign property NLog.LogManager.Configuration")]
+        [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             builder.AddNLog();
             LogManager.Configuration = configuration;
             return LogManager.LogFactory;
@@ -102,6 +104,8 @@ namespace NLog.Web
             if (builder == null) throw new ArgumentNullException(nameof(builder));
             options = options ?? NLogAspNetCoreOptions.Default;
 
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+
             builder.ConfigureServices(services =>
             {
                 //note: when registering ILoggerFactory, all non NLog stuff and stuff before this will be removed
@@ -116,28 +120,8 @@ namespace NLog.Web
                 {
                     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 }
-
-                RegisterHiddenAssembliesForCallSite();
             });
             return builder;
-        }
-
-        private static void RegisterHiddenAssembliesForCallSite()
-        {
-            var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in allAssemblies)
-            {
-                if ( assembly.FullName.StartsWith("NLog.Extensions.Logging,", StringComparison.OrdinalIgnoreCase)
-                    || assembly.FullName.StartsWith("NLog.Web,", StringComparison.OrdinalIgnoreCase)
-                    || assembly.FullName.StartsWith("NLog.Web.AspNetCore,", StringComparison.OrdinalIgnoreCase)
-                    || assembly.FullName.StartsWith("Microsoft.Extensions.Logging,", StringComparison.OrdinalIgnoreCase)
-                    || assembly.FullName.StartsWith("Microsoft.Extensions.Logging.Abstractions,", StringComparison.OrdinalIgnoreCase)
-                    || assembly.FullName.StartsWith("Microsoft.Extensions.Logging.Filter,", StringComparison.OrdinalIgnoreCase)
-                    || assembly.FullName.StartsWith("Microsoft.Logging,", StringComparison.OrdinalIgnoreCase))
-                {
-                    LogManager.AddHiddenAssembly(assembly);
-                }
-            }
         }
 #endif
 
