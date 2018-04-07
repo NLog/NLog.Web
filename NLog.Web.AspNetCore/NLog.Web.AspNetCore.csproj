@@ -75,7 +75,7 @@ Recommend to replace `LogManager.LoadConfiguration` with `NLogBuilder.ConfigureN
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
