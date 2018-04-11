@@ -21,6 +21,8 @@ namespace NLog.Web
     /// </summary>
     public static class AspNetExtensions
     {
+        private static readonly Assembly _nlogWebAssembly = typeof(AspNetExtensions).GetTypeInfo().Assembly;
+
         /// <summary>
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
@@ -30,9 +32,7 @@ namespace NLog.Web
 #endif
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
-            ServiceLocator.ServiceProvider = app.ApplicationServices;
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            app.ApplicationServices.SetupNLogServiceLocator();
         }
 
         /// <summary>
@@ -43,8 +43,8 @@ namespace NLog.Web
         /// <returns>LoggingConfiguration for chaining</returns>
         public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
         {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(_nlogWebAssembly);
+            LogManager.AddHiddenAssembly(_nlogWebAssembly);
             var fileName = Path.Combine(env.ContentRootPath, configFileRelativePath);
             LogManager.LoadConfiguration(fileName);
             return LogManager.Configuration;
@@ -63,7 +63,7 @@ namespace NLog.Web
         [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(_nlogWebAssembly);
             builder.AddNLog();
             return LogManager.LoadConfiguration(configFileName);
         }
@@ -79,7 +79,7 @@ namespace NLog.Web
         [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(_nlogWebAssembly);
             builder.AddNLog();
             LogManager.Configuration = configuration;
             return LogManager.LogFactory;
@@ -103,8 +103,9 @@ namespace NLog.Web
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
             options = options ?? NLogAspNetCoreOptions.Default;
-
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(_nlogWebAssembly);
+            LogManager.AddHiddenAssembly(_nlogWebAssembly);
 
             builder.ConfigureServices(services =>
             {
@@ -125,5 +126,20 @@ namespace NLog.Web
         }
 #endif
 
+        /// <summary>
+        /// Override the default <see cref="IServiceProvider"/> used by the NLog ServiceLocator.
+        /// NLog ServiceLocator uses the <see cref="IServiceProvider"/> to access context specific services (Ex. <see cref="IHttpContextAccessor"/>)
+        /// </summary>
+        /// <remarks>
+        /// Should only be used if the standard approach for configuring NLog is not enough
+        /// </remarks>
+        /// <param name="serviceProvider"></param>
+        public static IServiceProvider SetupNLogServiceLocator(this IServiceProvider serviceProvider)
+        {
+            ServiceLocator.ServiceProvider = serviceProvider;
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(_nlogWebAssembly);
+            LogManager.AddHiddenAssembly(_nlogWebAssembly);
+            return serviceProvider;
+        }
     }
 }

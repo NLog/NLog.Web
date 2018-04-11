@@ -16,7 +16,5 @@ namespace NLog.Web.DependencyInjection
         /// The current service provider for reading ASP.NET Core session, request etc.
         /// </summary>
         public static IServiceProvider ServiceProvider { get; set; }
-
-   
     }
 }
