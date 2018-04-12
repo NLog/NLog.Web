@@ -32,7 +32,7 @@ namespace NLog.Web.LayoutRenderers
             }
 #if !ASP_NET_CORE
 
-            var ip = httpContext.Request?.ServerVariables["REMOTE_ADDR"];
+            var ip = httpContext.TryGetRequest()?.ServerVariables["REMOTE_ADDR"];
 #else
             var ip = httpContext.Connection?.RemoteIpAddress;
 #endif
