@@ -1,5 +1,10 @@
 ## Change Log
 
+### v4.5.2-aspnetcore (2018/04/12)
+- [#273](https://github.com/nlog/nlog.web/pull/273) Added public method to configure the NLog ServiceLocator (@snakefoot)
+- [#272](https://github.com/nlog/nlog.web/pull/272) Improved registration of hidden assemblies for callsite handling (@snakefoot)
+
+
 ### v4.5.1-aspnetcore (2018/04/02)
 - [#268](https://github.com/nlog/nlog.web/pull/268) Improved ConfigureNLog for better out-of-the-box experience (@snakefoot)
 

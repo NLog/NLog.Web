@@ -5,7 +5,7 @@
 
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
-    <VersionPrefix>4.5.1</VersionPrefix>
+    <VersionPrefix>4.5.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
@@ -30,11 +30,11 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
-4.5.1: Improved ConfigureNLog for better out-of-the-box experience. 
+4.5.2:  
+- Added public method to configure the NLog ServiceLocator 
+- Improved registration of hidden assemblies for callsite handling
 
-Recommend to replace `LogManager.LoadConfiguration` with `NLogBuilder.ConfigureNLog` (NLog.Web namespace) for better out-of-the-box experience  
-
-
+See https://github.com/NLog/NLog.Web/milestone/20?closed=1
 
 
     </PackageReleaseNotes>
