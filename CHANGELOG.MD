@@ -1,5 +1,8 @@
 ## Change Log
 
+### v4.5.3-aspnet4 (2018/04/12)
+- [#275](https://github.com/nlog/nlog.web/pull/275) ${aspnet-request-ip} handle emtpy Request on HttpContext (@304NotModified)
+
 ### v4.5.2-aspnetcore (2018/04/12)
 - [#273](https://github.com/nlog/nlog.web/pull/273) Added public method to configure the NLog ServiceLocator (@snakefoot)
 - [#272](https://github.com/nlog/nlog.web/pull/272) Improved registration of hidden assemblies for callsite handling (@snakefoot)
