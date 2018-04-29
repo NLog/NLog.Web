@@ -1,7 +1,7 @@
 ## Change Log
 
 
-### v4.5.3-aspnetcore (2018/04/30)
+### v4.5.3-aspnetcore (2018/04/29)
 - [#283](https://github.com/nlog/nlog.web/pull/283) Avoid assembly lookup on static class initialization (@snakefoot)
 
 ### v4.5.3-aspnet4 (2018/04/12)
