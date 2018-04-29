@@ -1,5 +1,9 @@
 ## Change Log
 
+
+### v4.5.3-aspnetcore (2018/04/30)
+- [#283](https://github.com/nlog/nlog.web/pull/283) Avoid assembly lookup on static class initialization (@snakefoot)
+
 ### v4.5.3-aspnet4 (2018/04/12)
 - [#275](https://github.com/nlog/nlog.web/pull/275) ${aspnet-request-ip} handle emtpy Request on HttpContext (@304NotModified)
 
