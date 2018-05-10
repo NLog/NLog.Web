@@ -5,7 +5,7 @@
 
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
-    <VersionPrefix>4.5.3</VersionPrefix>
+    <VersionPrefix>4.5.4</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
@@ -30,11 +30,8 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
     <PackageReleaseNotes>
-4.5.3:  
-- Avoid assembly lookup on static class initialization 
-
-See https://github.com/NLog/NLog.Web/milestone/23?closed=1
-
+4.5.4:  
+- Update NLog dependency
 
     </PackageReleaseNotes>
     <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
@@ -55,12 +52,12 @@ See https://github.com/NLog/NLog.Web/milestone/23?closed=1
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Title>NLog.Web.AspNetCore for .NET Framework 4.5.1</Title>
+    <Title>NLog.Web.AspNetCore for .NET Framework 4.5.1+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Title>NLog.Web.AspNetCore for .NET Framework 4.6.1</Title>
+    <Title>NLog.Web.AspNetCore for .NET Framework 4.6+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
@@ -74,7 +71,7 @@ See https://github.com/NLog/NLog.Web/milestone/23?closed=1
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
