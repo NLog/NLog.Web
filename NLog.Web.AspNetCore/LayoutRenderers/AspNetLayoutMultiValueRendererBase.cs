@@ -35,29 +35,27 @@ namespace NLog.Web.LayoutRenderers
         public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
-        /// Serialize multiple values
+        /// Serialize multiple values in pairs format.
         /// </summary>
-        /// <param name="values">The values with key and value.</param>
+        /// <param name="pairs">The key value pairs to serialize.</param>
         /// <param name="builder">Add to this builder.</param>
-        protected void SerializeValues(IEnumerable<KeyValuePair<string, string>> values,
-            StringBuilder builder)
+        protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
         {
-
             switch (OutputFormat)
             {
                 case AspNetRequestLayoutOutputFormat.Flat:
-                    SerializValuesFlat(values, builder);
+                    SerializePairsFlat(pairs, builder);
                     break;
                 case AspNetRequestLayoutOutputFormat.Json:
-                    SerializeValuesJson(values, builder);
+                    SerializePairsJson(pairs, builder);
                     break;
             }
         }
 
-        private void SerializeValuesJson(IEnumerable<KeyValuePair<string, string>> values, StringBuilder builder)
+        private void SerializePairsJson(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
         {
             var firstItem = true;
-            var valueList = values.ToList();
+            var valueList = pairs.ToList();
 
             if (valueList.Count > 0)
             {
@@ -92,13 +90,12 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(']');
                 }
             }
-
         }
 
-        private void SerializValuesFlat(IEnumerable<KeyValuePair<string, string>> values, StringBuilder builder)
+        private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
         {
             var firstItem = true;
-            foreach (var kpv in values)
+            foreach (var kpv in pairs)
             {
                 var key = kpv.Key;
                 var value = kpv.Value;
@@ -111,6 +108,72 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(key);
                 builder.Append(ValueSeparator);
                 builder.Append(value);
+            }
+        }
+
+        /// <summary>
+        /// Serialize values only from the given pairs.
+        /// </summary>
+        /// <param name="pairs">The key value pairs to serialize.</param>
+        /// <param name="builder">Add to this builder.</param>
+        protected void SerializeValues(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        {
+            switch (OutputFormat)
+            {
+                case AspNetRequestLayoutOutputFormat.Flat:
+                    SerializeValuesFlat(pairs, builder);
+                    break;
+                case AspNetRequestLayoutOutputFormat.Json:
+                    SerializeValuesJson(pairs, builder);
+                    break;
+            }
+        }
+
+        private void SerializeValuesFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        {
+            var firstItem = true;
+            foreach (var kpv in pairs)
+            {
+                var value = kpv.Value;
+
+                if (!firstItem)
+                {
+                    builder.Append(ItemSeparator);
+                }
+                firstItem = false;
+                builder.Append(value);
+            }
+        }
+
+        private void SerializeValuesJson(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        {
+            var firstItem = true;
+            var valueList = pairs.ToList();
+
+            if (valueList.Count > 0)
+            {
+                var addArray = valueList.Count > (SingleAsArray ? 0 : 1);
+
+                if (addArray)
+                {
+                    builder.Append('[');
+                }
+
+                foreach (var kpv in valueList)
+                {
+                    var value = kpv.Value;
+                    if (!firstItem)
+                    {
+                        builder.Append(',');
+                    }
+                    firstItem = false;
+
+                    AppendQuoted(builder, value);
+                }
+                if (addArray)
+                {
+                    builder.Append(']');
+                }
             }
         }
 

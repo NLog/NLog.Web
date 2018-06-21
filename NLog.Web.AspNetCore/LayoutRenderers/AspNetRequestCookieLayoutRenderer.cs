@@ -36,6 +36,11 @@ namespace NLog.Web.LayoutRenderers
         public List<string> CookieNames { get; set; }
 
         /// <summary>
+        /// Only render cookie values if true, otherwise render key value pairs.
+        /// </summary>
+        public bool ValuesOnly { get; set; }
+
+        /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
@@ -53,8 +58,15 @@ namespace NLog.Web.LayoutRenderers
 
             if (this.CookieNames?.Count > 0 && cookies?.Count > 0)
             {
-                var cookieValues = GetCookies(cookies);
-                SerializeValues(cookieValues, builder);
+                var cookieKeyValuePairs = GetCookies(cookies);
+                if (!ValuesOnly)
+                {
+                    SerializePairs(cookieKeyValuePairs, builder);
+                }
+                else
+                {
+                    SerializeValues(cookieKeyValuePairs, builder);
+                }
             }
         }
 
