@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>NLog.Web.AspNetCore2.Example</AssemblyName>
     <RootNamespace>NLog.Web.AspNetCore2.Example</RootNamespace>
+    <FileVersion>1.0.0.1</FileVersion>
+    <InformationalVersion>1.0.0.2</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
