@@ -152,12 +152,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (valueList.Count > 0)
             {
-                var addArray = valueList.Count > (SingleAsArray ? 0 : 1);
-
-                if (addArray)
-                {
-                    builder.Append('[');
-                }
+                builder.Append('[');
 
                 foreach (var kpv in valueList)
                 {
@@ -170,10 +165,8 @@ namespace NLog.Web.LayoutRenderers
 
                     AppendQuoted(builder, value);
                 }
-                if (addArray)
-                {
-                    builder.Append(']');
-                }
+
+                builder.Append(']');
             }
         }
 
