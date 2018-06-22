@@ -82,7 +82,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             var values = GetValues(queryStrings, queryStringKeys);
-            SerializeValues(values, builder);
+            SerializePairs(values, builder);
         }
 
         private static IEnumerable<KeyValuePair<string, string>> GetValues(
