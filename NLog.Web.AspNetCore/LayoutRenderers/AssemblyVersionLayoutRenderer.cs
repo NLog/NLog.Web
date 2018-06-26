@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +21,7 @@ namespace NLog.Web.LayoutRenderers
             base.Append(builder, logEvent);
         }
 
+        /// <inheritdoc />
         protected override System.Reflection.Assembly GetAssembly()
         {
             var assembly = base.GetAssembly();
