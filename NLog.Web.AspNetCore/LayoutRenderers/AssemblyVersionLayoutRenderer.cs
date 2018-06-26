@@ -38,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
 
 #if !ASP_NET_CORE
 
-        private static Assembly GetAspNetEntryAssembly()
+        private static System.Reflection.Assembly GetAspNetEntryAssembly()
         {
             if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.ApplicationInstance == null)
             {
