@@ -3,6 +3,8 @@
     <TargetFrameworks>netcoreapp1.1;netcoreapp2;net461</TargetFrameworks>
     <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
+    <FileVersion>1.2.3.1</FileVersion>
+    <InformationalVersion>1.2.3.2</InformationalVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
