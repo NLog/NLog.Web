@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NLog.Web.LayoutRenderers;
-using NSubstitute;
 using NLog.Web.Enums;
 using Xunit;
 
@@ -14,6 +13,7 @@ using NLog.Layouts;
 using NLog.Targets;
 
 #if !ASP_NET_CORE
+using NSubstitute;
 using System.Web;
 using System.Collections.Specialized;
 using System.Web.SessionState;
@@ -38,10 +38,17 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NullKeyRendersEmptyString()
         {
+#if ASP_NET_CORE
+            var httpContext = this.HttpContext;
+#else
             var httpContext = Substitute.For<HttpContextBase>();
+#endif
 
+            /*
             var renderer = new AspNetRequestCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            */
+            var renderer = CreateRenderer();
             renderer.CookieNames = null;
 
             string result = renderer.Render(new LogEventInfo());
@@ -262,21 +269,30 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="addKey">add key1 to cookie 1</param>
         /// <param name="addCookie2">add 2nd cookie</param>
         /// <returns></returns>
-        private static AspNetRequestCookieLayoutRenderer CreateRenderer(bool addKey = true, bool addCookie2 = false)
+        private AspNetRequestCookieLayoutRenderer CreateRenderer(bool addKey = true, bool addCookie2 = false)
         {
             var cookieNames = new List<string>();
+#if ASP_NET_CORE
+            var httpContext = this.HttpContext;
+#else
             var httpContext = Substitute.For<HttpContextBase>();
-
+#endif
 
 #if ASP_NET_CORE
-            IRequestCookieCollection cookies = Substitute.For<IRequestCookieCollection>();
-            var cookieDict = new Dictionary<string, string>();
-
             void AddCookie(string key, string result)
             {
                 cookieNames.Add(key);
-                cookies[key].Returns(result);
-                cookieDict.Add(key, result);
+
+                var newCookieValues = new [] { $"{key}={result}" };
+                if (!httpContext.Request.Headers.TryGetValue("Cookie", out var cookieHeaderValues))
+                {
+                    cookieHeaderValues = new StringValues(newCookieValues);
+                }
+                else
+                {
+                    cookieHeaderValues = new StringValues(cookieHeaderValues.ToArray().Union(newCookieValues).ToArray());
+                }
+                httpContext.Request.Headers["Cookie"] = cookieHeaderValues;
             }
 
             AddCookie("key", "TEST");
@@ -291,17 +307,6 @@ namespace NLog.Web.Tests.LayoutRenderers
                 AddCookie("key2", "Test");
                 AddCookie("key3", "Test456");
             }
-
-            cookies.Count.Returns(cookieDict.Count);
-
-            cookies.TryGetValue("", out var _)
-                .ReturnsForAnyArgs(callInfo =>
-                {
-                    var name = callInfo.Args().First()?.ToString();
-                    var returnVal = cookieDict.TryGetValue(name, out var cookie);
-                    callInfo[1] = cookie;
-                    return returnVal;
-                });
 
 #else
 
@@ -320,18 +325,13 @@ namespace NLog.Web.Tests.LayoutRenderers
                 cookies.Add(cookie2);
                 cookieNames.Add("key2");
             }
-#endif
-
 
             httpContext.Request.Cookies.Returns(cookies);
+#endif
+
             var renderer = new AspNetRequestCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
             renderer.CookieNames = cookieNames;
-
-
-
-
             return renderer;
         }
     }

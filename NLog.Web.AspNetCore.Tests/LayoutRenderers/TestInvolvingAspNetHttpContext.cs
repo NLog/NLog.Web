@@ -104,7 +104,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #else
 
-        protected virtual HttpContext SetUpFakeHttpContext()
+        protected HttpContext SetUpFakeHttpContext()
         {
             var context = new DefaultHttpContext();
             var httpRequest = SetUpHttpRequest(context);
