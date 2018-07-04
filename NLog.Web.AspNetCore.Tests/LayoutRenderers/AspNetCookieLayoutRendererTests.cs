@@ -308,8 +308,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             if (addMultiValueCookieKey)
             {
-                AddCookie("key2", "Test");
-                AddCookie("key3", "Test456");
+                throw new NotSupportedException("Multi-valued cookie keys are not supported in ASP.NET Core");
             }
 
 #else
