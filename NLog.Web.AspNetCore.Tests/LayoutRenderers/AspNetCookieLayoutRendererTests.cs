@@ -44,10 +44,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
 #endif
 
-            /*
-            var renderer = new AspNetRequestCookieLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            */
             var renderer = CreateRenderer();
             renderer.CookieNames = null;
 
@@ -82,10 +78,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void KeyFoundRendersValue_Cookie_Mulitple_Items_Flat_Formatting()
+        public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting()
         {
 #if ASP_NET_CORE
-            //no multivalue keys in ASP.NET core
+            //no multivalue cookie keys in ASP.NET core
             var expectedResult = "key=TEST,Key1=TEST1";
 #else
             var expectedResult = "key=TEST&Key1=TEST1";
@@ -100,10 +96,10 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 
         [Fact]
-        public void KeyFoundRendersValue_Cookie_Multiple_Items_Flat_Formatting_separators()
+        public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting_separators()
         {
 #if ASP_NET_CORE
-            //no multivalue keys in ASP.NET core
+            //no multivalue cookie keys in ASP.NET core
             var expectedResult = "key:TEST|Key1:TEST1";
 #else
             var expectedResult = "key:TEST&Key1=TEST1"; 
@@ -119,11 +115,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void KeyFoundRendersValue_Single_Item_Flat_Formatting()
+        public void KeyFoundRendersValue_Single_Cookie_Flat_Formatting()
         {
             var expectedResult = "key=TEST";
 
-            var renderer = CreateRenderer(addKey: false);
+            var renderer = CreateRenderer(addSecondCookie: false);
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -131,11 +127,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void KeyFoundRendersValue_Single_Item_Json_Formatting()
+        public void KeyFoundRendersValue_Single_Cookie_Json_Formatting()
         {
             var expectedResult = "[{\"key\":\"TEST\"}]";
 
-            var renderer = CreateRenderer(addKey: false);
+            var renderer = CreateRenderer(addSecondCookie: false);
 
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
 
@@ -145,11 +141,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void KeyFoundRendersValue_Single_Item_Json_Formatting_no_array()
+        public void KeyFoundRendersValue_Single_Cookie_Json_Formatting_no_array()
         {
             var expectedResult = "{\"key\":\"TEST\"}";
 
-            var renderer = CreateRenderer(addKey: false);
+            var renderer = CreateRenderer(addSecondCookie: false);
 
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
             renderer.SingleAsArray = false;
@@ -162,7 +158,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public void KeyFoundRendersValue_Cookie_Mulitple_Items_Json_Formatting(bool singleAsArray)
+        public void KeyFoundRendersValue_Multiple_Cookies_Json_Formatting(bool singleAsArray)
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
 
@@ -176,15 +172,15 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-//no multivalue keys in ASP.NET core
+//no multivalue cookie keys in ASP.NET core
 #if !ASP_NET_CORE
 
         [Fact]
-        public void KeyFoundRendersVakue_Cookie_Mulitple_Cookies_Cookie_Items_Flat_Formatting()
+        public void KeyFoundRendersValue_Cookie_Multiple_Cookies_Cookie_Items_Flat_Formatting()
         {
             var expectedResult = "key=TEST&Key1=TEST1,key2=Test&key3=Test456";
 
-            var renderer = CreateRenderer(addCookie2: true);
+            var renderer = CreateRenderer(addMultiValueCookieKey: true);
 
             renderer.CookieNames = new List<string> { "key", "key2" };
 
@@ -194,10 +190,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void KeyFoundRendersVakue_Cookie_Mulitple_Cookies_Cookie_Items_Json_Formatting()
+        public void KeyFoundRendersValue_Cookie_Multiple_Cookies_Cookie_Items_Json_Formatting()
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"},{\"key2\":\"Test\"},{\"key3\":\"Test456\"}]";
-            var renderer = CreateRenderer(addCookie2: true);
+            var renderer = CreateRenderer(addMultiValueCookieKey: true);
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
 
             string result = renderer.Render(new LogEventInfo());
@@ -209,7 +205,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 #if !ASP_NET_CORE //todo
 
         [Fact]
-        public void CommaSeperatedCookieNamesTest_Mulitple_FLAT_Formatting()
+        public void CommaSeperatedCookieNamesTest_Multiple_FLAT_Formatting()
         {
             var expectedResult = "key=TEST&Key1=TEST1";
 
@@ -237,7 +233,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void CommaSeperatedCookieNamesTest_Mulitple_Json_Formatting()
+        public void CommaSeperatedCookieNamesTest_Multiple_Json_Formatting()
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
 
@@ -264,12 +260,20 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Create cookie renderer with mockup http context
+        /// Create cookie renderer with mocked HTTP context
         /// </summary>
-        /// <param name="addKey">add key1 to cookie 1</param>
-        /// <param name="addCookie2">add 2nd cookie</param>
-        /// <returns></returns>
-        private AspNetRequestCookieLayoutRenderer CreateRenderer(bool addKey = true, bool addCookie2 = false)
+        /// <param name="addSecondCookie">Add second cookie</param>
+        /// <param name="addMultiValueCookieKey">Make cookie multi-value by adding a second value to it</param>
+        /// <returns>Created cookie layout renderer</returns>
+        /// <remarks>
+        /// The parameter <paramref name="addMultiValueCookieKey"/> allows creation of multi-valued cookies with the same key,
+        /// as provided in the HttpCookie API for backwards compatibility with classic ASP.
+        /// This is not supported in ASP.NET Core. For further details, see:
+        /// https://docs.microsoft.com/en-us/dotnet/api/system.web.httpcookie.item?view=netframework-4.7.1#System_Web_HttpCookie_Item_System_String_
+        /// https://stackoverflow.com/a/43831482/6651
+        /// https://github.com/aspnet/HttpAbstractions/issues/831
+        /// </remarks>
+        private AspNetRequestCookieLayoutRenderer CreateRenderer(bool addSecondCookie = true, bool addMultiValueCookieKey = false)
         {
             var cookieNames = new List<string>();
 #if ASP_NET_CORE
@@ -297,12 +301,12 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             AddCookie("key", "TEST");
 
-            if (addKey)
+            if (addSecondCookie)
             {
                 AddCookie("Key1", "TEST1");
             }
 
-            if (addCookie2)
+            if (addMultiValueCookieKey)
             {
                 AddCookie("key2", "Test");
                 AddCookie("key3", "Test456");
@@ -312,13 +316,13 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var cookie1 = new HttpCookie("key", "TEST");
             cookieNames.Add("key");
-            if (addKey)
+            if (addSecondCookie)
             {
                 cookie1["Key1"] = "TEST1";
             }
             var cookies = new HttpCookieCollection { cookie1 };
            
-            if (addCookie2)
+            if (addMultiValueCookieKey)
             {
                 var cookie2 = new HttpCookie("key2", "Test");
                 cookie2["key3"] = "Test456";
