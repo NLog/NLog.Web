@@ -15,11 +15,20 @@ namespace NLog.Web.Tests
     /// </summary>
     public class FakeHttpContextAccessor : IHttpContextAccessor
     {
+#if ASP_NET_CORE
+        public HttpContext HttpContext { get; set; }
+
+        public FakeHttpContextAccessor(HttpContext httpContext)
+        {
+            HttpContext = httpContext;
+        }
+#else
         public HttpContextBase HttpContext { get; set; }
 
         public FakeHttpContextAccessor(HttpContextBase httpContext)
         {
             HttpContext = httpContext;
         }
+#endif
     }
 }

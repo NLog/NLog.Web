@@ -12,6 +12,7 @@ using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 #endif
 using System.Xml;
 
@@ -23,11 +24,13 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public abstract class TestInvolvingAspNetHttpContext : TestBase, IDisposable
     {
+        private static readonly Uri DefaultTestUri = new Uri("http://stackoverflow.com/");
+
         protected HttpContext HttpContext;
 
         protected TestInvolvingAspNetHttpContext()
         {
-            HttpContext = SetupFakeHttpContext();
+            HttpContext = SetUpFakeHttpContext();
 #if !ASP_NET_CORE
             HttpContext.Current = HttpContext;
 #endif
@@ -54,25 +57,23 @@ namespace NLog.Web.Tests.LayoutRenderers
                 return new XmlLoggingConfiguration(reader, null);
         }
 
-        protected HttpContext SetupFakeHttpContext()
-        {
 #if !ASP_NET_CORE
+
+        protected HttpContext SetUpFakeHttpContext()
+        {
             var httpRequest = SetUpHttpRequest();
-            var stringWriter = new StringWriter();
-            var httpResponse = new HttpResponse(stringWriter);
+            var httpResponse = SetUpHttpResponse();
             return new HttpContext(httpRequest, httpResponse);
-#else
-            return null;
-#endif
         }
-#if !ASP_NET_CORE
-        protected virtual HttpRequest SetUpHttpRequest(string query = "")
+
+        protected virtual HttpRequest SetUpHttpRequest(Uri uri = null)
         {
-            return new HttpRequest("", "http://stackoverflow/", query);
+            if (uri == null)
+                uri = DefaultTestUri;
+            return new HttpRequest("", uri.AbsoluteUri, uri.Query);
         }
 
-
-        protected void AddHeader(HttpRequest request, string headerName, string headerValue)
+        protected void AddRequestHeader(HttpRequest request, string headerName, string headerValue)
         {
             // thanks http://stackoverflow.com/a/13307238
             var headers = request.Headers;
@@ -93,7 +94,49 @@ namespace NLog.Web.Tests.LayoutRenderers
                 null,
                 headers, null);
         }
-      #endif
+
+        protected virtual HttpResponse SetUpHttpResponse()
+        {
+            var stringWriter = new StringWriter();
+            var httpResponse = new HttpResponse(stringWriter);
+            return httpResponse;
+        }
+
+#else
+
+        protected HttpContext SetUpFakeHttpContext()
+        {
+            var context = new DefaultHttpContext();
+            var httpRequest = SetUpHttpRequest(context);
+            var httpResponse = SetUpHttpResponse(context);
+            return context;
+        }
+
+        protected void AddRequestHeader(HttpRequest request, string headerName, params string[] headerValues)
+        {
+            var headers = request.Headers;
+            headers.Add(headerName, headerValues);
+        }
+
+        protected virtual HttpRequest SetUpHttpRequest(HttpContext context)
+        {
+            var httpRequest = new DefaultHttpRequest(context)
+            {
+                Scheme = DefaultTestUri.Scheme,
+                Path = DefaultTestUri.AbsolutePath,
+                Host = new HostString(DefaultTestUri.Host),
+                Method = "GET"
+            };
+            return httpRequest;
+        }
+
+        protected virtual HttpResponse SetUpHttpResponse(HttpContext context)
+        {
+            var httpResponse = new DefaultHttpResponse(context);
+            return httpResponse;
+        }
+
+#endif
 
         protected NLog.Targets.DebugTarget GetDebugTarget(string targetName, LoggingConfiguration configuration)
         {
