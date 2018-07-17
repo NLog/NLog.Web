@@ -55,12 +55,20 @@ namespace NLog.Web.LayoutRenderers
                 return null;
             }
 
-            var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
-            if (httpContextAccessor == null)
+            try
             {
-                Common.InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
+                var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+                if (httpContextAccessor == null)
+                {
+                    Common.InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
+                }
+                return httpContextAccessor;
             }
-            return httpContextAccessor;
+            catch (ObjectDisposedException ex)
+            {
+                Common.InternalLogger.Debug(ex, "ServiceProvider has been disposed, so no HttpContext");
+                return null;
+            }
         }
 
 #else
