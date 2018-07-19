@@ -10,6 +10,8 @@ namespace NLog.Web.AspNet461.Example.Controllers
     {
         public ActionResult Index()
         {
+            NLog.LogManager.GetCurrentClassLogger().Info("Hello World");
+
             return View();
         }
 
