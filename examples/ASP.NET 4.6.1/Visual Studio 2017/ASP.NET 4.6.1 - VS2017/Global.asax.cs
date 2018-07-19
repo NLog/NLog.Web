@@ -16,8 +16,6 @@ namespace NLog.Web.AspNet461.Example
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            NLog.LogManager.GetCurrentClassLogger().Info("Hello World");
         }
     }
 }
