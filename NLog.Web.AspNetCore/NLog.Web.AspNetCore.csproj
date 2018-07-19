@@ -71,6 +71,7 @@ Supported platforms:
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog" Version="4.5.7" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.2" />
   </ItemGroup>
 
