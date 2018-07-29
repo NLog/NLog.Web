@@ -54,46 +54,48 @@ namespace NLog.Web.LayoutRenderers
             if (this.CookieNames?.Count > 0 && cookies?.Count > 0)
             {
                 var cookieValues = GetCookies(cookies);
-                SerializeValues(cookieValues, builder);
+                SerializePairs(cookieValues, builder);
             }
         }
-
 
 #if !ASP_NET_CORE
 
         private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
         {
-            if (CookieNames != null)
+            var cookieNames = this.CookieNames;
+            if (cookieNames != null)
             {
-                foreach (var cookieName in CookieNames)
+                foreach (var cookieName in cookieNames)
                 {
-                    var value = cookies[cookieName];
-                    
-                    if (value != null)
+                    var httpCookie = cookies[cookieName];
+                    if (httpCookie == null)
                     {
-                        if (this.OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                        continue;
+                    }
+
+                    if (this.OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                    {
+                        // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+                        var isFirst = true;
+                        foreach (var multiValueKey in httpCookie.Values.AllKeys)
                         {
-                            //split
-                            var isFirst = true;
-                            foreach (var key in value.Values.AllKeys)
+                            var cookieKey = multiValueKey;
+                            if (isFirst)
                             {
-                                var key2 = key;
-                                if (isFirst)
-                                {
-                                    key2 = cookieName;
-                                    isFirst = false;
-                                }
-                                yield return new KeyValuePair<string, string>(key2, value.Values[key]);
+                                cookieKey = cookieName;
+                                isFirst = false;
                             }
+                            yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
                         }
-                        else
-                        {
-                            yield return new KeyValuePair<string, string>(cookieName, value.Value);
-                        }
+                    }
+                    else
+                    {
+                        yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
                     }
                 }
             }
         }
+
 #else
 
         private IEnumerable<KeyValuePair<string, string>> GetCookies(IRequestCookieCollection cookies)
@@ -103,15 +105,16 @@ namespace NLog.Web.LayoutRenderers
             {
                 foreach (var cookieName in cookieNames)
                 {
-                    if (cookies.TryGetValue(cookieName, out var cookieValue))
+                    if (!cookies.TryGetValue(cookieName, out var cookieValue))
                     {
-                        yield return new KeyValuePair<string, string>(cookieName, cookieValue);
+                        continue;
                     }
+
+                    yield return new KeyValuePair<string, string>(cookieName, cookieValue);
                 }
             }
         }
+
 #endif
-
-
     }
 }

@@ -7,7 +7,7 @@ using NLog.Web.Enums;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Layout renderers for ASP.NET rendering multiple values.
+    /// Layout renderers for ASP.NET rendering multiple key/value pairs.
     /// </summary>
     public abstract class AspNetLayoutMultiValueRendererBase : AspNetLayoutRendererBase
     {
@@ -35,40 +35,43 @@ namespace NLog.Web.LayoutRenderers
         public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
-        /// Serialize multiple values
+        /// Only render values if true, otherwise render key/value pairs.
         /// </summary>
-        /// <param name="values">The values with key and value.</param>
-        /// <param name="builder">Add to this builder.</param>
-        protected void SerializeValues(IEnumerable<KeyValuePair<string, string>> values,
-            StringBuilder builder)
-        {
+        public bool ValuesOnly { get; set; }
 
+        /// <summary>
+        /// Serialize multiple key/value pairs
+        /// </summary>
+        /// <param name="pairs">The key/value pairs.</param>
+        /// <param name="builder">Add to this builder.</param>
+        protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        {
             switch (OutputFormat)
             {
                 case AspNetRequestLayoutOutputFormat.Flat:
-                    SerializValuesFlat(values, builder);
+                    SerializePairsFlat(pairs, builder);
                     break;
                 case AspNetRequestLayoutOutputFormat.Json:
-                    SerializeValuesJson(values, builder);
+                    SerializePairsJson(pairs, builder);
                     break;
             }
         }
 
-        private void SerializeValuesJson(IEnumerable<KeyValuePair<string, string>> values, StringBuilder builder)
+        private void SerializePairsJson(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
         {
             var firstItem = true;
-            var valueList = values.ToList();
+            var pairsList = pairs.ToList();
 
-            if (valueList.Count > 0)
+            if (pairsList.Count > 0)
             {
-                var addArray = valueList.Count > (SingleAsArray ? 0 : 1);
+                var addArray = pairsList.Count > (SingleAsArray | ValuesOnly ? 0 : 1);
 
                 if (addArray)
                 {
                     builder.Append('[');
                 }
 
-                foreach (var kpv in valueList)
+                foreach (var kpv in pairsList)
                 {
                     var key = kpv.Key;
                     var value = kpv.Value;
@@ -78,27 +81,34 @@ namespace NLog.Web.LayoutRenderers
                     }
                     firstItem = false;
 
-                    //quoted key
-                    builder.Append('{');
-                    AppendQuoted(builder, key);
+                    if (!ValuesOnly)
+                    {
+                        // Quoted key
+                        builder.Append('{');
+                        AppendQuoted(builder, key);
 
-                    builder.Append(':');
-                    //quoted value;
+                        builder.Append(':');
+                    }
+
+                    // Quoted value
                     AppendQuoted(builder, value);
-                    builder.Append('}');
+
+                    if (!ValuesOnly)
+                    {
+                        builder.Append('}');
+                    }
                 }
                 if (addArray)
                 {
                     builder.Append(']');
                 }
             }
-
         }
 
-        private void SerializValuesFlat(IEnumerable<KeyValuePair<string, string>> values, StringBuilder builder)
+        private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
         {
             var firstItem = true;
-            foreach (var kpv in values)
+            foreach (var kpv in pairs)
             {
                 var key = kpv.Key;
                 var value = kpv.Value;
@@ -108,8 +118,13 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(ItemSeparator);
                 }
                 firstItem = false;
-                builder.Append(key);
-                builder.Append(ValueSeparator);
+
+                if (!ValuesOnly)
+                {
+                    builder.Append(key);
+                    builder.Append(ValueSeparator);
+                }
+
                 builder.Append(value);
             }
         }

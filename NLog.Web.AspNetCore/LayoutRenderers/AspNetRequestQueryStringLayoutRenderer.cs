@@ -45,9 +45,6 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-
-
-
             var printAllQueryString = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
             var queryStringKeys = this.QueryStringKeys;
 #if !ASP_NET_CORE
@@ -55,7 +52,6 @@ namespace NLog.Web.LayoutRenderers
 
             if (queryStrings == null)
                 return;
-
 
             if (printAllQueryString)
             {
@@ -81,11 +77,11 @@ namespace NLog.Web.LayoutRenderers
             }
 #endif
 
-            var values = GetValues(queryStrings, queryStringKeys);
-            SerializeValues(values, builder);
+            var pairs = GetPairs(queryStrings, queryStringKeys);
+            SerializePairs(pairs, builder);
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetValues(
+        private static IEnumerable<KeyValuePair<string, string>> GetPairs(
 #if ASP_NET_CORE
             IQueryCollection queryStrings,
 #else
