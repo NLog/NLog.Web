@@ -5,7 +5,7 @@
 
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
-    <VersionPrefix>4.5.4</VersionPrefix>
+    <VersionPrefix>4.6</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
@@ -28,10 +28,11 @@ Supported platforms:
     <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - http://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
     <PackageId>NLog.Web.AspNetCore</PackageId>
-    <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC</PackageTags>
+    <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
-4.5.4:  
-- Update NLog dependency
+- Inherits AssemblyVersionLayoutRenderer from NLog implementation, so it has all NLog's features  (@alexangas)
+- Added "ValuesOnly" property to Cookie and QueryString layout renderers + support for multivalue cookie keys in ASP.NET core (@alexangas)
+- Improve error-handling during startup / shutdown for all layout renders using httpcontext
 
     </PackageReleaseNotes>
     <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
