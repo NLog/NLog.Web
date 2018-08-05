@@ -1,5 +1,12 @@
 ## Change Log
 
+### v4.5.4-aspnetcore & aspnet4 (2018/08/05)
+
+- [#306](https://github.com/nlog/nlog.web/pull/306) Inherits AssemblyVersionLayoutRenderer from NLog implementation, so it has all NLog's features  (@alexangas)
+- [#307](https://github.com/nlog/nlog.web/pull/307) Added "ValuesOnly" property to Cookie and QueryString layout renderers + support for multivalue cookie keys in ASP.NET core (@alexangas)
+- [#303](https://github.com/nlog/nlog.web/pull/303) Improve error-handling during startup / shutdown for all layout renders using httpcontext
+
+
 ### v4.5.4-aspnetcore (2018/05/10)
 - [#285](https://github.com/nlog/nlog.web/pull/285) Update NLog dependency (@304NotModified)
 
