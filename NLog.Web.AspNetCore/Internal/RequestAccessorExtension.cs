@@ -32,5 +32,21 @@ namespace NLog.Web.Internal
             return context.Request;
         }
 #endif
+
+#if ASP_NET_CORE
+        internal static string GetString(this ISession session, string key)
+        {
+            if (!session.TryGetValue(key, out var data))
+                return null;
+
+            if (data == null)
+                return null;
+
+            if (data.Length == 0)
+                return string.Empty;
+
+            return Encoding.UTF8.GetString(data);
+        }
+#endif
     }
 }
