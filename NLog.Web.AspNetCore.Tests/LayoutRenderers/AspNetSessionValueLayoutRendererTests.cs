@@ -23,15 +23,12 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetSessionValueLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-
-
-
         public AspNetSessionValueLayoutRendererTests()
         {
             SetUp();
         }
 
-        public void SetUp()
+        private void SetUp()
         {
             //auto load won't work yet (in DNX), so use <extensions>
             LogManager.Configuration = CreateConfigurationFromString(@"
@@ -232,7 +229,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <summary>
         /// Create Fake Session http://stackoverflow.com/a/10126711/201303
         /// </summary>
-        public void SetupFakeSession()
+        private void SetupFakeSession()
         {
             var sessionContainer = new HttpSessionStateContainer("id", new SessionStateItemCollection(),
                                                     new HttpStaticObjectsCollection(), 10, true,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -79,18 +80,21 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
+
             var context = HttpContextAccessor.HttpContext;
-
-            if (context == null)
+#if !ASP_NET_CORE
+            Func<System.Collections.IDictionary, string, object> getVal = (items, key) => 
             {
-                return;
-            }
-
-            Func<string, object> getVal = k => context.Items[k];
-
-            var value = PropertyReader.GetValue(Variable, getVal, EvaluateAsNestedProperties);
+                return items?.Count > 0 && items.Contains(key) ? items[key] : null;
+            };
+#else
+            Func<IDictionary<object, object>, string, object> getVal = (items, key) =>
+            {
+                return items != null && items.TryGetValue(key, out var itemValue) ? itemValue : null;
+            };
+#endif
+            var value = PropertyReader.GetValue(Variable, context?.Items, getVal, EvaluateAsNestedProperties);
             var formatProvider = GetFormatProvider(logEvent, Culture);
-
             builder.Append(Convert.ToString(value, formatProvider));
         }
     }

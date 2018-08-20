@@ -50,7 +50,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Empty(result);
         }
 
-        [Theory, MemberData("VariableFoundData")]
+        [Theory, MemberData(nameof(VariableFoundData))]
         public void VariableFoundRendersValue(object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
