@@ -82,20 +82,21 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-#if !ASP_NET_CORE
-            Func<System.Collections.IDictionary, string, object> getVal = (items, key) => 
-            {
-                return items?.Count > 0 && items.Contains(key) ? items[key] : null;
-            };
-#else
-            Func<IDictionary<object, object>, string, object> getVal = (items, key) =>
-            {
-                return items != null && items.TryGetValue(key, out var itemValue) ? itemValue : null;
-            };
-#endif
-            var value = PropertyReader.GetValue(Variable, context?.Items, getVal, EvaluateAsNestedProperties);
+            var value = PropertyReader.GetValue(Variable, context?.Items, LookupItemValue, EvaluateAsNestedProperties);
             var formatProvider = GetFormatProvider(logEvent, Culture);
             builder.Append(Convert.ToString(value, formatProvider));
         }
+
+#if !ASP_NET_CORE
+        private static object LookupItemValue(System.Collections.IDictionary items, string key)
+        {
+            return items?.Count > 0 && items.Contains(key) ? items[key] : null;
+        }
+#else
+        private static object LookupItemValue(IDictionary<object, object> items, string key)
+        {
+            return items != null && items.TryGetValue(key, out var itemValue) ? itemValue : null;
+        }
+#endif
     }
 }
