@@ -40,6 +40,7 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current request HttpContext.
         /// </summary>
         /// <returns>HttpContextAccessor or <c>null</c></returns>
+        [NLog.Config.NLogConfigurationIgnorePropertyAttribute]
         public IHttpContextAccessor HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
@@ -72,9 +73,11 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #else
+
         /// <summary>
         /// Provides access to the current request HttpContext.
         /// </summary>
+        [NLog.Config.NLogConfigurationIgnorePropertyAttribute]
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
 #endif

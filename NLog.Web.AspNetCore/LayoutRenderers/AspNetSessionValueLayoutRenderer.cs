@@ -86,20 +86,20 @@ namespace NLog.Web.LayoutRenderers
                 InternalLogger.Debug("Session is null");
                 return;
             }
-#if !ASP_NET_CORE
-            var value = PropertyReader.GetValue(Variable, k => context.Session[k], EvaluateAsNestedProperties);
-#else
-            if (context.Items == null || context.Features.Get<ISessionFeature>()?.Session == null) { return; }
 
+#if !ASP_NET_CORE
+            var value = PropertyReader.GetValue(Variable, context.Session, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
+#else
             //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
             //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
-            if (context.Items.ContainsKey(NLogRetrievingSessionValue)) { return; }
-
+            if (context.Items == null || context.Features.Get<ISessionFeature>()?.Session == null) { return; }
+            if (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue)) { return; }
             context.Items[NLogRetrievingSessionValue] = true;
+
             object value;
             try
             {
-                value = PropertyReader.GetValue(Variable, k => context.Session.GetString(k), EvaluateAsNestedProperties);
+                value = PropertyReader.GetValue(Variable, context.Session, (session, key) => session.GetString(key), EvaluateAsNestedProperties);
             }
             catch (Exception ex)
             {
@@ -110,8 +110,8 @@ namespace NLog.Web.LayoutRenderers
             {
                 context.Items.Remove(NLogRetrievingSessionValue);
             }
-
 #endif
+
             var formatProvider = GetFormatProvider(logEvent, Culture);
             builder.Append(Convert.ToString(value, formatProvider));
         }

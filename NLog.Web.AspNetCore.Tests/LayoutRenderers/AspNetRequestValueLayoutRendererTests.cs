@@ -48,7 +48,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Empty(result);
-            Assert.Equal(true, string.IsNullOrEmpty(internalLog.ToString()));
+            Assert.True(string.IsNullOrEmpty(internalLog.ToString()));
         }
 
         public class ItemTests

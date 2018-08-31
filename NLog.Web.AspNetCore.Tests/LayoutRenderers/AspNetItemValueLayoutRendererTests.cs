@@ -63,6 +63,8 @@ namespace NLog.Web.Tests.LayoutRenderers
 			httpContext.Items = new Dictionary<object, object>();
 			httpContext.Items.Add("key", expectedValue);
 #else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains("key").Returns(true);
             httpContext.Items["key"].Returns(expectedValue);
 #endif
             var cultureInfo = new CultureInfo("nl-NL");
@@ -85,6 +87,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items = new Dictionary<object, object>();
             httpContext.Items.Add("key", expectedValue);
 #else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains("key").Returns(true);
             httpContext.Items["key"].Returns(expectedValue);
 #endif
 
@@ -101,7 +105,14 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NestedPropertyRendersValue(string itemKey, string variable, object data, object expectedValue)
         {
             var httpContext = Substitute.For<HttpContextBase>();
+#if ASP_NET_CORE
+            httpContext.Items = new Dictionary<object, object>();
+            httpContext.Items.Add(itemKey, data);
+#else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains(itemKey).Returns(true);
             httpContext.Items[itemKey].Returns(data);
+#endif
 
             var renderer = new AspNetItemValueLayoutRenderer();
             renderer.Variable = variable;
