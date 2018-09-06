@@ -68,6 +68,9 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcControllerRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcActionRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcLayoutRendererBase.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestFormLayoutRenderer.cs">
+      <Link>AspNetRequestFormLayoutRenderer.cs</Link>
+    </Compile>
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestIpLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIdLayoutRenderer.cs" />
