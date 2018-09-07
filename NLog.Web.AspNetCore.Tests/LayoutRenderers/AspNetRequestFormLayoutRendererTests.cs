@@ -95,9 +95,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
 #if ASP_NET_CORE
             var httpContext = this.HttpContext;
+            httpContext.Request.ContentType = "application/x-www-form-urlencoded";
 #else
             var httpContext = Substitute.For<HttpContextBase>();
+            httpContext.Request.ContentType.Returns("application/x-www-form-urlencoded");
 #endif
+
             if (hasFormValues)
             {
 #if ASP_NET_CORE
@@ -106,14 +109,15 @@ namespace NLog.Web.Tests.LayoutRenderers
                     { "name","Test Person" },
                     { "token","86abe8fe-2237-4f87-81af-0a4e522b4140" }
                 });
+                httpContext.Request.Form = formCollection;
 #else
                 var formCollection = new NameValueCollection(){
                     { "id","1" },
                     { "name","Test Person" },
                     { "token","86abe8fe-2237-4f87-81af-0a4e522b4140" }
                 };
-#endif
                 httpContext.Request.Form.Returns(formCollection);
+#endif
             }
             var renderer = new AspNetRequestFormLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
