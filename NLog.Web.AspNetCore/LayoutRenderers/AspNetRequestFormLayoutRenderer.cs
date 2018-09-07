@@ -23,7 +23,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-form")]
-    class AspNetRequestFormLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestFormLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the form keys to include in the output.  If omitted, all are included.
@@ -68,7 +68,7 @@ namespace NLog.Web.LayoutRenderers
                 {
                     if ((!includeList.Any() || includeList.Contains(key)) && !excludeList.Contains(key))
                     {
-                        formDataList.Add(httpRequest.Form[key].ToString());
+                        formDataList.Add($"{key}={httpRequest.Form[key]}");
                     }
                 }
 #else
@@ -76,7 +76,7 @@ namespace NLog.Web.LayoutRenderers
                 {
                     if ((!includeList.Any() || includeList.Contains(item.Key)) && !excludeList.Contains(item.Key))
                     {
-                        formDataList.Add(item.ToString());
+                        formDataList.Add($"{item.Key}={item.Value}");
                     }
                 }
 #endif
