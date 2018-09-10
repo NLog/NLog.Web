@@ -1,7 +1,4 @@
-﻿#if ASP_NET_CORE
-using Microsoft.Extensions.Primitives;
-#endif
-using NLog.LayoutRenderers;
+﻿using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 using System;
 using System.Collections.Generic;
@@ -63,23 +60,13 @@ namespace NLog.Web.LayoutRenderers
                 Separator = Separator ?? Environment.NewLine;
                 var formDataList = new List<string>();
 
-#if !ASP_NET_CORE
-                foreach (string key in httpRequest.Form.AllKeys)
+                foreach (string key in httpRequest.Form.Keys)
                 {
                     if ((!includeList.Any() || includeList.Contains(key)) && !excludeList.Contains(key))
                     {
                         formDataList.Add($"{key}={httpRequest.Form[key]}");
                     }
                 }
-#else
-                foreach (KeyValuePair<string, StringValues> item in httpRequest.Form)
-                {
-                    if ((!includeList.Any() || includeList.Contains(item.Key)) && !excludeList.Contains(item.Key))
-                    {
-                        formDataList.Add($"{item.Key}={item.Value}");
-                    }
-                }
-#endif
 
                 builder.Append(string.Join(Separator, formDataList.ToArray()));
             }
