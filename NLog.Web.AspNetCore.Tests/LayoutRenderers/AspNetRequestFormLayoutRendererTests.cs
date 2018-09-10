@@ -52,7 +52,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var expectedResult = "id=1\r\nname=Test Person";
             var renderer = CreateRenderer();
-            renderer.Include = "id,name";
+            renderer.Include.Add("id");
+            renderer.Include.Add("name");
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -67,7 +68,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var expectedResult = "id=1\r\nname=Test Person";
             var renderer = CreateRenderer();
-            renderer.Exclude = "token";
+            renderer.Exclude.Add("token");
 
             // Act
             string result = renderer.Render(new LogEventInfo());

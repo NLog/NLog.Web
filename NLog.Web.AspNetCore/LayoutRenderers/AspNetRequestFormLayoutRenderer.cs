@@ -26,19 +26,36 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the form keys to include in the output.  If omitted, all are included.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Include { get; set; }
+#if ASP_NET_CORE
+        public ISet<string> Include { get; set; }
+#else
+        public HashSet<string> Include { get; set; }
+#endif
 
         /// <summary>
-        /// Gets or sets the form keys to exclude in the output.  If omitted, none are excluded.
+        /// Gets or sets the form keys to exclude from the output.  If omitted, none are excluded.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Exclude { get; set; }
+#if ASP_NET_CORE
+        public ISet<string> Exclude { get; set; }
+#else
+        public HashSet<string> Exclude { get; set; }
+#endif
 
         /// <summary>
         /// Gets or sets the separator to use between each key/value pair.  If omitted, <see cref="Environment.NewLine"/> is used.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public string Separator { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AspNetRequestFormLayoutRenderer()
+        {
+            Include = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            Exclude = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        }
 
         /// <summary>
         /// Renders the Form Collection from the HttpRequest and appends it to the specified <see cref="StringBuilder" />.
@@ -55,14 +72,12 @@ namespace NLog.Web.LayoutRenderers
 
             if (httpRequest.Form != null)
             {
-                var includeList = Include == null ? new List<string>() : Include.Split(',').ToList();
-                var excludeList = Exclude == null ? new List<string>() : Exclude.Split(',').ToList();
                 Separator = Separator ?? Environment.NewLine;
                 var formDataList = new List<string>();
 
                 foreach (string key in httpRequest.Form.Keys)
                 {
-                    if ((!includeList.Any() || includeList.Contains(key)) && !excludeList.Contains(key))
+                    if ((!Include.Any() || Include.Contains(key)) && !Exclude.Contains(key))
                     {
                         formDataList.Add($"{key}={httpRequest.Form[key]}");
                     }
