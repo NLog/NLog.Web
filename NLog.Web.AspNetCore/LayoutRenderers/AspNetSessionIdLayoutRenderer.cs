@@ -22,11 +22,12 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
-
             if (context?.Session == null)
             {
+                Common.InternalLogger.Debug("aspnet-sessionid - HttpContext Session is null");
                 return;
             }
+
 #if !ASP_NET_CORE
             builder.Append(context.Session.SessionID);
 #else

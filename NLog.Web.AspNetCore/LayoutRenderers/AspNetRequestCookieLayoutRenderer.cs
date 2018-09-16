@@ -1,17 +1,14 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
 using System.Web;
 #else
-using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Http;
 #endif
 using NLog.LayoutRenderers;
-using System.Collections.Generic;
-using NLog.Config;
 using NLog.Web.Enums;
-using System;
-using System.Linq;
 
 using NLog.Web.Internal;
 
@@ -42,16 +39,12 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
-
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
-            {
                 return;
-            }
 
             var cookies = httpRequest.Cookies;
-
-            if (this.CookieNames?.Count > 0 && cookies?.Count > 0)
+            if (CookieNames?.Count > 0 && cookies?.Count > 0)
             {
                 var cookieValues = GetCookies(cookies);
                 SerializePairs(cookieValues, builder);
@@ -62,7 +55,7 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
         {
-            var cookieNames = this.CookieNames;
+            var cookieNames = CookieNames;
             if (cookieNames != null)
             {
                 foreach (var cookieName in cookieNames)
@@ -73,7 +66,7 @@ namespace NLog.Web.LayoutRenderers
                         continue;
                     }
 
-                    if (this.OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                    if (OutputFormat == AspNetRequestLayoutOutputFormat.Json)
                     {
                         // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
                         var isFirst = true;
@@ -100,7 +93,7 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<KeyValuePair<string, string>> GetCookies(IRequestCookieCollection cookies)
         {
-            var cookieNames = this.CookieNames;
+            var cookieNames = CookieNames;
             if (cookieNames != null)
             {
                 foreach (var cookieName in cookieNames)

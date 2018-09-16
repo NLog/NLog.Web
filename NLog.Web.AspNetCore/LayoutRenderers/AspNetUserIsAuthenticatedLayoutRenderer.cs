@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Web.LayoutRenderers;
@@ -21,19 +20,21 @@ namespace NLog.Web.AspNetCore.LayoutRenderers
         /// <param name="logEvent"></param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor.HttpContext;
-            if (httpContext == null)
+            try
             {
-                return;
+                var httpContext = HttpContextAccessor.HttpContext;
+                if (httpContext.User?.Identity?.IsAuthenticated == true)
+                {
+                    builder.Append(1);
+                }
+                else
+                {
+                    builder.Append(0);
+                }
             }
-
-            if (httpContext.User?.Identity?.IsAuthenticated == true)
+            catch (ObjectDisposedException)
             {
-                builder.Append(1);
-            }
-            else
-            {
-                builder.Append(0);
+                //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83
             }
         }
     }

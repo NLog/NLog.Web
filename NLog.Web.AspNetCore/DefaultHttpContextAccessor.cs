@@ -21,9 +21,10 @@ namespace NLog.Web
         {
             get
             {
-                if (System.Web.HttpContext.Current == null)
+                var httpContext = System.Web.HttpContext.Current;
+                if (httpContext == null)
                     return null;
-                return new HttpContextWrapper(System.Web.HttpContext.Current);
+                return new HttpContextWrapper(httpContext);
             }
         }
 

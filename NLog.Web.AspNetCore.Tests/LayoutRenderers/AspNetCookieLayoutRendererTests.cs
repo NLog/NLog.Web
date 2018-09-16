@@ -38,7 +38,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullKeyRendersEmptyString()
         {
 #if ASP_NET_CORE
-            var httpContext = this.HttpContext;
+            var httpContext = HttpContext;
 #else
             var httpContext = Substitute.For<HttpContextBase>();
 #endif
@@ -322,7 +322,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var cookie = new HttpCookie("key", "TEST");
             cookie["Key1"] = "TEST1";
 
-            this.HttpContext.Request.Cookies.Add(cookie);
+            HttpContext.Request.Cookies.Add(cookie);
             var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
             var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
 
@@ -347,7 +347,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var cookie = new HttpCookie("key", "TEST");
             cookie["Key1"] = "TEST1";
 
-            this.HttpContext.Request.Cookies.Add(cookie);
+            HttpContext.Request.Cookies.Add(cookie);
             var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
             var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
 
@@ -376,7 +376,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var cookieNames = new List<string>();
 #if ASP_NET_CORE
-            var httpContext = this.HttpContext;
+            var httpContext = HttpContext;
 #else
             var httpContext = Substitute.For<HttpContextBase>();
 #endif

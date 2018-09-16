@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
+
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -36,7 +37,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-application")]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
-
         /// <summary>
         /// Gets or sets the variable name.
         /// </summary>
@@ -52,18 +52,18 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (this.Variable == null)
-            {
-                return;
-            }
-            var context = HttpContextAccessor.HttpContext;
-
-            if (context.Application == null)
+            if (Variable == null)
             {
                 return;
             }
 
-            builder.Append(Convert.ToString(context.Application[this.Variable], CultureInfo.CurrentUICulture));
+            var application = HttpContextAccessor.HttpContext.Application;
+            if (application == null)
+            {
+                return;
+            }
+            
+            builder.Append(Convert.ToString(application[Variable], CultureInfo.CurrentUICulture));
         }
     }
 }

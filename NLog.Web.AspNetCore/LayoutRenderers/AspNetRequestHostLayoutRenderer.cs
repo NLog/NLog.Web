@@ -1,9 +1,5 @@
-
-using NLog.LayoutRenderers;
 using System.Text;
-#if ASP_NET_CORE
-using Microsoft.AspNetCore.Routing;
-#endif
+using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -29,13 +25,15 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var request = HttpContextAccessor?.HttpContext?.TryGetRequest();
-#if ASP_NET_CORE
-            var host = request?.Host;
-#else
-            var host = request?.UserHostName;
-#endif
+            var request = HttpContextAccessor.HttpContext.TryGetRequest();
+            if (request == null)
+                return;
 
+#if ASP_NET_CORE
+            var host = request.Host;
+#else
+            var host = request.UserHostName;
+#endif
             if (host != null)
             {
                 var hostString = host.ToString();

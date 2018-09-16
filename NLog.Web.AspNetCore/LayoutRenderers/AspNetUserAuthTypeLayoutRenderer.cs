@@ -23,14 +23,14 @@ namespace NLog.Web.LayoutRenderers
         {
             try
             {
-                var context = HttpContextAccessor.HttpContext;
-
-                if (context.User?.Identity?.IsAuthenticated == null)
+                var identity = HttpContextAccessor.HttpContext.User?.Identity;
+                if (identity == null)
                 {
+                    Common.InternalLogger.Debug("aspnet-user-authtype - HttpContext User Identity is null");
                     return;
                 }
 
-                builder.Append(context.User.Identity.AuthenticationType);
+                builder.Append(identity.AuthenticationType);
             }
             catch (ObjectDisposedException)
             {

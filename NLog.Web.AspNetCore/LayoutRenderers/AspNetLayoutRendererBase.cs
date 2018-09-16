@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using NLog.LayoutRenderers;
-
 #if ASP_NET_CORE
-using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using NLog.Web.DependencyInjection;
 #endif
+
+using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -89,8 +88,15 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (HttpContextAccessor?.HttpContext == null)
+            var httpContextAccessor = HttpContextAccessor;
+            if (httpContextAccessor == null)
                 return;
+
+            if (httpContextAccessor.HttpContext == null)
+            {
+                Common.InternalLogger.Debug("No available HttpContext. Logging outside valid request context?");
+                return;
+            }
 
             DoAppend(builder, logEvent);
         }
