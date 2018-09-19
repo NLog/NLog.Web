@@ -16,6 +16,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// ${aspnet-request-form:Include=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
     /// ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
+    /// ${aspnet-request-form:Include=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude"/> takes precedence over <see cref="Include"/>).
     /// ${aspnet-request-form:Separator= / } - Produces - All Form Data from the Request with each key/value pair separated by " / ".
     /// </code>
     /// </example>
@@ -23,7 +24,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Gets or sets the form keys to include in the output.  If omitted, all are included.
+        /// Gets or sets the form keys to include in the output.  If omitted, all are included.  <see cref="Exclude"/> takes precedence over <see cref="Include"/>.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
 #if ASP_NET_CORE
@@ -33,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Gets or sets the form keys to exclude from the output.  If omitted, none are excluded.
+        /// Gets or sets the form keys to exclude from the output.  If omitted, none are excluded.  <see cref="Exclude"/> takes precedence over <see cref="Include"/>.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
 #if ASP_NET_CORE

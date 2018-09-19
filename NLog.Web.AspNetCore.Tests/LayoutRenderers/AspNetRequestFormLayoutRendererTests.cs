@@ -92,6 +92,23 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
+        [Fact]
+        public void ExcludeShouldTakePrecedenceOverInclude()
+        {
+            // Arrange
+            var expectedResult = "name=Test Person";
+            var renderer = CreateRenderer();
+            renderer.Include.Add("id");
+            renderer.Include.Add("name");
+            renderer.Exclude.Add("id");
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
         private AspNetRequestFormLayoutRenderer CreateRenderer(bool hasFormValues = true)
         {
 #if ASP_NET_CORE
@@ -120,9 +137,11 @@ namespace NLog.Web.Tests.LayoutRenderers
                 httpContext.Request.Form.Returns(formCollection);
 #endif
             }
-            var renderer = new AspNetRequestFormLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            return renderer;
+
+            return new AspNetRequestFormLayoutRenderer
+            {
+                HttpContextAccessor = new FakeHttpContextAccessor(httpContext)
+            };
         }
     }
 }
