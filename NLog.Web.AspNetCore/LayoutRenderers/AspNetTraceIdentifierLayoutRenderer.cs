@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -17,9 +14,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc />
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-            
-            builder.Append(context.TraceIdentifier);
+            var httpContext = HttpContextAccessor.HttpContext;
+            builder.Append(httpContext.TraceIdentifier);
         }
     }
 }

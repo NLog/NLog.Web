@@ -1,13 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 #if !ASP_NET_CORE
-using System.Web;
 using System.Collections.Specialized;
+using System.Web;
 #else
 #endif
 using NLog.LayoutRenderers;
-using System.Collections.Generic;
-using NLog.Config;
-using System;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -57,13 +55,11 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
-
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
                 return;
 
             var url = CreateUrl(httpRequest);
-
             builder.Append(url);
         }
 

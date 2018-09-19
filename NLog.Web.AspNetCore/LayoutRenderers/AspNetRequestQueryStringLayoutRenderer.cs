@@ -1,16 +1,15 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 #if !ASP_NET_CORE
-using System.Web;
 using System.Collections.Specialized;
+using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
 using NLog.LayoutRenderers;
-using System.Collections.Generic;
-using NLog.Config;
 using NLog.Web.Enums;
-using System;
-using System.Linq;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -41,15 +40,14 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent"></param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
                 return;
 
-            var printAllQueryString = this.QueryStringKeys == null || this.QueryStringKeys.Count == 0;
-            var queryStringKeys = this.QueryStringKeys;
+            var printAllQueryString = QueryStringKeys == null || QueryStringKeys.Count == 0;
+            var queryStringKeys = QueryStringKeys;
 #if !ASP_NET_CORE
             var queryStrings = httpRequest.QueryString;
-
             if (queryStrings == null)
                 return;
 
@@ -67,7 +65,6 @@ namespace NLog.Web.LayoutRenderers
             }
 #else
             var queryStrings = httpRequest.Query;
-
             if (queryStrings == null)
                 return;
 
@@ -87,8 +84,7 @@ namespace NLog.Web.LayoutRenderers
 #else
             NameValueCollection queryStrings,
 #endif
-            IEnumerable<string> queryStringKeys)
-
+            List<string> queryStringKeys)
         {
             if (queryStrings.Count > 0)
             {

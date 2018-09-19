@@ -47,7 +47,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public AspNetItemValueLayoutRenderer()
         {
-            this.Culture = CultureInfo.CurrentUICulture;
+            Culture = CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
