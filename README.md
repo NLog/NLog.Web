@@ -26,27 +26,42 @@ For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https
 
 ## ASP.NET Core 1 / ASP.NET Core 2
 
-------
 ℹ️  Missing the trace and debug logs in .NET Core 2? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-2%3F)
 
------
-
-There is a special package for ASP.NET Core / MVC Core. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging)
+Use the NLog.Web.AspNetCore package
 
 - [Supported layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
 
+_There is a special package for ASP.NET Core / MVC Core. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging)_
+
+
+### Installation
+
+Include in your nlog.config:
+
+```xml
+<!-- enable asp.net core layout renderers -->
+<extensions>
+  <add assembly="NLog.Web.AspNetCore"/>
+</extensions>
+```
+
+
 ## ASP.NET (non-core)
 
-Simply install the package. NLog will detect the extension automatically. 
+Use the NLog.Web package.
 
-- [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=target&search=package:nlog.web)
+- [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=targets&search=package:nlog.web)
 - [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
  
+### Installation
+
+Simply install the package. NLog will detect the extension automatically. 
 
 
 ## HTTP module (ASP.NET non-core)
 
-_note: Not listed on https://nlog-project.org/config_
+_note: not listed on https://nlog-project.org/config_
 
 There is a ASP.NET ASP.NET HttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
 
