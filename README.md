@@ -6,10 +6,9 @@ These packages are extensions to [NLog](https://github.com/NLog/NLog/).
 The packages contain 
 targets and layout-renderes specific to ASP.NET (Core), MVC and IIS. 
 
-ASP.NET:  [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web) 
 
-ASP.NET Core 1+2: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore) 
-
+- [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)](https://www.nuget.org/packages/NLog.Web.AspNetCore)  (ASP.NET Core 1+2)
+- [![Version](https://badge.fury.io/nu/NLog.Web.svg)](https://www.nuget.org/packages/NLog.Web) (ASP.NET)
 
 ## Getting started
 
@@ -25,14 +24,6 @@ ASP.NET Core 1+2: [![Version](https://badge.fury.io/nu/NLog.Web.AspNetCore.svg)]
 
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
-
-## ASP.NET (non-core)
-
-Simply install the package. NLog will detect the extension automatically. 
-
-- [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=target&search=package:nlog.web)
-- [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
- 
 ## ASP.NET Core 1 / ASP.NET Core 2
 
 ------
@@ -44,10 +35,13 @@ There is a special package for ASP.NET Core / MVC Core. This is needed because `
 
 - [Supported layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
 
+## ASP.NET (non-core)
 
-## Content
+Simply install the package. NLog will detect the extension automatically. 
 
-This package contains one target, one target-wrapper, multiple layout renderers and one httpmodule. 
+- [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=target&search=package:nlog.web)
+- [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
+ 
 
 
 ## HTTP module (ASP.NET non-core)
