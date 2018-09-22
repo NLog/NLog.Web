@@ -47,7 +47,7 @@ namespace NLog.Web.LayoutRenderers
             if (CookieNames?.Count > 0 && cookies?.Count > 0)
             {
                 var cookieValues = GetCookies(cookies);
-                SerializePairs(cookieValues, builder);
+                SerializePairs(cookieValues, builder, logEvent);
             }
         }
 
