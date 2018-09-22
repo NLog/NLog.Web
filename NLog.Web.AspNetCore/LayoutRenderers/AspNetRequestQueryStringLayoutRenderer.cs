@@ -75,7 +75,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
             var pairs = GetPairs(queryStrings, queryStringKeys);
-            SerializePairs(pairs, builder);
+            SerializePairs(pairs, builder, logEvent);
         }
 
         private static IEnumerable<KeyValuePair<string, string>> GetPairs(
