@@ -23,15 +23,15 @@ namespace NLog.Web.LayoutRenderers
         {
             try
             {
-                var context = HttpContextAccessor.HttpContext;
-
-                if (context.User?.Identity == null)
+                var identity = HttpContextAccessor.HttpContext.User?.Identity;
+                if (identity == null)
                 {
+                    Common.InternalLogger.Debug("aspnet-user-identity - HttpContext User Identity is null");
                     return;
                 }
 
-                builder.Append(context.User.Identity.Name);
-            }
+                builder.Append(identity.Name);
+             }
             catch (ObjectDisposedException)
             {
                 //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83

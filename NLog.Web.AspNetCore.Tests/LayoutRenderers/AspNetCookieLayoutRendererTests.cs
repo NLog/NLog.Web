@@ -38,7 +38,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullKeyRendersEmptyString()
         {
 #if ASP_NET_CORE
-            var httpContext = this.HttpContext;
+            var httpContext = HttpContext;
 #else
             var httpContext = Substitute.For<HttpContextBase>();
 #endif
@@ -99,6 +99,29 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting_separators_layouts()
+        {
+            try
+            {
+                var expectedResult = "key>TEST" + Environment.NewLine + "Key1>TEST1";
+                GlobalDiagnosticsContext.Set("valueSeparator1", ">");
+
+                var renderer = CreateRenderer();
+                renderer.ValueSeparator = "${gdc:valueSeparator1}";
+                renderer.ItemSeparator = "${newline}";
+
+                string result = renderer.Render(new LogEventInfo());
+
+                Assert.Equal(expectedResult, result);
+            }
+            finally
+            {
+                //clean up
+                GlobalDiagnosticsContext.Clear();
+            }
         }
 
         [Fact]
@@ -272,7 +295,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-//no multivalue cookie keys in ASP.NET core
+        //no multivalue cookie keys in ASP.NET core
 #if !ASP_NET_CORE
 
         [Fact]
@@ -322,7 +345,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var cookie = new HttpCookie("key", "TEST");
             cookie["Key1"] = "TEST1";
 
-            this.HttpContext.Request.Cookies.Add(cookie);
+            HttpContext.Request.Cookies.Add(cookie);
             var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
             var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
 
@@ -347,7 +370,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var cookie = new HttpCookie("key", "TEST");
             cookie["Key1"] = "TEST1";
 
-            this.HttpContext.Request.Cookies.Add(cookie);
+            HttpContext.Request.Cookies.Add(cookie);
             var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
             var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
 
@@ -376,7 +399,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var cookieNames = new List<string>();
 #if ASP_NET_CORE
-            var httpContext = this.HttpContext;
+            var httpContext = HttpContext;
 #else
             var httpContext = Substitute.For<HttpContextBase>();
 #endif
@@ -422,7 +445,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 cookies.Add(cookie2);
                 cookieNames.Add("Key1");
             }
-           
+
             if (addMultiValueCookieKey)
             {
                 var multiValueCookie = new HttpCookie("key2", "Test");

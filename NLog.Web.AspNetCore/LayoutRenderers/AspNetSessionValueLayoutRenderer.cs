@@ -2,13 +2,13 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using NLog.Common;
 #if !ASP_NET_CORE
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
@@ -49,7 +49,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public AspNetSessionValueLayoutRenderer()
         {
-            this.Culture = CultureInfo.CurrentUICulture;
+            Culture = CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
@@ -78,12 +78,12 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (this.Variable == null) { return; }
+            if (Variable == null) { return; }
 
             var context = HttpContextAccessor.HttpContext;
             if (context?.Session == null)
             {
-                InternalLogger.Debug("Session is null");
+                InternalLogger.Trace("aspnet-session - HttpContext Session is null");
                 return;
             }
 
@@ -103,7 +103,7 @@ namespace NLog.Web.LayoutRenderers
             }
             catch (Exception ex)
             {
-                InternalLogger.Warn(ex, "Retrieving session value failed. ");
+                InternalLogger.Warn(ex, "aspnet-session - Retrieving session value failed.");
                 return;
             }
             finally

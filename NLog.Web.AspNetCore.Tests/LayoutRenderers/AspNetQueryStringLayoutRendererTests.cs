@@ -281,7 +281,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             var pairCollection = new NameValueCollection();
 #else
-            var httpContext = this.HttpContext;
+            var httpContext = HttpContext;
             var pairCollection = new QueryBuilder();
 #endif
 

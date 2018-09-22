@@ -1,9 +1,6 @@
 #if ASP_NET_CORE
-using NLog.LayoutRenderers;
 using System.Text;
-
-using Microsoft.AspNetCore.Routing;
-
+using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -26,13 +23,13 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var request = HttpContextAccessor?.HttpContext?.TryGetRequest();
+            var request = HttpContextAccessor.HttpContext.TryGetRequest();
+            if (request == null)
+                return;
 
-            var contentType = request?.ContentType;
-
+            var contentType = request.ContentType;
             if (!string.IsNullOrEmpty(contentType))
-                    builder.Append(contentType);
-            
+                builder.Append(contentType);
         }
     }
 }

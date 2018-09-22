@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog.Config;
+using NLog.Layouts;
 using NLog.Web.Enums;
 
 namespace NLog.Web.LayoutRenderers
@@ -11,15 +13,38 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     public abstract class AspNetLayoutMultiValueRendererBase : AspNetLayoutRendererBase
     {
+        private string _itemSeparator = ",";
+        private Layout _itemSeparatorLayout = ",";
+        private string _valueSeparator = "=";
+        private Layout _valueSeparatorLayout = "=";
+
         /// <summary>
         /// Separator between item. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat"/>
         /// </summary>
-        public string ItemSeparator { get; set; } = ",";
+        /// <remarks>Render with <see cref="GetRenderedItemSeparator"/></remarks>
+        public string ItemSeparator
+        {
+            get => _itemSeparator;
+            set
+            {
+                _itemSeparator = value;
+                _itemSeparatorLayout = value;
+            }
+        }
 
         /// <summary>
         /// Separator between value and key. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat"/>
         /// </summary>
-        public string ValueSeparator { get; set; } = "=";
+        /// <remarks>Render with <see cref="GetRenderedValueSeparator"/></remarks>
+        public string ValueSeparator
+        {
+            get => _valueSeparator;
+            set
+            {
+                _valueSeparator = value;
+                _valueSeparatorLayout = value;
+            }
+        }
 
         /// <summary>
         /// Single item in array? Only used for <see cref="AspNetRequestLayoutOutputFormat.Json"/>
@@ -44,12 +69,24 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="pairs">The key/value pairs.</param>
         /// <param name="builder">Add to this builder.</param>
+        [Obsolete("use SerializePairs with logEvent to support Layouts for Separator. This overload will be removed in NLog.Web(aspNetCore) 5")]
         protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        {
+            SerializePairs(pairs, builder, null);
+        }
+
+        /// <summary>
+        /// Serialize multiple key/value pairs
+        /// </summary>
+        /// <param name="pairs">The key/value pairs.</param>
+        /// <param name="builder">Add to this builder.</param>
+        /// <param name="logEvent">Log event for rendering separators.</param>
+        protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder, LogEventInfo logEvent)
         {
             switch (OutputFormat)
             {
                 case AspNetRequestLayoutOutputFormat.Flat:
-                    SerializePairsFlat(pairs, builder);
+                    SerializePairsFlat(pairs, builder, logEvent);
                     break;
                 case AspNetRequestLayoutOutputFormat.Json:
                     SerializePairsJson(pairs, builder);
@@ -105,8 +142,12 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder,
+            LogEventInfo logEvent)
         {
+            var itemSeparator = GetRenderedItemSeparator(logEvent);
+            var valueSeparator = GetRenderedValueSeparator(logEvent);
+
             var firstItem = true;
             foreach (var kpv in pairs)
             {
@@ -115,18 +156,39 @@ namespace NLog.Web.LayoutRenderers
 
                 if (!firstItem)
                 {
-                    builder.Append(ItemSeparator);
+                    builder.Append(itemSeparator);
                 }
                 firstItem = false;
 
                 if (!ValuesOnly)
                 {
                     builder.Append(key);
-                    builder.Append(ValueSeparator);
+
+                    builder.Append(valueSeparator);
                 }
 
                 builder.Append(value);
             }
+        }
+
+        /// <summary>
+        /// Get the rendered <see cref="ItemSeparator"/>
+        /// </summary>
+        /// <param name="logEvent"></param>
+        /// <returns></returns>
+        protected string GetRenderedItemSeparator(LogEventInfo logEvent)
+        {
+            return logEvent != null ? _itemSeparatorLayout.Render(logEvent) : ItemSeparator;
+        }
+
+        /// <summary>
+        /// Get the rendered <see cref="ValueSeparator"/>
+        /// </summary>
+        /// <param name="logEvent"></param>
+        /// <returns></returns>
+        protected string GetRenderedValueSeparator(LogEventInfo logEvent)
+        {
+            return logEvent != null ? _valueSeparatorLayout.Render(logEvent) : ValueSeparator;
         }
 
         /// <summary>

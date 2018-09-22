@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 #if !ASP_NET_CORE
-using NLog.Common;
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
@@ -83,11 +82,9 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
-            {
                 return;
-            }
 
             if (QueryString != null)
             {
@@ -95,7 +92,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else if (Form != null && httpRequest.Form != null)
             {
-                builder.Append(httpRequest.Form[Form]);
+                AppendForm(builder, httpRequest);
             }
             else if (Cookie != null && httpRequest.Cookies != null)
             {
@@ -109,12 +106,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
             else if (Header != null && httpRequest.Headers != null)
             {
-                string header = httpRequest.Headers[Header];
-
-                if (header != null)
-                {
-                    builder.Append(header);
-                }
+                AppendHeader(builder, httpRequest);
             }
             else if (Item != null)
             {
@@ -125,23 +117,36 @@ namespace NLog.Web.LayoutRenderers
 
 #if !ASP_NET_CORE
 
-
         private void AppendQueryString(StringBuilder builder, HttpRequestBase httpRequest)
         {
-            if (httpRequest.QueryString != null)
-            {
-                builder.Append(httpRequest.QueryString[QueryString]);
-            }
+            var queryString = httpRequest.QueryString;
+            if (queryString == null)
+                return;
+
+            var query = queryString[QueryString];
+            if (query != null)
+                builder.Append(query);
+        }
+
+        private void AppendForm(StringBuilder builder, HttpRequestBase httpRequest)
+        {
+            var formValue = httpRequest.Form[Form];
+            if (formValue != null)
+                builder.Append(formValue);
         }
 
         private void AppendCookie(StringBuilder builder, HttpRequestBase httpRequest)
         {
             var cookie = httpRequest.Cookies[Cookie];
-
             if (cookie != null)
-            {
                 builder.Append(cookie.Value);
-            }
+        }
+
+        private void AppendHeader(StringBuilder builder, HttpRequestBase httpRequest)
+        {
+            var header = httpRequest.Headers[Header];
+            if (header != null)
+                builder.Append(header);
         }
 
         private void AppendItem(StringBuilder builder, HttpRequestBase httpRequest)
@@ -152,21 +157,43 @@ namespace NLog.Web.LayoutRenderers
 
         private void AppendQueryString(StringBuilder builder, HttpRequest httpRequest)
         {
-            if (httpRequest.Query != null)
+            if (httpRequest.Query?.TryGetValue(QueryString, out var queryValue) ?? false)
             {
-                builder.Append(httpRequest.Query[this.QueryString]);
+                builder.Append(queryValue.ToString());
+            }
+        }
+
+        private void AppendForm(StringBuilder builder, HttpRequest httpRequest)
+        {
+            if (httpRequest.Form.TryGetValue(Form, out var formValue))
+            {
+                builder.Append(formValue.ToString());
             }
         }
 
         private void AppendCookie(StringBuilder builder, HttpRequest httpRequest)
         {
-            var cookie = httpRequest.Cookies[Cookie];
-            builder.Append(cookie);
+            if (httpRequest.Cookies.TryGetValue(Cookie, out var cookieValue))
+            {
+                builder.Append(cookieValue);
+            }
+        }
+
+        private void AppendHeader(StringBuilder builder, HttpRequest httpRequest)
+        {
+            if (httpRequest.Headers.TryGetValue(Header, out var headerValue))
+            {
+                builder.Append(headerValue.ToString());
+            }
         }
 
         private void AppendItem(StringBuilder builder, HttpRequest httpRequest)
         {
-            builder.Append(httpRequest.HttpContext.Items[this.Item]);
+            object itemValue = null;
+            if (httpRequest.HttpContext.Items?.TryGetValue(Item, out itemValue) ?? false)
+            {
+                builder.Append(itemValue);
+            }
         }
 #endif
     }
