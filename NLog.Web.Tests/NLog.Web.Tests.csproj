@@ -92,6 +92,9 @@
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetMvcActionRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetCookieLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetItemValueLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestFormLayoutRendererTests.cs">
+      <Link>AspNetRequestFormLayoutRendererTests.cs</Link>
+    </Compile>
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetSessionValueLayoutRendererTests.cs" />
