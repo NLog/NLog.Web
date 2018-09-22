@@ -32,7 +32,7 @@ Use the NLog.Web.AspNetCore package
 
 - [Supported layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
 
-_There is a special package for ASP.NET Core / MVC Core. This is needed because `HttpContext.Current` isn't available in ASP.NET Core and we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging)_
+_There is a special package for ASP.NET Core / MVC Core. This is needed because we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging) - which integrates with the ASP.NET Core logging system._
 
 
 ### Installation
