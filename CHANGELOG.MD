@@ -1,11 +1,20 @@
 ## Change Log
 
-### v4.6-aspnetcore & aspnet4 (2018/08/05)
+See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](https://github.com/NLog/NLog.Web/milestones).
 
+Date format: (year/month/day)
+
+### v4.7-aspnetcore & aspnet4 (2018/09/22)
+- [#315](https://github.com/NLog/NLog.Web/pull/315) Added ${configsetting} for reading appsettings.json etc - via NLog.Extensions.Logging (@304NotModified) (ASP.NET Core only)
+- [#313](https://github.com/NLog/NLog.Web/pull/313) Added ${aspnet-request-form} (@DrewBrasher)
+- [#317](https://github.com/NLog/NLog.Web/pull/317) Make separators layoutable for (${aspnet-request-querystring} and ${aspnet-request-cookie}) (@304NotModified)
+- [#314](https://github.com/NLog/NLog.Web/pull/314) Better missing HttpContext reporting & Skip null-check of HttpContextAccessor.HttpContext in DoAppend (@snakefoot)
+- [#312](https://github.com/NLog/NLog.Web/pull/312) Removed dependency on Microsoft.AspNetCore.Http.Extensions (@snakefoot) ASP.NET Core only)
+
+### v4.6-aspnetcore & aspnet4 (2018/08/05)
 - [#306](https://github.com/nlog/nlog.web/pull/306) Inherits AssemblyVersionLayoutRenderer from NLog implementation, so it has all NLog's features  (@alexangas)
 - [#307](https://github.com/nlog/nlog.web/pull/307) Added "ValuesOnly" property to Cookie and QueryString layout renderers + support for multivalue cookie keys in ASP.NET core (@alexangas)
 - [#303](https://github.com/nlog/nlog.web/pull/303) Improve error-handling during startup / shutdown for all layout renders using httpcontext
-
 
 ### v4.5.4-aspnetcore (2018/05/10)
 - [#285](https://github.com/nlog/nlog.web/pull/285) Update NLog dependency (@304NotModified)
@@ -20,10 +29,8 @@
 - [#273](https://github.com/nlog/nlog.web/pull/273) Added public method to configure the NLog ServiceLocator (@snakefoot)
 - [#272](https://github.com/nlog/nlog.web/pull/272) Improved registration of hidden assemblies for callsite handling (@snakefoot)
 
-
 ### v4.5.1-aspnetcore (2018/04/02)
 - [#268](https://github.com/nlog/nlog.web/pull/268) Improved ConfigureNLog for better out-of-the-box experience (@snakefoot)
-
 
 ### v4.5.0-aspnetcore (2018/03/27)
 - [#257](https://github.com/nlog/nlog.web/pull/257) ConfigureNLog should not be used together with UseNLog (@snakefoot)
@@ -72,7 +79,6 @@
 ### v4.4.1-aspnetcore (2017/06/16)
 - [#152](https://github.com/nlog/nlog.web/pull/152) Run test for asp.net core on full and core framework, fix unit test build (#152) (@johnkors)
 - [#150](https://github.com/nlog/nlog.web/pull/150) Update vulnerable dependency (#150) (@johnkors)
-
 
 ### v4.5.0-aspnet4 (2017/05/14)
 

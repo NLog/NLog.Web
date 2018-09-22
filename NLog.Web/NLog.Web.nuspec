@@ -15,9 +15,9 @@ This package is for ASP.NET 3.5+
 
 For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore</description>
     <releaseNotes>
-- Inherits AssemblyVersionLayoutRenderer from NLog implementation, so it has all NLog's features  (@alexangas)
-- Added "ValuesOnly" property to Cookie and QueryString layout renderers + support for multivalue cookie keys in ASP.NET core (@alexangas)
-- Improve error-handling during startup / shutdown for all layout renders using httpcontext   
+- Added ${aspnet-request-form} (@DrewBrasher)
+- Make separators layoutable for (${aspnet-request-querystring} and ${aspnet-request-cookie}) (@304NotModified)
+- Better missing HttpContext reporting &amp; Skip null-check of HttpContextAccessor.HttpContext in DoAppend (@snakefoot)
     </releaseNotes>
     <copyright>Copyright 2014-2018</copyright>
     <tags>nlog log target layoutrenderer web asp.net httpcontext</tags>
