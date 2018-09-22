@@ -13,15 +13,15 @@ namespace NLog.Web.LayoutRenderers
     /// <example>
     /// <para>Example usage of ${aspnet-request-form}:</para>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
+    /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a comma.
     /// ${aspnet-request-form:Include=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
     /// ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
     /// ${aspnet-request-form:Include=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude"/> takes precedence over <see cref="Include"/>).
-    /// ${aspnet-request-form:Separator= / } - Produces - All Form Data from the Request with each key/value pair separated by " / ".
+    /// ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-form")]
-    public class AspNetRequestFormLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// Gets or sets the form keys to include in the output.  If omitted, all are included.  <see cref="Exclude"/> takes precedence over <see cref="Include"/>.
@@ -44,12 +44,6 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Gets or sets the separator to use between each key/value pair.  If omitted, <see cref="Environment.NewLine"/> is used.
-        /// </summary>
-        /// <docgen category='Rendering Options' order='10' />
-        public string Separator { get; set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public AspNetRequestFormLayoutRenderer()
@@ -65,27 +59,36 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent"></param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
-            if (httpRequest == null)
+            if (HttpContextAccessor?.HttpContext?.TryGetRequest() == null)
             {
                 return;
             }
 
+            var formDataToInclude = GetPairsToInclude();
+
+            if (formDataToInclude.Any())
+            {
+                SerializePairs(formDataToInclude, builder, logEvent);
+            }
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetPairsToInclude()
+        {
+            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
+            var pairs = new List<KeyValuePair<string, string>>();
+
             if (httpRequest.Form != null)
             {
-                Separator = Separator ?? Environment.NewLine;
-                var formDataList = new List<string>();
-
                 foreach (string key in httpRequest.Form.Keys)
                 {
                     if ((!Include.Any() || Include.Contains(key)) && !Exclude.Contains(key))
                     {
-                        formDataList.Add($"{key}={httpRequest.Form[key]}");
+                        pairs.Add(new KeyValuePair<string, string>(key, httpRequest.Form[key]));
                     }
                 }
-
-                builder.Append(string.Join(Separator, formDataList.ToArray()));
             }
+
+            return pairs;
         }
     }
 }

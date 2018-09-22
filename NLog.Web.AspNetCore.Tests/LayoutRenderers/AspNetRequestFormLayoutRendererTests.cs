@@ -36,7 +36,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void ShouldReturnAllIfDefaultsAreUsed()
         {
             // Arrange
-            var expectedResult = "id=1\r\nname=Test Person\r\ntoken=86abe8fe-2237-4f87-81af-0a4e522b4140";
+            var expectedResult = "id=1,name=Test Person,token=86abe8fe-2237-4f87-81af-0a4e522b4140";
             var renderer = CreateRenderer();
 
             // Act
@@ -50,7 +50,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void ShouldReturnOnlySpecifiedIfIncludeIsUsed()
         {
             // Arrange
-            var expectedResult = "id=1\r\nname=Test Person";
+            var expectedResult = "id=1,name=Test Person";
             var renderer = CreateRenderer();
             renderer.Include.Add("id");
             renderer.Include.Add("name");
@@ -66,7 +66,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void ShouldNotReturnKeysSpecidiedInExclude()
         {
             // Arrange
-            var expectedResult = "id=1\r\nname=Test Person";
+            var expectedResult = "id=1,name=Test Person";
             var renderer = CreateRenderer();
             renderer.Exclude.Add("token");
 
@@ -81,9 +81,9 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void ShouldUseTheSpecifiedSeparator()
         {
             // Arrange
-            var expectedResult = "id=1 / name=Test Person / token=86abe8fe-2237-4f87-81af-0a4e522b4140";
+            var expectedResult = "id=1\r\nname=Test Person\r\ntoken=86abe8fe-2237-4f87-81af-0a4e522b4140";
             var renderer = CreateRenderer();
-            renderer.Separator = " / ";
+            renderer.ItemSeparator = "${newline}";
 
             // Act
             string result = renderer.Render(new LogEventInfo());
