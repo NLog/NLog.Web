@@ -30,9 +30,9 @@ For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https
 
 Simply install the package. NLog will detect the extension automatically. 
 
-[Supported for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
-
-
+- [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=target&search=package:nlog.web)
+- [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
+ 
 ## ASP.NET Core 1 / ASP.NET Core 2
 
 ------
