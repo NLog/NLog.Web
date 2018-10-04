@@ -77,7 +77,11 @@ namespace NLog.Web.LayoutRenderers
             var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
             var pairs = new List<KeyValuePair<string, string>>();
 
+#if ASP_NET_CORE
+            if (httpRequest.HasFormContentType && httpRequest.Form != null)
+#else
             if (httpRequest.Form != null)
+#endif
             {
                 foreach (string key in httpRequest.Form.Keys)
                 {
