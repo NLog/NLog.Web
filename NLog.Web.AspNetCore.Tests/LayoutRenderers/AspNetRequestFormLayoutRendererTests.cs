@@ -19,6 +19,28 @@ namespace NLog.Web.Tests.LayoutRenderers
     public class AspNetRequestFormLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
         [Fact]
+        public void ShouldReturnEmptyForNonValidContentTypes()
+        {
+            // Arrange
+            var expectedResult = "";
+#if ASP_NET_CORE
+            var httpContext = this.HttpContext;
+#else
+            var httpContext = Substitute.For<HttpContextBase>();
+#endif
+            var renderer = new AspNetRequestFormLayoutRenderer
+            {
+                HttpContextAccessor = new FakeHttpContextAccessor(httpContext)
+            };
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
         public void ShouldReturnEmptyIfFormCollectionIsEmpty()
         {
             // Arrange
