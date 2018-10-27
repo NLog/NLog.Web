@@ -59,13 +59,13 @@ namespace NLog.Web.LayoutRenderers
 
             var ip = request.ServerVariables["REMOTE_ADDR"];
 #else
-            if (CheckForwardedForHeader)
+            if (CheckForwardedForHeader && httpContext.Request.Headers.ContainsKey(ForwardedForHeader))
             {
                 var forwardedHeaders = httpContext.Request.Headers.GetCommaSeparatedValues(ForwardedForHeader);
 
                 if (forwardedHeaders.Length > 0)
                 {
-                    forwardedIp=forwardedHeaders[0];
+                    forwardedIp = forwardedHeaders[0];
                 }
             }
 
