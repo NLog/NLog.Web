@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Text;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http;
+#endif
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -16,18 +19,52 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-ip")]
     public class AspNetRequestIpLayoutRenderer : AspNetLayoutRendererBase
     {
+        private const string ForwardedForHeader = "X-Forwarded-For";
+
+        /// <summary>
+        /// Gets or sets whether the renderer should check value of X-Forwarded-For header
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public bool CheckForwardedForHeader { get; set; }
+
         /// <summary>
         /// Render IP
         /// </summary>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
+            var forwardedIp = string.Empty;
             var httpContext = HttpContextAccessor.HttpContext;
+
 #if !ASP_NET_CORE
+            if (CheckForwardedForHeader)
+            {
+                var forwardedHeader = httpContext.TryGetRequest().Headers[ForwardedForHeader];
+
+                if (!string.IsNullOrEmpty(forwardedHeader))
+                {
+                    var addresses = forwardedHeader.Split(',');
+                    if (addresses.Length > 0)
+                    {
+                        forwardedIp = addresses[0];
+                    }
+                }
+            }
+
             var ip = httpContext.TryGetRequest()?.ServerVariables["REMOTE_ADDR"];
 #else
-            var ip = httpContext.Connection?.RemoteIpAddress;
+            if (CheckForwardedForHeader)
+            {
+                var forwardedHeaders = httpContext.Request.Headers.GetCommaSeparatedValues(ForwardedForHeader);
+
+                if (forwardedHeaders.Length > 0)
+                {
+                    forwardedIp=forwardedHeaders[0];
+                }
+            }
+
+            var ip = httpContext.Connection?.RemoteIpAddress?.ToString();
 #endif
-            builder.Append(ip);
+            builder.Append(string.IsNullOrEmpty(forwardedIp) ? ip : forwardedIp);
         }
     }
 }
