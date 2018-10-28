@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.DependencyInjection;
 
@@ -13,6 +14,8 @@ namespace NLog.Web.LayoutRenderers
     /// Rendering development environment. <see cref="IHostingEnvironment"/>
     /// </summary>
     [LayoutRenderer("aspnet-environment")]
+    [ThreadAgnostic]
+    [ThreadSafe]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
         private static IHostingEnvironment _hostingEnvironment;

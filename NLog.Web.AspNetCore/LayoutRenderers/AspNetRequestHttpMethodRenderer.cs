@@ -2,8 +2,8 @@
 using System.Text;
 #if !ASP_NET_CORE
 using System.Web;
-using System.Collections.Specialized;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -19,6 +19,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-method")]
+    [ThreadSafe]
     public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

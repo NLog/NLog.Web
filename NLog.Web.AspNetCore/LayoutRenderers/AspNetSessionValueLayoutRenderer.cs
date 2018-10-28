@@ -42,6 +42,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-session")]
+    [ThreadSafe]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -111,9 +112,11 @@ namespace NLog.Web.LayoutRenderers
                 context.Items.Remove(NLogRetrievingSessionValue);
             }
 #endif
-
-            var formatProvider = GetFormatProvider(logEvent, Culture);
-            builder.Append(Convert.ToString(value, formatProvider));
+            if (value != null)
+            {
+                var formatProvider = GetFormatProvider(logEvent, Culture);
+                builder.Append(Convert.ToString(value, formatProvider));
+            }
         }
 
 #if ASP_NET_CORE

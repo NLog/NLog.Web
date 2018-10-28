@@ -3,8 +3,8 @@ using System.Text;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
 using System.Web;
-#else
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -25,6 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-url")]
+    [ThreadSafe]
     public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -42,7 +43,6 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IncludeHost { get; set; } = true;
 
-
         /// <summary>
         /// To specify whether to exclude / include the scheme. Default is true.
         /// </summary>
@@ -59,71 +59,59 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
-            var url = CreateUrl(httpRequest);
-            builder.Append(url);
+            RenderUrl(httpRequest, builder);
         }
 
 #if !ASP_NET_CORE
-
-        private string CreateUrl(HttpRequestBase httpRequest)
+        private void RenderUrl(HttpRequestBase httpRequest, StringBuilder builder)
         {
-            string port = null, host = null, scheme = null;
+            var url =  httpRequest.Url;
+            if (url == null)
+                return;
 
-            if (httpRequest.Url == null)
+            if (IncludeScheme && !string.IsNullOrEmpty(url.Scheme))
             {
-                return null;
+                builder.Append(url.Scheme);
+                builder.Append("://");
             }
-
-            if (IncludePort && httpRequest.Url.Port > 0)
-            {
-                port = ":" + httpRequest.Url.Port;
-            }
-
-            var pathAndQuery = IncludeQueryString ? httpRequest.Url.PathAndQuery : httpRequest.Url.AbsolutePath;
-
             if (IncludeHost)
             {
-                host = httpRequest.Url?.Host;
+                builder.Append(url.Host);
             }
-
-            if (IncludeScheme)
+            if (IncludePort && url.Port > 0)
             {
-                scheme = httpRequest.Url.Scheme + "://";
+                builder.Append(':');
+                builder.Append(url.Port);
             }
 
-            var url = $"{scheme}{host}{port}{pathAndQuery}";
-            return url;
+            var pathAndQuery = IncludeQueryString ? url.PathAndQuery : url.AbsolutePath;
+            builder.Append(pathAndQuery);
         }
-
 #else
-        private string CreateUrl(Microsoft.AspNetCore.Http.HttpRequest httpRequest)
+        private void RenderUrl(Microsoft.AspNetCore.Http.HttpRequest httpRequest, StringBuilder builder)
         {
-            string pathAndQuery = null, port = null, host = null, scheme = null;
-        
-            if (IncludeQueryString)
+            if (IncludeScheme && !string.IsNullOrWhiteSpace(httpRequest.Scheme))
             {
-                pathAndQuery = httpRequest.QueryString.Value;
+                builder.Append(httpRequest.Scheme);
+                builder.Append("://");
             }
-
+            if (IncludeHost)
+            {
+                builder.Append(httpRequest.Host.Host);
+            }
             if (IncludePort && httpRequest.Host.Port > 0)
             {
-                port = ":" + httpRequest.Host.Port.ToString();
+                builder.Append(':');
+                builder.Append(httpRequest.Host.Port.Value);
             }
 
-            if (IncludeHost)
+            builder.Append(httpRequest.PathBase.ToUriComponent());
+            builder.Append(httpRequest.Path.ToUriComponent());
+            if (IncludeQueryString)
             {
-                host = httpRequest.Host.Host;
+                builder.Append(httpRequest.QueryString.Value);
             }
-
-            if (IncludeScheme && !String.IsNullOrWhiteSpace(httpRequest.Scheme))
-            {
-                scheme = httpRequest.Scheme + "://";
-            }
-
-            var url = $"{scheme}{host}{port}{httpRequest.PathBase.ToUriComponent()}{httpRequest.Path.ToUriComponent()}{pathAndQuery}";
-            return url;
         }
-
 #endif
     }
 }

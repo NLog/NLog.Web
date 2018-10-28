@@ -7,9 +7,9 @@ using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Enums;
-
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -25,6 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-cookie")]
+    [ThreadSafe]
     public class AspNetRequestCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
@@ -52,62 +53,50 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-
         private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
         {
-            var cookieNames = CookieNames;
-            if (cookieNames != null)
+            foreach (var cookieName in CookieNames)
             {
-                foreach (var cookieName in cookieNames)
+                var httpCookie = cookies[cookieName];
+                if (httpCookie == null)
                 {
-                    var httpCookie = cookies[cookieName];
-                    if (httpCookie == null)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    if (OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                if (OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                {
+                    // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+                    var isFirst = true;
+                    foreach (var multiValueKey in httpCookie.Values.AllKeys)
                     {
-                        // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
-                        var isFirst = true;
-                        foreach (var multiValueKey in httpCookie.Values.AllKeys)
+                        var cookieKey = multiValueKey;
+                        if (isFirst)
                         {
-                            var cookieKey = multiValueKey;
-                            if (isFirst)
-                            {
-                                cookieKey = cookieName;
-                                isFirst = false;
-                            }
-                            yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
+                            cookieKey = cookieName;
+                            isFirst = false;
                         }
+                        yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
                     }
-                    else
-                    {
-                        yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
-                    }
+                }
+                else
+                {
+                    yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
                 }
             }
         }
-
 #else
-
         private IEnumerable<KeyValuePair<string, string>> GetCookies(IRequestCookieCollection cookies)
         {
-            var cookieNames = CookieNames;
-            if (cookieNames != null)
+            foreach (var cookieName in CookieNames)
             {
-                foreach (var cookieName in cookieNames)
+                if (!cookies.TryGetValue(cookieName, out var cookieValue))
                 {
-                    if (!cookies.TryGetValue(cookieName, out var cookieValue))
-                    {
-                        continue;
-                    }
-
-                    yield return new KeyValuePair<string, string>(cookieName, cookieValue);
+                    continue;
                 }
+
+                yield return new KeyValuePair<string, string>(cookieName, cookieValue);
             }
         }
-
 #endif
     }
 }

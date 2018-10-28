@@ -8,8 +8,8 @@ using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
-using NLog.Web.Enums;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
@@ -25,6 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-querystring")]
+    [ThreadSafe]
     public class AspNetQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
@@ -48,7 +49,7 @@ namespace NLog.Web.LayoutRenderers
             var queryStringKeys = QueryStringKeys;
 #if !ASP_NET_CORE
             var queryStrings = httpRequest.QueryString;
-            if (queryStrings == null)
+            if (queryStrings == null || queryStrings.Count == 0)
                 return;
 
             if (printAllQueryString)
@@ -65,7 +66,7 @@ namespace NLog.Web.LayoutRenderers
             }
 #else
             var queryStrings = httpRequest.Query;
-            if (queryStrings == null)
+            if (queryStrings == null || queryStrings.Count == 0)
                 return;
 
             if (printAllQueryString)
@@ -79,27 +80,26 @@ namespace NLog.Web.LayoutRenderers
         }
 
         private static IEnumerable<KeyValuePair<string, string>> GetPairs(
-#if ASP_NET_CORE
-            IQueryCollection queryStrings,
-#else
+#if !ASP_NET_CORE
             NameValueCollection queryStrings,
+#else
+            IQueryCollection queryStrings,       
 #endif
             List<string> queryStringKeys)
         {
-            if (queryStrings.Count > 0)
+            foreach (var key in queryStringKeys)
             {
-                foreach (var key in queryStringKeys)
-                {
-                    // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
+                // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
 #if !ASP_NET_CORE
-                    var value = queryStrings[key];
+                var value = queryStrings[key];
 #else
-                    var value = queryStrings[key].ToString();
+                if (!queryStrings.TryGetValue(key, out var objValue))
+                    continue;
+                var value = objValue.ToString();
 #endif
-                    if (!String.IsNullOrEmpty(value))
-                    {
-                        yield return new KeyValuePair<string, string>(key, value);
-                    }
+                if (!String.IsNullOrEmpty(value))
+                {
+                    yield return new KeyValuePair<string, string>(key, value);
                 }
             }
         }

@@ -2,8 +2,8 @@ using System;
 using System.Text;
 #if !ASP_NET_CORE
 using System.Web;
-#else
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -12,6 +12,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User variable.
     /// </summary>
     [LayoutRenderer("aspnet-user-identity")]
+    [ThreadSafe]
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

@@ -1,9 +1,8 @@
 using System.Text;
 #if !ASP_NET_CORE
 using System.Web;
-#else
-
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -12,6 +11,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Session ID.
     /// </summary>
     [LayoutRenderer("aspnet-sessionid")]
+    [ThreadSafe]
     public class AspNetSessionIdLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

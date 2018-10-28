@@ -7,6 +7,7 @@ using NLog.Web.DependencyInjection;
 #else
 using System.Web.Hosting;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -21,6 +22,8 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
 #endif
     [LayoutRenderer("aspnet-webrootpath")]
+    [ThreadAgnostic]
+    [ThreadSafe]
     public class AspNetWebRootPathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
