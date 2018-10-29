@@ -32,46 +32,59 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var forwardedIp = string.Empty;
             var httpContext = HttpContextAccessor.HttpContext;
 
-#if !ASP_NET_CORE
             var request = httpContext.TryGetRequest();
-
             if (request == null)
             {
                 return;
             }
 
-            if (CheckForwardedForHeader)
-            {
-                var forwardedHeader = request.Headers[ForwardedForHeader];
+            var ip = CheckForwardedForHeader ? TryLookupForwardHeader(request) : string.Empty;
 
-                if (!string.IsNullOrEmpty(forwardedHeader))
+            if (string.IsNullOrEmpty(ip))
+            {
+#if !ASP_NET_CORE
+                ip = request.ServerVariables["REMOTE_ADDR"];
+#else
+                ip = httpContext.Connection?.RemoteIpAddress?.ToString();
+#endif
+            }
+
+            builder.Append(ip);
+        }
+
+#if !ASP_NET_CORE
+        string TryLookupForwardHeader(System.Web.HttpRequestBase httpRequest)
+        {
+            var forwardedHeader = httpRequest.Headers[ForwardedForHeader];
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                var addresses = forwardedHeader.Split(',');
+                if (addresses.Length > 0)
                 {
-                    var addresses = forwardedHeader.Split(',');
-                    if (addresses.Length > 0)
-                    {
-                        forwardedIp = addresses[0];
-                    }
+                    return addresses[0];
                 }
             }
 
-            var ip = request.ServerVariables["REMOTE_ADDR"];
+            return string.Empty;
+        }
 #else
-            if (CheckForwardedForHeader && httpContext.Request.Headers.ContainsKey(ForwardedForHeader))
+        string TryLookupForwardHeader(HttpRequest httpRequest)
+        {
+            if (httpRequest.Headers.ContainsKey(ForwardedForHeader))
             {
-                var forwardedHeaders = httpContext.Request.Headers.GetCommaSeparatedValues(ForwardedForHeader);
+                var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(ForwardedForHeader);
 
                 if (forwardedHeaders.Length > 0)
                 {
-                    forwardedIp = forwardedHeaders[0];
+                    return forwardedHeaders[0];
                 }
             }
 
-            var ip = httpContext.Connection?.RemoteIpAddress?.ToString();
-#endif
-            builder.Append(string.IsNullOrEmpty(forwardedIp) ? ip : forwardedIp);
+            return string.Empty;
         }
+#endif
     }
 }
