@@ -1,9 +1,9 @@
-﻿using NLog.LayoutRenderers;
-using NLog.Web.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -21,6 +21,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-form")]
+    [ThreadSafe]
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
@@ -59,40 +60,36 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent"></param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (HttpContextAccessor?.HttpContext?.TryGetRequest() == null)
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+#if !ASP_NET_CORE
+            var formKeys = httpRequest?.Form?.Keys;
+#else
+            var formKeys = httpRequest?.HasFormContentType == true ? httpRequest.Form?.Keys : null;
+#endif
+            if (formKeys?.Count > 0)
             {
-                return;
-            }
-
-            var formDataToInclude = GetPairsToInclude();
-
-            if (formDataToInclude.Any())
-            {
+                var formDataToInclude = GetPairsToInclude(formKeys, httpRequest);
                 SerializePairs(formDataToInclude, builder, logEvent);
             }
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetPairsToInclude()
-        {
-            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
-            var pairs = new List<KeyValuePair<string, string>>();
-
-#if ASP_NET_CORE
-            if (httpRequest.HasFormContentType && httpRequest.Form != null)
+        private IEnumerable<KeyValuePair<string, string>> GetPairsToInclude(
+#if !ASP_NET_CORE
+            System.Collections.Specialized.NameValueCollection.KeysCollection formKeys,
+            System.Web.HttpRequestBase httpRequest
 #else
-            if (httpRequest.Form != null)
+            ICollection<string> formKeys,
+            Microsoft.AspNetCore.Http.HttpRequest httpRequest
 #endif
+            )
+        {
+            foreach (string key in formKeys)
             {
-                foreach (string key in httpRequest.Form.Keys)
+                if ((Include.Count == 0 || Include.Contains(key)) && !Exclude.Contains(key))
                 {
-                    if ((!Include.Any() || Include.Contains(key)) && !Exclude.Contains(key))
-                    {
-                        pairs.Add(new KeyValuePair<string, string>(key, httpRequest.Form[key]));
-                    }
+                    yield return new KeyValuePair<string, string>(key, httpRequest.Form[key]);
                 }
             }
-
-            return pairs;
         }
     }
 }

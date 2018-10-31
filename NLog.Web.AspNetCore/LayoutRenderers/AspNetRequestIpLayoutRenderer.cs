@@ -3,6 +3,7 @@ using System.Text;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -17,6 +18,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-ip")]
+    [ThreadSafe]
     public class AspNetRequestIpLayoutRenderer : AspNetLayoutRendererBase
     {
         private const string ForwardedForHeader = "X-Forwarded-For";
@@ -73,10 +75,9 @@ namespace NLog.Web.LayoutRenderers
 #else
         string TryLookupForwardHeader(HttpRequest httpRequest)
         {
-            if (httpRequest.Headers.ContainsKey(ForwardedForHeader))
+            if (httpRequest.Headers?.ContainsKey(ForwardedForHeader)==true)
             {
                 var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(ForwardedForHeader);
-
                 if (forwardedHeaders.Length > 0)
                 {
                     return forwardedHeaders[0];

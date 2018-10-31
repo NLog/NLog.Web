@@ -40,6 +40,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-item")]
+    [ThreadSafe]
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

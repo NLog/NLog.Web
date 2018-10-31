@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Web;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -19,6 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-useragent")]
+    [ThreadSafe]
     public class AspNetRequestUserAgent : AspNetLayoutRendererBase
     {
         /// <summary>

@@ -30,6 +30,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request")]
+    [ThreadSafe]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -58,15 +59,11 @@ namespace NLog.Web.LayoutRenderers
         public string Cookie { get; set; }
 
 #if !ASP_NET_CORE
-
-        //missing in .NET Core (RC2)
-
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public string ServerVariable { get; set; }
-
 #endif
 
         /// <summary>
@@ -86,114 +83,103 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest == null)
                 return;
 
+            string value = string.Empty;
             if (QueryString != null)
             {
-                AppendQueryString(builder, httpRequest);
+                value = LookupQueryString(QueryString, httpRequest);
             }
-            else if (Form != null && httpRequest.Form != null)
+            else if (Form != null)
             {
-                AppendForm(builder, httpRequest);
+                value = LookupFormValue(Form, httpRequest);
             }
-            else if (Cookie != null && httpRequest.Cookies != null)
+            else if (Cookie != null)
             {
-                AppendCookie(builder, httpRequest);
+                value = LookupCookieValue(Cookie, httpRequest);
             }
 #if !ASP_NET_CORE
-            else if (ServerVariable != null && httpRequest.ServerVariables != null)
+            else if (ServerVariable != null)
             {
-                builder.Append(httpRequest.ServerVariables[ServerVariable]);
+                value = httpRequest.ServerVariables?.Count > 0 ?
+                    httpRequest.ServerVariables[ServerVariable] : null;
             }
 #endif
-            else if (Header != null && httpRequest.Headers != null)
+            else if (Header != null)
             {
-                AppendHeader(builder, httpRequest);
+                value = LookupHeaderValue(Header, httpRequest);
             }
             else if (Item != null)
             {
-                AppendItem(builder, httpRequest);
+                value = LookupItemValue(Item, httpRequest);
             }
+            builder.Append(value);
         }
 
 
 #if !ASP_NET_CORE
-
-        private void AppendQueryString(StringBuilder builder, HttpRequestBase httpRequest)
+        private static string LookupQueryString(string key, HttpRequestBase httpRequest)
         {
-            var queryString = httpRequest.QueryString;
-            if (queryString == null)
-                return;
-
-            var query = queryString[QueryString];
-            if (query != null)
-                builder.Append(query);
+            var collection = httpRequest.QueryString;
+            return collection?.Count > 0 ? collection[key] : null;
         }
 
-        private void AppendForm(StringBuilder builder, HttpRequestBase httpRequest)
+        private static string LookupFormValue(string key, HttpRequestBase httpRequest)
         {
-            var formValue = httpRequest.Form[Form];
-            if (formValue != null)
-                builder.Append(formValue);
+            var collection = httpRequest.Form;
+            return collection?.Count > 0 ? collection[key] : null;
         }
 
-        private void AppendCookie(StringBuilder builder, HttpRequestBase httpRequest)
+        private static string LookupCookieValue(string key, HttpRequestBase httpRequest)
         {
-            var cookie = httpRequest.Cookies[Cookie];
-            if (cookie != null)
-                builder.Append(cookie.Value);
+            var cookieCollection = httpRequest.Cookies;
+            return cookieCollection?.Count > 0 ? cookieCollection[key]?.Value : null;
         }
 
-        private void AppendHeader(StringBuilder builder, HttpRequestBase httpRequest)
+        private static string LookupHeaderValue(string key, HttpRequestBase httpRequest)
         {
-            var header = httpRequest.Headers[Header];
-            if (header != null)
-                builder.Append(header);
+            var collection = httpRequest.Headers;
+            return collection?.Count > 0 ? collection[key] : null;
         }
 
-        private void AppendItem(StringBuilder builder, HttpRequestBase httpRequest)
+        private static string LookupItemValue(string key, HttpRequestBase httpRequest)
         {
-            builder.Append(httpRequest[Item]);
+            return httpRequest[key];
         }
 #else
-
-        private void AppendQueryString(StringBuilder builder, HttpRequest httpRequest)
+        private static string LookupQueryString(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.Query?.TryGetValue(QueryString, out var queryValue) ?? false)
-            {
-                builder.Append(queryValue.ToString());
-            }
+            if (httpRequest.Query?.TryGetValue(key, out var queryValue) ?? false)
+                return queryValue.ToString();
+            return null;
         }
 
-        private void AppendForm(StringBuilder builder, HttpRequest httpRequest)
+        private static string LookupFormValue(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.Form.TryGetValue(Form, out var formValue))
-            {
-                builder.Append(formValue.ToString());
-            }
+            if (httpRequest.HasFormContentType && (httpRequest.Form?.TryGetValue(key, out var queryValue) ?? false))
+                return queryValue.ToString();
+            return null;
         }
 
-        private void AppendCookie(StringBuilder builder, HttpRequest httpRequest)
+        private static string LookupCookieValue(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.Cookies.TryGetValue(Cookie, out var cookieValue))
-            {
-                builder.Append(cookieValue);
-            }
+            string cookieValue = null;
+            if (httpRequest.Cookies?.TryGetValue(key, out cookieValue) ?? false)
+                return cookieValue;
+            return null;
         }
 
-        private void AppendHeader(StringBuilder builder, HttpRequest httpRequest)
+        private static string LookupHeaderValue(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.Headers.TryGetValue(Header, out var headerValue))
-            {
-                builder.Append(headerValue.ToString());
-            }
+            if (httpRequest.Headers?.TryGetValue(key, out var headerValue) ?? false)
+                return headerValue.ToString();
+            return null;
         }
 
-        private void AppendItem(StringBuilder builder, HttpRequest httpRequest)
+        private static string LookupItemValue(string key, HttpRequest httpRequest)
         {
             object itemValue = null;
-            if (httpRequest.HttpContext.Items?.TryGetValue(Item, out itemValue) ?? false)
-            {
-                builder.Append(itemValue);
-            }
+            if (httpRequest.HttpContext.Items?.TryGetValue(key, out itemValue) ?? false)
+                return itemValue?.ToString();
+            return null;
         }
 #endif
     }

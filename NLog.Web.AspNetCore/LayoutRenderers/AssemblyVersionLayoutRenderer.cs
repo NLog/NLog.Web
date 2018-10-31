@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NLog.Common;
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -11,6 +12,8 @@ namespace NLog.Web.LayoutRenderers
     /// Extend NLog.LayoutRenderers.AssemblyVersionLayoutRenderer with ASP.NET Full and Core support
     /// </summary>
     [LayoutRenderer("assembly-version")]
+    [ThreadAgnostic]
+    [ThreadSafe]
     public class AssemblyVersionLayoutRenderer : NLog.LayoutRenderers.AssemblyVersionLayoutRenderer
     {
         /// <inheritdoc />

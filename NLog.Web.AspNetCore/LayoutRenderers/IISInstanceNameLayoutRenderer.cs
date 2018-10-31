@@ -7,6 +7,7 @@ using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -23,6 +24,8 @@ namespace NLog.Web.LayoutRenderers
 #endif
     [LayoutRenderer("iis-site-name")]
     // ReSharper disable once InconsistentNaming
+    [ThreadAgnostic]
+    [ThreadSafe]
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE

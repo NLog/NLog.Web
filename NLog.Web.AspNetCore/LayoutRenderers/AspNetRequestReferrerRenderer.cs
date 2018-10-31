@@ -4,6 +4,7 @@ using System.Text;
 using System.Web;
 using System.Collections.Specialized;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -19,6 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-referrer")]
+    [ThreadSafe]
     public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

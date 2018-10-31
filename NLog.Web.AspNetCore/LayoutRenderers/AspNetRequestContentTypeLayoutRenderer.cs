@@ -1,5 +1,6 @@
 #if ASP_NET_CORE
 using System.Text;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -14,6 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-contenttype")]
+    [ThreadSafe]
     public class AspNetRequestContentTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

@@ -1,4 +1,5 @@
 using System.Text;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
@@ -12,10 +13,11 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <example>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-host}    
+    /// ${aspnet-request-host}    
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-host")]
+    [ThreadSafe]
     public class AspNetRequestHostLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -30,17 +32,11 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
 #if ASP_NET_CORE
-            var host = request.Host;
+            var host = request.Host.ToString();
 #else
-            var host = request.UserHostName;
+            var host = request.UserHostName?.ToString();
 #endif
-            if (host != null)
-            {
-                var hostString = host.ToString();
-
-                if (!string.IsNullOrEmpty(hostString))
-                    builder.Append(hostString);
-            }
+            builder.Append(host);
         }
     }
 }

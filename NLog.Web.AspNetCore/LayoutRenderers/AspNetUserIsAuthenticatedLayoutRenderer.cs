@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.LayoutRenderers;
 
@@ -11,6 +12,7 @@ namespace NLog.Web.AspNetCore.LayoutRenderers
     /// ${aspnet-user-isAuthenticated}
     /// </summary>
     [LayoutRenderer("aspnet-user-isAuthenticated")]
+    [ThreadSafe]
     public class AspNetUserIsAuthenticatedLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

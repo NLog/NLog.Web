@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -9,6 +10,7 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     /// <remarks>.NET Core Only</remarks>
     [LayoutRenderer("aspnet-traceidentifier")]
+    [ThreadSafe]
     public class AspNetTraceIdentifierLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc />
