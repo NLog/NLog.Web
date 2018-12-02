@@ -12,12 +12,12 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionIDLayoutRendererTests : TestBase
+    public class AspNetTraceIdentifierRendererTests : TestBase
     {
         [Fact]
         public void NullHttpContextRendersEmptyString()
         {
-            var renderer = new AspNetSessionIdLayoutRenderer();
+            var renderer = new AspNetTraceIdentifierLayoutRenderer();
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -25,38 +25,39 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void NullSessionRendersEmptyString()
+        public void EmptyGuidRendersEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
 #if ASP_NET_CORE
-            httpContext.Session.Returns(null as Microsoft.AspNetCore.Http.ISession);
-#else
-            httpContext.Session.Returns(null as HttpSessionStateWrapper);
+            httpContext.TraceIdentifier.Returns(null as string);
+#else 
+            var httpWorker = Substitute.For<HttpWorkerRequest>();
+            httpContext.GetService(typeof(System.Web.HttpWorkerRequest)).Returns(httpWorker);
 #endif
-            var renderer = new AspNetSessionIdLayoutRenderer();
+            var renderer = new AspNetTraceIdentifierLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
             string result = renderer.Render(new LogEventInfo());
-
             Assert.Empty(result);
         }
 
         [Fact]
-        public void AvailableSessionRendersSessionId()
+        public void AvailableTraceIdentifierRendersGuid()
         {
-            var expectedResult = "value";
+            var expectedResult = System.Guid.NewGuid();
             var httpContext = Substitute.For<HttpContextBase>();
 #if ASP_NET_CORE
-            httpContext.Session.Id.Returns(expectedResult);
+            httpContext.TraceIdentifier.Returns(expectedResult.ToString());
 #else
-            httpContext.Session.SessionID.Returns(expectedResult);
+            var httpWorker = Substitute.For<HttpWorkerRequest>();
+            httpWorker.RequestTraceIdentifier.Returns(expectedResult);
+            httpContext.GetService(typeof(System.Web.HttpWorkerRequest)).Returns(httpWorker);
 #endif
-            var renderer = new AspNetSessionIdLayoutRenderer();
+            var renderer = new AspNetTraceIdentifierLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
 
-            Assert.Equal(expectedResult, result);
+            Assert.Equal(expectedResult.ToString(), result);
         }
     }
 }

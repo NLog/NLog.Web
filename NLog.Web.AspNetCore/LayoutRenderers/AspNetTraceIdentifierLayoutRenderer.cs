@@ -6,9 +6,8 @@ using NLog.LayoutRenderers;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Print the TraceIdentifier
+    /// ASP.NET Request TraceIdentifier.
     /// </summary>
-    /// <remarks>.NET Core Only</remarks>
     [LayoutRenderer("aspnet-traceidentifier")]
     [ThreadSafe]
     public class AspNetTraceIdentifierLayoutRenderer : AspNetLayoutRendererBase

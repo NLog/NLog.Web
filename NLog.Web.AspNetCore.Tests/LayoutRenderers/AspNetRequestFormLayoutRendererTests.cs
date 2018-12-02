@@ -1,17 +1,17 @@
-﻿using NLog.Web.Tests.LayoutRenderers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using NLog.Web.LayoutRenderers;
-using NLog.Web.Tests;
-using NSubstitute;
 using System.Collections.Specialized;
+using System.Text;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 #else
 using System.Web;
 #endif
+using NLog.Web.LayoutRenderers;
+using NLog.Web.Tests;
+using NLog.Web.Tests.LayoutRenderers;
+using NSubstitute;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
