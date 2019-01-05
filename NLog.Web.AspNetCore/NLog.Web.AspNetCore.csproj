@@ -5,7 +5,7 @@
 
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
-    <VersionPrefix>4.7</VersionPrefix>
+    <VersionPrefix>4.7.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
@@ -30,11 +30,10 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Added ${aspnet-request-form} (@DrewBrasher)
-- Added ${configsetting} for reading appsettings.json etc - via NLog.Extensions.Logging  (@304NotModified)
-- Make separators layoutable for (${aspnet-request-querystring} and ${aspnet-request-cookie}) (@304NotModified)
-- Better missing httpcontext reporting &amp; Skip null-check of HttpContextAccessor.HttpContext in DoAppend (@snakefoot)
-- Removed dependency on Microsoft.AspNetCore.Http.Extensions (@snakefoot) 
+- Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
+- ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
+- Check that Content-Type is correct before accessing the Form (#322) (@mcliment)
+- Enabled SymbolPackageFormat=snupkg (@snakefoot)
     </PackageReleaseNotes>
     <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
