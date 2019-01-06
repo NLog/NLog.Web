@@ -4,6 +4,17 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.7.1-aspnetcore (2019/01/06)
+- [#326](https://github.com/NLog/NLog.Web/pull/326) Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
+- [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
+- [#322](https://github.com/NLog/NLog.Web/pull/322) Check that Content-Type is correct before accessing the Form (#322) (@mcliment)
+- [#333](https://github.com/NLog/NLog.Web/pull/333) Enabled SymbolPackageFormat=snupkg (@snakefoot)
+
+### v4.7.1 aspnet4 (2019/01/06)
+- [#330](https://github.com/NLog/NLog.Web/pull/330) aspnet-traceidentifier: Support for ASP.NET (non-core) - requires IIS ETW (@snakefoot)
+- [#326](https://github.com/NLog/NLog.Web/pull/326) Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
+- [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
+
 ### v4.7-aspnetcore & aspnet4 (2018/09/22)
 - [#315](https://github.com/NLog/NLog.Web/pull/315) Added ${configsetting} for reading appsettings.json etc - via NLog.Extensions.Logging (@304NotModified) (ASP.NET Core only)
 - [#313](https://github.com/NLog/NLog.Web/pull/313) Added ${aspnet-request-form} (@DrewBrasher)
