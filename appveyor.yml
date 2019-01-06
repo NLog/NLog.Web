@@ -17,6 +17,8 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: quiet
+  
+skip_tags: true
 
 build_script:
 - cmd: >-
