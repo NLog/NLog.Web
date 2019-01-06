@@ -5,7 +5,7 @@ if (-Not $LastExitCode -eq 0) { exit $LastExitCode }
 dotnet build  --configuration release 
 if (-Not $LastExitCode -eq 0) { exit $LastExitCode }
 
-dotnet xunit
+dotnet test
 if (-Not $LastExitCode -eq 0) { exit $LastExitCode }
 
 set-location ..

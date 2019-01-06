@@ -40,3 +40,4 @@ test_script:
 
 artifacts:
 - path: '**\NLog.Web.*.nupkg'
+- path: '**\NLog.Web.*.snupkg'
