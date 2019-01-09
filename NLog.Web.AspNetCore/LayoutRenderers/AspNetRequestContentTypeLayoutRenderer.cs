@@ -1,4 +1,3 @@
-#if ASP_NET_CORE
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -7,11 +6,11 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET content type.
+    /// ASP.NET HttpRequest Content-Type Header
     /// </summary>
     /// <example>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-contenttype}    
+    /// ${aspnet-request-contenttype}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-contenttype")]
@@ -35,4 +34,3 @@ namespace NLog.Web.LayoutRenderers
         }
     }
 }
-#endif
