@@ -4,14 +4,14 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using NLog.Config;
 using NLog.Extensions.Logging;
 using NLog.Web.DependencyInjection;
 
 #if ASP_NET_CORE2
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 #endif
 
 namespace NLog.Web
@@ -100,27 +100,64 @@ namespace NLog.Web
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
-            options = options ?? NLogAspNetCoreOptions.Default;
             
             builder.ConfigureServices(services =>
             {
-                ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-                LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-
-                //note: when registering ILoggerFactory, all non NLog stuff and stuff before this will be removed
-                services.AddSingleton<ILoggerProvider>(serviceProvider =>
-                {
-                    ServiceLocator.ServiceProvider = serviceProvider;
-                    return new NLogLoggerProvider(options);
-                });
-
-                //note: this one is called before  services.AddSingleton<ILoggerFactory>
-                if (options.RegisterHttpContextAccessor)
-                {
-                    services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                }
+                ConfigureServicesNLog(options, services, (serviceProvider) => serviceProvider.GetService<Microsoft.Extensions.Configuration.IConfiguration>());
             });
             return builder;
+        }
+
+        /// <summary>
+        /// Use NLog for Dependency Injected loggers. 
+        /// </summary>
+        public static Microsoft.Extensions.Hosting.IHostBuilder UseNLog(this Microsoft.Extensions.Hosting.IHostBuilder builder)
+        {
+            return UseNLog(builder, null);
+        }
+
+        /// <summary>
+        /// Use NLog for Dependency Injected loggers. 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        /// <returns></returns>
+        public static Microsoft.Extensions.Hosting.IHostBuilder UseNLog(this Microsoft.Extensions.Hosting.IHostBuilder builder, NLogAspNetCoreOptions options)
+        {
+            if (builder == null) throw new ArgumentNullException(nameof(builder));
+            
+            builder.ConfigureServices((hostbuilder, services) =>
+            {
+                ConfigureServicesNLog(options, services, (serviceProvider) => hostbuilder.Configuration);
+            });
+            return builder;
+        }
+
+        private static void ConfigureServicesNLog(NLogAspNetCoreOptions options, IServiceCollection services, Func<IServiceProvider, Microsoft.Extensions.Configuration.IConfiguration> lookupConfiguration)
+        {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+
+            services.AddSingleton<ILoggerProvider>(serviceProvider =>
+            {
+                ServiceLocator.ServiceProvider = serviceProvider;
+
+                var provider = new NLogLoggerProvider(options ?? new NLogProviderOptions());
+                var configuration = lookupConfiguration(serviceProvider);
+                if (configuration != null)
+                {
+                    ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
+                    if (options == null)
+                        provider.Configure(configuration.GetSection("Logging:NLog"));
+                }
+                return provider;
+            });
+
+            //note: this one is called before  services.AddSingleton<ILoggerFactory>
+            if ((options ?? NLogAspNetCoreOptions.Default).RegisterHttpContextAccessor)
+            {
+                services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            }
         }
 #endif
 
