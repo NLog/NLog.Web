@@ -29,7 +29,6 @@ namespace NLog.Web.AspNetCore2.Example
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
