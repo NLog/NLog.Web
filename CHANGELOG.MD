@@ -4,6 +4,16 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.8.0-aspnet4 (2019/01/30)
+- [#334](https://github.com/NLog/NLog.Web/pull/334) Added ${aspnet-request-contenttype} for NLog.Web (@snakefoot)
+
+### v4.8.0 aspnetcore (2019/01/25)
+- [#335](https://github.com/NLog/NLog.Web/pull/335)   (@snakefoot)
+    - Updated Microsoft.AspNetCore to ver. 2.1 (Long-Term-Support)
+    - ${configsetting} layout renderer now depends on UseNLog-call to provide IConfiguration using IServiceProvider
+    - NLogLoggerProvider options now binds to IConfiguration (Using section Logging:NLog)
+    - UseNLog-call now also available for IHostBuilder
+
 ### v4.7.1-aspnetcore (2019/01/06)
 - [#326](https://github.com/NLog/NLog.Web/pull/326) Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
 - [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
