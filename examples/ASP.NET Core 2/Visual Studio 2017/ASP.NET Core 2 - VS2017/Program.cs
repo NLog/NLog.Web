@@ -15,7 +15,7 @@ namespace NLog.Web.AspNetCore2.Example
             try
             {
                 logger.Debug("init main");
-                BuildWebHost(args).Run();
+                BuildWebHost(args).Build().Run();
             }
             catch (Exception exception)
             {
@@ -30,7 +30,7 @@ namespace NLog.Web.AspNetCore2.Example
             }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
@@ -38,7 +38,6 @@ namespace NLog.Web.AspNetCore2.Example
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
-                .UseNLog()  // NLog: Setup NLog for Dependency injection
-                .Build();
+                .UseNLog();  // NLog: Setup NLog for Dependency injection
     }
 }
