@@ -15,11 +15,9 @@ This package is for ASP.NET 3.5+
 
 For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore</description>
     <releaseNotes>
-- aspnet-traceidentifier: Support for ASP.NET (non-core) - requires IIS ETW (@snakefoot)
-- Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
-- ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
+- Added ${aspnet-request-contenttype} for NLog.Web (@snakefoot)
     </releaseNotes>
-    <copyright>Copyright 2014-2018</copyright>
+    <copyright>Copyright 2014-2019</copyright>
     <tags>nlog log target layoutrenderer web asp.net httpcontext</tags>
   </metadata>
 </package>
