@@ -25,7 +25,7 @@ Supported platforms:
     <Authors>Julian Verdurmen</Authors>
     <Company>NLog</Company>
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
-    <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - http://nlog-project.org/ </Copyright>
+    <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
@@ -35,9 +35,9 @@ Supported platforms:
 - NLogLoggerProvider options now binds to IConfiguration (Using section Logging:NLog)
 - UseNLog-call now also available for IHostBuilder
     </PackageReleaseNotes>
-    <PackageIconUrl>http://nlog-project.org/N.png</PackageIconUrl>
+    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
-    <PackageLicenseUrl>http://raw.github.com/NLog/NLog.Web/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
