@@ -6,14 +6,14 @@
     <title>NLog.Web</title>
     <authors>NLog</authors>
     <owners>NLog</owners>
-    <licenseUrl>https://github.com/NLog/NLog.Web/raw/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/NLog/NLog.Web</projectUrl>
-    <iconUrl>http://nlog-project.org/N.png</iconUrl>
+    <iconUrl>https://nlog-project.org/N.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extend NLog with targets and layout renderers for websites and web applications.
 This package is for ASP.NET 3.5+
 
-For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore</description>
+For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore </description>
     <releaseNotes>
 - aspnet-traceidentifier: Support for ASP.NET (non-core) - requires IIS ETW (@snakefoot)
 - Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
