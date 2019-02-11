@@ -53,8 +53,8 @@ namespace NLog.Web.LayoutRenderers
             // reset if possible
             if (body.CanSeek)
             {
-                body.Position = 0;
                 oldPosition = body.Position;
+                body.Position = 0;
             }
 
             //note: dispose of StreamReader isn't doing things besides closing the stream (which can be turn off, and then it's a NOOP)
