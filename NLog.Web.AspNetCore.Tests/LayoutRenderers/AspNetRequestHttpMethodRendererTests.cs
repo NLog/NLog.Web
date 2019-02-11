@@ -16,38 +16,23 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestHttpMethodRendererTests : TestBase
+    public class AspNetRequestHttpMethodRendererTests : LayoutRenderersTestBase<AspNetRequestHttpMethodRenderer>
     {
-        [Fact]
-        public void NullUrlRendersEmptyString()
-        {
-            var httpContext = Substitute.For<HttpContextBase>();
-            
-            var renderer = new AspNetRequestHttpMethodRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
-
         [Fact]
         public void HttpMethod_Set_Renderer()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
 #if ASP_NET_CORE
             httpContext.Request.Method.Returns("POST");
 #else
             httpContext.Request.HttpMethod.Returns("POST");
 #endif
-
-            var renderer = new AspNetRequestHttpMethodRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal("POST", result);
         }
     }

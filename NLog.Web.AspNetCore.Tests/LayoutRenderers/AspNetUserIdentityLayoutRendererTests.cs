@@ -14,47 +14,37 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetUserIdentityLayoutRendererTests : TestBase
+    public class AspNetUserIdentityLayoutRendererTests : LayoutRenderersTestBase<AspNetUserIdentityLayoutRenderer>
     {
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetUserIdentityLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
-
         [Fact]
         public void NullUserIdentityRendersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
             httpContext.User.Identity.Returns(null as IIdentity);
 
-            var renderer = new AspNetUserIdentityLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Empty(result);
         }
-
 
         [Fact]
         public void UserIdentityNameRendersName()
         {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
             var expectedResult = "value";
-            var httpContext = Substitute.For<HttpContextBase>();
             var identity = Substitute.For<IIdentity>();
             identity.Name.Returns(expectedResult);
             httpContext.User.Identity.Returns(identity);
 
-            var renderer = new AspNetUserIdentityLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal(expectedResult, result);
         }
     }

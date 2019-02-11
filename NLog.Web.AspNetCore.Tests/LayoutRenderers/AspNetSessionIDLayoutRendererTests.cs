@@ -12,50 +12,42 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionIDLayoutRendererTests : TestBase
+    public class AspNetSessionIDLayoutRendererTests : LayoutRenderersTestBase<AspNetSessionIdLayoutRenderer>
     {
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetSessionIdLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
-
         [Fact]
         public void NullSessionRendersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
 #if ASP_NET_CORE
             httpContext.Session.Returns(null as Microsoft.AspNetCore.Http.ISession);
 #else
             httpContext.Session.Returns(null as HttpSessionStateWrapper);
 #endif
-            var renderer = new AspNetSessionIdLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Empty(result);
         }
 
         [Fact]
         public void AvailableSessionRendersSessionId()
         {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
             var expectedResult = "value";
-            var httpContext = Substitute.For<HttpContextBase>();
 #if ASP_NET_CORE
             httpContext.Session.Id.Returns(expectedResult);
 #else
             httpContext.Session.SessionID.Returns(expectedResult);
 #endif
-            var renderer = new AspNetSessionIdLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal(expectedResult, result);
         }
     }

@@ -1,4 +1,5 @@
-﻿#if !ASP_NET_CORE
+﻿using System;
+#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -12,52 +13,47 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetTraceIdentifierRendererTests : TestBase
+    public class AspNetTraceIdentifierRendererTests : LayoutRenderersTestBase<AspNetTraceIdentifierLayoutRenderer>
     {
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetTraceIdentifierLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
-
         [Fact]
         public void EmptyGuidRendersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
-#if ASP_NET_CORE
-            httpContext.TraceIdentifier.Returns(null as string);
-#else 
-            var httpWorker = Substitute.For<HttpWorkerRequest>();
-            httpContext.GetService(typeof(System.Web.HttpWorkerRequest)).Returns(httpWorker);
-#endif
-            var renderer = new AspNetTraceIdentifierLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            SetTraceIdentifier(httpContext, null);
+            // Act
             string result = renderer.Render(new LogEventInfo());
+
+            // Assert
             Assert.Empty(result);
         }
 
         [Fact]
         public void AvailableTraceIdentifierRendersGuid()
         {
-            var expectedResult = System.Guid.NewGuid();
-            var httpContext = Substitute.For<HttpContextBase>();
-#if ASP_NET_CORE
-            httpContext.TraceIdentifier.Returns(expectedResult.ToString());
-#else
-            var httpWorker = Substitute.For<HttpWorkerRequest>();
-            httpWorker.RequestTraceIdentifier.Returns(expectedResult);
-            httpContext.GetService(typeof(System.Web.HttpWorkerRequest)).Returns(httpWorker);
-#endif
-            var renderer = new AspNetTraceIdentifierLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
 
+            var expectedResult = System.Guid.NewGuid();
+            SetTraceIdentifier(httpContext, expectedResult);
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal(expectedResult.ToString(), result);
+        }
+
+        private static void SetTraceIdentifier(HttpContextBase httpContext, Guid? expectedResult)
+        {
+#if ASP_NET_CORE
+            httpContext.TraceIdentifier.Returns(expectedResult?.ToString());
+#else
+            var httpWorker = Substitute.For<HttpWorkerRequest>();
+            if (expectedResult.HasValue)
+                httpWorker.RequestTraceIdentifier.Returns(expectedResult.Value);
+            httpContext.GetService(typeof(System.Web.HttpWorkerRequest)).Returns(httpWorker);
+#endif
         }
     }
 }

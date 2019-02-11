@@ -17,23 +17,20 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetMvcActionRendererTests : TestBase
+    public class AspNetMvcActionRendererTests : LayoutRenderersTestBase<AspNetMvcActionRenderer>
     {
         [Fact]
         public void NullRoutesRenderersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
-#if ASP_NET_CORE
-            var routingFeature = Substitute.For<IRoutingFeature>();
-            var collection = new FeatureCollection();
-            collection.Set<IRoutingFeature>(routingFeature);
-            httpContext.Features.Returns(collection);
-#endif
-            var renderer = new AspNetMvcActionRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
 
+            AddRoutingFeature(httpContext);
+
+            // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
+            // Assert
             Assert.Empty(result);
         }
     }

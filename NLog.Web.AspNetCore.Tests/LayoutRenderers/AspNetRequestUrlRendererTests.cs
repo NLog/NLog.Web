@@ -17,21 +17,8 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUrlRendererTests
+    public class AspNetRequestUrlRendererTests : LayoutRenderersTestBase<AspNetRequestUrlRenderer>
     {
-        [Fact]
-        public void NullUrlRendersEmptyString()
-        {
-            var httpContext = Substitute.For<HttpContextBase>();
-
-            var renderer = new AspNetRequestUrlRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(LogEventInfo.CreateNullEvent());
-
-            Assert.Empty(result);
-        }
-
         [Fact]
         public void UrlPresentRenderNonEmpty_Default()
         {
@@ -162,7 +149,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "")
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
             var url = $"{scheme}://{hostBase}{pathBase}{page}{queryString}";
@@ -174,9 +161,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.Host.Returns(new HostString(hostBase));
             httpContext.Request.Scheme.Returns(scheme);
 #endif
-            var renderer = new AspNetRequestUrlRenderer();
-
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             return renderer;
         }
     }

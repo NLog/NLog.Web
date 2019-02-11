@@ -8,19 +8,19 @@ using Microsoft.AspNetCore.Http;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
 using NLog.Web.LayoutRenderers;
-using NLog.Web.Tests;
+using NLog.Web.Tests.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 
 namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
 {
-    public class AspNetRequestPostedBodyTests
+    public class AspNetRequestPostedBodyTests : LayoutRenderersTestBase<AspNetRequestPostedBody>
     {
         [Fact]
         public void NullStreamRendersEmptyString()
         {
             // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext<AspNetRequestPostedBody>();
+            var (renderer, httpContext) = CreateWithHttpContext();
             SetBodyStream(httpContext, null);
 
             var logEventInfo = new LogEventInfo();
@@ -38,7 +38,7 @@ namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
         public void CorrectStreamRendersFullStreamAndRestorePosition(long position)
         {
             // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext<AspNetRequestPostedBody>();
+            var (renderer, httpContext) = CreateWithHttpContext();
 
             var json = "{user: 'foo', password: '123'}";
             var stream = CreateStream(json);
@@ -53,18 +53,6 @@ namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
             // Assert
             Assert.Equal(json, result);
             Assert.Equal(position, stream.Position);
-        }
-
-        private static (TLayoutRenderer renderer, HttpContextBase httpContext) CreateWithHttpContext<TLayoutRenderer>()
-        where TLayoutRenderer : AspNetLayoutRendererBase, new()
-        {
-            var httpContext = Substitute.For<HttpContextBase>();
-
-            var renderer = new TLayoutRenderer
-            {
-                HttpContextAccessor = new FakeHttpContextAccessor(httpContext)
-            };
-            return (renderer, httpContext);
         }
 
         private static void SetBodyStream(HttpContextBase httpContext, Stream stream)
