@@ -12,20 +12,20 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET posted value, e.g. FORM or Ajax POST
+    /// ASP.NET posted body, e.g. FORM or Ajax POST
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-posted-value}:</para>
+    /// <para>Example usage of ${aspnet-request-posted-body}:</para>
     /// <example>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-posted-value} - Produces - {username:xyz,password:xyz}
+    /// ${aspnet-request-posted-body} - Produces - {username:xyz,password:xyz}
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-request-posted-value")]
+    [LayoutRenderer("aspnet-request-posted-body")]
     [ThreadSafe]
-    public class AspNetRequestPostedValue : AspNetLayoutRendererBase
+    public class AspNetRequestPostedBody : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the ASP.NET posted value
+        /// Renders the ASP.NET posted body
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -36,15 +36,14 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
 #if !ASP_NET_CORE
-
-            var body = HttpContext.Current.Request.InputStream;
+            var body = httpRequest.InputStream;
 #else
             var body = httpRequest.Body;
 #endif
 
             if (body == null)
             {
-                InternalLogger.Debug("AspNetRequestPostedvalue: body stream was null");
+                InternalLogger.Debug("AspNetRequestPostedBody: body stream was null");
                 return;
             }
 

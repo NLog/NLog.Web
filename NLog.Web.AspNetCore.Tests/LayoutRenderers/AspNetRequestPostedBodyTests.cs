@@ -14,13 +14,13 @@ using Xunit;
 
 namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
 {
-    public class AspNetRequestPostedValueTests
+    public class AspNetRequestPostedBodyTests
     {
         [Fact]
         public void NullStreamRendersEmptyString()
         {
             // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext<AspNetRequestPostedValue>();
+            var (renderer, httpContext) = CreateWithHttpContext<AspNetRequestPostedBody>();
             SetBodyStream(httpContext, null);
 
             var logEventInfo = new LogEventInfo();
@@ -38,7 +38,7 @@ namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
         public void CorrectStreamRendersFullStreamAndRestorePosition(long position)
         {
             // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext<AspNetRequestPostedValue>();
+            var (renderer, httpContext) = CreateWithHttpContext<AspNetRequestPostedBody>();
 
             var json = "{user: 'foo', password: '123'}";
             var stream = CreateStream(json);

@@ -101,8 +101,8 @@
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestIpLayoutRendererTests.cs">
       <Link>AspNetRequestIpLayoutRendererTests.cs</Link>
     </Compile>
-    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestPostedValueTests.cs">
-      <Link>AspNetRequestPostedValueTests.cs</Link>
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestPostedBodyTests.cs">
+      <Link>AspNetRequestPostedBodyTests.cs</Link>
     </Compile>
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestValueLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetSessionIDLayoutRendererTests.cs" />
