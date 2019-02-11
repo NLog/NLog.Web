@@ -74,6 +74,9 @@
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestFormLayoutRenderer.cs">
       <Link>AspNetRequestFormLayoutRenderer.cs</Link>
     </Compile>
+    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestPostedBody.cs">
+      <Link>AspNetRequestPostedBody.cs</Link>
+    </Compile>
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestIpLayoutRenderer.cs" />
     <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIdLayoutRenderer.cs" />
