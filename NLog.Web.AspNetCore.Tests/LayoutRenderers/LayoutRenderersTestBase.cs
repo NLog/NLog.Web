@@ -14,7 +14,6 @@ namespace NLog.Web.Tests.LayoutRenderers
     public abstract class LayoutRenderersTestBase<TLayoutRenderer> : TestBase
         where TLayoutRenderer : AspNetLayoutRendererBase, new()
     {
-
         [Fact]
         public void NullRendersEmptyString()
         {
@@ -27,8 +26,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Empty(result);
         }
-
-
+        
         protected static (TLayoutRenderer renderer, HttpContextBase httpContext) CreateWithHttpContext()
            
         {

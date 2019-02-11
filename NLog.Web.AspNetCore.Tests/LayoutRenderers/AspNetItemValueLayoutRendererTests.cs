@@ -77,7 +77,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 
-
 #if ASP_NET_CORE
             httpContext.Items = new Dictionary<object, object> {{"key", expectedValue}};
 #else

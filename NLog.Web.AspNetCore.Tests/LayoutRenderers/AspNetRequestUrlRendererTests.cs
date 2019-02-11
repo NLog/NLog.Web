@@ -17,10 +17,8 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUrlRendererTests: LayoutRenderersTestBase<AspNetRequestUrlRenderer>
+    public class AspNetRequestUrlRendererTests : LayoutRenderersTestBase<AspNetRequestUrlRenderer>
     {
-
-
         [Fact]
         public void UrlPresentRenderNonEmpty_Default()
         {

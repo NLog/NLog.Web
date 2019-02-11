@@ -14,7 +14,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetSessionIDLayoutRendererTests : LayoutRenderersTestBase<AspNetSessionIdLayoutRenderer>
     {
-
         [Fact]
         public void NullSessionRendersEmptyString()
         {

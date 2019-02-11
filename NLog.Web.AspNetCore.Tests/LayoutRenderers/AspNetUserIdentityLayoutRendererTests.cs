@@ -16,7 +16,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetUserIdentityLayoutRendererTests : LayoutRenderersTestBase<AspNetUserIdentityLayoutRenderer>
     {
-
         [Fact]
         public void NullUserIdentityRendersEmptyString()
         {
@@ -30,7 +29,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Empty(result);
         }
-
 
         [Fact]
         public void UserIdentityNameRendersName()

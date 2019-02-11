@@ -15,14 +15,12 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetTraceIdentifierRendererTests : LayoutRenderersTestBase<AspNetTraceIdentifierLayoutRenderer>
     {
-
-
         [Fact]
         public void EmptyGuidRendersEmptyString()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-          
+
             SetTraceIdentifier(httpContext, null);
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -52,7 +50,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.TraceIdentifier.Returns(expectedResult?.ToString());
 #else
             var httpWorker = Substitute.For<HttpWorkerRequest>();
-            if(expectedResult.HasValue)
+            if (expectedResult.HasValue)
                 httpWorker.RequestTraceIdentifier.Returns(expectedResult.Value);
             httpContext.GetService(typeof(System.Web.HttpWorkerRequest)).Returns(httpWorker);
 #endif
