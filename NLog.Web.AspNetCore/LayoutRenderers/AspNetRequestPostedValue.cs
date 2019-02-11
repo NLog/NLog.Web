@@ -22,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// </example>
     [LayoutRenderer("aspnet-request-posted-value")]
     [ThreadSafe]
-    public class AspNetRequestPostedvalue : AspNetLayoutRendererBase
+    public class AspNetRequestPostedValue : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Renders the ASP.NET posted value
