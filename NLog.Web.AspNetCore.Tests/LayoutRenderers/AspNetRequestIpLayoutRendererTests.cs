@@ -19,14 +19,15 @@ using System.Net;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestIpLayoutRendererTests : TestBase
+    public class AspNetRequestIpLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestIpLayoutRenderer>
     {
         private const string ForwardedForHeader = "X-Forwarded-For";
 
         [Fact]
         public void ForwardedForHeaderNotPresentRenderRemoteAddress()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
 #if !ASP_NET_CORE
             httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
             httpContext.Request.Headers.Returns(new NameValueCollection());
@@ -35,18 +36,21 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.Headers.Returns(callinfo => headers);
             httpContext.Connection.RemoteIpAddress.Returns(callinfo => IPAddress.Parse("192.0.0.0"));
 #endif
-            var renderer = new AspNetRequestIpLayoutRenderer {CheckForwardedForHeader = true};
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            renderer.CheckForwardedForHeader = true;
 
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal("192.0.0.0", result);
         }
 
         [Fact]
         public void ForwardedForHeaderPresentRenderForwardedValue()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
 #if !ASP_NET_CORE
             httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
             httpContext.Request.Headers.Returns(new NameValueCollection {{ForwardedForHeader, "127.0.0.1"}});
@@ -55,18 +59,21 @@ namespace NLog.Web.Tests.LayoutRenderers
             headers.Add(ForwardedForHeader, new StringValues("127.0.0.1"));
             httpContext.Request.Headers.Returns(callinfo => headers);
 #endif
-            var renderer = new AspNetRequestIpLayoutRenderer {CheckForwardedForHeader = true};
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            renderer.CheckForwardedForHeader = true;
 
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal("127.0.0.1", result);
         }
 
         [Fact]
         public void ForwardedForHeaderContainsMultipleEntriesRenderFirstValue()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
 #if !ASP_NET_CORE
             httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
             httpContext.Request.Headers.Returns(
@@ -76,11 +83,12 @@ namespace NLog.Web.Tests.LayoutRenderers
             headers.Add(ForwardedForHeader, new StringValues("127.0.0.1, 192.168.1.1"));
             httpContext.Request.Headers.Returns(callinfo => headers);
 #endif
-            var renderer = new AspNetRequestIpLayoutRenderer {CheckForwardedForHeader = true};
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            renderer.CheckForwardedForHeader = true;
 
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal("127.0.0.1", result);
         }
     }

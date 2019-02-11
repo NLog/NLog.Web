@@ -16,40 +16,25 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUserAgentTests : TestBase
+    public class AspNetRequestUserAgentTests : LayoutRenderersTestBase<AspNetRequestUserAgent>
     {
-        [Fact]
-        public void NullUserAgentRendersEmptyString()
-        {
-            var httpContext = Substitute.For<HttpContextBase>();
-
-            var renderer = new AspNetRequestUserAgent();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
-
         [Fact]
         public void NotNullUserAgentRendersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
-            
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
 
 #if !ASP_NET_CORE
              httpContext.Request.UserAgent.Returns("TEST");
 #else
-            var headers = new HeaderDict();
-            headers.Add("User-Agent", new StringValues("TEST"));
+            var headers = new HeaderDict {{"User-Agent", new StringValues("TEST")}};
             httpContext.Request.Headers.Returns((callinfo) => headers);
 #endif
-
-            var renderer = new AspNetRequestUserAgent();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
+            // Act
             string result = renderer.Render(new LogEventInfo());
 
+            // Assert
             Assert.Equal("TEST", result);
         }
     }

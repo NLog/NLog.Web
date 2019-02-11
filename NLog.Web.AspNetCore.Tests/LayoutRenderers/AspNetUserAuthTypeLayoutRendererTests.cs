@@ -1,77 +1,70 @@
 ﻿using System.Security.Principal;
+using NLog.Web.LayoutRenderers;
+using NSubstitute;
+using Xunit;
 #if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
 using System.Web.SessionState;
 #else
-using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
-using NLog.Web.LayoutRenderers;
-using NSubstitute;
-using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetUserAuthTypeLayoutRendererTests : TestBase
+    public class AspNetUserAuthTypeLayoutRendererTests : LayoutRenderersTestBase<AspNetUserAuthTypeLayoutRenderer>
     {
         [Fact]
-        public void NullHttpContextRendersEmptyString()
+        public void AuthenticatedUserRendersAuthenticationType()
         {
-            var renderer = new AspNetUserAuthTypeLayoutRenderer();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
 
-            string result = renderer.Render(new LogEventInfo());
+            var expectedResult = "value";
+            SetIIdentity(expectedResult, httpContext, true);
 
-            Assert.Empty(result);
+            // Act
+            var result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedResult, result);
         }
 
         [Fact]
         public void NullUserIdentityRendersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
             httpContext.User.Identity.Returns(null as IIdentity);
 
-            var renderer = new AspNetUserAuthTypeLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            // Act
+            var result = renderer.Render(new LogEventInfo());
 
-            string result = renderer.Render(new LogEventInfo());
-
+            // Assert
             Assert.Empty(result);
         }
 
         [Fact]
         public void UnauthenticatedUserRendersEmptyString()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
-            var identity = Substitute.For<IIdentity>();
-            identity.IsAuthenticated.Returns(false);
-            httpContext.User.Identity.Returns(identity);
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            SetIIdentity(null, httpContext, false);
 
-            var renderer = new AspNetUserAuthTypeLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            // Act
+            var result = renderer.Render(new LogEventInfo());
 
-            string result = renderer.Render(new LogEventInfo());
-
+            // Assert
             Assert.Empty(result);
         }
 
-        [Fact]
-        public void AuthenticatedUserRendersAuthenticationType()
+        private static void SetIIdentity(string expectedResult, HttpContextBase httpContext, bool isAuthenticated)
         {
-            var expectedResult = "value";
-            var httpContext = Substitute.For<HttpContextBase>();
             var identity = Substitute.For<IIdentity>();
-            identity.IsAuthenticated.Returns(true);
+            identity.IsAuthenticated.Returns(isAuthenticated);
             identity.AuthenticationType.Returns(expectedResult);
             httpContext.User.Identity.Returns(identity);
-
-            var renderer = new AspNetUserAuthTypeLayoutRenderer();
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Equal(expectedResult, result);
         }
     }
 }

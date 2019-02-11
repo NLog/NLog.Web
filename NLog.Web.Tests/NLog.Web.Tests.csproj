@@ -111,6 +111,9 @@
       <Link>AspNetTraceIdentifierRendererTests.cs</Link>
     </Compile>
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetUserAuthTypeLayoutRendererTests.cs" />
+    <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\LayoutRenderersTestBase.cs">
+      <Link>LayoutRenderersTestBase.cs</Link>
+    </Compile>
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\TestInvolvingAspNetHttpContext.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetUserIdentityLayoutRendererTests.cs" />
     <Compile Include="..\NLog.Web.AspNetCore.Tests\LayoutRenderers\AspNetRequestReferrerRendererTests.cs" />
