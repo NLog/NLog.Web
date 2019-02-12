@@ -1,5 +1,5 @@
 ﻿#if !ASP_NET_CORE
-//TODO test .NET Core
+//TODO combine with AspNetSessionValueLayoutRendererTests2
 
 using System;
 using System.Reflection;
