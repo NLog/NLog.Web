@@ -5,7 +5,6 @@ using System.Web;
 #endif
 
 
-
 namespace NLog.Web
 {
 #if !ASP_NET_CORE

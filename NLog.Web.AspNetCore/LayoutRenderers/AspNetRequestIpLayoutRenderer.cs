@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Text;
-#if ASP_NET_CORE
-using Microsoft.AspNetCore.Http;
-#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http;
+
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -73,9 +74,9 @@ namespace NLog.Web.LayoutRenderers
             return string.Empty;
         }
 #else
-        string TryLookupForwardHeader(HttpRequest httpRequest)
+        private string TryLookupForwardHeader(HttpRequest httpRequest)
         {
-            if (httpRequest.Headers?.ContainsKey(ForwardedForHeader)==true)
+            if (httpRequest.Headers?.ContainsKey(ForwardedForHeader) == true)
             {
                 var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(ForwardedForHeader);
                 if (forwardedHeaders.Length > 0)

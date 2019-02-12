@@ -19,9 +19,9 @@ namespace NLog.Web.LayoutRenderers
         private Layout _valueSeparatorLayout = "=";
 
         /// <summary>
-        /// Separator between item. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat"/>
+        /// Separator between item. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
-        /// <remarks>Render with <see cref="GetRenderedItemSeparator"/></remarks>
+        /// <remarks>Render with <see cref="GetRenderedItemSeparator" /></remarks>
         public string ItemSeparator
         {
             get => _itemSeparator;
@@ -33,9 +33,9 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Separator between value and key. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat"/>
+        /// Separator between value and key. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
-        /// <remarks>Render with <see cref="GetRenderedValueSeparator"/></remarks>
+        /// <remarks>Render with <see cref="GetRenderedValueSeparator" /></remarks>
         public string ValueSeparator
         {
             get => _valueSeparator;
@@ -47,8 +47,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Single item in array? Only used for <see cref="AspNetRequestLayoutOutputFormat.Json"/>
-        /// 
+        /// Single item in array? Only used for <see cref="AspNetRequestLayoutOutputFormat.Json" />
         /// Mutliple items are always in an array.
         /// </summary>
         public bool SingleAsArray { get; set; } = true;
@@ -116,6 +115,7 @@ namespace NLog.Web.LayoutRenderers
                     {
                         builder.Append(',');
                     }
+
                     firstItem = false;
 
                     if (!ValuesOnly)
@@ -135,6 +135,7 @@ namespace NLog.Web.LayoutRenderers
                         builder.Append('}');
                     }
                 }
+
                 if (addArray)
                 {
                     builder.Append(']');
@@ -158,6 +159,7 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append(itemSeparator);
                 }
+
                 firstItem = false;
 
                 if (!ValuesOnly)
@@ -172,7 +174,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Get the rendered <see cref="ItemSeparator"/>
+        /// Get the rendered <see cref="ItemSeparator" />
         /// </summary>
         /// <param name="logEvent"></param>
         /// <returns></returns>
@@ -182,7 +184,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Get the rendered <see cref="ValueSeparator"/>
+        /// Get the rendered <see cref="ValueSeparator" />
         /// </summary>
         /// <param name="logEvent"></param>
         /// <returns></returns>
@@ -201,13 +203,13 @@ namespace NLog.Web.LayoutRenderers
             builder.Append('"');
             if (!string.IsNullOrEmpty(value) && value.Contains('"'))
             {
-                //escape quotes
                 builder.Append(value.Replace("\"", "\\\""));
             }
             else
             {
                 builder.Append(value);
             }
+
             builder.Append('"');
         }
     }

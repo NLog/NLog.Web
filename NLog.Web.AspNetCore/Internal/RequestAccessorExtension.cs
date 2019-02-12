@@ -1,13 +1,12 @@
 using System;
 using System.Text;
-using NLog.Common;
 #if !ASP_NET_CORE
 using System.Web;
+using NLog.Common;
 #else
 using Microsoft.AspNetCore.Http;
+
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
 
 namespace NLog.Web.Internal
 {
@@ -37,13 +36,19 @@ namespace NLog.Web.Internal
         internal static string GetString(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))
+            {
                 return null;
+            }
 
             if (data == null)
+            {
                 return null;
+            }
 
             if (data.Length == 0)
+            {
                 return string.Empty;
+            }
 
             return Encoding.UTF8.GetString(data);
         }

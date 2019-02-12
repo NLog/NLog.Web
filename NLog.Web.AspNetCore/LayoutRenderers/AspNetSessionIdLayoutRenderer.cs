@@ -1,9 +1,11 @@
 using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.LayoutRenderers;
+
 #if !ASP_NET_CORE
 using System.Web;
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -17,14 +19,14 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the ASP.NET Session ID appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
             if (context?.Session == null)
             {
-                Common.InternalLogger.Debug("aspnet-sessionid - HttpContext Session is null");
+                InternalLogger.Debug("aspnet-sessionid - HttpContext Session is null");
                 return;
             }
 

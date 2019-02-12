@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-
+using NLog.Common;
+using NLog.Config;
+using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NLog.Web.DependencyInjection;
-#endif
 
-using NLog.LayoutRenderers;
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -18,7 +19,7 @@ namespace NLog.Web.LayoutRenderers
     public abstract class AspNetLayoutRendererBase : LayoutRenderer
     {
         /// <summary>
-        /// Initializes the <see cref="AspNetLayoutRendererBase"/>.
+        /// Initializes the <see cref="AspNetLayoutRendererBase" />.
         /// </summary>
         protected AspNetLayoutRendererBase()
         {
@@ -39,7 +40,7 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current request HttpContext.
         /// </summary>
         /// <returns>HttpContextAccessor or <c>null</c></returns>
-        [NLog.Config.NLogConfigurationIgnorePropertyAttribute]
+        [NLogConfigurationIgnoreProperty]
         public IHttpContextAccessor HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
@@ -51,7 +52,7 @@ namespace NLog.Web.LayoutRenderers
             var serviceProvider = ServiceLocator.ServiceProvider;
             if (serviceProvider == null)
             {
-                Common.InternalLogger.Debug("Missing serviceProvider, so no HttpContext");
+                InternalLogger.Debug("Missing serviceProvider, so no HttpContext");
                 return null;
             }
 
@@ -60,19 +61,19 @@ namespace NLog.Web.LayoutRenderers
                 var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
                 if (httpContextAccessor == null)
                 {
-                    Common.InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
+                    InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
                 }
+
                 return httpContextAccessor;
             }
             catch (ObjectDisposedException ex)
             {
-                Common.InternalLogger.Debug(ex, "ServiceProvider has been disposed, so no HttpContext");
+                InternalLogger.Debug(ex, "ServiceProvider has been disposed, so no HttpContext");
                 return null;
             }
         }
 
 #else
-
         /// <summary>
         /// Provides access to the current request HttpContext.
         /// </summary>
@@ -84,17 +85,19 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Validates that the HttpContext is available and delegates append to subclasses.<see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpContextAccessor = HttpContextAccessor;
             if (httpContextAccessor == null)
+            {
                 return;
+            }
 
             if (httpContextAccessor.HttpContext == null)
             {
-                Common.InternalLogger.Debug("No available HttpContext. Logging outside valid request context?");
+                InternalLogger.Debug("No available HttpContext. Logging outside valid request context?");
                 return;
             }
 
@@ -104,9 +107,9 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Implemented by subclasses to render request information and append it to the specified <see cref="StringBuilder" />.
         /// 
-        /// Won't be called if <see cref="HttpContextAccessor"/> of <see cref="IHttpContextAccessor.HttpContext"/> is <c>null</c>.
+        /// Won't be called if <see cref="HttpContextAccessor" /> of <see cref="IHttpContextAccessor.HttpContext" /> is <c>null</c>.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
 
@@ -119,7 +122,5 @@ namespace NLog.Web.LayoutRenderers
             base.CloseLayoutRenderer();
         }
 #endif
-
-
     }
 }

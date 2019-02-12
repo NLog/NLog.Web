@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Text;
+using NLog.Config;
+using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
 #else
 using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
-
 #if ASP_NET_CORE
     /// <summary>
-    /// Rendering site name in IIS. <see cref="IHostingEnvironment"/>
+    /// Rendering site name in IIS. <see cref="IHostingEnvironment" />
     /// </summary>
 #else
     /// <summary>
@@ -37,7 +37,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Append to target
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {

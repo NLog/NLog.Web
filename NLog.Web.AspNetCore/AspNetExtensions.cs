@@ -2,13 +2,15 @@
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using NLog.Config;
 using NLog.Extensions.Logging;
 using NLog.Web.DependencyInjection;
-
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #if ASP_NET_CORE2
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -48,15 +50,32 @@ namespace NLog.Web
             return LogManager.Configuration;
         }
 
+        /// <summary>
+        /// Override the default <see cref="IServiceProvider" /> used by the NLog ServiceLocator.
+        /// NLog ServiceLocator uses the <see cref="IServiceProvider" /> to access context specific services (Ex. <see cref="IHttpContextAccessor" />)
+        /// </summary>
+        /// <remarks>
+        /// Should only be used if the standard approach for configuring NLog is not enough
+        /// </remarks>
+        /// <param name="serviceProvider"></param>
+        public static IServiceProvider SetupNLogServiceLocator(this IServiceProvider serviceProvider)
+        {
+            ServiceLocator.ServiceProvider = serviceProvider;
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            return serviceProvider;
+        }
+
 #if ASP_NET_CORE2
 
         /// <summary>
         /// Apply NLog configuration from XML config.
         /// 
-        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(string)"/> is used.
+        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(string)" /> is used.
         /// </summary>
         /// <param name="builder">The logging builder</param>
-        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
+        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
+        /// >
         /// <returns>LogFactory to get loggers, add events etc</returns>
         [Obsolete("Use UseNLog() on IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog()")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
@@ -69,7 +88,7 @@ namespace NLog.Web
         /// <summary>
         /// Configure NLog from API
         /// 
-        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(LoggingConfiguration)"/> is used.
+        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(LoggingConfiguration)" /> is used.
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
@@ -84,7 +103,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers. 
+        /// Use NLog for Dependency Injected loggers.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
         {
@@ -92,48 +111,48 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers. 
+        /// Use NLog for Dependency Injected loggers.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
         /// <returns></returns>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
-            if (builder == null) throw new ArgumentNullException(nameof(builder));
-            
-            builder.ConfigureServices(services =>
+            if (builder == null)
             {
-                ConfigureServicesNLog(options, services, (serviceProvider) => serviceProvider.GetService<Microsoft.Extensions.Configuration.IConfiguration>());
-            });
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.ConfigureServices(services => { ConfigureServicesNLog(options, services, serviceProvider => serviceProvider.GetService<IConfiguration>()); });
             return builder;
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers. 
+        /// Use NLog for Dependency Injected loggers.
         /// </summary>
-        public static Microsoft.Extensions.Hosting.IHostBuilder UseNLog(this Microsoft.Extensions.Hosting.IHostBuilder builder)
+        public static IHostBuilder UseNLog(this IHostBuilder builder)
         {
             return UseNLog(builder, null);
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers. 
+        /// Use NLog for Dependency Injected loggers.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
         /// <returns></returns>
-        public static Microsoft.Extensions.Hosting.IHostBuilder UseNLog(this Microsoft.Extensions.Hosting.IHostBuilder builder, NLogAspNetCoreOptions options)
+        public static IHostBuilder UseNLog(this IHostBuilder builder, NLogAspNetCoreOptions options)
         {
-            if (builder == null) throw new ArgumentNullException(nameof(builder));
-            
-            builder.ConfigureServices((hostbuilder, services) =>
+            if (builder == null)
             {
-                ConfigureServicesNLog(options, services, (serviceProvider) => hostbuilder.Configuration);
-            });
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.ConfigureServices((hostbuilder, services) => { ConfigureServicesNLog(options, services, serviceProvider => hostbuilder.Configuration); });
             return builder;
         }
 
-        private static void ConfigureServicesNLog(NLogAspNetCoreOptions options, IServiceCollection services, Func<IServiceProvider, Microsoft.Extensions.Configuration.IConfiguration> lookupConfiguration)
+        private static void ConfigureServicesNLog(NLogAspNetCoreOptions options, IServiceCollection services, Func<IServiceProvider, IConfiguration> lookupConfiguration)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
@@ -148,8 +167,11 @@ namespace NLog.Web
                 {
                     ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
                     if (options == null)
+                    {
                         provider.Configure(configuration.GetSection("Logging:NLog"));
+                    }
                 }
+
                 return provider;
             });
 
@@ -160,21 +182,5 @@ namespace NLog.Web
             }
         }
 #endif
-
-        /// <summary>
-        /// Override the default <see cref="IServiceProvider"/> used by the NLog ServiceLocator.
-        /// NLog ServiceLocator uses the <see cref="IServiceProvider"/> to access context specific services (Ex. <see cref="IHttpContextAccessor"/>)
-        /// </summary>
-        /// <remarks>
-        /// Should only be used if the standard approach for configuring NLog is not enough
-        /// </remarks>
-        /// <param name="serviceProvider"></param>
-        public static IServiceProvider SetupNLogServiceLocator(this IServiceProvider serviceProvider)
-        {
-            ServiceLocator.ServiceProvider = serviceProvider;
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            return serviceProvider;
-        }
     }
 }

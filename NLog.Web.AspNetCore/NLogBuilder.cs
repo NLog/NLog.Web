@@ -13,7 +13,8 @@ namespace NLog.Web
         /// <summary>
         /// Configure NLog from XML config.
         /// </summary>
-        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>>
+        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
+        /// >
         /// <returns>LogFactory to get loggers, add events etc</returns>
         public static LogFactory ConfigureNLog(string configFileName)
         {

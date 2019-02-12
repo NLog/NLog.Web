@@ -1,14 +1,14 @@
 using System.Text;
+using NLog.Config;
+using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Routing;
 using System.Web;
 #else
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Http;
+
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -30,12 +30,12 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         /// <param name="context">The current http context.</param>
         protected override void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContextBase context)
         {
-            string key = "controller";
+            var key = "controller";
 
 #if !ASP_NET_CORE
             var controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
@@ -43,7 +43,9 @@ namespace NLog.Web.LayoutRenderers
             var controller = context?.GetRouteData()?.Values?[key]?.ToString();
 #endif
             if (!string.IsNullOrEmpty(controller))
+            {
                 builder.Append(controller);
+            }
         }
     }
 }

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
+
 #if !ASP_NET_CORE
 using System.Web;
 #else
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -17,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Item variable.
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified variable stored 
+    /// Use this layout renderer to insert the value of the specified variable stored
     /// in the ASP.NET HttpContext.Current.Items dictionary.
     /// </remarks>
     /// <example>
@@ -65,7 +66,7 @@ namespace NLog.Web.LayoutRenderers
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
-        /// Gets or sets the culture used for rendering. 
+        /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo Culture { get; set; }
@@ -73,7 +74,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the specified ASP.NET Item value and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
