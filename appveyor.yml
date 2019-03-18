@@ -17,6 +17,9 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: quiet
+environment:
+  NUGET_DEPLOY_SECRET:
+    secure: DtVDH1ZfIR8E2oDLeSPxfn0WFXw3MCv4WhLkkQQl9LfEHswb5sdxdCYodNKhrKik
   
 skip_tags: true
 
