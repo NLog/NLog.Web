@@ -15,7 +15,7 @@ This package is for ASP.NET 3.5+
 
 For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore </description>
     <releaseNotes>
-- Added ${aspnet-request-contenttype} for NLog.Web (@snakefoot)
+- Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
     </releaseNotes>
     <copyright>Copyright 2014-2019</copyright>
     <tags>nlog log target layoutrenderer web asp.net httpcontext</tags>
