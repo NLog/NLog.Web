@@ -43,3 +43,6 @@ test_script:
 artifacts:
 - path: '**\NLog.Web.*.nupkg'
 - path: '**\NLog.Web.*.snupkg'
+
+after_deploy:
+- ps : Get-ChildItem *.snupkg -recurse | % { dotnet nuget push $_.FullName -s https://api.nuget.org/v3/index.json -k $env:NUGET_DEPLOY_SECRET }
