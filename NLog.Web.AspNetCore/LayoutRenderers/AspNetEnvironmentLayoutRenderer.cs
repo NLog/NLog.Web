@@ -9,9 +9,8 @@ using NLog.Web.DependencyInjection;
 
 namespace NLog.Web.LayoutRenderers
 {
-
     /// <summary>
-    /// Rendering development environment. <see cref="IHostingEnvironment"/>
+    /// Rendering development environment. <see cref="IHostingEnvironment" />
     /// </summary>
     [LayoutRenderer("aspnet-environment")]
     [ThreadAgnostic]
@@ -21,11 +20,11 @@ namespace NLog.Web.LayoutRenderers
         private static IHostingEnvironment _hostingEnvironment;
 
         private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
-        
+
         /// <summary>
         /// Append to target
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {

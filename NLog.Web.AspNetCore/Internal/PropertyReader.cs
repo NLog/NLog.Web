@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using System.Linq;
 
 namespace NLog.Web.Internal
 {
@@ -13,11 +12,11 @@ namespace NLog.Web.Internal
         /// <param name="key">key</param>
         /// <param name="container">Container to perform value lookup using key</param>
         /// <param name="getVal">function to get a value with this key</param>
-        /// <param name="evaluateAsNestedProperties">evaluate <paramref name="key"/> as a nested property path. E.g. A.B is property B inside A.</param>
+        /// <param name="evaluateAsNestedProperties">evaluate <paramref name="key" /> as a nested property path. E.g. A.B is property B inside A.</param>
         /// <returns>value</returns>
         public static object GetValue<T>(string key, T container, Func<T, string, object> getVal, bool evaluateAsNestedProperties)
         {
-            if (String.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 return null;
             }
@@ -28,7 +27,7 @@ namespace NLog.Web.Internal
 
         private static object GetValueAsNestedProperties<T>(string key, T container, Func<T, string, object> getVal)
         {
-            var path = key.IndexOf('.') >= 0 ? key.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries) : null;
+            var path = key.IndexOf('.') >= 0 ? key.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries) : null;
 
             var value = getVal(container, path?.First() ?? key);
             if (value != null && path?.Length > 1)
@@ -39,11 +38,11 @@ namespace NLog.Web.Internal
                     value = propertyInfo?.GetValue(value, null);
                     if (value == null)
                     {
-                        //done
                         break;
                     }
                 }
             }
+
             return value;
         }
 

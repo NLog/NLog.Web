@@ -1,5 +1,4 @@
 ﻿#if !ASP_NET_CORE
-
 using System;
 using System.Web;
 

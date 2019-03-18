@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
+
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -32,7 +33,7 @@ namespace NLog.Web.LayoutRenderers
         /// List Query Strings' Key to be rendered from Request.
         /// If empty, then render all querystrings
         /// </summary>
-        public List<String> QueryStringKeys { get; set; }
+        public List<string> QueryStringKeys { get; set; }
 
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
@@ -43,7 +44,9 @@ namespace NLog.Web.LayoutRenderers
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
+            {
                 return;
+            }
 
             var printAllQueryString = QueryStringKeys == null || QueryStringKeys.Count == 0;
             var queryStringKeys = QueryStringKeys;
@@ -67,7 +70,9 @@ namespace NLog.Web.LayoutRenderers
 #else
             var queryStrings = httpRequest.Query;
             if (queryStrings == null || queryStrings.Count == 0)
+            {
                 return;
+            }
 
             if (printAllQueryString)
             {
@@ -83,7 +88,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
             NameValueCollection queryStrings,
 #else
-            IQueryCollection queryStrings,       
+            IQueryCollection queryStrings,
 #endif
             List<string> queryStringKeys)
         {
@@ -94,10 +99,13 @@ namespace NLog.Web.LayoutRenderers
                 var value = queryStrings[key];
 #else
                 if (!queryStrings.TryGetValue(key, out var objValue))
+                {
                     continue;
+                }
+
                 var value = objValue.ToString();
 #endif
-                if (!String.IsNullOrEmpty(value))
+                if (!string.IsNullOrEmpty(value))
                 {
                     yield return new KeyValuePair<string, string>(key, value);
                 }

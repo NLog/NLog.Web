@@ -2,16 +2,16 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-#if !ASP_NET_CORE
-using System.Web;
-#else
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Http;
-#endif
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+#if !ASP_NET_CORE
+using System.Web;
+#else
+using Microsoft.AspNetCore.Http.Features;
+
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -19,7 +19,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Session variable.
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified variable stored 
+    /// Use this layout renderer to insert the value of the specified variable stored
     /// in the ASP.NET Session dictionary.
     /// </remarks>
     /// <example>
@@ -45,6 +45,9 @@ namespace NLog.Web.LayoutRenderers
     [ThreadSafe]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
+#if ASP_NET_CORE
+        private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
+#endif
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetSessionValueLayoutRenderer" /> class.
         /// </summary>
@@ -67,7 +70,7 @@ namespace NLog.Web.LayoutRenderers
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
-        /// Gets or sets the culture used for rendering. 
+        /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo Culture { get; set; }
@@ -75,11 +78,14 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (Variable == null) { return; }
+            if (Variable == null)
+            {
+                return;
+            }
 
             var context = HttpContextAccessor.HttpContext;
             if (context?.Session == null)
@@ -93,8 +99,16 @@ namespace NLog.Web.LayoutRenderers
 #else
             //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
             //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
-            if (context.Items == null || context.Features.Get<ISessionFeature>()?.Session == null) { return; }
-            if (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue)) { return; }
+            if (context.Items == null || context.Features.Get<ISessionFeature>()?.Session == null)
+            {
+                return;
+            }
+
+            if (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue))
+            {
+                return;
+            }
+
             context.Items[NLogRetrievingSessionValue] = true;
 
             object value;
@@ -118,9 +132,5 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(Convert.ToString(value, formatProvider));
             }
         }
-
-#if ASP_NET_CORE
-        private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
-#endif
     }
 }

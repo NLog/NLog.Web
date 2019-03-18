@@ -1,10 +1,12 @@
 using System;
 using System.Text;
+using NLog.Common;
+using NLog.Config;
+using NLog.LayoutRenderers;
+
 #if !ASP_NET_CORE
 using System.Web;
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -18,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the specified ASP.NET User.Identity.Name variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
@@ -27,12 +29,12 @@ namespace NLog.Web.LayoutRenderers
                 var identity = HttpContextAccessor.HttpContext.User?.Identity;
                 if (identity == null)
                 {
-                    Common.InternalLogger.Debug("aspnet-user-identity - HttpContext User Identity is null");
+                    InternalLogger.Debug("aspnet-user-identity - HttpContext User Identity is null");
                     return;
                 }
 
                 builder.Append(identity.Name);
-             }
+            }
             catch (ObjectDisposedException)
             {
                 //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83

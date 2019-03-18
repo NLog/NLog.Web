@@ -1,13 +1,14 @@
 using System;
 using System.Text;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
+
 #endif
-using NLog.Config;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -75,15 +76,17 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the specified ASP.NET Request variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
+            {
                 return;
+            }
 
-            string value = string.Empty;
+            var value = string.Empty;
             if (QueryString != null)
             {
                 value = LookupQueryString(QueryString, httpRequest);
@@ -111,6 +114,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 value = LookupItemValue(Item, httpRequest);
             }
+
             builder.Append(value);
         }
 
@@ -148,14 +152,20 @@ namespace NLog.Web.LayoutRenderers
         private static string LookupQueryString(string key, HttpRequest httpRequest)
         {
             if (httpRequest.Query?.TryGetValue(key, out var queryValue) ?? false)
+            {
                 return queryValue.ToString();
+            }
+
             return null;
         }
 
         private static string LookupFormValue(string key, HttpRequest httpRequest)
         {
             if (httpRequest.HasFormContentType && (httpRequest.Form?.TryGetValue(key, out var queryValue) ?? false))
+            {
                 return queryValue.ToString();
+            }
+
             return null;
         }
 
@@ -163,14 +173,20 @@ namespace NLog.Web.LayoutRenderers
         {
             string cookieValue = null;
             if (httpRequest.Cookies?.TryGetValue(key, out cookieValue) ?? false)
+            {
                 return cookieValue;
+            }
+
             return null;
         }
 
         private static string LookupHeaderValue(string key, HttpRequest httpRequest)
         {
             if (httpRequest.Headers?.TryGetValue(key, out var headerValue) ?? false)
+            {
                 return headerValue.ToString();
+            }
+
             return null;
         }
 
@@ -178,7 +194,10 @@ namespace NLog.Web.LayoutRenderers
         {
             object itemValue = null;
             if (httpRequest.HttpContext.Items?.TryGetValue(key, out itemValue) ?? false)
+            {
                 return itemValue?.ToString();
+            }
+
             return null;
         }
 #endif

@@ -2,6 +2,10 @@
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http;
+
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -20,7 +24,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if ASP_NET_CORE
-        private string LookupTraceIdentifier(Microsoft.AspNetCore.Http.HttpContext httpContext)
+        private string LookupTraceIdentifier(HttpContext httpContext)
         {
             return httpContext.TraceIdentifier;
         }

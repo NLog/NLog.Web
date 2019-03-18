@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-#if !ASP_NET_CORE
-using System.Collections.Specialized;
-using System.Web;
-#else
-using Microsoft.AspNetCore.Http;
-#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
-using NLog.Web.Enums;
 using NLog.Web.Internal;
+#if !ASP_NET_CORE
+using NLog.Web.Enums;
+using System.Collections.Specialized;
+using System.Web;
+
+#else
+using Microsoft.AspNetCore.Http;
+
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -36,13 +38,15 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
+            {
                 return;
+            }
 
             var cookies = httpRequest.Cookies;
             if (CookieNames?.Count > 0 && cookies?.Count > 0)

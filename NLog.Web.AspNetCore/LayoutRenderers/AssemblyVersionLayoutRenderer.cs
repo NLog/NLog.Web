@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using NLog.Common;
 using NLog.Config;
@@ -25,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <inheritdoc />
-        protected override System.Reflection.Assembly GetAssembly()
+        protected override Assembly GetAssembly()
         {
             var assembly = base.GetAssembly();
 
@@ -40,7 +40,6 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-
         private static System.Reflection.Assembly GetAspNetEntryAssembly()
         {
             if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.ApplicationInstance == null)

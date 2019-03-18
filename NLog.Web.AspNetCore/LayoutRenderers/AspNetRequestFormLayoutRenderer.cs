@@ -4,6 +4,9 @@ using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http;
+#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -16,7 +19,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a comma.
     /// ${aspnet-request-form:Include=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
     /// ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
-    /// ${aspnet-request-form:Include=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude"/> takes precedence over <see cref="Include"/>).
+    /// ${aspnet-request-form:Include=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude" /> takes precedence over <see cref="Include" />).
     /// ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// </code>
     /// </example>
@@ -25,7 +28,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
-        /// Gets or sets the form keys to include in the output.  If omitted, all are included.  <see cref="Exclude"/> takes precedence over <see cref="Include"/>.
+        /// Gets or sets the form keys to include in the output.  If omitted, all are included.  <see cref="Exclude" /> takes precedence over <see cref="Include" />.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
 #if ASP_NET_CORE
@@ -35,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Gets or sets the form keys to exclude from the output.  If omitted, none are excluded.  <see cref="Exclude"/> takes precedence over <see cref="Include"/>.
+        /// Gets or sets the form keys to exclude from the output.  If omitted, none are excluded.  <see cref="Exclude" /> takes precedence over <see cref="Include" />.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
 #if ASP_NET_CORE
@@ -79,10 +82,11 @@ namespace NLog.Web.LayoutRenderers
             System.Web.HttpRequestBase httpRequest
 #else
             ICollection<string> formKeys,
-            Microsoft.AspNetCore.Http.HttpRequest httpRequest
+            HttpRequest httpRequest
 #endif
-            )
+        )
         {
+            // ReSharper disable once SuggestVarOrType_BuiltInTypes
             foreach (string key in formKeys)
             {
                 if ((Include.Count == 0 || Include.Contains(key)) && !Exclude.Contains(key))
