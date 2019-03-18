@@ -5,7 +5,7 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 Date format: (year/month/day)
 
 ### v4.8.1 aspnetcore & aspnet4 (2019/03/18)
-- [#339]](https://github.com/NLog/NLog.Web/pull/339) Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
+- [#339](https://github.com/NLog/NLog.Web/pull/339) Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
 
 ### v4.8.0-aspnet4 (2019/01/30)
 - [#334](https://github.com/NLog/NLog.Web/pull/334) Added ${aspnet-request-contenttype} for NLog.Web (@snakefoot)
