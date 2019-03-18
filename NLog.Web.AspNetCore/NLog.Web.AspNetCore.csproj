@@ -5,7 +5,7 @@
 
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
-    <VersionPrefix>4.8</VersionPrefix>
+    <VersionPrefix>4.8.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
     <InformationalVersion>$(Version)</InformationalVersion>
@@ -30,10 +30,7 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Updated Microsoft.AspNetCore to ver. 2.1 (Long-Term-Support)
-- ${configsetting} layout renderer now depends on UseNLog-call to provide IConfiguration using IServiceProvider
-- NLogLoggerProvider options now binds to IConfiguration (Using section Logging:NLog)
-- UseNLog-call now also available for IHostBuilder
+- Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>

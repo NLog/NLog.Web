@@ -1,4 +1,4 @@
-version: 4.8.0.{build}
+version: 4.8.1.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
 image: Visual Studio 2017
@@ -7,8 +7,8 @@ assembly_info:
   patch: true
   file: '**\AssemblyInfo.cs'
   assembly_version: '4.0.0'
-  assembly_file_version: '4.8.0.{build}' #NLog.Web
-  assembly_informational_version: '4.8.0' #NLog.Web
+  assembly_file_version: '4.8.1.{build}' #NLog.Web
+  assembly_informational_version: '4.8.1' #NLog.Web
 nuget:
   project_feed: true
 matrix:
@@ -25,7 +25,7 @@ skip_tags: true
 
 build_script:
 - cmd: >-
-    call build_aspnet.bat -nuget_version=4.8.0 # NLog.Web package
+    call build_aspnet.bat -nuget_version=4.8.1 # NLog.Web package
 
     call build_aspnetcore.bat # update NLog.Web.AspNetCore.csproj for version number
 
