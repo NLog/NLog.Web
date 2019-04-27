@@ -38,6 +38,11 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
+            if (httpRequest.ContentLength <= 0)
+            {
+                return; // No Body to read
+            }
+
 #if !ASP_NET_CORE
             var body = httpRequest.InputStream;
 #else
@@ -47,6 +52,12 @@ namespace NLog.Web.LayoutRenderers
             if (body == null)
             {
                 InternalLogger.Debug("AspNetRequestPostedBody: body stream was null");
+                return;
+            }
+
+            if (!body.CanRead)
+            {
+                InternalLogger.Debug("AspNetRequestPostedBody: body stream has been closed");
                 return;
             }
 

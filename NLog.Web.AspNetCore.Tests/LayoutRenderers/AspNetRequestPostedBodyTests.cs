@@ -62,6 +62,7 @@ namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
 #else
             httpContext.Request.InputStream.Returns(stream);
 #endif
+            httpContext.Request.ContentLength.Returns((int)(stream?.Length ?? 0));
         }
 
         private static MemoryStream CreateStream(string content)
