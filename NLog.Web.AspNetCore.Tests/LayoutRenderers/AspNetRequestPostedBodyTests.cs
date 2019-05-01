@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Web;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+#else
+using System.Web;
 #endif
 using NLog.Web.LayoutRenderers;
 using NLog.Web.Tests.LayoutRenderers;

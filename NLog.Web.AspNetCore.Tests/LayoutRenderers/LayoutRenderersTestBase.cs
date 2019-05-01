@@ -1,5 +1,4 @@
-﻿using System.Web;
-using NLog.Web.LayoutRenderers;
+﻿using NLog.Web.LayoutRenderers;
 using NLog.Web.Tests;
 using NSubstitute;
 using Xunit;
@@ -7,6 +6,8 @@ using Xunit;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+#else
+using System.Web;
 #endif
 
 namespace NLog.Web.Tests.LayoutRenderers
