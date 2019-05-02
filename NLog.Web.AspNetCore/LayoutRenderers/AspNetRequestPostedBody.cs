@@ -29,7 +29,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestPostedBody : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Skip logging of HttpRequest.Body when ContentLength is larger than this (0 = No limit, -1 = No Buffer Limit)
+        /// Max size in bytes of the body. Skip logging of the body when larger.
+        /// Default 30720 Bytes = 30 KiB 
+        /// (0 = No limit, -1 = No Buffer Limit)
         /// </summary>
         public int MaxContentLength { get; set; } = 30 * 1024;
 
