@@ -51,81 +51,37 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            if (!TryGetBody(httpRequest, out var body))
+            long? contentLength = httpRequest.ContentLength;
+            if (!TryGetBody(httpRequest, contentLength, out var body))
             {
                 return; // No Body to read
             }
 
-            // reset if possible
-            if (!TryResetStream(httpRequest, body, out var oldPosition))
-            {
-                return;
-            }
-
             var content = BodyToString(body);
-
-            //restore
-            body.Position = oldPosition;
-
             builder.Append(content);
         }
 
         private static string BodyToString(Stream body)
         {
-            // Note: don't dispose the StreamReader, it will close the stream and that's unwanted. You could pass that that
-            // to the StreamReader in some platforms, but then the dispose will be a NOOP, so for platform compat just don't dispose
-            var bodyReader = new StreamReader(body);
-            var content = bodyReader.ReadToEnd();
-            return content;
-        }
-
-        private bool TryResetStream(HttpRequest httpRequest, Stream body, out long oldPosition)
-        {
-            long? contentLength = httpRequest.ContentLength;
-            oldPosition = body.Position;
-            if (!body.CanSeek)
-            {
-
-#if !ASP_NET_CORE
-                InternalLogger.Debug("AspNetRequestPostedBody: body stream cannot seek");
-                return false;
-#endif
-
-
-                if (oldPosition > 0 && oldPosition >= contentLength)
-                {
-                    InternalLogger.Debug("AspNetRequestPostedBody: body stream cannot seek and already read. StreamPosition={0}", oldPosition);
-                    return false;
-                }
-
-                oldPosition = 0;
-                if (!TryEnableRewind(httpRequest))
-                {
-                    return false;
-                }
-
-                // can seek after buffering?
-                if (!body.CanSeek)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (MaxContentLength > 0 && !contentLength.HasValue && body.Length > MaxContentLength)
-                {
-                    InternalLogger.Debug("AspNetRequestPostedBody: body stream too big. Body.Length={0}", body.Length);
-                    return false;
-                }
-            }
-
+            var oldPosition = body.Position;
             body.Position = 0;
-            return true;
+            try
+            {
+                // Note: don't dispose the StreamReader, it will close the stream and that's unwanted. You could pass that that
+                // to the StreamReader in some platforms, but then the dispose will be a NOOP, so for platform compat just don't dispose
+                var bodyReader = new StreamReader(body);
+                var content = bodyReader.ReadToEnd();
+                return content;
+            }
+            finally
+            {
+                //restore
+                body.Position = oldPosition;
+            }
         }
 
-        private bool TryGetBody(HttpRequest httpRequest, out Stream body)
+        private bool TryGetBody(HttpRequest httpRequest, long? contentLength, out Stream body)
         {
-            long? contentLength = httpRequest.ContentLength;
             body = null;
             if (contentLength <= 0)
             {
@@ -152,6 +108,28 @@ namespace NLog.Web.LayoutRenderers
                 return false;
             }
 
+            if (!body.CanSeek)
+            {
+                var oldPosition = body.Position;
+                if (oldPosition > 0 && oldPosition >= contentLength)
+                {
+                    InternalLogger.Debug("AspNetRequestPostedBody: body stream cannot seek and already read. StreamPosition={0}", oldPosition);
+                    return false;
+                }
+
+                if (!TryEnableBuffering(httpRequest, contentLength, out body))
+                    return false;
+            }
+            else
+            {
+                if (MaxContentLength > 0 && !contentLength.HasValue && body.Length > MaxContentLength)
+                {
+                    InternalLogger.Debug("AspNetRequestPostedBody: body stream too big. Body.Length={0}", body.Length);
+                    body = null;
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -165,9 +143,11 @@ namespace NLog.Web.LayoutRenderers
             return body;
         }
 
-        private bool TryEnableRewind(HttpRequest httpRequest)
+        ///<returns>Can seek now?</returns>
+        private bool TryEnableBuffering(HttpRequest httpRequest, long? contentLength, out Stream bodyStream)
         {
-            long? contentLength = httpRequest.ContentLength;
+            bodyStream = null;
+
             if (MaxContentLength >= 0 && !contentLength.HasValue)
             {
                 InternalLogger.Debug("AspNetRequestPostedBody: body stream cannot seek with unknown ContentLength");
@@ -181,16 +161,26 @@ namespace NLog.Web.LayoutRenderers
                 return false;
             }
 
-            EnableRewind(httpRequest, bufferThreshold);
+            bodyStream = EnableRewind(httpRequest, bufferThreshold);
+            if (bodyStream?.CanSeek != true)
+            {
+                InternalLogger.Debug("AspNetRequestPostedBody: body stream cannot seek");
+                return false;
+            }
+
             return true;
         }
 
-        private static void EnableRewind(HttpRequest httpRequest, int bufferThreshold)
+        private static Stream EnableRewind(HttpRequest httpRequest, int bufferThreshold)
         {
 #if ASP_NET_CORE2
             Microsoft.AspNetCore.Http.HttpRequestRewindExtensions.EnableBuffering(httpRequest, bufferThreshold);
+            return httpRequest.Body;
 #elif ASP_NET_CORE1
             Microsoft.AspNetCore.Http.Internal.BufferingHelper.EnableRewind(httpRequest, bufferThreshold);
+            return httpRequest.Body;
+#else
+            return null;
 #endif
         }
     }
