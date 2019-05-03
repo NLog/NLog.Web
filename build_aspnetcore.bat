@@ -1,7 +1,28 @@
-echo off
+@echo off
 
-rem update NLog.Web.AspNetCore.csproj for version number
+rem fallback if not passed
+set version_prefix=1.0.0
+set version_suffix=
+set version_build=%version_prefix%
 
-cd NLog.Web.AspNetCore
-msbuild /t:restore /t:build /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg
-cd ..
+call :read_params %*
+
+msbuild .\NLog.Web.AspNetCore /t:restore,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
+IF ERRORLEVEL 1 EXIT /B 1
+
+rem read pass parameters by name
+:read_params
+if not %1/==/ (
+    if not "%__var%"=="" (
+        if not "%__var:~0,1%"=="-" (
+            endlocal
+            goto read_params
+        )
+        endlocal & set %__var:~1%=%~1
+    ) else (
+        setlocal & set __var=%~1
+    )
+    shift
+    goto read_params
+)
+exit /B

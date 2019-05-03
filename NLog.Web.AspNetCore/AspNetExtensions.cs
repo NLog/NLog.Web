@@ -178,7 +178,7 @@ namespace NLog.Web
             //note: this one is called before  services.AddSingleton<ILoggerFactory>
             if ((options ?? NLogAspNetCoreOptions.Default).RegisterHttpContextAccessor)
             {
-                services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                services.AddHttpContextAccessor();
             }
         }
 #endif

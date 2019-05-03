@@ -5,14 +5,7 @@
 
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
 
-    <VersionPrefix>4.8.1</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
-    <Version>$(VersionPrefix)$(VersionSuffix)</Version>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    <FileVersion>$(VersionPrefix).0</FileVersion>
-    <FileVersion Condition="'$(APPVEYOR_BUILD_NUMBER)' != ''">$(VersionPrefix).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
-
-    <Product>NLog.Web.AspNetCore v$(Version)</Product>
+    <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 Use NLog with the ASP.NET Core platform. Adds helpers and layout renderers for websites and webapplications.
 
@@ -37,7 +30,6 @@ Supported platforms:
     <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
     <SignAssembly>true</SignAssembly>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>

@@ -7,8 +7,8 @@ assembly_info:
   patch: true
   file: '**\AssemblyInfo.cs'
   assembly_version: '4.0.0'
-  assembly_file_version: '4.8.1.{build}' #NLog.Web
-  assembly_informational_version: '4.8.1' #NLog.Web
+  assembly_file_version: '{version}' #NLog.Web
+  assembly_informational_version: '{version}' #NLog.Web
 nuget:
   project_feed: true
 matrix:
@@ -24,10 +24,27 @@ environment:
 skip_tags: true
 
 build_script:
-- cmd: >-
-    call build_aspnet.bat -nuget_version=4.8.1 # NLog.Web package
-
-    call build_aspnetcore.bat # update NLog.Web.AspNetCore.csproj for version number
+- ps: |
+    $versionPrefix = "4.8.1"
+    $versionSuffix = ""
+    $versionBuild = $versionPrefix + "." + ${env:APPVEYOR_BUILD_NUMBER}
+    $versionNuget = $versionPrefix
+    if ($env:APPVEYOR_PULL_REQUEST_NUMBER)
+    {
+        $versionPrefix = $versionBuild
+        $versionSuffix = "PR" + $env:APPVEYOR_PULL_REQUEST_NUMBER
+        $versionNuget = $versionPrefix + "-" + $versionSuffix
+    }
+    $build_aspnet = "build_aspnet.bat", "-nuget_version=$versionNuget"
+    & cmd /c $build_aspnet
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+    $build_aspnetcore = "build_aspnetcore.bat", "-version_prefix=$versionPrefix", "-version_suffix=$versionSuffix", "-version_build=$versionBuild"
+    & cmd /c $build_aspnetcore
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
 
 deploy:
 - provider: NuGet
@@ -38,7 +55,8 @@ deploy:
     branch: master
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion -DependencyVersion Ignore
-  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:coverage.xml
+  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.Tests\bin\Release\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -output:coverage.xml
+  - OpenCover\tools\OpenCover.Console.exe -register:user -mergeoutput -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\NLog.Web.AspNetCore.Tests\bin\Release\net461\NLog.Web.AspNetCore.Tests.dll\" -appveyor -noshadow" -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -output:coverage.xml
   - pip install codecov
   - codecov -f "coverage.xml"
   - ps: .\test_aspnetcore.ps1

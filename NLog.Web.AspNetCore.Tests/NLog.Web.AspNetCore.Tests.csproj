@@ -20,9 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
     <PackageReference Include="NSubstitute" Version="4.0.0" />
-    
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -40,10 +37,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Web">
-      <HintPath>C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Web.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>
