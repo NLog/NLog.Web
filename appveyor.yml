@@ -1,4 +1,4 @@
-version: 4.8.1.{build}
+version: 4.8.2.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
 image: Visual Studio 2017
@@ -25,8 +25,8 @@ skip_tags: true
 
 build_script:
 - ps: |
-    $versionPrefix = "4.8.1"
-    $versionSuffix = ""
+    $versionPrefix = "4.8.2"
+    $versionSuffix = "rc1"
     $versionBuild = $versionPrefix + "." + ${env:APPVEYOR_BUILD_NUMBER}
     $versionNuget = $versionPrefix
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER)
