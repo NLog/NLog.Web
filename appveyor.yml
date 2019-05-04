@@ -40,7 +40,7 @@ build_script:
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
-    $build_aspnetcore = "build_aspnetcore.bat", "-version_prefix=$versionPrefix", "-version_suffix=$versionSuffix", "-version_build=$versionBuild"
+    $build_aspnetcore = "build_aspnetcore.bat", "-version_prefix=$versionPrefix", "-version_build=$versionBuild", "-version_suffix=$versionSuffix"
     & cmd /c $build_aspnetcore
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
