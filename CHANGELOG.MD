@@ -4,6 +4,9 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.8.2 aspnetcore & aspnet4
+- [#401](https://github.com/NLog/NLog.Web/pull/401) Updated ${aspnet-request-posted-body} with new MaxContentLength option
+
 ### v4.8.1 aspnetcore & aspnet4 (2019/03/18)
 - [#339](https://github.com/NLog/NLog.Web/pull/339) Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
 

@@ -23,7 +23,7 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
+- Updated ${aspnet-request-posted-body} with new MaxContentLength option
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
