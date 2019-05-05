@@ -33,6 +33,9 @@ build_script:
     {
         $versionPrefix = $versionBuild
         $versionSuffix = "PR" + $env:APPVEYOR_PULL_REQUEST_NUMBER
+    }
+    if ($versionSuffix)
+    {
         $versionNuget = $versionPrefix + "-" + $versionSuffix
     }
     $build_aspnet = "build_aspnet.bat", "-nuget_version=$versionNuget"
