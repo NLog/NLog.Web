@@ -23,7 +23,8 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Updated ${aspnet-request-posted-body} with new MaxContentLength option
+- Fixed that ${aspnet-request-posted-body} could lead to "A non-empty request body is required." in ASP.NET Core 2 (@snakefoot, @304NotModified)
+- Added MaxContentLength option to ${aspnet-request-posted-body} (@snakefoot, @304NotModified)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>

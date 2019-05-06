@@ -4,8 +4,12 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
-### v4.8.2 aspnetcore & aspnet4
-- [#401](https://github.com/NLog/NLog.Web/pull/401) Updated ${aspnet-request-posted-body} with new MaxContentLength option
+### v4.8.2 aspnetcore (2019/05/06)
+- [#401](https://github.com/NLog/NLog.Web/pull/401) Fixed that ${aspnet-request-posted-body} could lead to "A non-empty request body is required." in ASP.NET Core 2 (@snakefoot, @304NotModified)
+- [#401](https://github.com/NLog/NLog.Web/pull/401) Added MaxContentLength option to ${aspnet-request-posted-body} (@snakefoot, @304NotModified)
+
+### v4.8.2 aspnet4 (2019/05/04)
+- [#401](https://github.com/NLog/NLog.Web/pull/401) Added MaxContentLength option to ${aspnet-request-posted-body} (@snakefoot, @304NotModified)
 
 ### v4.8.1 aspnetcore & aspnet4 (2019/03/18)
 - [#339](https://github.com/NLog/NLog.Web/pull/339) Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
