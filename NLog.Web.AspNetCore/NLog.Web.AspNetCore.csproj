@@ -43,23 +43,23 @@ Supported platforms:
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Title>NLog.Web.AspNetCore for .NET Framework 4.5.1+</Title>
+    <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Title>NLog.Web.AspNetCore for .NET Framework 4.6+</Title>
+    <Title>ASP.NET Core 2 integration for NLog - .NET Framework 4.6+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
-    <Title>NLog.Web.AspNetCore for NetStandard 1.5</Title>
+    <Title>ASP.NET Core 1 integration for NLog - .NET Standard 1.5</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Title>NLog.Web.AspNetCore for NetStandard 2.0</Title>
+    <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
 
