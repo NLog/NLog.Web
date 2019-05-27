@@ -7,16 +7,13 @@
     <InformationalVersion>1.2.3.2</InformationalVersion>
     <DebugType Condition=" '$(TargetFramework)' == 'net461' ">Full</DebugType>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(TargetFramework)' != 'netcoreapp1.1' ">
     <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
     <PackageReference Include="NSubstitute" Version="4.2.0" />
@@ -25,7 +22,6 @@
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
   </ItemGroup>

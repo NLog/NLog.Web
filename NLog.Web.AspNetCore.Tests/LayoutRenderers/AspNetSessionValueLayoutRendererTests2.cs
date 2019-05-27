@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if ASP_NET_CORE
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -175,3 +177,4 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
     }
 }
+#endif
