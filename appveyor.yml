@@ -17,9 +17,6 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: quiet
-environment:
-  NUGET_DEPLOY_SECRET:
-    secure: DtVDH1ZfIR8E2oDLeSPxfn0WFXw3MCv4WhLkkQQl9LfEHswb5sdxdCYodNKhrKik
   
 skip_tags: true
 
@@ -53,7 +50,6 @@ deploy:
 - provider: NuGet
   api_key:
     secure: DtVDH1ZfIR8E2oDLeSPxfn0WFXw3MCv4WhLkkQQl9LfEHswb5sdxdCYodNKhrKik
-  artifact: /.*\.nupkg/
   on:
     branch: master
 test_script:
@@ -67,6 +63,3 @@ test_script:
 artifacts:
 - path: '**\NLog.Web.*.nupkg'
 - path: '**\NLog.Web.*.snupkg'
-
-after_deploy:
-- ps : Get-ChildItem *.snupkg -recurse | % { dotnet nuget push $_.FullName -s https://api.nuget.org/v3/index.json -k $env:NUGET_DEPLOY_SECRET }
