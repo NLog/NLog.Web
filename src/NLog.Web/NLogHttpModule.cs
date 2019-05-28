@@ -1,5 +1,4 @@
-﻿#if !ASP_NET_CORE
-using System;
+﻿using System;
 using System.Web;
 
 namespace NLog.Web
@@ -55,4 +54,3 @@ namespace NLog.Web
         }
     }
 }
-#endif

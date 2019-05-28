@@ -33,9 +33,9 @@
     <Reference Include="System.Web.Routing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\NLog.Web.AspNetCore.Tests\**\*.cs" Exclude="**\obj\**;**\AssemblyInfo*.cs" />
+    <Compile Include="..\Shared\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NLog.Web\NLog.Web.csproj" />
+    <ProjectReference Include="..\..\src\NLog.Web\NLog.Web.csproj" />
   </ItemGroup>
 </Project>

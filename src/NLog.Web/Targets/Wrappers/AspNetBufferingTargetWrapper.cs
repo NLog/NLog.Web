@@ -1,5 +1,4 @@
-﻿#if !ASP_NET_CORE
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Web;
 using NLog.Common;
@@ -209,4 +208,3 @@ namespace NLog.Web.Targets.Wrappers
         }
     }
 }
-#endif
