@@ -1,120 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E30DC886-8431-4CFA-90FA-38D9BE4203A0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NLog.Web</RootNamespace>
-    <AssemblyName>NLog.Web</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net35</TargetFramework>
+    <AssemblyTitle>NLog.Web</AssemblyTitle>
+    <Product>NLog.Web</Product>
+    <Description>Extend NLog with targets and layout renderers for websites and web applications.
+This package is for ASP.NET 3.5+
+
+For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore </Description>
+    <Copyright>Copyright 2014-2019</Copyright>
+    <Version>4.0.0.0</Version>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Authors>NLog</Authors>
+    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
+    <PackageId>NLog.Web</PackageId>
+    <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
+    <PackageReleaseNotes>
+- Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
+    </PackageReleaseNotes>
+    <PackageTags>nlog log target layoutrenderer web asp.net httpcontext</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants>TRACE;DEBUG;NET451</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET451</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\NLog.Web.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\NLog.Web.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.11\lib\net35\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
+    <PackageReference Include="NLog" Version="4.5.11" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\NLog.Web.AspNetCore\DefaultHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\IHttpContextAccessor.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetApplicationValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetAppBasePathLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetItemValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutRendererBase.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetLayoutMultiValueRendererBase.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcControllerRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcActionRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetMvcLayoutRendererBase.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestContentTypeLayoutRenderer.cs">
-      <Link>AspNetRequestContentTypeLayoutRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestFormLayoutRenderer.cs">
-      <Link>AspNetRequestFormLayoutRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestPostedBody.cs">
-      <Link>AspNetRequestPostedBody.cs</Link>
-    </Compile>
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestIpLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionIdLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetSessionValueLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetTraceIdentifierLayoutRenderer.cs">
-      <Link>AspNetTraceIdentifierLayoutRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserAuthTypeLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserIdentityLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetWebRootPathLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AssemblyVersionLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetUserIsAuthenticatedLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\IISInstanceNameLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestReferrerRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUrlRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestUserAgent.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestCookieLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHostLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestQueryStringLayoutRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\LayoutRenderers\AspNetRequestHttpMethodRenderer.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\Enums\AspNetRequestLayoutOutputFormat.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\Internal\PropertyReader.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\NLogHttpModule.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\Targets\AspNetTrace.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\Targets\Wrappers\AspNetBufferingTargetWrapper.cs" />
-    <Compile Include="..\NLog.Web.AspNetCore\Internal\RequestAccessorExtension.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="..\NLog.Web.AspNetCore\**\*.cs" Exclude="**\obj\**;**\AssemblyInfo.cs" />
     <None Include="NLog.snk" />
-    <None Include="packages.NLog.Web.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

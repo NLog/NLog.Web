@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if ASP_NET_CORE
+
+using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
@@ -184,3 +186,4 @@ namespace NLog.Web
 #endif
     }
 }
+#endif

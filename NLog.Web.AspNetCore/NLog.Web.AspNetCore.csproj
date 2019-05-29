@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
-
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 Use NLog with the ASP.NET Core platform. Adds helpers and layout renderers for websites and webapplications.
@@ -31,17 +28,14 @@ Supported platforms:
     <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
-
     <SignAssembly>true</SignAssembly>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-
     <RootNamespace>NLog.Web</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
@@ -66,18 +60,15 @@ Supported platforms:
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="1.5.0" />
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' and '$(TargetFramework)' != 'net461' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.1" />
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
