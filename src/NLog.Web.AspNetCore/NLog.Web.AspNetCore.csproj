@@ -35,6 +35,7 @@ Supported platforms:
     <RootNamespace>NLog.Web</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
@@ -56,7 +57,6 @@ Supported platforms:
     <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="1.5.0" />
   </ItemGroup>
@@ -74,9 +74,7 @@ Supported platforms:
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.0" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <AssemblyTitle>$(Title)</AssemblyTitle>
-  </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Include="..\Shared\**\*.cs" />
+  </ItemGroup>
 </Project>

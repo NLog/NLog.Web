@@ -1,5 +1,4 @@
-﻿#if ASP_NET_CORE
-using System;
+﻿using System;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,4 +38,3 @@ namespace NLog.Web.LayoutRenderers
         }
     }
 }
-#endif

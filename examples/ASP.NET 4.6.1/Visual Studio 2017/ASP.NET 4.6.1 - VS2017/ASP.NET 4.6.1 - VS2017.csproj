@@ -198,7 +198,7 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\NLog.Web\NLog.Web.csproj">
+    <ProjectReference Include="..\..\..\..\src\NLog.Web\NLog.Web.csproj">
       <Project>{e30dc886-8431-4cfa-90fa-38d9be4203a0}</Project>
       <Name>NLog.Web</Name>
     </ProjectReference>

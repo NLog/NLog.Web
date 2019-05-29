@@ -1,4 +1,3 @@
-#if !ASP_NET_CORE
 using System;
 using System.Globalization;
 using System.Text;
@@ -67,4 +66,3 @@ namespace NLog.Web.LayoutRenderers
         }
     }
 }
-#endif

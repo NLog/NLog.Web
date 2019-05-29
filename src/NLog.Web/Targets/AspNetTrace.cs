@@ -1,5 +1,4 @@
-﻿#if !ASP_NET_CORE
-using System.Web;
+﻿using System.Web;
 using NLog.Targets;
 
 namespace NLog.Web.Targets
@@ -54,4 +53,3 @@ namespace NLog.Web.Targets
         }
     }
 }
-#endif

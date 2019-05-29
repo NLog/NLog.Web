@@ -1,13 +1,7 @@
-#if !ASP_NET_CORE
 using System.Web;
-#else
-
-#endif
-
 
 namespace NLog.Web
 {
-#if !ASP_NET_CORE
     /// <summary>
     /// Provides the HttpContext associated with the current request.
     /// </summary>
@@ -28,5 +22,4 @@ namespace NLog.Web
         }
 
     }
-#endif
 }

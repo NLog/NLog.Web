@@ -49,7 +49,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore </Des
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\NLog.Web.AspNetCore\**\*.cs" Exclude="**\obj\**;**\AssemblyInfo.cs" />
+    <Compile Include="..\Shared\**\*.cs" />
     <None Include="NLog.snk" />
   </ItemGroup>
 </Project>
