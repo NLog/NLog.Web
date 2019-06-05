@@ -170,18 +170,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             ExecTest("a", o, "", appSettingLayoutRenderer);
         }
 
-
-        [Fact]
-        public void SessionWithPadding()
-        {
-            Layout layout = "${aspnet-session:a.b:padding=5:evaluateAsNestedProperties=true}";
-
-            var o = new { b = "c" };
-            //set in "a"
-            ExecTest("a", o, "    c", layout);
-        }
-
-
         [Fact]
         public void SessionWithCulture()
         {
@@ -202,11 +190,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         ///  <remarks>IRenderable is internal</remarks>
         private void ExecTest(string key, object value, object expected, Layout appSettingLayoutRenderer)
         {
-            Session[key] = value;
+            var simpleLayout = (appSettingLayoutRenderer as SimpleLayout);
+            var renderer = simpleLayout?.Renderers[0] as AspNetLayoutRendererBase;
 
-            var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
+            Assert.NotNull(renderer);
 
-            Assert.Equal(expected, rendered);
+            ExecTest(key, value, expected, renderer);
         }
 
         /// <summary>
@@ -217,9 +206,9 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="expected">expected</param>
         /// <param name="appSettingLayoutRenderer"></param>
         /// <remarks>IRenderable is internal</remarks>
-        private void ExecTest(string key, object value, object expected, LayoutRenderer appSettingLayoutRenderer)
+        private void ExecTest(string key, object value, object expected, AspNetLayoutRendererBase appSettingLayoutRenderer)
         {
-            Session[key] = value;
+            appSettingLayoutRenderer.HttpContextAccessor.HttpContext.Session[key] = value;
 
             var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
 
