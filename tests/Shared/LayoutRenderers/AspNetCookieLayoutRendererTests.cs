@@ -104,24 +104,20 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting_separators_layouts()
         {
-            try
-            {
-                var expectedResult = "key>TEST" + Environment.NewLine + "Key1>TEST1";
-                GlobalDiagnosticsContext.Set("valueSeparator1", ">");
+            var expectedResult = "key>TEST" + Environment.NewLine + "Key1>TEST1";
 
-                var renderer = CreateRenderer();
-                renderer.ValueSeparator = "${gdc:valueSeparator1}";
-                renderer.ItemSeparator = "${newline}";
+            var renderer = CreateRenderer();
+            renderer.ValueSeparator = "${event-properties:valueSeparator1}";
+            renderer.ItemSeparator = "${newline}";
 
-                string result = renderer.Render(new LogEventInfo());
+            var logEventInfo = new LogEventInfo();
+            logEventInfo.Properties["valueSeparator1"] = ">";
 
-                Assert.Equal(expectedResult, result);
-            }
-            finally
-            {
-                //clean up
-                GlobalDiagnosticsContext.Clear();
-            }
+            // Act
+            string result = renderer.Render(logEventInfo);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
         }
 
         [Fact]
@@ -329,28 +325,23 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void CommaSeperatedCookieNamesTest_Multiple_Cookie_Values_Flat_Formatting()
         {
+            // Arrange
             var expectedResult = "key=TEST&Key1=TEST1";
 
-            string config = @"<nlog>
-    <extensions>
-        <add assembly='NLog.Web' />
-    </extensions>
-<targets><target name='debug' type='Debug' layout='${aspnet-request-cookie:CookieNames=key,key1}' /></targets>
-    <rules>
-        <logger name='*' minlevel='Debug' writeTo='debug' />
-    </rules>
-</nlog>";
-            LogManager.Configuration = CreateConfigurationFromString(config);
+            var cookie = new HttpCookie("key", "TEST") { ["Key1"] = "TEST1" };
 
-            var cookie = new HttpCookie("key", "TEST");
-            cookie["Key1"] = "TEST1";
+            var layoutRender = new AspNetRequestCookieLayoutRenderer()
+            {
+                CookieNames = new List<string> { "key", "key1" }
+            };
 
-            HttpContext.Request.Cookies.Add(cookie);
-            var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
-            var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
+            var httpContextAccessorMock = CreateHttpContextAccessorMockWithCookie(cookie);
+            layoutRender.HttpContextAccessor = httpContextAccessorMock;
 
-            var result = renderer.Render(LogEventInfo.CreateNullEvent());
+            // Act
+            var result = layoutRender.Render(LogEventInfo.CreateNullEvent());
 
+            // Assert
             Assert.Equal(expectedResult, result);
         }
 
@@ -359,24 +350,28 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
 
-            string config = @"<nlog>
-    <extensions>
-        <add assembly='NLog.Web' />
-    </extensions>
-<targets><target name='debug' type='Debug' layout='${aspnet-request-cookie:CookieNames=key,key1:OutputFormat=Json}' /></targets>
-</nlog>";
-            LogManager.Configuration = CreateConfigurationFromString(config);
+            var cookie = new HttpCookie("key", "TEST") { ["Key1"] = "TEST1" };
 
-            var cookie = new HttpCookie("key", "TEST");
-            cookie["Key1"] = "TEST1";
+            var layoutRender = new AspNetRequestCookieLayoutRenderer()
+            {
+                CookieNames = new List<string> { "key", "key1" },
+                OutputFormat = AspNetRequestLayoutOutputFormat.Json
+            };
 
-            HttpContext.Request.Cookies.Add(cookie);
-            var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
-            var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
+            var httpContextAccessorMock = CreateHttpContextAccessorMockWithCookie(cookie);
+            layoutRender.HttpContextAccessor = httpContextAccessorMock;
 
-            var result = renderer.Render(LogEventInfo.CreateNullEvent());
+            var result = layoutRender.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(expectedResult, result);
+        }
+
+        private static IHttpContextAccessor CreateHttpContextAccessorMockWithCookie(HttpCookie cookie)
+        {
+            var httpCookieCollection = new HttpCookieCollection { cookie };
+            var httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessorMock.HttpContext.Request.Cookies.Returns(httpCookieCollection);
+            return httpContextAccessorMock;
         }
 
 #endif

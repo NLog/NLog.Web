@@ -1,4 +1,6 @@
-﻿@{
+﻿@model NLog.Web.AspNetCore2.Example.Models.MessageModel
+
+@{
     ViewData["Title"] = "Contact";
 }
 <h2>@ViewData["Title"]</h2>
@@ -15,3 +17,24 @@
     <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
     <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
 </address>
+
+@if (ViewData["Posted"] is bool b && b)
+{
+    <div>Message posted!</div>
+}
+else
+{
+    <form asp-action="PostMessage" asp-controller="Home" method="post">
+        <div>
+            <input asp-for="From" placeholder="From" autofocus/>
+        </div>
+        <div>
+            <textarea asp-for="Message" placeholder="Message"></textarea>
+        </div>
+
+        <div>
+            <button type="submit">Post</button>
+        </div>
+
+    </form>
+}

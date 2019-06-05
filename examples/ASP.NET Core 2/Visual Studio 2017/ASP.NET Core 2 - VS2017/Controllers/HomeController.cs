@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NLog.Web.AspNetCore2.Example.Models;
+using NLog.Web.LayoutRenderers;
 
 namespace NLog.Web.AspNetCore2.Example.Controllers
 {
@@ -32,11 +33,19 @@ namespace NLog.Web.AspNetCore2.Example.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Contact(bool posted = false)
         {
             ViewData["Message"] = "Your contact page.";
+            ViewData["Posted"] = posted;
 
-            return View();
+            return View(new MessageModel() { From = "me", Message = "My Message"});
+        }
+
+        [HttpPost]
+        public IActionResult PostMessage([FromForm] MessageModel messageModel)
+        {
+            _logger.LogInformation("Posted an message");
+            return RedirectToAction("Contact", new { posted = true });
         }
 
         public IActionResult Error()
