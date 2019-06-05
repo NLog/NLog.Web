@@ -17,7 +17,8 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore </Des
     <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
     <PackageReleaseNotes>
-- Added ${aspnet-request-posted-body} - log posted request body/payload (@304NotModified)
+- Added AspNetLayoutRendererBase.Register for registering lambdas with httpcontext (@304NotModified)
+- Fix NotSupportedException with ${aspnet-request-posted-body} (@304NotModified)
     </PackageReleaseNotes>
     <PackageTags>nlog log target layoutrenderer web asp.net httpcontext</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

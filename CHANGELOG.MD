@@ -4,6 +4,12 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+
+
+### v4.8.3 aspnetcore  & aspnet4 (2019/06/05)
+- [#428](https://github.com/NLog/NLog.Web/pull/428) Added AspNetLayoutRendererBase.Register for registering lambdas with httpcontext (@304NotModified)
+- [#431](https://github.com/NLog/NLog.Web/pull/431) Fix NotSupportedException with ${aspnet-request-posted-body} (@304NotModified)
+
 ### v4.8.2 aspnetcore (2019/05/06)
 - [#401](https://github.com/NLog/NLog.Web/pull/401) Fixed that ${aspnet-request-posted-body} could lead to "A non-empty request body is required." in ASP.NET Core 2 (@snakefoot, @304NotModified)
 - [#401](https://github.com/NLog/NLog.Web/pull/401) Added MaxContentLength option to ${aspnet-request-posted-body} (@snakefoot, @304NotModified)
