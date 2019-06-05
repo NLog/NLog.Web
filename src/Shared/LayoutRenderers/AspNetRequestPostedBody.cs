@@ -110,13 +110,6 @@ namespace NLog.Web.LayoutRenderers
 
             if (!body.CanSeek)
             {
-                var oldPosition = body.Position;
-                if (oldPosition > 0 && oldPosition >= contentLength)
-                {
-                    InternalLogger.Debug("AspNetRequestPostedBody: body stream cannot seek and already read. StreamPosition={0}", oldPosition);
-                    return false;
-                }
-
                 if (!TryEnableBuffering(httpRequest, contentLength, out body))
                     return false;
             }
