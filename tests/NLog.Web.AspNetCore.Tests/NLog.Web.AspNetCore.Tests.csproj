@@ -7,6 +7,8 @@
     <InformationalVersion>1.2.3.2</InformationalVersion>
     <DebugType Condition=" '$(TargetFramework)' == 'net461' ">Full</DebugType>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../NLog.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>

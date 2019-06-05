@@ -10,6 +10,8 @@
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
     <FileVersion>1.2.3.1</FileVersion>
     <DebugType>full</DebugType>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../NLog.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.*" />
