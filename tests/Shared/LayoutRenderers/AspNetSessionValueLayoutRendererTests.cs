@@ -18,38 +18,12 @@ using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
 using Xunit;
+using NSubstitute;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetSessionValueLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-        public AspNetSessionValueLayoutRendererTests()
-        {
-            SetUp();
-        }
-
-        private void SetUp()
-        {
-            //auto load won't work yet (in DNX), so use <extensions>
-            LogManager.Configuration = CreateConfigurationFromString(@"
-<nlog throwExceptions='true'>
-    <extensions>
-        <add assembly='NLog.Web' />
-    </extensions>
-</nlog>");
-            SetupFakeSession();
-        }
-
-        protected override void CleanUp()
-        {
-            Session.Clear();
-        }
-
-        private HttpSessionState Session
-        {
-            get { return HttpContext.Current.Session; }
-        }
-
         [Fact]
         public void SimpleTest()
         {
@@ -187,7 +161,6 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="value">set this value</param>
         /// <param name="expected">expected</param>
         /// <param name="appSettingLayoutRenderer"></param>
-        ///  <remarks>IRenderable is internal</remarks>
         private void ExecTest(string key, object value, object expected, Layout appSettingLayoutRenderer)
         {
             var simpleLayout = (appSettingLayoutRenderer as SimpleLayout);
@@ -205,33 +178,18 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// <param name="value">set this value</param>
         /// <param name="expected">expected</param>
         /// <param name="appSettingLayoutRenderer"></param>
-        /// <remarks>IRenderable is internal</remarks>
         private void ExecTest(string key, object value, object expected, AspNetLayoutRendererBase appSettingLayoutRenderer)
         {
-            appSettingLayoutRenderer.HttpContextAccessor.HttpContext.Session[key] = value;
+            var httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessorMock.HttpContext.Session[key].Returns(value);
+            httpContextAccessorMock.HttpContext.Session.Count.Returns(1);
+
+            appSettingLayoutRenderer.HttpContextAccessor = httpContextAccessorMock;
 
             var rendered = appSettingLayoutRenderer.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(expected, rendered);
         }
-
-        /// <summary>
-        /// Create Fake Session http://stackoverflow.com/a/10126711/201303
-        /// </summary>
-        private void SetupFakeSession()
-        {
-            var sessionContainer = new HttpSessionStateContainer("id", new SessionStateItemCollection(),
-                                                    new HttpStaticObjectsCollection(), 10, true,
-                                                    HttpCookieMode.AutoDetect,
-                                                    SessionStateMode.InProc, false);
-
-            HttpContext.Items["AspSession"] = typeof(HttpSessionState).GetConstructor(
-                                        BindingFlags.NonPublic | BindingFlags.Instance,
-                                        null, CallingConventions.Standard,
-                                        new[] { typeof(HttpSessionStateContainer) },
-                                        null)
-                                .Invoke(new object[] { sessionContainer });
         }
     }
-}
 #endif
