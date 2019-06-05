@@ -329,28 +329,18 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void CommaSeperatedCookieNamesTest_Multiple_Cookie_Values_Flat_Formatting()
         {
+            // Arrange
             var expectedResult = "key=TEST&Key1=TEST1";
 
-            string config = @"<nlog>
-    <extensions>
-        <add assembly='NLog.Web' />
-    </extensions>
-<targets><target name='debug' type='Debug' layout='${aspnet-request-cookie:CookieNames=key,key1}' /></targets>
-    <rules>
-        <logger name='*' minlevel='Debug' writeTo='debug' />
-    </rules>
-</nlog>";
-            LogManager.Configuration = CreateConfigurationFromString(config);
-
-            var cookie = new HttpCookie("key", "TEST");
-            cookie["Key1"] = "TEST1";
+            var cookie = new HttpCookie("key", "TEST") {["Key1"] = "TEST1"};
 
             HttpContext.Request.Cookies.Add(cookie);
-            var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
-            var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
+            Layout layout = "${aspnet-request-cookie:CookieNames=key,key1}";
 
-            var result = renderer.Render(LogEventInfo.CreateNullEvent());
+            // Act
+            var result = layout.Render(LogEventInfo.CreateNullEvent());
 
+            // Assert
             Assert.Equal(expectedResult, result);
         }
 
@@ -358,23 +348,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void CommaSeperatedCookieNamesTest_Multiple_Cookie_Values_Json_Formatting()
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
-
-            string config = @"<nlog>
-    <extensions>
-        <add assembly='NLog.Web' />
-    </extensions>
-<targets><target name='debug' type='Debug' layout='${aspnet-request-cookie:CookieNames=key,key1:OutputFormat=Json}' /></targets>
-</nlog>";
-            LogManager.Configuration = CreateConfigurationFromString(config);
-
-            var cookie = new HttpCookie("key", "TEST");
-            cookie["Key1"] = "TEST1";
-
+            
+            var cookie = new HttpCookie("key", "TEST") {["Key1"] = "TEST1"};
             HttpContext.Request.Cookies.Add(cookie);
-            var t = (DebugTarget)LogManager.Configuration.AllTargets[0];
-            var renderer = ((SimpleLayout)t.Layout).Renderers[0] as AspNetRequestCookieLayoutRenderer;
 
-            var result = renderer.Render(LogEventInfo.CreateNullEvent());
+            Layout layout = "${aspnet-request-cookie:CookieNames=key,key1:OutputFormat=Json}";
+
+            var result = layout.Render(LogEventInfo.CreateNullEvent());
 
             Assert.Equal(expectedResult, result);
         }
