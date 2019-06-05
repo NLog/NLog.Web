@@ -118,7 +118,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             // Assert
             Assert.Equal(expectedResult, result);
-
         }
 
         [Fact]
@@ -346,7 +345,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-
         [Fact]
         public void CommaSeperatedCookieNamesTest_Multiple_Cookie_Values_Json_Formatting()
         {
@@ -367,7 +365,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             Assert.Equal(expectedResult, result);
         }
-
 
         private static IHttpContextAccessor CreateHttpContextAccessorMockWithCookie(HttpCookie cookie)
         {
