@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NLog.Web.Internal
 {
-    internal static class RequestAccessor
+    internal static class HttpContextExtensions
     {
 #if !ASP_NET_CORE
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
