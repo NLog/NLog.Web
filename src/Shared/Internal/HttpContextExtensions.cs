@@ -1,12 +1,11 @@
 using System;
-using System.Text;
 #if !ASP_NET_CORE
 using System.Web;
-using NLog.Common;
 #else
+using System.Text;
 using Microsoft.AspNetCore.Http;
-
 #endif
+using NLog.Common;
 
 namespace NLog.Web.Internal
 {
@@ -17,18 +16,24 @@ namespace NLog.Web.Internal
         {
             try
             {
-                return context.Request;
+                var request = context?.Request;
+                if (request == null)
+                    InternalLogger.Debug("HttpContext Request Lookup returned null");
+                return request;
             }
             catch (HttpException ex)
             {
-                InternalLogger.Debug(ex, "Exception thrown when accessing Request: " + ex.Message);
+                InternalLogger.Debug(ex, "HttpContext Request Lookup failed.");
                 return null;
             }
         }
 #else
         internal static HttpRequest TryGetRequest(this HttpContext context)
         {
-            return context.Request;
+            var request = context?.Request;
+            if (request == null)
+                InternalLogger.Debug("HttpContext Request Lookup returned null");
+            return request;
         }
 #endif
 
@@ -51,6 +56,32 @@ namespace NLog.Web.Internal
             }
 
             return Encoding.UTF8.GetString(data);
+        }
+#endif
+
+#if !ASP_NET_CORE
+        internal static HttpSessionStateBase TryGetSession(this HttpContextBase context)
+        {
+            var session = context?.Session;
+            if (session == null)
+                InternalLogger.Debug("HttpContext Session Lookup returned null");
+            return session;
+        }
+#else
+        internal static ISession TryGetSession(this HttpContext context)
+        {
+            try
+            {
+                var session = context?.Session;
+                if (session == null)
+                    InternalLogger.Debug("HttpContext Session Lookup returned null");
+                return session;
+            }
+            catch (InvalidOperationException ex)
+            {
+                InternalLogger.Debug(ex, "HttpContext Session Lookup failed.");
+                return null; // System.InvalidOperationException: Session has not been configured for this application or request.
+            }
         }
 #endif
     }
