@@ -1,4 +1,7 @@
 using System.Text;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http.Features;
+#endif
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -23,8 +26,12 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
+            var isSessionConfigured = true;
             var context = HttpContextAccessor.HttpContext;
-            if (context?.Session == null)
+#if ASP_NET_CORE
+            isSessionConfigured = context.Features.Get<ISessionFeature>() != null;
+#endif
+            if (!isSessionConfigured || context?.Session == null)
             {
                 InternalLogger.Debug("aspnet-sessionid - HttpContext Session is null");
                 return;
