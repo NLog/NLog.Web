@@ -4,6 +4,7 @@ using System.Web;
 #else
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 using NLog.Common;
 
@@ -72,10 +73,18 @@ namespace NLog.Web.Internal
         {
             try
             {
-                var session = context?.Session;
-                if (session == null)
-                    InternalLogger.Debug("HttpContext Session Lookup returned null");
-                return session;
+                if (context?.Features.Get<ISessionFeature>()?.Session != null)
+                {
+                    var session = context?.Session;
+                    if (session == null)
+                        InternalLogger.Debug("HttpContext Session Lookup returned null");
+                    return session;
+                }
+                else
+                {
+                    InternalLogger.Debug("HttpContext Session Feature not available");
+                    return null;
+                }
             }
             catch (InvalidOperationException ex)
             {
