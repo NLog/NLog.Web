@@ -1,7 +1,7 @@
 using System.Text;
-using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 #if !ASP_NET_CORE
 using System.Web;
@@ -24,16 +24,14 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
-            if (context?.Session == null)
-            {
-                InternalLogger.Debug("aspnet-sessionid - HttpContext Session is null");
+            var contextSession = context.TryGetSession();
+            if (contextSession == null)
                 return;
-            }
 
 #if !ASP_NET_CORE
-            builder.Append(context.Session.SessionID);
+            builder.Append(contextSession.SessionID);
 #else
-            builder.Append(context.Session.Id);
+            builder.Append(contextSession.Id);
 #endif
         }
     }
