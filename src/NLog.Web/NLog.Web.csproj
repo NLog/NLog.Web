@@ -17,7 +17,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <PackageId>NLog.Web</PackageId>
     <PackageTags>nlog log target layoutrenderer web asp.net httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Fixed Nuget-Package generation to include valid dependencies and release notes.
+- Fixed Nuget-Package generation to include dependencies and release notes.
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
