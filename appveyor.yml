@@ -35,13 +35,8 @@ build_script:
     {
         $versionNuget = $versionPrefix + "-" + $versionSuffix
     }
-    $build_aspnet = "build_aspnet.bat", "-nuget_version=$versionNuget"
+    $build_aspnet = "build_aspnet.bat", "-version_prefix=$versionPrefix", "-version_build=$versionBuild", "-version_suffix=$versionSuffix"
     & cmd /c $build_aspnet
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
-    $build_aspnetcore = "build_aspnetcore.bat", "-version_prefix=$versionPrefix", "-version_build=$versionBuild", "-version_suffix=$versionSuffix"
-    & cmd /c $build_aspnetcore
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }

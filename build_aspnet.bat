@@ -1,16 +1,19 @@
 @echo off
 
 rem fallback if not passed
-set nuget_version=1.0.0
+set version_prefix=1.0.0
+set version_suffix=
+set version_build=%version_prefix%
 
 call :read_params %*
 
-nuget restore NLog.Web.sln -verbosity quiet
-msbuild NLog.Web.sln /verbosity:minimal /t:rebuild /p:configuration=release
+msbuild NLog.Web.sln /t:restore,rebuild /p:configuration=release /verbosity:minimal
 IF ERRORLEVEL 1 EXIT /B 1
-nuget pack src\NLog.Web\NLog.Web.csproj -properties Configuration=Release;Platform=AnyCPU -version %nuget_version%
+
+msbuild src\NLog.Web /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
 IF ERRORLEVEL 1 EXIT /B 1
-nuget pack src\NLog.Web\NLog.Web.csproj -properties Configuration=Release;Platform=AnyCPU -version %nuget_version% -symbols
+
+msbuild src\NLog.Web.AspNetCore /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
 IF ERRORLEVEL 1 EXIT /B 1
 
 rem read pass parameters by name
