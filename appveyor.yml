@@ -35,13 +35,8 @@ build_script:
     {
         $versionNuget = $versionPrefix + "-" + $versionSuffix
     }
-    $build_aspnet = "build_aspnet.bat", "-nuget_version=$versionNuget"
+    $build_aspnet = "build_aspnet.bat", "-version_prefix=$versionPrefix", "-version_build=$versionBuild", "-version_suffix=$versionSuffix"
     & cmd /c $build_aspnet
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
-    $build_aspnetcore = "build_aspnetcore.bat", "-version_prefix=$versionPrefix", "-version_build=$versionBuild", "-version_suffix=$versionSuffix"
-    & cmd /c $build_aspnetcore
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
@@ -54,8 +49,8 @@ deploy:
     branch: master
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion -DependencyVersion Ignore
-  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.Tests\bin\Release\net452\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -output:coverage.xml
-  - OpenCover\tools\OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.AspNetCore.Tests\bin\Release\net461\NLog.Web.AspNetCore.Tests.dll\" -appveyor -noshadow" -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -mergeoutput -output:coverage.xml
+  - OpenCover\tools\OpenCover.Console.exe -register:user -returntargetcode -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.Tests\bin\Release\net452\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -output:coverage.xml
+  - OpenCover\tools\OpenCover.Console.exe -register:user -returntargetcode -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.AspNetCore.Tests\bin\Release\net461\NLog.Web.AspNetCore.Tests.dll\" -appveyor -noshadow" -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -mergeoutput -output:coverage.xml
   - pip install codecov
   - codecov -f "coverage.xml"
 

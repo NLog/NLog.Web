@@ -49,19 +49,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Empty(result);
         }
-        [Fact]
-        public void ThrowItemRendersEmpty()
-        {
-            // Arrange
-            var (renderer, _) = CreateRenderer(true);
-            renderer.Variable = "a";
-
-            // Act
-            string result = renderer.Render(LogEventInfo.CreateNullEvent());
-
-            // Assert
-            Assert.Empty(result);
-        }
 
         private static (AspNetSessionValueLayoutRenderer, HttpContext) CreateRenderer(bool throwsError = false)
         {
