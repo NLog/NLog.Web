@@ -1,3 +1,5 @@
+![NLog](https://raw.githubusercontent.com/NLog/NLog.github.io/master/images/NLog-logo-only_small.png)
+
 # NLog.Web (ASP.NET & ASP.NET Core) 
 [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master) [![codecov.io](https://codecov.io/github/NLog/NLog.Web/coverage.svg?branch=master)](https://codecov.io/github/NLog/NLog.Web?branch=master) [![BCH compliance](https://bettercodehub.com/edge/badge/NLog/NLog.Web)](https://bettercodehub.com/results/NLog/NLog.Web)
 

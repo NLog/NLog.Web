@@ -1,16 +1,11 @@
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Web;
-#else
-using Microsoft.AspNetCore.Http.Features;
-
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -88,23 +83,16 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-            if (context?.Session == null)
-            {
-                InternalLogger.Trace("aspnet-session - HttpContext Session is null");
+            var contextSession = context.TryGetSession();
+            if (contextSession == null)
                 return;
-            }
 
 #if !ASP_NET_CORE
-            var value = PropertyReader.GetValue(Variable, context.Session, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
+            var value = PropertyReader.GetValue(Variable, contextSession, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
 #else
             //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
             //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
-            if (context.Items == null || context.Features.Get<ISessionFeature>()?.Session == null)
-            {
-                return;
-            }
-
-            if (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue))
+            if (context.Items == null || (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue)))
             {
                 return;
             }
@@ -114,12 +102,7 @@ namespace NLog.Web.LayoutRenderers
             object value;
             try
             {
-                value = PropertyReader.GetValue(Variable, context.Session, (session, key) => session.GetString(key), EvaluateAsNestedProperties);
-            }
-            catch (Exception ex)
-            {
-                InternalLogger.Warn(ex, "aspnet-session - Retrieving session value failed.");
-                return;
+                value = PropertyReader.GetValue(Variable, contextSession, (session, key) => session.GetString(key), EvaluateAsNestedProperties);
             }
             finally
             {

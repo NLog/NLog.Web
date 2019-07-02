@@ -1,53 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net35</TargetFramework>
-    <AssemblyTitle>NLog.Web</AssemblyTitle>
-    <Product>NLog.Web</Product>
-    <Description>Extend NLog with targets and layout renderers for websites and web applications.
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <TargetFrameworks>net35</TargetFrameworks>
+    <Product>NLog.Web v$(VersionPrefix)</Product>
+    <Description>
+Extend NLog with targets and layout renderers for websites and web applications.
 This package is for ASP.NET 3.5+
 
-For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore </Description>
-    <Copyright>Copyright 2014-2019</Copyright>
-    <Version>4.0.0.0</Version>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Authors>NLog</Authors>
-    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
+For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
+    </Description>
+    <Authors>Julian Verdurmen</Authors>
+    <Company>NLog</Company>
+    <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
+    <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
+    <AssemblyName>NLog.Web</AssemblyName>
     <PackageId>NLog.Web</PackageId>
-    <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
-    <PackageReleaseNotes>
-- Added AspNetLayoutRendererBase.Register for registering lambdas with httpcontext (@304NotModified)
-- Fix NotSupportedException with ${aspnet-request-posted-body} (@304NotModified)
-    </PackageReleaseNotes>
     <PackageTags>nlog log target layoutrenderer web asp.net httpcontext</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>TRACE;DEBUG;NET451</DefineConstants>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup>
+    <PackageReleaseNotes>
+- Better checking for availability of session (@Defee, @snakefoot)    
+- Fixed Nuget-Package generation to include dependencies and release notes (@snakefoot)
+    </PackageReleaseNotes>
+    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/NLog/NLog.Web.git</RepositoryUrl>
+    
     <SignAssembly>true</SignAssembly>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
+    
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.6.4" />
+    <PackageReference Include="NLog" Version="4.6.5" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
-    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
