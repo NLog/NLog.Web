@@ -35,7 +35,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.6.6" />
+    <PackageReference Include="NLog" Version="4.6.7" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
