@@ -4,7 +4,8 @@
     <TargetFrameworks>net35</TargetFrameworks>
     <Product>NLog.Web v$(VersionPrefix)</Product>
     <Description>
-Extend NLog with targets and layout renderers for websites and web applications.
+NLog logging for ASP.NET and ASP.NET MVC. Includes targets and layout renderers for websites and web applications.
+
 This package is for ASP.NET 3.5+
 
 For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
@@ -15,7 +16,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web</AssemblyName>
     <PackageId>NLog.Web</PackageId>
-    <PackageTags>nlog log target layoutrenderer web asp.net httpcontext</PackageTags>
+    <PackageTags>nlog;log;logging;target;layoutrenderer;web;asp.net;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
 - Better checking for availability of session (@Defee, @snakefoot)    
 - Fixed Nuget-Package generation to include dependencies and release notes (@snakefoot)
@@ -33,6 +34,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.6.7" />
