@@ -4,6 +4,8 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.8.5 aspnetcore (2019/07/02)
+- [#459](https://github.com/NLog/NLog.Web/pull/459) Fixed double logging when mixing UseNLog with AddNLog (@snakefoot)
 
 ### v4.8.4 aspnetcore (2019/07/02)
 - [#436](https://github.com/NLog/NLog.Web/pull/436) Better checking for availability of session (@Defee, @snakefoot)
