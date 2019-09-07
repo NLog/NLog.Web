@@ -4,13 +4,12 @@
     <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
-Use NLog with the ASP.NET Core platform. Adds helpers and layout renderers for websites and webapplications.
+NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
 
 Supported platforms:
 
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
-- For ASP.NET Core 1, .NET Standard 1.5+ and .NET 4.5.x
-    
+- For ASP.NET Core 1, .NET Standard 1.5+ and .NET 4.5.x    
     </Description>
     <Authors>Julian Verdurmen</Authors>
     <Company>NLog</Company>
@@ -18,9 +17,10 @@ Supported platforms:
     <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
     <PackageId>NLog.Web.AspNetCore</PackageId>
-    <PackageTags>logging;log;session;NLog;web;aspnet;aspnetcore;MVC;httpcontext</PackageTags>
+    <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- Better checking for availability of session (@Defee, @snakefoot)
+- Fixed double logging when mixing UseNLog with AddNLog (@snakefoot)
+- Updated nuget-package description to make it easier to discover (@snakefoot)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
@@ -57,7 +57,7 @@ Supported platforms:
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.4" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Reference Include="System" />

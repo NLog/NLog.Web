@@ -157,7 +157,7 @@ namespace NLog.Web
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
 
-            services.AddSingleton<ILoggerProvider>(serviceProvider =>
+            services.Replace(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => 
             {
                 ServiceLocator.ServiceProvider = serviceProvider;
 
@@ -173,7 +173,7 @@ namespace NLog.Web
                 }
 
                 return provider;
-            });
+            }));
 
             //note: this one is called before  services.AddSingleton<ILoggerFactory>
             if ((options ?? NLogAspNetCoreOptions.Default).RegisterHttpContextAccessor)
