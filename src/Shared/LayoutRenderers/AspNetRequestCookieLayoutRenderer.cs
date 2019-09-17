@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -8,10 +9,10 @@ using NLog.Web.Internal;
 using NLog.Web.Enums;
 using System.Collections.Specialized;
 using System.Web;
-
+using Cookies = System.Web.HttpCookieCollection;
 #else
 using Microsoft.AspNetCore.Http;
-
+using Cookies = Microsoft.AspNetCore.Http.IRequestCookieCollection;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -31,7 +32,8 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
-        /// List Cookie Key as String to be rendered from Request.
+        /// Cookie names to be rendered.
+        /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
         public List<string> CookieNames { get; set; }
 
@@ -49,17 +51,37 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var cookies = httpRequest.Cookies;
-            if (CookieNames?.Count > 0 && cookies?.Count > 0)
+            var cookieNames = GetCookieNames(cookies)?.ToList();
+            if (cookieNames?.Count > 0 && cookies?.Count > 0)
             {
-                var cookieValues = GetCookies(cookies);
+                var cookieValues = GetCookies(cookies, cookieNames);
                 SerializePairs(cookieValues, builder, logEvent);
             }
         }
 
-#if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies)
+        /// <summary>
+        /// Get cookies names to render
+        /// </summary>
+        /// <param name="cookies"></param>
+        /// <returns></returns>
+        private IEnumerable<string> GetCookieNames(Cookies cookies)
         {
-            foreach (var cookieName in CookieNames)
+            if (CookieNames != null && CookieNames.Any())
+                return CookieNames;
+            
+            var keys = cookies.Keys;
+
+#if !ASP_NET_CORE
+            return keys.Cast<string>();
+#else
+            return keys;
+#endif
+        }
+
+#if !ASP_NET_CORE
+        private IEnumerable<KeyValuePair<string, string>> GetCookies(HttpCookieCollection cookies, IEnumerable<string> cookieNames)
+        {
+            foreach (var cookieName in cookieNames)
             {
                 var httpCookie = cookies[cookieName];
                 if (httpCookie == null)
@@ -89,9 +111,9 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 #else
-        private IEnumerable<KeyValuePair<string, string>> GetCookies(IRequestCookieCollection cookies)
+        private IEnumerable<KeyValuePair<string, string>> GetCookies(IRequestCookieCollection cookies, IEnumerable<string> cookieNames)
         {
-            foreach (var cookieName in CookieNames)
+            foreach (var cookieName in cookieNames)
             {
                 if (!cookies.TryGetValue(cookieName, out var cookieValue))
                 {
