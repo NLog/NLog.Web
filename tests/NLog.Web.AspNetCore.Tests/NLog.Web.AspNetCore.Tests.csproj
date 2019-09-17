@@ -9,6 +9,7 @@
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../NLog.snk</AssemblyOriginatorKeyFile>
+    <RootNamespace>NLog.Web.Tests</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>

@@ -1,11 +1,7 @@
 ﻿#if !ASP_NET_CORE
 using System.Web;
-using System.Collections.Specialized;
-using System.Web.SessionState;
 #else
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
 
 namespace NLog.Web.Tests
