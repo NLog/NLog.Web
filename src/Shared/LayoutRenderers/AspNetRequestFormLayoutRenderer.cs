@@ -48,12 +48,12 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="AspNetRequestFormLayoutRenderer" /> class.
         /// </summary>
         public AspNetRequestFormLayoutRenderer()
         {
             Include = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            Exclude = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            Exclude = new HashSet<string>(new[] { "Password", "Pwd" }, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
