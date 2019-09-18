@@ -35,18 +35,21 @@ Supported platforms:
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
+    <Configurations>Debug;Release;unittest</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
+    <DebugType Condition="'$(Configuration)'=='unittest'">Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Framework 4.6+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
+    <DebugType Condition="'$(Configuration)'=='unittest'">Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
     <Title>ASP.NET Core 1 integration for NLog - .NET Standard 1.5</Title>

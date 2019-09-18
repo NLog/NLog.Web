@@ -9,6 +9,7 @@
     <RootNamespace>NLog.Web.AspNetCore2.Example</RootNamespace>
     <FileVersion>1.0.0.1</FileVersion>
     <InformationalVersion>1.0.0.2</InformationalVersion>
+    <Configurations>Debug;Release;unittest</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
