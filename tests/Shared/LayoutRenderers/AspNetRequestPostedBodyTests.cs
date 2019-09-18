@@ -13,7 +13,7 @@ using NLog.Web.Tests.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 
-namespace NLog.Web.AspNetCore.Tests.LayoutRenderers
+namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetRequestPostedBodyTests : LayoutRenderersTestBase<AspNetRequestPostedBody>
     {

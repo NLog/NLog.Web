@@ -13,11 +13,10 @@ using NLog.Web.DependencyInjection;
 using System.Web;
 #endif
 using NLog.Web.LayoutRenderers;
-using NLog.Web.Tests.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 
-namespace NLog.Web.AspNetCore.Tests
+namespace NLog.Web.Tests
 {
     public class RegisterCustomLayoutRenderer : TestBase
     {

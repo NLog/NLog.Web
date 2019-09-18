@@ -19,7 +19,7 @@ using NLog.Targets;
 using NLog.Web.Tests.LayoutRenderers;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
-namespace NLog.Web.AspNetCore.Tests
+namespace NLog.Web.Tests
 {
     public class AspNetCoreTests : TestBase, IDisposable
     {
