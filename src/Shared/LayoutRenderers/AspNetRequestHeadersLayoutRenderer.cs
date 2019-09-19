@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+using System;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
+using System.Linq;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
@@ -20,6 +21,8 @@ namespace NLog.Web.LayoutRenderers
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-headers:OutputFormat=Flat}
     /// ${aspnet-request-headers:OutputFormat=Json}
+    /// ${aspnet-request-headers:OutputFormat=Json:HeaderNames=username}
+    /// ${aspnet-request-headers:OutputFormat=Json:Exclude=access_token}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-headers")]
@@ -31,6 +34,24 @@ namespace NLog.Web.LayoutRenderers
         /// If <c>null</c> or empty array, all headers will be rendered.
         /// </summary>
         public List<string> HeaderNames { get; set; }
+
+        /// <summary>
+        /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+#if ASP_NET_CORE
+        public ISet<string> Exclude { get; set; }
+#else
+        public HashSet<string> Exclude { get; set; }
+#endif
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AspNetRequestHeadersLayoutRenderer" /> class.
+        /// </summary>
+        public AspNetRequestHeadersLayoutRenderer()
+        {
+            Exclude = new HashSet<string>(new[] { "ALL_HTTP", "ALL_RAW", "AUTH_PASSWORD" }, StringComparer.OrdinalIgnoreCase);
+        }
 
         /// <summary>
         /// Renders the ASP.NET Headers appends it to the specified <see cref="StringBuilder" />.
@@ -46,46 +67,25 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var headers = httpRequest.Headers;
-            var headerNames = GetHeaderNames(headers)?.ToList();
-            if (headerNames?.Count > 0 && headers?.Count > 0)
+            if (headers?.Count > 0)
             {
-                var headerValues = GetHeaders(headers, headerNames);
+                bool excludeKeys = (HeaderNames == null || HeaderNames.Count == 0) && Exclude?.Count > 0;
+                var headerValues = GetHeaderValues(headers, excludeKeys);
                 SerializePairs(headerValues, builder, logEvent);
             }
         }
 
 #if !ASP_NET_CORE
-        private IEnumerable<string> GetHeaderNames(NameValueCollection headers)
-#else
-        private IEnumerable<string> GetHeaderNames(IHeaderDictionary headers)
-#endif
+        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool excludeKeys)
         {
-            if (HeaderNames != null && HeaderNames.Any())
-                return HeaderNames;
-            
-            var keys = headers.Keys;
-
-#if !ASP_NET_CORE
-            return keys.Cast<string>();
-#else
-            return keys;
-#endif
-        }
-
-#if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetHeaders(NameValueCollection headers, IEnumerable<string> headerNames)
-#else
-        private IEnumerable<KeyValuePair<string, string>> GetHeaders(IHeaderDictionary headers, IEnumerable<string> headerNames)
-#endif
-        {
+            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.Cast<string>().ToList();
             foreach (var headerName in headerNames)
             {
-#if !ASP_NET_CORE
+                if (excludeKeys && Exclude.Contains(headerName))
+                    continue;
+
                 var headerValue = headers[headerName];
                 if (headerValue == null)
-#else
-                if (!headers.TryGetValue(headerName, out var headerValue))
-#endif
                 {
                     continue;
                 }
@@ -93,5 +93,23 @@ namespace NLog.Web.LayoutRenderers
                 yield return new KeyValuePair<string, string>(headerName, headerValue);
             }
         }
+#else
+        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, bool excludeKeys)
+        {
+            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys;
+            foreach (var headerName in headerNames)
+            {
+                if (excludeKeys && Exclude.Contains(headerName))
+                    continue;
+
+                if (!headers.TryGetValue(headerName, out var headerValue))
+                {
+                    continue;
+                }
+
+                yield return new KeyValuePair<string, string>(headerName, headerValue);
+            }
+        }
+#endif
     }
 }

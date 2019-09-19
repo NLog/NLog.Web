@@ -33,6 +33,23 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void NullKeyRendersAllHeadersExceptExcluded()
+        {
+#if ASP_NET_CORE
+            var expectedResult = "Host=stackoverflow.com,Key1=TEST1"; // ASP.NET Core automatically includes host of request URL as part of headers
+#else
+            var expectedResult = "Key1=TEST1";
+#endif
+            var renderer = CreateRenderer();
+            renderer.HeaderNames = null;
+            renderer.Exclude.Add("key");
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
         public void KeyNotFoundRendersEmptyString_Flat_Formatting()
         {
             var renderer = CreateRenderer();
