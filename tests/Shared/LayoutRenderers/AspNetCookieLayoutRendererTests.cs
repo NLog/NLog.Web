@@ -31,6 +31,19 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void NullKeyRendersAllCookiesExceptExcluded()
+        {
+            var expectedResult = "Key1=TEST1";
+            var renderer = CreateRenderer();
+            renderer.CookieNames = null;
+            renderer.Exclude.Add("key");
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
         public void KeyNotFoundRendersEmptyString_Flat_Formatting()
         {
             var renderer = CreateRenderer();
