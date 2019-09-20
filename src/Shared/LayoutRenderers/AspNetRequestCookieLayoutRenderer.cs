@@ -73,19 +73,19 @@ namespace NLog.Web.LayoutRenderers
             var cookies = httpRequest.Cookies;
             if (cookies?.Count > 0)
             {
-                bool excludeKeys = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
-                var cookieValues = GetCookieValues(cookies, excludeKeys);
+                bool checkForExclude = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
+                var cookieValues = GetCookieValues(cookies, checkForExclude);
                 SerializePairs(cookieValues, builder, logEvent);
             }
         }
 
 #if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, bool excludeKeys)
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, bool checkForExclude)
         {
             var cookieNames = CookieNames?.Count > 0 ? CookieNames : cookies.Keys.Cast<string>().ToList();
             foreach (var cookieName in cookieNames)
             {
-                if (excludeKeys && Exclude.Contains(cookieName))
+                if (checkForExclude && Exclude.Contains(cookieName))
                     continue;
 
                 var httpCookie = cookies[cookieName];
@@ -116,12 +116,12 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 #else
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IRequestCookieCollection cookies, bool excludeKeys)
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IRequestCookieCollection cookies, bool checkForExclude)
         {
             var cookieNames = CookieNames?.Count > 0 ? CookieNames : cookies.Keys;
             foreach (var cookieName in cookieNames)
             {
-                if (excludeKeys && Exclude.Contains(cookieName))
+                if (checkForExclude && Exclude.Contains(cookieName))
                     continue;
 
                 if (!cookies.TryGetValue(cookieName, out var cookieValue))
