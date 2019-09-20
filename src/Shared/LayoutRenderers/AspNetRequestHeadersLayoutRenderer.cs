@@ -69,19 +69,19 @@ namespace NLog.Web.LayoutRenderers
             var headers = httpRequest.Headers;
             if (headers?.Count > 0)
             {
-                bool excludeKeys = (HeaderNames == null || HeaderNames.Count == 0) && Exclude?.Count > 0;
-                var headerValues = GetHeaderValues(headers, excludeKeys);
+                bool checkForExclude = (HeaderNames == null || HeaderNames.Count == 0) && Exclude?.Count > 0;
+                var headerValues = GetHeaderValues(headers, checkForExclude);
                 SerializePairs(headerValues, builder, logEvent);
             }
         }
 
 #if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool excludeKeys)
+        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool checkForExclude)
         {
             var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.Cast<string>().ToList();
             foreach (var headerName in headerNames)
             {
-                if (excludeKeys && Exclude.Contains(headerName))
+                if (checkForExclude && Exclude.Contains(headerName))
                     continue;
 
                 var headerValue = headers[headerName];
@@ -94,12 +94,12 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 #else
-        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, bool excludeKeys)
+        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, bool checkForExclude)
         {
             var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys;
             foreach (var headerName in headerNames)
             {
-                if (excludeKeys && Exclude.Contains(headerName))
+                if (checkForExclude && Exclude.Contains(headerName))
                     continue;
 
                 if (!headers.TryGetValue(headerName, out var headerValue))
