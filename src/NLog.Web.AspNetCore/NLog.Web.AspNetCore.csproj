@@ -69,9 +69,10 @@ Supported platforms:
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
+    <!-- Fixed to 2.1.1 as 2.1 is Long Term Supported (LTS) -->
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
