@@ -28,7 +28,7 @@ namespace NLog.Web
         /// </summary>
         /// <param name="app"></param>
 #if ASP_NET_CORE2
-        [Obsolete("Use UseNLog() on IWebHostBuilder")]
+        [Obsolete("Use UseNLog() on IWebHostBuilder / IHostBuilder")]
 #endif
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
@@ -41,6 +41,9 @@ namespace NLog.Web
         /// <param name="env"></param>
         /// <param name="configFileRelativePath">relative path to NLog configuration file.</param>
         /// <returns>LoggingConfiguration for chaining</returns>
+#if ASP_NET_CORE2
+        [Obsolete("Use ConfigureNLog() on ILoggingBuilder. Or UseNLog() on IWebHostBuilder / IHostBuilder")]
+#endif
         public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
