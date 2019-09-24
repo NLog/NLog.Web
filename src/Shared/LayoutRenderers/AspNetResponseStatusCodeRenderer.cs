@@ -31,12 +31,8 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            int statusCode;
-#if !ASP_NET_CORE
-            statusCode = httpResponse.StatusCode;
-#else
-            statusCode = httpResponse.StatusCode;
-#endif
+            int statusCode = httpResponse.StatusCode;
+
             if (statusCode >= 100 && statusCode <= 599)
             {
                 builder.Append(statusCode);
