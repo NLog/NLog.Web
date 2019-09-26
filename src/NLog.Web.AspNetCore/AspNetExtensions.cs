@@ -106,6 +106,30 @@ namespace NLog.Web
         }
 
         /// <summary>
+        /// Apply NLog configuration from XML config.
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
+        public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, string configFileName)
+        {
+            ConfigureServicesNLog(null, builder.Services, serviceProvider => serviceProvider.GetService<IConfiguration>());
+            LogManager.LoadConfiguration(configFileName);
+            return builder;
+        }
+
+        /// <summary>
+        /// Configure NLog from API
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="configuration">Config for NLog</param>
+        public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
+        {
+            ConfigureServicesNLog(null, builder.Services, serviceProvider => serviceProvider.GetService<IConfiguration>());
+            LogManager.Configuration = configuration;
+            return builder;
+        }
+
+        /// <summary>
         /// Use NLog for Dependency Injected loggers.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
