@@ -112,8 +112,13 @@ namespace NLog.Web
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, string configFileName)
         {
-            ConfigureServicesNLog(null, builder.Services, serviceProvider => serviceProvider.GetService<IConfiguration>());
-            LogManager.LoadConfiguration(configFileName);
+            AddNLogLoggerProvider(builder.Services, null, null, (serviceProvider, config, options) =>
+            {
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, options);
+                // Delay initialization of targets until we have loaded config-settings
+                LogManager.LoadConfiguration(configFileName);
+                return provider;
+            });
             return builder;
         }
 
@@ -124,8 +129,13 @@ namespace NLog.Web
         /// <param name="configuration">Config for NLog</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
-            ConfigureServicesNLog(null, builder.Services, serviceProvider => serviceProvider.GetService<IConfiguration>());
-            LogManager.Configuration = configuration;
+            AddNLogLoggerProvider(builder.Services, null, null, (serviceProvider, config, options) =>
+            {
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, options);
+                // Delay initialization of targets until we have loaded config-settings
+                LogManager.Configuration = configuration;
+                return provider;
+            });
             return builder;
         }
 
@@ -150,7 +160,7 @@ namespace NLog.Web
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.ConfigureServices(services => { ConfigureServicesNLog(options, services, serviceProvider => serviceProvider.GetService<IConfiguration>()); });
+            builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, options, CreateNLogLoggerProvider));
             return builder;
         }
 
@@ -175,38 +185,39 @@ namespace NLog.Web
                 throw new ArgumentNullException(nameof(builder));
             }
 
-            builder.ConfigureServices((hostbuilder, services) => { ConfigureServicesNLog(options, services, serviceProvider => hostbuilder.Configuration); });
+            builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, options, CreateNLogLoggerProvider));
             return builder;
         }
 
-        private static void ConfigureServicesNLog(NLogAspNetCoreOptions options, IServiceCollection services, Func<IServiceProvider, IConfiguration> lookupConfiguration)
+        private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration configuration, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
 
-            services.Replace(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => 
-            {
-                ServiceLocator.ServiceProvider = serviceProvider;
-
-                var provider = new NLogLoggerProvider(options ?? new NLogProviderOptions());
-                var configuration = lookupConfiguration(serviceProvider);
-                if (configuration != null)
-                {
-                    ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
-                    if (options == null)
-                    {
-                        provider.Configure(configuration.GetSection("Logging:NLog"));
-                    }
-                }
-
-                return provider;
-            }));
+            services.Replace(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => factory(serviceProvider, configuration, options)));
 
             //note: this one is called before  services.AddSingleton<ILoggerFactory>
             if ((options ?? NLogAspNetCoreOptions.Default).RegisterHttpContextAccessor)
             {
                 services.AddHttpContextAccessor();
             }
+        }
+
+        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration configuration, NLogAspNetCoreOptions options)
+        {
+            ServiceLocator.ServiceProvider = serviceProvider;
+
+            NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default);
+            configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
+            if (configuration != null)
+            {
+                ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
+                if (options == null)
+                {
+                    provider.Configure(configuration.GetSection("Logging:NLog"));
+                }
+            }
+            return provider;
         }
 #endif
     }
