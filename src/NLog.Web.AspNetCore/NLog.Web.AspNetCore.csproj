@@ -19,8 +19,7 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- Fixed double logging when mixing UseNLog with AddNLog (@snakefoot)
-- Updated nuget-package description to make it easier to discover (@snakefoot)
+- Fixed: Mixing AddDebug() with a file based NLog configuration no longer works (@snakefoot)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
