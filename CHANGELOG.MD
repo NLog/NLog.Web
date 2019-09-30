@@ -4,6 +4,9 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.8.6-aspnetcore (2019/09/30)
+- [#487](https://github.com/NLog/NLog.Web/pull/487) Fixed: Mixing AddDebug() with a file based NLog configuration no longer works (@snakefoot)
+
 ### v4.8.5 aspnetcore (2019/07/02)
 - [#459](https://github.com/NLog/NLog.Web/pull/459) Fixed double logging when mixing UseNLog with AddNLog (@snakefoot)
 
