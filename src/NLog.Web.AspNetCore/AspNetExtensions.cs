@@ -157,7 +157,7 @@ namespace NLog.Web
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
 
-            services.Replace(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => 
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => 
             {
                 ServiceLocator.ServiceProvider = serviceProvider;
 
