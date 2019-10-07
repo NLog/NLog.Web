@@ -140,6 +140,25 @@ namespace NLog.Web
         }
 
         /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        /// <returns>ILoggingBuilder for chaining</returns>
+        public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, Func<IServiceProvider, LogFactory> factoryBuilder)
+        {
+            AddNLogLoggerProvider(builder.Services, null, null, (serviceProvider, config, options) =>
+            {
+                config = SetupConfiguration(serviceProvider, config);
+                // Delay initialization of targets until we have loaded config-settings
+                var logFactory = factoryBuilder(serviceProvider);
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, options, logFactory);
+                return provider;
+            });
+            return builder;
+        }
+
+        /// <summary>
         /// Use NLog for Dependency Injected loggers.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
@@ -205,19 +224,29 @@ namespace NLog.Web
 
         private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration configuration, NLogAspNetCoreOptions options)
         {
-            ServiceLocator.ServiceProvider = serviceProvider;
+            return CreateNLogLoggerProvider(serviceProvider, configuration, options, null);
+        }
 
-            NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default);
+        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration configuration, NLogAspNetCoreOptions options, NLog.LogFactory logFactory)
+        {
+            configuration = SetupConfiguration(serviceProvider, configuration);
+            NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default, logFactory ?? LogManager.LogFactory);
+            if (configuration != null && options == null)
+            {
+                provider.Configure(configuration.GetSection("Logging:NLog"));
+            }
+            return provider;
+        }
+
+        private static IConfiguration SetupConfiguration(IServiceProvider serviceProvider, IConfiguration configuration)
+        {
+            ServiceLocator.ServiceProvider = serviceProvider;
             configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
             if (configuration != null)
             {
                 ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
-                if (options == null)
-                {
-                    provider.Configure(configuration.GetSection("Logging:NLog"));
-                }
             }
-            return provider;
+            return configuration;
         }
 #endif
     }
