@@ -8,7 +8,7 @@ using NLog.Config;
 using NLog.Extensions.Logging;
 using NLog.Web.DependencyInjection;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +27,7 @@ namespace NLog.Web
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
         /// <param name="app"></param>
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
         [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
 #endif
         public static void AddNLogWeb(this IApplicationBuilder app)
@@ -41,7 +41,7 @@ namespace NLog.Web
         /// <param name="env"></param>
         /// <param name="configFileRelativePath">relative path to NLog configuration file.</param>
         /// <returns>LoggingConfiguration for chaining</returns>
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
         [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
 #endif
         public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
@@ -69,7 +69,7 @@ namespace NLog.Web
             return serviceProvider;
         }
 
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
 
         /// <summary>
         /// Apply NLog configuration from XML config.

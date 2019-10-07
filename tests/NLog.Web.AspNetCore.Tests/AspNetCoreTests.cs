@@ -111,7 +111,7 @@ namespace NLog.Web.Tests
             Assert.NotNull(webhost.Services.GetService<IHttpContextAccessor>());
         }
 
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
         [Fact]
         public void SkipRegisterHttpContext()
         {
@@ -126,7 +126,7 @@ namespace NLog.Web.Tests
         /// <returns></returns>
         private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
         {
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
             var webhost =
                 Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
                     .Configure(c => c.New()) //.New needed, otherwise:
