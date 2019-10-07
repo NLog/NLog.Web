@@ -7,9 +7,9 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.Extensions.DependencyInjection;
 using NLog.Web.DependencyInjection;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #else
 using System.Web;
 #endif

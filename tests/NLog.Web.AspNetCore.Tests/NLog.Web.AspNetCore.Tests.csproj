@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;netcoreapp2;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp1.1;netcoreapp2.1;net461;netcoreapp3.0</TargetFrameworks>
     <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
     <FileVersion>1.2.3.1</FileVersion>
@@ -14,9 +14,12 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'netcoreapp1.1' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'net461' ">
     <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
@@ -29,7 +32,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netcoreapp1.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'net461' ">
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
+using NSubstitute;
 #endif
 using System.Xml;
 
@@ -120,19 +120,18 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected virtual HttpRequest SetUpHttpRequest(HttpContext context)
         {
-            var httpRequest = new DefaultHttpRequest(context)
-            {
-                Scheme = DefaultTestUri.Scheme,
-                Path = DefaultTestUri.AbsolutePath,
-                Host = new HostString(DefaultTestUri.Host),
-                Method = "GET"
-            };
+            var httpRequest = NSubstitute.Substitute.For<HttpRequest>();
+            httpRequest.HttpContext.Returns(x => context);
+            httpRequest.Scheme = DefaultTestUri.Scheme;
+            httpRequest.Path = DefaultTestUri.AbsolutePath;
+            httpRequest.Host = new HostString(DefaultTestUri.Host);
+            httpRequest.Method = "GET";
             return httpRequest;
         }
 
         protected virtual HttpResponse SetUpHttpResponse(HttpContext context)
         {
-            var httpResponse = new DefaultHttpResponse(context);
+            var httpResponse = NSubstitute.Substitute.For<HttpResponse>();
             return httpResponse;
         }
 

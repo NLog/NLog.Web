@@ -1,14 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using NLog.Config;
 using NLog.Extensions.Logging;
 using NLog.Web.DependencyInjection;
+#if ASP_NET_CORE1 || ASP_NET_CORE2
+using Microsoft.AspNetCore.Builder;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#if ASP_NET_CORE2
+#endif
+#if ASP_NET_CORE2 || ASP_NET_CORE3
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,7 @@ namespace NLog.Web
     /// </summary>
     public static class AspNetExtensions
     {
+#if ASP_NET_CORE1 || ASP_NET_CORE2
         /// <summary>
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
@@ -34,7 +37,9 @@ namespace NLog.Web
         {
             app.ApplicationServices.SetupNLogServiceLocator();
         }
+#endif
 
+#if ASP_NET_CORE1 || ASP_NET_CORE2
         /// <summary>
         /// Apply NLog configuration from XML config.
         /// </summary>
@@ -52,6 +57,7 @@ namespace NLog.Web
             LogManager.LoadConfiguration(fileName);
             return LogManager.Configuration;
         }
+#endif
 
         /// <summary>
         /// Override the default <see cref="IServiceProvider" /> used by the NLog ServiceLocator.
@@ -69,7 +75,7 @@ namespace NLog.Web
             return serviceProvider;
         }
 
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
 
         /// <summary>
         /// Apply NLog configuration from XML config.
