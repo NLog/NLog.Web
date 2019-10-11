@@ -18,8 +18,10 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <PackageId>NLog.Web</PackageId>
     <PackageTags>nlog;log;logging;target;layoutrenderer;web;asp.net;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Updated NLog dependency
-- Updated nuget-package description to make it easier to discover (@snakefoot)
+- Added ${aspnet-response-statuscode} - rendering response status code (@304NotModified, @ThomasArdal)
+- Added ${aspnet-request-headers} - rendering headers for ASP.NET and ASP.NET Core (@ThomasArdal)
+- ${aspnet-request-cookie} - Added Exclude option (@snakefoot)
+- ${aspnet-request-cookie} (without cookienames) will render all cookies (@304NotModified)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>

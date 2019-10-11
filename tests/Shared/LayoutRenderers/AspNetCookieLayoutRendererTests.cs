@@ -1,27 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NLog.Web.LayoutRenderers;
 using NLog.Web.Enums;
 using Xunit;
 
-using System.Reflection;
-
-using NLog.Config;
-using NLog.Layouts;
-using NLog.Targets;
-
 #if !ASP_NET_CORE
 using NSubstitute;
 using System.Web;
-using System.Collections.Specialized;
-using System.Web.SessionState;
 #else
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Primitives;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
 
 
@@ -30,25 +18,29 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetCookieLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-        public AspNetCookieLayoutRendererTests() : base()
-        {
-        }
-
         [Fact]
-        public void NullKeyRendersEmptyString()
+        public void NullKeyRendersAllCookies()
         {
-#if ASP_NET_CORE
-            var httpContext = HttpContext;
-#else
-            var httpContext = Substitute.For<HttpContextBase>();
-#endif
-
+            var expectedResult = "key=TEST,Key1=TEST1";
             var renderer = CreateRenderer();
             renderer.CookieNames = null;
 
             string result = renderer.Render(new LogEventInfo());
 
-            Assert.Empty(result);
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void NullKeyRendersAllCookiesExceptExcluded()
+        {
+            var expectedResult = "Key1=TEST1";
+            var renderer = CreateRenderer();
+            renderer.CookieNames = null;
+            renderer.Exclude.Add("key");
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
         }
 
         [Fact]

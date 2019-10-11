@@ -12,7 +12,6 @@ using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using HttpSessionState = Microsoft.AspNetCore.Http.ISession;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Http.Internal;
 #endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;

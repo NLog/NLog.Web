@@ -4,9 +4,11 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Hosting;
+#if ASP_NET_CORE1 || ASP_NET_CORE2
+using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
 using Microsoft.Extensions.DependencyInjection;
 using NLog.Web.DependencyInjection;
-
 #else
 using System.Web.Hosting;
 #endif
@@ -28,11 +30,11 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetWebRootPathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
-        private static IHostingEnvironment _hostingEnvironment;
+        private static IWebHostEnvironment _webHostEnvironment;
 
-        private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
+        private static IWebHostEnvironment WebHostEnvironment => _webHostEnvironment ?? (_webHostEnvironment = ServiceLocator.ServiceProvider?.GetService<IWebHostEnvironment>());
 
-        private string WebRootPath => HostingEnvironment?.WebRootPath;
+        private string WebRootPath => WebHostEnvironment?.WebRootPath;
 #else
         private string WebRootPath => _webRootPath ?? (_webRootPath = HostingEnvironment.MapPath("/"));
         private static string _webRootPath;
@@ -52,7 +54,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void CloseLayoutRenderer()
         {
 #if ASP_NET_CORE
-            _hostingEnvironment = null;
+            _webHostEnvironment = null;
 #else
             _webRootPath = null;
 #endif

@@ -32,7 +32,9 @@ namespace NLog.Web.Tests.LayoutRenderers
            
         {
             var httpContext = Substitute.For<HttpContextBase>();
-
+#if ASP_NET_CORE3
+            httpContext.Request.RouteValues.Returns(new RouteValueDictionary());
+#endif
             var renderer = new TLayoutRenderer
             {
                 HttpContextAccessor = new FakeHttpContextAccessor(httpContext)

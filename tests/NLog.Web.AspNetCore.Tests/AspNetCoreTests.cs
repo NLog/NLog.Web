@@ -19,7 +19,7 @@ using NLog.Targets;
 using NLog.Web.Tests.LayoutRenderers;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
-namespace NLog.Web.AspNetCore.Tests
+namespace NLog.Web.Tests
 {
     public class AspNetCoreTests : TestBase, IDisposable
     {
@@ -126,7 +126,7 @@ namespace NLog.Web.AspNetCore.Tests
         /// <returns></returns>
         private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
         {
-#if ASP_NET_CORE2
+#if ASP_NET_CORE2 || ASP_NET_CORE3
             var webhost =
                 Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
                     .Configure(c => c.New()) //.New needed, otherwise:
@@ -149,7 +149,7 @@ namespace NLog.Web.AspNetCore.Tests
             return webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
         }
 
-#if !ASP_NET_CORE2
+#if !ASP_NET_CORE2 && !ASP_NET_CORE3
         public class Startup
         {
             public Startup()

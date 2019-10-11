@@ -28,6 +28,22 @@ namespace NLog.Web.Internal
                 return null;
             }
         }
+
+        internal static HttpResponseBase TryGetResponse(this HttpContextBase context)
+        {
+            try
+            {
+                var response = context?.Response;
+                if (response == null)
+                    InternalLogger.Debug("HttpContext Response Lookup returned null");
+                return response;
+            }
+            catch (HttpException ex)
+            {
+                InternalLogger.Debug(ex, "HttpContext Response Lookup failed.");
+                return null;
+            }
+        }
 #else
         internal static HttpRequest TryGetRequest(this HttpContext context)
         {
@@ -35,6 +51,14 @@ namespace NLog.Web.Internal
             if (request == null)
                 InternalLogger.Debug("HttpContext Request Lookup returned null");
             return request;
+        }
+
+        internal static HttpResponse TryGetResponse(this HttpContext context)
+        {
+            var response = context?.Response;
+            if (response == null)
+                InternalLogger.Debug("HttpContext Response Lookup returned null");
+            return response;
         }
 #endif
 

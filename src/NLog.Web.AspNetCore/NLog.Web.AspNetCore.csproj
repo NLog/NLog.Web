@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
 
 Supported platforms:
 
+- For ASP.NET Core 3, .NET Core 3.0
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
 - For ASP.NET Core 1, .NET Standard 1.5+ and .NET 4.5.x    
     </Description>
@@ -19,7 +20,16 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- Fixed: Mixing AddDebug() with a file based NLog configuration no longer works (@snakefoot)
+This version adds support for ASP.NET Core 3 and some nice renderers has been added and improved!
+
+- Support ASP.NET Core 3 (@snakefoot, @304NotModified)
+- Added example with ASP.NET Core 3 (@304NotModified)
+- Added ${aspnet-response-statuscode} - rendering response status code (@304NotModified, @ThomasArdal)
+- Added ${aspnet-request-headers} - rendering headers for ASP.NET and ASP.NET Core (@ThomasArdal)
+- ${aspnet-request-cookie} - Added Exclude option (@snakefoot)
+- ${aspnet-request-cookie} (without cookienames) will render all cookies (@304NotModified)
+- Added AddNLog with functor to create/initialize LogFactory for NLogLoggingProvider (@snakefoot)
+- AddNLog-methods for ILoggingBuilder (@snakefoot)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
@@ -55,22 +65,30 @@ Supported platforms:
     <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <Title>ASP.NET Core 3 integration for NLog - .NET Core 3</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' and '$(TargetFramework)' != 'net461' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' or '$(TargetFramework)' == 'net451' ">
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
+    <!-- Fixed to 2.1.1 as 2.1 is Long Term Supported (LTS) -->
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
