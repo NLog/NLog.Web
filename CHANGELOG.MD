@@ -4,6 +4,24 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.9.0-aspnetcore (2019/10/11)
+This version adds support for ASP.NET Core 3 and some nice renderers has been added and improved!
+
+- [#496](https://github.com/NLog/NLog.Web/pull/496) Support ASP.NET Core 3 (@snakefoot, @304NotModified)
+- [#491](https://github.com/NLog/NLog.Web/pull/491) Added example with ASP.NET Core 3 (@304NotModified)
+- [#477](https://github.com/NLog/NLog.Web/pull/477) Added ${aspnet-response-statuscode} - rendering response status code (@304NotModified, @ThomasArdal)
+- [#473](https://github.com/NLog/NLog.Web/pull/473) Added ${aspnet-request-headers} - rendering headers for ASP.NET and ASP.NET Core (@ThomasArdal)
+- [#472](https://github.com/NLog/NLog.Web/pull/472) ${aspnet-request-cookie} - Added Exclude option (@snakefoot)
+- [#465](https://github.com/NLog/NLog.Web/pull/465) ${aspnet-request-cookie} (without cookienames) will render all cookies (@304NotModified)
+- [#494](https://github.com/NLog/NLog.Web/pull/494) Added AddNLog with functor to create/initialize LogFactory for NLogLoggingProvider (@snakefoot)
+- [#483](https://github.com/NLog/NLog.Web/pull/483) AddNLog-methods for ILoggingBuilder (@snakefoot)
+
+### v4.9.0-aspnet4 (2019/10/11)
+- [#477](https://github.com/NLog/NLog.Web/pull/477) Added ${aspnet-response-statuscode} - rendering response status code (@304NotModified, @ThomasArdal)
+- [#473](https://github.com/NLog/NLog.Web/pull/473) Added ${aspnet-request-headers} - rendering headers for ASP.NET and ASP.NET Core (@ThomasArdal)
+- [#472](https://github.com/NLog/NLog.Web/pull/472) ${aspnet-request-cookie} - Added Exclude option (@snakefoot)
+- [#465](https://github.com/NLog/NLog.Web/pull/465) ${aspnet-request-cookie} (without cookienames) will render all cookies (@304NotModified)
+
 ### v4.8.6-aspnetcore (2019/09/30)
 - [#487](https://github.com/NLog/NLog.Web/pull/487) Fixed: Mixing AddDebug() with a file based NLog configuration no longer works (@snakefoot)
 
@@ -46,14 +64,14 @@ Date format: (year/month/day)
 
 ### v4.7.1-aspnetcore (2019/01/06)
 - [#326](https://github.com/NLog/NLog.Web/pull/326) Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
-- [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
-- [#322](https://github.com/NLog/NLog.Web/pull/322) Check that Content-Type is correct before accessing the Form (#322) (@mcliment)
+- [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (@Giorgi)
+- [#322](https://github.com/NLog/NLog.Web/pull/322) Check that Content-Type is correct before accessing the Form (@mcliment)
 - [#333](https://github.com/NLog/NLog.Web/pull/333) Enabled SymbolPackageFormat=snupkg (@snakefoot)
 
 ### v4.7.1 aspnet4 (2019/01/06)
 - [#330](https://github.com/NLog/NLog.Web/pull/330) aspnet-traceidentifier: Support for ASP.NET (non-core) - requires IIS ETW (@snakefoot)
 - [#326](https://github.com/NLog/NLog.Web/pull/326) Added ThreadSafe-attribute for LayoutRenderer to optimize async Precalculate (@snakefoot)
-- [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (#325) (@Giorgi)
+- [#325](https://github.com/NLog/NLog.Web/pull/325) ${AspNetRequestIp} added CheckForwardedForHeader to check for X-Forwarded-For header (@Giorgi)
 
 ### v4.7-aspnetcore & aspnet4 (2018/09/22)
 - [#315](https://github.com/NLog/NLog.Web/pull/315) Added ${configsetting} for reading appsettings.json etc - via NLog.Extensions.Logging (@304NotModified) (ASP.NET Core only)
@@ -128,18 +146,18 @@ Date format: (year/month/day)
 - [#154](https://github.com/nlog/nlog.web/pull/154) deploy to Nuget from AppVeyor (@304NotModified)
 
 ### v4.4.1-aspnetcore (2017/06/16)
-- [#152](https://github.com/nlog/nlog.web/pull/152) Run test for asp.net core on full and core framework, fix unit test build (#152) (@johnkors)
-- [#150](https://github.com/nlog/nlog.web/pull/150) Update vulnerable dependency (#150) (@johnkors)
+- [#152](https://github.com/nlog/nlog.web/pull/152) Run test for asp.net core on full and core framework, fix unit test build (@johnkors)
+- [#150](https://github.com/nlog/nlog.web/pull/150) Update vulnerable dependency (@johnkors)
 
 ### v4.5.0-aspnet4 (2017/05/14)
 
 #### Features
 
-- [#66](https://github.com/nlog/nlog.web/pull/66) ${Assembly-version} working for asp.net (core) (#66) (@304NotModified)
+- [#66](https://github.com/nlog/nlog.web/pull/66) ${Assembly-version} working for asp.net (core) (@304NotModified)
 - [#140](https://github.com/nlog/nlog.web/pull/140) Added ${aspnet-request-ip} (@304NotModified)
 - [#143](https://github.com/nlog/nlog.web/pull/143) added ${aspnet-user-isAuthenticated} (@304NotModified)
 - [#125](https://github.com/nlog/nlog.web/pull/125) Added ${aspnet-environment} (@grokky1)
-- [#123](https://github.com/nlog/nlog.web/pull/123) Added Culture option to ${aspnet-item} and {aspnet-session} (#123) (@sbebrys)
+- [#123](https://github.com/nlog/nlog.web/pull/123) Added Culture option to ${aspnet-item} and {aspnet-session} (@sbebrys)
 
 #### Improvements
 
@@ -155,16 +173,16 @@ Date format: (year/month/day)
 
 #### Features
 
-- [#66](https://github.com/nlog/nlog.web/pull/66) ${Assembly-version} working for asp.net (core) (#66) (@304NotModified)
+- [#66](https://github.com/nlog/nlog.web/pull/66) ${Assembly-version} working for asp.net (core) (@304NotModified)
 - [#140](https://github.com/nlog/nlog.web/pull/140) Added ${aspnet-request-ip} (@304NotModified)
 - [#143](https://github.com/nlog/nlog.web/pull/143) added ${aspnet-user-isAuthenticated} (@304NotModified)
 - [#126](https://github.com/nlog/nlog.web/pull/126) Add ${aspnet-request-contenttype} (ASP.NET Core only) (@304NotModified)
 - [#125](https://github.com/nlog/nlog.web/pull/125) Added ${aspnet-environment} (@grokky1)
-- [#123](https://github.com/nlog/nlog.web/pull/123) Added Culture option to ${aspnet-item} and {aspnet-session} (#123) (@sbebrys)
+- [#123](https://github.com/nlog/nlog.web/pull/123) Added Culture option to ${aspnet-item} and {aspnet-session} (@sbebrys)
 
 #### Improvements
 
-- [#144](https://github.com/nlog/nlog.web/pull/144) Limit dependecies (#144) (@304NotModified)
+- [#144](https://github.com/nlog/nlog.web/pull/144) Limit dependecies (@304NotModified)
 - [#142](https://github.com/nlog/nlog.web/pull/142) ignore ObjectDisposedException in aspnet-user renderers (@304NotModified)
 - [#141](https://github.com/nlog/nlog.web/pull/141) Improve performance with many threads 2 (@304NotModified)
 - [#133](https://github.com/nlog/nlog.web/pull/133) Improve performance with many threads (@304NotModified)
@@ -201,17 +219,17 @@ Date format: (year/month/day)
 - [#77](https://github.com/nlog/nlog.web/pull/77) Upgrade to NLog 4.4 (@304NotModified)
 - [#68](https://github.com/nlog/nlog.web/pull/68) Readme - make core vs non-core clearer (@timabell)
 - [#54](https://github.com/nlog/nlog.web/pull/54) Additional aspnet renderers & unit tests for .net core (@304NotModified, @Page-Not-Found)
-- [#61](https://github.com/nlog/nlog.web/pull/61) Upgrade RC2 to RTM. .Net Core. (#61) (@Page-Not-Found)
+- [#61](https://github.com/nlog/nlog.web/pull/61) Upgrade RC2 to RTM. .Net Core. (@Page-Not-Found)
 - [#59](https://github.com/nlog/nlog.web/pull/59) Upgrade to ASP.NET Core RC2 (@304NotModified)
 
 ### v4.2.1-aspnet4 (2016/05/12)
-- [#57](https://github.com/nlog/nlog.web/pull/57) Package both nupkg + build scripts (#57) (@304NotModified)
-- [#56](https://github.com/nlog/nlog.web/pull/56) Suppressing exception thrown when accessing HttpContext.Request (#56) (@vegar)
+- [#57](https://github.com/nlog/nlog.web/pull/57) Package both nupkg + build scripts (@304NotModified)
+- [#56](https://github.com/nlog/nlog.web/pull/56) Suppressing exception thrown when accessing HttpContext.Request (@vegar)
 
 ### 4.2.2 (2016/04/15)
-- [#48](https://github.com/nlog/nlog.web/pull/48) Update LICENSE (#48) (@304NotModified)
-- [#41](https://github.com/nlog/nlog.web/pull/41) DNX: Prevent stackoverflowException in ${aspnet-session} (#41) (@304NotModified)
-- [#52](https://github.com/nlog/nlog.web/pull/52) Extra null check (#52) (@304NotModified)
+- [#48](https://github.com/nlog/nlog.web/pull/48) Update LICENSE (@304NotModified)
+- [#41](https://github.com/nlog/nlog.web/pull/41) DNX: Prevent stackoverflowException in ${aspnet-session} (@304NotModified)
+- [#52](https://github.com/nlog/nlog.web/pull/52) Extra null check (@304NotModified)
 - [#50](https://github.com/nlog/nlog.web/pull/50) Add dotnet5.4 framework (@304NotModified)
 - [#37](https://github.com/nlog/nlog.web/pull/37) fix syntax of readme.md (@petemounce)
 

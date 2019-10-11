@@ -20,7 +20,16 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- Fixed: Mixing AddDebug() with a file based NLog configuration no longer works (@snakefoot)
+This version adds support for ASP.NET Core 3 and some nice renderers has been added and improved!
+
+- Support ASP.NET Core 3 (@snakefoot, @304NotModified)
+- Added example with ASP.NET Core 3 (@304NotModified)
+- Added ${aspnet-response-statuscode} - rendering response status code (@304NotModified, @ThomasArdal)
+- Added ${aspnet-request-headers} - rendering headers for ASP.NET and ASP.NET Core (@ThomasArdal)
+- ${aspnet-request-cookie} - Added Exclude option (@snakefoot)
+- ${aspnet-request-cookie} (without cookienames) will render all cookies (@304NotModified)
+- Added AddNLog with functor to create/initialize LogFactory for NLogLoggingProvider (@snakefoot)
+- AddNLog-methods for ILoggingBuilder (@snakefoot)
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
