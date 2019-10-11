@@ -141,7 +141,14 @@ namespace NLog.Web.Tests.LayoutRenderers
 #if !ASP_NET_CORE
                 httpContext.Request.QueryString.Returns(new NameValueCollection { {"key", expectedResult} });
 #else
-                var queryCollection = new Microsoft.AspNetCore.Http.Internal.QueryCollection(new Dictionary<string, StringValues>() { { "key", expectedResult } });
+                var queryCollection = Substitute.For<IQueryCollection>();
+                queryCollection.Keys.Returns(x => new [] { "key" });
+                queryCollection.Count.Returns(x => 1);
+                queryCollection.TryGetValue("key", out Arg.Any<Microsoft.Extensions.Primitives.StringValues>()).Returns(x => {
+                    x[1] = new Microsoft.Extensions.Primitives.StringValues(expectedResult);
+                    return true;
+                });
+                queryCollection.ContainsKey("key").Returns(true);
                 httpContext.Request.Query.Returns(queryCollection);
 #endif
 
@@ -346,7 +353,14 @@ namespace NLog.Web.Tests.LayoutRenderers
 #if !ASP_NET_CORE
                 httpContext.Request.Cookies.Returns(new HttpCookieCollection {new HttpCookie("key", expectedResult) });
 #else
-                var cookieCollection = new Microsoft.AspNetCore.Http.Internal.RequestCookieCollection(new Dictionary<string, string>{ { "key", expectedResult } });
+                var cookieCollection = Substitute.For<IRequestCookieCollection>();
+                cookieCollection.Keys.Returns(x => new [] { "key" });
+                cookieCollection.Count.Returns(x => 1);
+                cookieCollection.TryGetValue("key", out Arg.Any<string>()).Returns(x => {
+                    x[1] = expectedResult;
+                    return true;
+                });
+                cookieCollection.ContainsKey("key").Returns(true);
                 httpContext.Request.Cookies.Returns(cookieCollection);
 #endif
 

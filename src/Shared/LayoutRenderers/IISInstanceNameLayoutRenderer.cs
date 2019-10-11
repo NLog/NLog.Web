@@ -5,10 +5,15 @@ using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
 #else
-using NLog.Web.DependencyInjection;
+#if ASP_NET_CORE1 || ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
+using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+#if ASP_NET_CORE3
+using Microsoft.Extensions.Hosting;
+#endif
 using Microsoft.Extensions.DependencyInjection;
-
+using NLog.Web.DependencyInjection;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -29,9 +34,9 @@ namespace NLog.Web.LayoutRenderers
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
-        private static IHostingEnvironment _hostingEnvironment;
+        private static IHostEnvironment _hostEnvironment;
 
-        private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
+        private static IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostEnvironment>());
 #endif
 
         /// <summary>
@@ -42,7 +47,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
 #if ASP_NET_CORE
-            builder.Append(HostingEnvironment?.ApplicationName);
+            builder.Append(HostEnvironment?.ApplicationName);
 #else
             builder.Append(HostingEnvironment.SiteName);
 #endif
@@ -52,7 +57,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {
-            _hostingEnvironment = null;
+            _hostEnvironment = null;
             base.CloseLayoutRenderer();
         }
 #endif

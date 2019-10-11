@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Text;
+#if ASP_NET_CORE1 || ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
+using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+#if ASP_NET_CORE3
+using Microsoft.Extensions.Hosting;
+#endif
 using Microsoft.Extensions.DependencyInjection;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -16,9 +22,9 @@ namespace NLog.Web.LayoutRenderers
     [ThreadSafe]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
-        private static IHostingEnvironment _hostingEnvironment;
+        private static IHostEnvironment _hostEnvironment;
 
-        private static IHostingEnvironment HostingEnvironment => _hostingEnvironment ?? (_hostingEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostingEnvironment>());
+        private static IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostEnvironment>());
 
         /// <summary>
         /// Append to target
@@ -27,13 +33,13 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            builder.Append(HostingEnvironment?.EnvironmentName);
+            builder.Append(HostEnvironment?.EnvironmentName);
         }
 
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {
-            _hostingEnvironment = null;
+            _hostEnvironment = null;
             base.CloseLayoutRenderer();
         }
     }

@@ -19,7 +19,7 @@ namespace NLog.Web.Tests
 #if ASP_NET_CORE
         protected class HeaderDict : Dictionary<string, StringValues>, IHeaderDictionary
         {
-#if ASP_NET_CORE2
+#if !ASP_NET_CORE1
             /// <summary>
             /// Strongly typed access to the Content-Length header. Implementations must keep this in sync with the string representation.
             /// </summary>
