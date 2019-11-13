@@ -1,5 +1,3 @@
-using System;
-
 namespace NLog.Web.Enums
 {
     /// <summary>
