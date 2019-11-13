@@ -1,5 +1,4 @@
-﻿#if ASP_NET_CORE
-using System;
+﻿using System;
 using System.ComponentModel;
 using NLog.Extensions.Logging;
 
@@ -23,4 +22,3 @@ namespace NLog.Web
         public static NLogAspNetCoreOptions Default { get; } = new NLogAspNetCoreOptions();
     }
 }
-#endif
