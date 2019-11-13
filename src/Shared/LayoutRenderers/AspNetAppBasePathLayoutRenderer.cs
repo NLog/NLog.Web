@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Text;
-using NLog.Config;
-using NLog.LayoutRenderers;
 #if ASP_NET_CORE
+using System.IO;
 #if ASP_NET_CORE1 || ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -16,6 +14,8 @@ using NLog.Web.DependencyInjection;
 #else
 using System.Web.Hosting;
 #endif
+using NLog.Config;
+using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {

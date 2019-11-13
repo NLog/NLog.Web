@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore.Http;
 using NLog.Config;
-using NLog.Extensions.Logging;
 using NLog.Web.DependencyInjection;
 #if ASP_NET_CORE1 || ASP_NET_CORE2
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 #endif
 
 namespace NLog.Web
@@ -61,7 +60,7 @@ namespace NLog.Web
 
         /// <summary>
         /// Override the default <see cref="IServiceProvider" /> used by the NLog ServiceLocator.
-        /// NLog ServiceLocator uses the <see cref="IServiceProvider" /> to access context specific services (Ex. <see cref="IHttpContextAccessor" />)
+        /// NLog ServiceLocator uses the <see cref="IServiceProvider" /> to access context specific services (Ex. <see cref="Microsoft.AspNetCore.Http.IHttpContextAccessor" />)
         /// </summary>
         /// <remarks>
         /// Should only be used if the standard approach for configuring NLog is not enough
