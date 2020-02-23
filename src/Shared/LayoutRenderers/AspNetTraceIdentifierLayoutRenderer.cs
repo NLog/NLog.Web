@@ -4,7 +4,6 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
-
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -23,7 +22,20 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(LookupTraceIdentifier(httpContext));
         }
 
-#if ASP_NET_CORE
+        /// <summary>
+        /// Ignore the System.Diagnostics.Activity.Current.Id value (AspNetCore3 uses ActivityId by default)
+        /// </summary>
+        public bool IgnoreActivityId { get; set; }
+
+#if ASP_NET_CORE3
+        private string LookupTraceIdentifier(HttpContext httpContext)
+        {
+            if (IgnoreActivityId)
+                return httpContext.TraceIdentifier;
+            else
+                return System.Diagnostics.Activity.Current?.Id ?? httpContext.TraceIdentifier;
+        }
+#elif ASP_NET_CORE
         private string LookupTraceIdentifier(HttpContext httpContext)
         {
             return httpContext.TraceIdentifier;
