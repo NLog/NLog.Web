@@ -44,6 +44,26 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult.ToString(), result);
         }
 
+#if ASP_NET_CORE3
+        [Fact]
+        public void AvailableActivityIdOverridesGuid()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            var expectedResult = System.Guid.NewGuid();
+            SetTraceIdentifier(httpContext, expectedResult);
+
+            System.Diagnostics.Activity.Current = new System.Diagnostics.Activity("MyOperation").Start();
+            
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(System.Diagnostics.Activity.Current.Id, result);
+        }
+#endif
+
         private static void SetTraceIdentifier(HttpContextBase httpContext, Guid? expectedResult)
         {
 #if ASP_NET_CORE
