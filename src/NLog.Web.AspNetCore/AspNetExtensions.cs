@@ -134,11 +134,23 @@ namespace NLog.Web
         /// <param name="configuration">Config for NLog</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
-            AddNLogLoggerProvider(builder.Services, null, null, (serviceProvider, config, options) =>
+            return AddNLog(builder, configuration, null);
+        }
+
+        /// <summary>
+        /// Configure NLog from API
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="configuration">Config for NLog</param>
+        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
+        {
+            AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
             {
-                var provider = CreateNLogLoggerProvider(serviceProvider, config, options);
+                var logFactory = configuration?.LogFactory ?? LogManager.LogFactory;
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, opt, logFactory);
                 // Delay initialization of targets until we have loaded config-settings
-                LogManager.Configuration = configuration;
+                logFactory.Configuration = configuration;
                 return provider;
             });
             return builder;
