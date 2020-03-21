@@ -5,6 +5,7 @@ using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 #else
 using System.Collections.Specialized;
@@ -24,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-url:IncludePort=true} - produces http://www.exmaple.com:80/
     /// ${aspnet-request-url:IncludePort=false} - produces http://www.exmaple.com/
     /// ${aspnet-request-url:IncludeScheme=false} - produces www.exmaple.com/
-    /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1    
+    /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-url")]
@@ -37,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
         public bool IncludeQueryString { get; set; } = false;
 
         /// <summary>
-        /// To specify whether to  include /exclude the Port. Default is false.
+        /// To specify whether to include / exclude the Port. Default is false.
         /// </summary>
         public bool IncludePort { get; set; } = false;
 
@@ -50,6 +51,11 @@ namespace NLog.Web.LayoutRenderers
         /// To specify whether to exclude / include the scheme. Default is true.
         /// </summary>
         public bool IncludeScheme { get; set; } = true;
+
+        /// <summary>
+        /// To specify whether to use raw path and full query (for ASP.NET Core only). Default is false.
+        /// </summary>
+        public bool UseRawTarget { get; set; } = false;
 
         /// <summary>
         /// Renders the Request URL from the HttpRequest
@@ -112,11 +118,20 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(httpRequest.Host.Port.Value);
             }
 
-            builder.Append(httpRequest.PathBase.ToUriComponent());
-            builder.Append(httpRequest.Path.ToUriComponent());
-            if (IncludeQueryString)
+            IHttpRequestFeature httpRequestFeature;
+            if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
             {
-                builder.Append(httpRequest.QueryString.Value);
+                builder.Append(httpRequestFeature.RawTarget);
+            }
+            else
+            {
+                builder.Append(httpRequest.PathBase.ToUriComponent());
+                builder.Append(httpRequest.Path.ToUriComponent());
+
+                if (IncludeQueryString)
+                {
+                    builder.Append(httpRequest.QueryString.Value);
+                }
             }
         }
 #endif
