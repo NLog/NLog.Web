@@ -52,11 +52,15 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IncludeScheme { get; set; } = true;
 
+#if ASP_NET_CORE
+
         /// <summary>
-        /// To specify whether to use raw path and full query (for ASP.NET Core only). Default is false.
+        /// To specify whether to use raw path and full query. Default is false.
         /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
         /// </summary>
         public bool UseRawTarget { get; set; } = false;
+        
+#endif        
 
         /// <summary>
         /// Renders the Request URL from the HttpRequest
@@ -74,8 +78,7 @@ namespace NLog.Web.LayoutRenderers
             RenderUrl(httpRequest, builder);
         }
 
-
-
+#if !ASP_NET_CORE
 
         private void RenderUrl(HttpRequestBase httpRequest, StringBuilder builder)
         {
