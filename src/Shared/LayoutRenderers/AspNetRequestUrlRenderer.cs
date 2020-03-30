@@ -54,6 +54,7 @@ namespace NLog.Web.LayoutRenderers
 
         /// <summary>
         /// To specify whether to use raw path and full query (for ASP.NET Core only). Default is false.
+        /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
         /// </summary>
         public bool UseRawTarget { get; set; } = false;
 
@@ -73,7 +74,9 @@ namespace NLog.Web.LayoutRenderers
             RenderUrl(httpRequest, builder);
         }
 
-#if !ASP_NET_CORE
+
+
+
         private void RenderUrl(HttpRequestBase httpRequest, StringBuilder builder)
         {
             var url = httpRequest.Url;
