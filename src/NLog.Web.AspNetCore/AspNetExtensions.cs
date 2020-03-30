@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore.Http;
 using NLog.Config;
-using NLog.Extensions.Logging;
 using NLog.Web.DependencyInjection;
 #if ASP_NET_CORE1 || ASP_NET_CORE2
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 #endif
 
 namespace NLog.Web
@@ -61,7 +60,7 @@ namespace NLog.Web
 
         /// <summary>
         /// Override the default <see cref="IServiceProvider" /> used by the NLog ServiceLocator.
-        /// NLog ServiceLocator uses the <see cref="IServiceProvider" /> to access context specific services (Ex. <see cref="IHttpContextAccessor" />)
+        /// NLog ServiceLocator uses the <see cref="IServiceProvider" /> to access context specific services (Ex. <see cref="Microsoft.AspNetCore.Http.IHttpContextAccessor" />)
         /// </summary>
         /// <remarks>
         /// Should only be used if the standard approach for configuring NLog is not enough
@@ -135,11 +134,23 @@ namespace NLog.Web
         /// <param name="configuration">Config for NLog</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
-            AddNLogLoggerProvider(builder.Services, null, null, (serviceProvider, config, options) =>
+            return AddNLog(builder, configuration, null);
+        }
+
+        /// <summary>
+        /// Configure NLog from API
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="configuration">Config for NLog</param>
+        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
+        {
+            AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
             {
-                var provider = CreateNLogLoggerProvider(serviceProvider, config, options);
+                var logFactory = configuration?.LogFactory ?? LogManager.LogFactory;
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, opt, logFactory);
                 // Delay initialization of targets until we have loaded config-settings
-                LogManager.Configuration = configuration;
+                logFactory.Configuration = configuration;
                 return provider;
             });
             return builder;
