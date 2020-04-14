@@ -90,6 +90,31 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             // Assert
             Assert.Equal("127.0.0.1", result);
+        }  
+        
+        [Fact]
+        public void ForwardedForHeaderPresentWithCustomRenderForwardedValue()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+#if !ASP_NET_CORE
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.Headers.Returns(
+                new NameValueCollection {{"header2", "127.0.0.1"}});
+#else
+            var headers = new HeaderDict();
+            headers.Add("header2", new StringValues("127.0.0.1"));
+            httpContext.Request.Headers.Returns(callinfo => headers);
+#endif
+            renderer.CheckForwardedForHeader = true;
+            renderer.ForwardedForHeader = "header2";
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal("127.0.0.1", result);
         }
     }
 }
