@@ -150,7 +150,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             Assert.Equal("http:///Test.asp?t=1", result);
         }
-
+#if ASP_NET_CORE
         [Fact]
         public void UrlPresentRenderNonEmpty_UseRawTarget()
         {
@@ -159,11 +159,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-#if !ASP_NET_CORE
-            Assert.Equal("http://www.google.com/Test.asp", result);
-#else
             Assert.Equal("http://www.google.com/rawTarget", result);
-#endif
         }
 
         [Fact]
@@ -175,12 +171,9 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
-#if !ASP_NET_CORE
-            Assert.Equal("http://www.google.com/Test.asp?t=1", result);
-#else
             Assert.Equal("http://www.google.com/rawTarget", result);
-#endif
         }
+#endif
 
         private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "", string rawTarget = null)
         {
