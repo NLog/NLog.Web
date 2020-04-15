@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
+
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Layouts;
 using NLog.Web.Internal;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
-
+#else
+using System.Web;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -22,10 +26,14 @@ namespace NLog.Web.LayoutRenderers
     [ThreadSafe]
     public class AspNetRequestIpLayoutRenderer : AspNetLayoutRendererBase
     {
-        private const string ForwardedForHeader = "X-Forwarded-For";
+        /// <summary>
+        /// The header name to check for the Forwarded-For. Default "X-Forwarded-For". Needs <see cref="CheckForwardedForHeader"/>
+        /// </summary>
+        [DefaultValue("X-Forwarded-For")]
+        public Layout ForwardedForHeader { get; set; } = "X-Forwarded-For";
 
         /// <summary>
-        /// Gets or sets whether the renderer should check value of X-Forwarded-For header
+        /// Gets or sets whether the renderer should check value of <see cref="ForwardedForHeader"/> header
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public bool CheckForwardedForHeader { get; set; }
@@ -43,7 +51,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var ip = CheckForwardedForHeader ? TryLookupForwardHeader(request) : string.Empty;
+            var ip = CheckForwardedForHeader && ForwardedForHeader != null ? TryLookupForwardHeader(request, logEvent) : string.Empty;
 
             if (string.IsNullOrEmpty(ip))
             {
@@ -58,9 +66,10 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-        string TryLookupForwardHeader(System.Web.HttpRequestBase httpRequest)
+        string TryLookupForwardHeader(HttpRequestBase httpRequest, LogEventInfo logEvent)
         {
-            var forwardedHeader = httpRequest.Headers[ForwardedForHeader];
+            var headerName = ForwardedForHeader.Render(logEvent);
+            var forwardedHeader = httpRequest.Headers[headerName];
 
             if (!string.IsNullOrEmpty(forwardedHeader))
             {
@@ -74,11 +83,12 @@ namespace NLog.Web.LayoutRenderers
             return string.Empty;
         }
 #else
-        private string TryLookupForwardHeader(HttpRequest httpRequest)
+        private string TryLookupForwardHeader(HttpRequest httpRequest, LogEventInfo logEvent)
         {
-            if (httpRequest.Headers?.ContainsKey(ForwardedForHeader) == true)
+            var headerName = ForwardedForHeader.Render(logEvent);
+            if (httpRequest.Headers?.ContainsKey(headerName) == true)
             {
-                var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(ForwardedForHeader);
+                var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(headerName);
                 if (forwardedHeaders.Length > 0)
                 {
                     return forwardedHeaders[0];
