@@ -20,8 +20,10 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- ${aspnet-traceidentifier} should automatically check Activity.Current.Id for NetCore3 (@snakefoot)
-- Improved AddNLog with LoggingConfiguration to handle custom LogFactory (@snakefoot)
+- ${aspnet-request-ip}: make ForwardedForHeader configurable (@304NotModified)
+- ${aspnet-request-url} Added UseRawTarget option (@sm-g, @304NotModified)
+
+See also https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>

@@ -19,6 +19,8 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <PackageTags>nlog;log;logging;target;layoutrenderer;web;asp.net;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
 
+    See https://github.com/NLog/NLog.Web/releases
+
     </PackageReleaseNotes>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
