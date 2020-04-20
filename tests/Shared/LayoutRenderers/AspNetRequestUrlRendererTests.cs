@@ -10,10 +10,14 @@ using System.Web.SessionState;
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
+
 using Xunit;
+
+using System.IO;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -146,8 +150,32 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             Assert.Equal("http:///Test.asp?t=1", result);
         }
+#if ASP_NET_CORE
+        [Fact]
+        public void UrlPresentRenderNonEmpty_UseRawTarget()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp", rawTarget: "/rawTarget");
+            renderer.UseRawTarget = true;
 
-        private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "")
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("http://www.google.com/rawTarget", result);
+        }
+
+        [Fact]
+        public void UrlPresentRenderNonEmpty_UseRawTarget_IncludeQueryString()
+        {
+            var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp", rawTarget: "/rawTarget");
+            renderer.UseRawTarget = true;
+            renderer.IncludeQueryString = true;
+
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            Assert.Equal("http://www.google.com/rawTarget", result);
+        }
+#endif
+
+        private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "", string rawTarget = null)
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 
@@ -160,8 +188,40 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.QueryString.Returns(new QueryString(queryString));
             httpContext.Request.Host.Returns(new HostString(hostBase));
             httpContext.Request.Scheme.Returns(scheme);
+
+            if (rawTarget != null)
+            {
+                httpContext.Request.HttpContext.Returns(httpContext);
+
+                var httpRequestFeature = new HttpRequestFeatureMock();
+                httpRequestFeature.RawTarget = rawTarget;
+                var collection = new FeatureCollection();
+                collection.Set<IHttpRequestFeature>(httpRequestFeature);
+                httpContext.Features.Returns(collection);
+            }
 #endif
             return renderer;
         }
+
+#if ASP_NET_CORE
+
+        private class HttpRequestFeatureMock : IHttpRequestFeature
+        {
+            #region Implementation of IHttpRequestFeature
+
+            public Stream Body { get; set; }
+            public IHeaderDictionary Headers { get; set; }
+            public string Method { get; set; }
+            public string Path { get; set; }
+            public string PathBase { get; set; }
+            public string Protocol { get; set; }
+            public string QueryString { get; set; }
+            public string RawTarget { get; set; }
+            public string Scheme { get; set; }
+
+            #endregion Implementation of IHttpRequestFeature
+        }
+
+#endif
     }
 }

@@ -4,9 +4,19 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.9.2-aspnetcore (2020/04/20)
+- [#546](https://github.com/NLog/NLog.Web/pull/546) ${aspnet-request-ip}: make ForwardedForHeader configurable (@304NotModified)
+- [#546](https://github.com/NLog/NLog.Web/pull/546) ${aspnet-request-url} Added UseRawTarget option (@sm-g, @304NotModified)
+
+### v4.9.2-aspnet4 (2020/04/20)
+- [#546](https://github.com/NLog/NLog.Web/pull/546) ${aspnet-request-ip}: make ForwardedForHeader configurable (@304NotModified)
+
 ### v4.9.1-aspnetcore (2020/03/25)
-- [#524](https://github.com/NLog/NLog.Web/pull/524) ${aspnet-traceidentifier} should automatically check Activity.Current.Id for NetCore3 (@snakefoot)
+- [#524](https://github.com/NLog/NLog.Web/pull/524) ${aspnet-traceidentifier} should automatically check Activity.Current.Id for .NET Core 3 (@snakefoot)
 - [#527](https://github.com/NLog/NLog.Web/pull/527) Improved AddNLog with LoggingConfiguration to handle custom LogFactory (@snakefoot)
+
+### v4.9.1-aspnet4 (2020/03/25)
+- Updated dependencies
 
 ### v4.9.0-aspnetcore (2019/10/11)
 This version adds support for ASP.NET Core 3 and some nice renderers has been added and improved!
