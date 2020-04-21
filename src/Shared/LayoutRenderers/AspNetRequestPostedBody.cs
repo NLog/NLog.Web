@@ -73,8 +73,8 @@ namespace NLog.Web.LayoutRenderers
                 // to the StreamReader in some platforms, but then the dispose will be a NOOP, so for platform compat just don't dispose
                 var bodyReader = new StreamReader(body);
 
-#if NETSTANDARD
-                var content = bodyReader.ReadToEndAsync().RunTaskSynchronously();
+#if ASP_NET_CORE
+                var content = bodyReader.ReadToEndAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 #else
                 var content = bodyReader.ReadToEnd();
 #endif
@@ -86,8 +86,6 @@ namespace NLog.Web.LayoutRenderers
                 body.Position = oldPosition;
             }
         }
-
-
 
         private bool TryGetBody(HttpRequest httpRequest, long? contentLength, out Stream body)
         {
