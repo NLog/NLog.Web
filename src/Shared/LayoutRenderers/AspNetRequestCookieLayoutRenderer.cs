@@ -82,7 +82,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, bool checkForExclude)
         {
-            var cookieNames = CookieNames?.Count > 0 ? CookieNames : cookies.Keys.Cast<string>().ToList();
+            var cookieNames = GetCookieNames(cookies);
             foreach (var cookieName in cookieNames)
             {
                 if (checkForExclude && Exclude.Contains(cookieName))
@@ -114,6 +114,11 @@ namespace NLog.Web.LayoutRenderers
                     yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
                 }
             }
+        }
+
+        private List<string> GetCookieNames(HttpCookieCollection cookies)
+        {
+            return CookieNames?.Count > 0 ? CookieNames : cookies.Keys.Cast<string>().ToList();
         }
 #else
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IRequestCookieCollection cookies, bool checkForExclude)
