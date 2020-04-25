@@ -100,7 +100,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (pairsList.Count > 0)
             {
-                var addArray = pairsList.Count > (SingleAsArray | ValuesOnly ? 0 : 1);
+                var addArray = pairsList.Count > (SingleAsArray || ValuesOnly ? 0 : 1);
 
                 if (addArray)
                 {
