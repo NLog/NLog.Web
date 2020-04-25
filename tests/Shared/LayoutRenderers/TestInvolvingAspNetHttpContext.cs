@@ -35,7 +35,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             HttpContext.Current = HttpContext;
 #endif
         }
-        
+
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -73,28 +73,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             return new HttpRequest("", uri.AbsoluteUri, uri.Query);
         }
 
-        protected void AddRequestHeader(HttpRequest request, string headerName, string headerValue)
-        {
-            // thanks http://stackoverflow.com/a/13307238
-            var headers = request.Headers;
-            var t = headers.GetType();
-            var item = new ArrayList();
-
-            t.InvokeMember("MakeReadWrite", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                headers, null);
-            t.InvokeMember("InvalidateCachedArrays",
-                BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance,
-                null, headers, null);
-            item.Add(headerValue);
-            t.InvokeMember("BaseAdd", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null,
-                headers,
-                new object[] { headerName, item });
-            t.InvokeMember("MakeReadOnly", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                headers, null);
-        }
-
         protected virtual HttpResponse SetUpHttpResponse()
         {
             var stringWriter = new StringWriter();
@@ -110,12 +88,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpRequest = SetUpHttpRequest(context);
             var httpResponse = SetUpHttpResponse(context);
             return context;
-        }
-
-        protected void AddRequestHeader(HttpRequest request, string headerName, params string[] headerValues)
-        {
-            var headers = request.Headers;
-            headers.Add(headerName, headerValues);
         }
 
         protected virtual HttpRequest SetUpHttpRequest(HttpContext context)

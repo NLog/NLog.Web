@@ -98,48 +98,56 @@ namespace NLog.Web.LayoutRenderers
             var firstItem = true;
             var pairsList = pairs.ToList();
 
-            if (pairsList.Count > 0)
+            if (pairsList.Count == 0)
             {
-                var addArray = pairsList.Count > (SingleAsArray | ValuesOnly ? 0 : 1);
+                return;
+            }
 
-                if (addArray)
+            var addArray = pairsList.Count > (SingleAsArray || ValuesOnly ? 0 : 1);
+
+            if (addArray)
+            {
+                builder.Append('[');
+            }
+
+            foreach (var kpv in pairsList)
+            {
+                if (!firstItem)
                 {
-                    builder.Append('[');
+                    builder.Append(',');
                 }
 
-                foreach (var kpv in pairsList)
-                {
-                    var key = kpv.Key;
-                    var value = kpv.Value;
-                    if (!firstItem)
-                    {
-                        builder.Append(',');
-                    }
+                SerializePairJson(builder, kpv);
 
-                    firstItem = false;
+                firstItem = false;
+            }
 
-                    if (!ValuesOnly)
-                    {
-                        // Quoted key
-                        builder.Append('{');
-                        AppendQuoted(builder, key);
+            if (addArray)
+            {
+                builder.Append(']');
+            }
+        }
 
-                        builder.Append(':');
-                    }
+        private void SerializePairJson(StringBuilder builder, KeyValuePair<string, string> kpv)
+        {
+            var key = kpv.Key;
+            var value = kpv.Value;
 
-                    // Quoted value
-                    AppendQuoted(builder, value);
+            if (!ValuesOnly)
+            {
+                // Quoted key
+                builder.Append('{');
+                AppendQuoted(builder, key);
 
-                    if (!ValuesOnly)
-                    {
-                        builder.Append('}');
-                    }
-                }
+                builder.Append(':');
+            }
 
-                if (addArray)
-                {
-                    builder.Append(']');
-                }
+            // Quoted value
+            AppendQuoted(builder, value);
+
+            if (!ValuesOnly)
+            {
+                builder.Append('}');
             }
         }
 
