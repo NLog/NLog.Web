@@ -103,7 +103,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var addArray = pairsList.Count > (SingleAsArray | ValuesOnly ? 0 : 1);
+            var addArray = pairsList.Count > (SingleAsArray || ValuesOnly ? 0 : 1);
 
             if (addArray)
             {
