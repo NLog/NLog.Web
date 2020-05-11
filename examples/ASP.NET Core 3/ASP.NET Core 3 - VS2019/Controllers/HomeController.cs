@@ -31,6 +31,13 @@ namespace ASP.NET_Core_3___VS2019.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult AddItem(ItemModel model)
+        {
+            _logger.LogInformation("Added item {@Model}", model);
+            return View("Index");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
