@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -10,6 +11,7 @@ using NLog.Web.Internal;
 using System.Web;
 using HttpRequest = System.Web.HttpRequestBase;
 #else
+using System.Threading.Tasks;
 using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
 #endif
 
@@ -70,7 +72,12 @@ namespace NLog.Web.LayoutRenderers
                 // Note: don't dispose the StreamReader, it will close the stream and that's unwanted. You could pass that that
                 // to the StreamReader in some platforms, but then the dispose will be a NOOP, so for platform compat just don't dispose
                 var bodyReader = new StreamReader(body);
+
+#if ASP_NET_CORE
+                var content = bodyReader.ReadToEndAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+#else
                 var content = bodyReader.ReadToEnd();
+#endif
                 return content;
             }
             finally
