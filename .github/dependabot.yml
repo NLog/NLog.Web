@@ -1,0 +1,71 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/tests/NLog.Web.AspNetCore.Tests"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Castle.Core
+    versions:
+    - ">= 4.3.a, < 4.4"
+  - dependency-name: Microsoft.AspNetCore
+    versions:
+    - "> 1.1.1, < 2"
+  - dependency-name: Microsoft.AspNetCore
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.AspNetCore.Http
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.AspNetCore.Routing.Abstractions
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.NET.Test.Sdk
+    versions:
+    - "> 16.5.0, < 17"
+  - dependency-name: Newtonsoft.Json
+    versions:
+    - ">= 12.a, < 13"
+- package-ecosystem: nuget
+  directory: "/tests/NLog.Web.Tests"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Microsoft.AspNetCore
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.AspNetCore.Http
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.AspNetCore.Routing.Abstractions
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.NET.Test.Sdk
+    versions:
+    - "> 16.5.0, < 17"
+- package-ecosystem: nuget
+  directory: "/src/NLog.Web"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Microsoft.AspNetCore.Hosting.Abstractions
+    versions:
+    - ">= 2.a, < 3"
+- package-ecosystem: nuget
+  directory: "/src/NLog.Web.AspNetCore"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Microsoft.AspNetCore.Hosting.Abstractions
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.AspNetCore.Http
+    versions:
+    - ">= 2.a, < 3"
+  - dependency-name: Microsoft.AspNetCore.Routing.Abstractions
+    versions:
+    - ">= 2.a, < 3"
