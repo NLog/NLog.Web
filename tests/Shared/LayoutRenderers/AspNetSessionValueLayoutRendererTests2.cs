@@ -42,6 +42,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, _) = CreateRenderer();
             renderer.Variable = "b";
+            renderer.ValueType = SessionValueType.Int32;
 
             // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());

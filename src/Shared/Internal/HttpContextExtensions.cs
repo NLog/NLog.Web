@@ -82,6 +82,20 @@ namespace NLog.Web.Internal
 
             return Encoding.UTF8.GetString(data);
         }
+
+        public static int? GetInt32(this ISession session, string key)
+        {
+            if (!session.TryGetValue(key, out var data))
+            {
+                return null;
+            }
+
+            if (data == null || data.Length < 4)
+            {
+                return null;
+            }
+            return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
+        }
 #endif
 
 #if !ASP_NET_CORE
