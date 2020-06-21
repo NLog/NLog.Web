@@ -131,8 +131,8 @@ namespace NLog.Web.LayoutRenderers
             switch (ValueType)
             {
                 case SessionValueType.Int32:
-                    return HttpContextExtensions.GetInt32(session, key);
-                default: return HttpContextExtensions.GetString(session, key);
+                    return session.GetInt32(key);
+                default: return session.GetString(key);
             }
         }
 #endif
