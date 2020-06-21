@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Castle.Core.Logging;
 using Xunit;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +15,6 @@ using NLog.Extensions.Logging;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
-using NLog.Web.Tests.LayoutRenderers;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace NLog.Web.Tests
@@ -44,7 +42,7 @@ namespace NLog.Web.Tests
 
             var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}");
 
-            LogManager.Configuration = configuration;
+            LogManager.Setup().RegisterNLogWeb(serviceProvider: webhost.Services).LoadConfiguration(configuration);
 
             var logger = loggerFact.CreateLogger("logger1");
 
@@ -54,8 +52,99 @@ namespace NLog.Web.Tests
 
             Assert.Single(logged);
             Assert.Equal("logger1|error1", logged.First());
-
         }
+
+#if !ASP_NET_CORE1 && !ASP_NET_CORE2
+        [Fact]
+        public void LoadConfigurationFromAppSettingsShouldLogTest()
+        {
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var appSettings = System.IO.Path.Combine(tempPath, "appsettings.json");
+
+            try
+            {
+                // Arrange
+                System.IO.Directory.CreateDirectory(tempPath);
+                System.IO.File.AppendAllText(appSettings, @"{
+                  ""basepath"": """ + tempPath + @""",
+                  ""NLog"": {
+                    ""throwConfigExceptions"": true,
+                    ""targets"": {
+                        ""logfile"": {
+                            ""type"": ""File"",
+                            ""fileName"": ""${configsetting:basepath}/hello.txt"",
+                            ""layout"": ""${message}""
+                        }
+                    },
+                    ""rules"": [
+                      {
+                        ""logger"": ""*"",
+                        ""minLevel"": ""Debug"",
+                        ""writeTo"": ""logfile""
+                      }
+                    ]
+                  }
+                }");
+
+                // Act
+                var logFactory = new LogFactory();
+                var logger = logFactory.Setup().LoadConfigurationFromAppSettings(basePath: tempPath).GetCurrentClassLogger();
+                logger.Info("Hello World");
+
+                // Assert
+                var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
+                Assert.Contains("Hello World", fileOutput);
+            }
+            finally
+            {
+                if (System.IO.Directory.Exists(tempPath))
+                {
+                    System.IO.Directory.Delete(tempPath, true);
+                }
+            }
+        }
+
+        [Fact]
+        public void LoadConfigurationFromAppSettingsShouldLogTest2()
+        {
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var appSettings = System.IO.Path.Combine(tempPath, "appsettings.json");
+
+            try
+            {
+                // Arrange
+                System.IO.Directory.CreateDirectory(tempPath);
+                System.IO.File.AppendAllText(appSettings, @"{
+                  ""basepath"": """ + tempPath + @"""
+                }");
+
+                System.IO.File.AppendAllText(System.IO.Path.Combine(tempPath, "nlog.config"), @"<nlog>
+                    <targets>
+                        <target type=""file"" name=""logfile"" layout=""${message}"" fileName=""${configsetting:basepath}/hello.txt"" />
+                    </targets>
+                    <rules>
+                        <logger name=""*"" minLevel=""Debug"" writeTo=""logfile"" />
+                    </rules>
+                </nlog>");
+
+                // Act
+                var logFactory = new LogFactory();
+                var logger = logFactory.Setup().LoadConfigurationFromAppSettings(basePath: tempPath).GetCurrentClassLogger();
+                logger.Info("Hello World");
+
+                // Assert
+                var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
+                Assert.Contains("Hello World", fileOutput);
+            }
+            finally
+            {
+                if (System.IO.Directory.Exists(tempPath))
+                {
+                    System.IO.Directory.Delete(tempPath, true);
+                }
+            }
+        }
+#endif
 
         private static LoggingConfiguration CreateConfigWithMemoryTarget(out MemoryTarget target, Layout layout)
         {
@@ -65,7 +154,6 @@ namespace NLog.Web.Tests
             configuration.AddRuleForAllLevels(target);
             return configuration;
         }
-
 
         [Fact]
         public void UseAspNetWithoutRegister()
@@ -79,7 +167,7 @@ namespace NLog.Web.Tests
 
                 var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}|${aspnet-item:key1}");
 
-                LogManager.Configuration = configuration;
+                LogManager.Setup().RegisterNLogWeb(serviceProvider: webhost.Services).LoadConfiguration(configuration);
 
                 var httpContext = webhost.Services.GetService<IHttpContextAccessor>().HttpContext = new DefaultHttpContext();
                 httpContext.Items["key1"] = "value1";
@@ -100,9 +188,7 @@ namespace NLog.Web.Tests
                 //clear so next time it's rebuild
                 ConfigurationItemFactory.Default = null;
             }
-
         }
-
 
         [Fact]
         public void RegisterHttpContext()
@@ -111,7 +197,7 @@ namespace NLog.Web.Tests
             Assert.NotNull(webhost.Services.GetService<IHttpContextAccessor>());
         }
 
-#if ASP_NET_CORE2
+#if !ASP_NET_CORE1
         [Fact]
         public void SkipRegisterHttpContext()
         {
@@ -126,7 +212,7 @@ namespace NLog.Web.Tests
         /// <returns></returns>
         private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
         {
-#if ASP_NET_CORE2 || ASP_NET_CORE3
+#if !ASP_NET_CORE1
             var webhost =
                 Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
                     .Configure(c => c.New()) //.New needed, otherwise:

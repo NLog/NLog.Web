@@ -3,6 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using NLog.Web;
 
 namespace NLog.Web.AspNetCore2.Example
@@ -11,7 +12,13 @@ namespace NLog.Web.AspNetCore2.Example
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var config = new ConfigurationBuilder().Build();
+
+            var logger = LogManager.Setup()
+                                   .RegisterNLogWeb(config)
+                                   .LoadConfigurationFromFile("nlog.config")
+                                   .GetCurrentClassLogger();
+
             try
             {
                 logger.Debug("init main");

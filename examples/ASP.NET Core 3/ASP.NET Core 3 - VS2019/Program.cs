@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Web;
 
 namespace ASP.NET_Core_3___VS2019
@@ -14,7 +15,10 @@ namespace ASP.NET_Core_3___VS2019
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = LogManager.Setup()
+                                   .LoadConfigurationFromAppSettings()
+                                   .GetCurrentClassLogger();
+
             try
             {
                 logger.Debug("init main");
