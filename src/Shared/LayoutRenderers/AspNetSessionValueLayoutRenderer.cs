@@ -76,7 +76,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// The hype of the value.
         /// </summary>
-        public SessionValueType ValueType = SessionValueType.String;
+        public SessionValueType ValueType { get; set; } = SessionValueType.String;
 #endif
 
         /// <summary>
