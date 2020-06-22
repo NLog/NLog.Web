@@ -6,6 +6,8 @@ using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Web;
+#else
+using Microsoft.AspNetCore.Http;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -70,6 +72,13 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo Culture { get; set; }
 
+#if ASP_NET_CORE
+        /// <summary>
+        /// The hype of the value.
+        /// </summary>
+        public SessionValueType ValueType { get; set; } = SessionValueType.String;
+#endif
+
         /// <summary>
         /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -102,7 +111,7 @@ namespace NLog.Web.LayoutRenderers
             object value;
             try
             {
-                value = PropertyReader.GetValue(Variable, contextSession, (session, key) => session.GetString(key), EvaluateAsNestedProperties);
+                value = PropertyReader.GetValue(Variable, contextSession, (session, key) => GetSessionValue(session, key), EvaluateAsNestedProperties);
             }
             finally
             {
@@ -115,5 +124,17 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(Convert.ToString(value, formatProvider));
             }
         }
+
+#if ASP_NET_CORE
+        private object GetSessionValue(ISession session, string key)
+        {
+            switch (ValueType)
+            {
+                case SessionValueType.Int32:
+                    return session.GetInt32(key);
+                default: return session.GetString(key);
+            }
+        }
+#endif
     }
 }

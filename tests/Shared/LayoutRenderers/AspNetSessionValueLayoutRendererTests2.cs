@@ -23,7 +23,7 @@ namespace NLog.Web.Tests.LayoutRenderers
     public class AspNetSessionValueLayoutRendererTests2 : LayoutRenderersTestBase<AspNetSessionValueLayoutRenderer>
     {
         [Fact]
-        public void SingleItemRendersCorrectValue()
+        public void SingleStringItemRendersCorrectValue()
         {
             // Arrange
             var (renderer, _) = CreateRenderer();
@@ -34,6 +34,21 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             // Assert
             Assert.Equal("https://duckduckgo.com", result);
+        }
+
+        [Fact]
+        public void SingleIntItemRendersCorrectValue()
+        {
+            // Arrange
+            var (renderer, _) = CreateRenderer();
+            renderer.Variable = "b";
+            renderer.ValueType = SessionValueType.Int32;
+
+            // Act
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            // Assert
+            Assert.Equal("123", result);
         }
 
         [Fact]
@@ -50,12 +65,15 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Empty(result);
         }
 
+
+
         private static (AspNetSessionValueLayoutRenderer, HttpContext) CreateRenderer(bool throwsError = false)
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 
             var mockSession = new SessionMock(throwsError);
             mockSession.SetString("a", "https://duckduckgo.com");
+            mockSession.SetInt32("b", 123);
             httpContext.Session = mockSession;
             httpContext.Items = new Dictionary<object, object>();
             var sessionFeature = new SessionFeatureMock(mockSession);

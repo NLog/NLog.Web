@@ -62,7 +62,7 @@ namespace NLog.Web.Internal
         }
 #endif
 
-#if ASP_NET_CORE
+#if ASP_NET_CORE1 || ASP_NET_CORE2
         internal static string GetString(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))
@@ -81,6 +81,20 @@ namespace NLog.Web.Internal
             }
 
             return Encoding.UTF8.GetString(data);
+        }
+
+        public static int? GetInt32(this ISession session, string key)
+        {
+            if (!session.TryGetValue(key, out var data))
+            {
+                return null;
+            }
+
+            if (data == null || data.Length < 4)
+            {
+                return null;
+            }
+            return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
         }
 #endif
 
