@@ -6,6 +6,7 @@ using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+using System.Text.RegularExpressions;
 
 #if !ASP_NET_CORE
 using System.Web;
@@ -41,6 +42,12 @@ namespace NLog.Web.LayoutRenderers
         public int MaxContentLength { get; set; } = Size30Kilobytes;
 
         /// <summary>
+        /// Boolean for if content should be trimmed for excess spaces.
+        /// Default is false.
+        /// </summary>
+        public bool TrimContent { get; set; } = false;
+
+        /// <summary>
         /// Renders the ASP.NET posted body
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
@@ -60,6 +67,10 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var content = BodyToString(body);
+
+            if (TrimContent)
+                content = new Regex(@"\s{2,}").Replace(content.Trim(), " ");
+
             builder.Append(content);
         }
 

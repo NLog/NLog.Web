@@ -90,6 +90,35 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
+        [Theory]
+        [InlineData("   ABC   DEF GH I J   KL ", true, "ABC DEF GH I J KL")]
+        [InlineData("   ABC   DEF GH I J   KL ", false, "   ABC   DEF GH I J   KL ")]
+        public void TrimContentTrimsCorrectlyTest(string body, bool trimContent, string expectedResult)
+        {
+            TrimContentTrimsCorrectly(body, trimContent, expectedResult, false);
+#if ASP_NET_CORE
+            TrimContentTrimsCorrectly(body, trimContent, expectedResult, true);
+#endif
+        }
+
+        private static void TrimContentTrimsCorrectly(string body, bool trimContent, string expectedResult, bool canReadOnce)
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.TrimContent = trimContent;
+
+            var stream = CreateStream(body, canReadOnce);
+            SetBodyStream(httpContext, stream);
+
+            var logEventInfo = new LogEventInfo();
+
+            // Act
+            string result = renderer.Render(logEventInfo);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
         private static void SetBodyStream(HttpContextBase httpContext, Stream stream)
         {
 #if ASP_NET_CORE
