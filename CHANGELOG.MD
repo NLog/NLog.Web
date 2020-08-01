@@ -4,6 +4,22 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.9.3-aspnetcore (2020/08/01)
+- [#549](https://github.com/NLog/NLog.Web/pull/549) ${aspnet-request-posted-body}: Use Async reading to prevent "Synchronous operations are disallowed" (#549) (@304NotModified)
+- [#570](https://github.com/NLog/NLog.Web/pull/570) ${aspnet-session} - added ValueType to handle integer session values (#570) (@304NotModified)
+- [#540](https://github.com/NLog/NLog.Web/pull/540) LogManager.Setup() - SetupBuilderExtension with LoadConfigurationFromAppSettings (#540) (@snakefoot)
+- [#567](https://github.com/NLog/NLog.Web/pull/567) Bump NLog.Extensions.Logging to 1.6.4 (#567) (@dependabot-preview[bot])
+
+- [#574](https://github.com/NLog/NLog.Web/pull/574) Create Dependabot config file (#574) (@dependabot-preview[bot])
+- [#553](https://github.com/NLog/NLog.Web/pull/553) Various code improvements (#553) (@304NotModified)
+
+### v4.9.3-aspnet4 (2020/08/01)
+- [#540](https://github.com/NLog/NLog.Web/pull/540) LogManager.Setup() - SetupBuilderExtension with LoadConfigurationFromAppSettings (#540) (@snakefoot)
+- [#565](https://github.com/NLog/NLog.Web/pull/565) Bump NLog from 4.7.0 to 4.7.2 (#565) (@dependabot-preview[bot])
+
+- [#574](https://github.com/NLog/NLog.Web/pull/574) Create Dependabot config file (#574) (@dependabot-preview[bot])
+- [#553](https://github.com/NLog/NLog.Web/pull/553) Various code improvements (#553) (@304NotModified)
+
 ### v4.9.2-aspnetcore (2020/04/20)
 - [#546](https://github.com/NLog/NLog.Web/pull/546) ${aspnet-request-ip}: make ForwardedForHeader configurable (@304NotModified)
 - [#530](https://github.com/NLog/NLog.Web/pull/530) ${aspnet-request-url} Added UseRawTarget option (@sm-g, @304NotModified)
