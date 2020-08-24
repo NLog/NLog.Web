@@ -38,7 +38,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.7.3" />
+    <PackageReference Include="NLog" Version="4.7.4" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
