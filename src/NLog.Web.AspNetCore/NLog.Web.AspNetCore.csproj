@@ -27,9 +27,9 @@ Supported platforms:
 
 See also https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
-    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
+    <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
@@ -41,6 +41,12 @@ See also https://github.com/NLog/NLog.Web/releases
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="N.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
+    <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
+  </Target>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>

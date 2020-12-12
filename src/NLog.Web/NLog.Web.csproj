@@ -22,9 +22,9 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     See https://github.com/NLog/NLog.Web/releases
 
     </PackageReleaseNotes>
-    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
+    <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/NLog/NLog.Web/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NLog/NLog.Web.git</RepositoryUrl>
     
@@ -37,6 +37,12 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="N.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
+    <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
+  </Target>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.5" />
   </ItemGroup>
