@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>ASP.NET_Core_5_NLog_Example</RootNamespace>
+  </PropertyGroup>
+
+</Project>
