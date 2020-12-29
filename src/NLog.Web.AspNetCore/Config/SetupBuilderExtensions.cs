@@ -20,7 +20,7 @@ namespace NLog.Web
         /// </summary>
         public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
-            environment = environment ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
 
             var builder = new ConfigurationBuilder()
                 // Host Configuration
