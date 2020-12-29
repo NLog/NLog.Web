@@ -8,6 +8,7 @@ NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. 
 
 Supported platforms:
 
+- For ASP.NET Core 5, .NET 5
 - For ASP.NET Core 3, .NET Core 3.0
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
 - For ASP.NET Core 1, .NET Standard 1.5+ and .NET 4.5.x    
@@ -20,10 +21,11 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- ${aspnet-request-posted-body}: Use Async reading to prevent "Synchronous operations are disallowed" (#549) (@304NotModified)
-- ${aspnet-session} - added ValueType to handle integer session values (#570) (@304NotModified)
-- LogManager.Setup() - SetupBuilderExtension with LoadConfigurationFromAppSettings (#540) (@snakefoot)
-- Bump NLog.Extensions.Logging (#567) (@dependabot-preview[bot])
+- ASPNETCORE_ENVIRONMENT takes now precedence over DOTNET_ENVIRONMENT (#614) (@snakefoot)
+- Move to PackageIcon and PackageLicenseExpression for NuGet package (#616) (@snakefoot, @304NotModified)
+- Added support for HttpContext.User claim lookup using ${aspnet-user-claim} (#609) (@snakefoot)
+- Introduced AddNLogWeb to avoid conflict with AddNLog from NLog.Extension.Logging (#602) (@snakefoot)
+- Updated NLog.Extensions.Logging dependency
 
 See also https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
