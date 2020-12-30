@@ -4,6 +4,17 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.10-aspnetcore (2020/12/30)
+- [#614](https://github.com/NLog/NLog.Web/pull/614) ASPNETCORE_ENVIRONMENT takes now precedence over DOTNET_ENVIRONMENT (#614) (@snakefoot)
+- [#616](https://github.com/NLog/NLog.Web/pull/616) Move to PackageIcon and PackageLicenseExpression for NuGet package (#616) (@snakefoot, @304NotModified)
+- [#609](https://github.com/NLog/NLog.Web/pull/609) Added support for HttpContext.User claim lookup using ${aspnet-user-claim} (#609) (@snakefoot)
+- [#602](https://github.com/NLog/NLog.Web/pull/602) Introduced AddNLogWeb to avoid conflict with AddNLog from NLog.Extension.Logging (#602) (@snakefoot)
+- Updated NLog.Extensions.Logging dependency (Various pull requests)
+
+### v4.10-aspnet4 (2020/12/30)
+- [#616](https://github.com/NLog/NLog.Web/pull/616) Move to PackageIcon and PackageLicenseExpression for NuGet package (#616) (@snakefoot, @304NotModified)
+- Updated NLog dependency (Various pull requests)
+
 ### v4.9.3-aspnetcore (2020/08/01)
 - [#549](https://github.com/NLog/NLog.Web/pull/549) ${aspnet-request-posted-body}: Use Async reading to prevent "Synchronous operations are disallowed" (#549) (@304NotModified)
 - [#570](https://github.com/NLog/NLog.Web/pull/570) ${aspnet-session} - added ValueType to handle integer session values (#570) (@304NotModified)
