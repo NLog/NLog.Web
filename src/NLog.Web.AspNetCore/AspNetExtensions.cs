@@ -241,6 +241,23 @@ namespace NLog.Web
         }
 
         /// <summary>
+        /// Configure NLog from API
+        /// </summary>
+        /// <param name="builder">The logging builder</param>
+        /// <param name="logFactory">NLog LogFactory</param>
+        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LogFactory logFactory, NLogAspNetCoreOptions options)
+        {
+            AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
+            {
+                logFactory = logFactory ?? LogManager.LogFactory;
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, opt, logFactory);
+                return provider;
+            });
+            return builder;
+        }
+
+        /// <summary>
         /// Use NLog for Dependency Injected loggers.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
