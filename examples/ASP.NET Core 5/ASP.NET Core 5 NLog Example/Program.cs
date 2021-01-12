@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using NLog.Web;
 
-namespace ASP.NET_Core_5_NLog_Example
+namespace ASP.NetCore5_NLog_Web_Example
 {
     public class Program
     {

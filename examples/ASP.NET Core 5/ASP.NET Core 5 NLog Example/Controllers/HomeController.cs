@@ -1,4 +1,4 @@
-﻿using ASP.NET_Core_5_NLog_Example.Models;
+﻿using ASP.NetCore5_NLog_Web_Example.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ASP.NET_Core_5_NLog_Example.Controllers
+namespace ASP.NetCore5_NLog_Web_Example.Controllers
 {
     public class HomeController : Controller
     {

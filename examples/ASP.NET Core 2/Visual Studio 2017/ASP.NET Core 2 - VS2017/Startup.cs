@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NLog.Web.AspNetCore2.Example
+namespace ASP.NetCore2_NLog_Web_Example
 {
     public class Startup
     {

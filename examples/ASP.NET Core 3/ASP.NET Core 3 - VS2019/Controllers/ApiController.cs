@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace ASP.NET_Core_3___VS2019.Controllers
+namespace ASP.NetCore3_NLog_Web_Example.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

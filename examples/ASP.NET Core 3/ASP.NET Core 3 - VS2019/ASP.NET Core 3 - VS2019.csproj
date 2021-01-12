@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>ASP.NET_Core_3___VS2019</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ASP.NetCore3_NLog_Web_Example</AssemblyName>
+    <RootNamespace>ASP.NetCore3_NLog_Web_Example</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

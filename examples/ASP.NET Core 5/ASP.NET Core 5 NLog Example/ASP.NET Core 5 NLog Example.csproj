@@ -1,13 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>ASP.NET_Core_5_NLog_Example</RootNamespace>
+    <AssemblyName>ASP.NetCore5_NLog_Web_Example</AssemblyName>
+    <RootNamespace>ASP.NetCore5_NLog_Web_Example</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
-    <PackageReference Include="NLog" Version="4.7.6" />
+    <ProjectReference Include="..\..\..\src\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

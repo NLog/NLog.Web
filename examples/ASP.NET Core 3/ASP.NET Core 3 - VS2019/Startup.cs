@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace ASP.NET_Core_3___VS2019
+namespace ASP.NetCore3_NLog_Web_Example
 {
     public class Startup
     {
