@@ -14,8 +14,6 @@ using NLog.Web.DependencyInjection;
 using System.Web;
 #endif
 
-
-
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
@@ -72,9 +70,6 @@ namespace NLog.Web.LayoutRenderers
                 return null;
             }
         }
-
-
-
 #endif
 
         /// <summary>

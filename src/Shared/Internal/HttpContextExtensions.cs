@@ -124,6 +124,11 @@ namespace NLog.Web.Internal
                     return null;
                 }
             }
+            catch (ObjectDisposedException ex)
+            {
+                InternalLogger.Debug(ex, "HttpContext Session Disposed.");
+                return null; // System.ObjectDisposedException: IFeatureCollection has been disposed.
+            }
             catch (InvalidOperationException ex)
             {
                 InternalLogger.Debug(ex, "HttpContext Session Lookup failed.");

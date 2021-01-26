@@ -64,9 +64,9 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(claim.Value);
                 }
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
-                //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83
+                InternalLogger.Debug(ex, "aspnet-user-claim - HttpContext has been disposed");
             }
         }
     }

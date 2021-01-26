@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.LayoutRenderers;
@@ -34,9 +35,9 @@ namespace NLog.Web.AspNetCore.LayoutRenderers
                     builder.Append(0);
                 }
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
-                //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83
+                InternalLogger.Debug(ex, "aspnet-user-isAuthenticated - HttpContext has been disposed");
             }
         }
     }
