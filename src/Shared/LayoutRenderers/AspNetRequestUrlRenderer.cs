@@ -3,10 +3,10 @@ using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+using NLog.Common;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-
 #else
 using System.Collections.Specialized;
 using System.Web;
@@ -75,7 +75,14 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            RenderUrl(httpRequest, builder);
+            try
+            {
+                RenderUrl(httpRequest, builder);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                InternalLogger.Debug(ex, "aspnet-request-url - HttpContext has been disposed");
+            }
         }
 
 #if !ASP_NET_CORE

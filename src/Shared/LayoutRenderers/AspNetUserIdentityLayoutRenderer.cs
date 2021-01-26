@@ -35,9 +35,9 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append(identity.Name);
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
-                //ignore ObjectDisposedException, see https://github.com/NLog/NLog.Web/issues/83
+                InternalLogger.Debug(ex, "aspnet-user-identity - HttpContext has been disposed");
             }
         }
     }
