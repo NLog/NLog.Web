@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ASP.NET_Core_5_NLog_Example": {
+    "ASP.NetCore5_NLog_Web_Example": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using NLog.Web;
 
-namespace NLog.Web.AspNetCore2.Example
+namespace ASP.NetCore2_NLog_Web_Example
 {
     public static class Program
     {

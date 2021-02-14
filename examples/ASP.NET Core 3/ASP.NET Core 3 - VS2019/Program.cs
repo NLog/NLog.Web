@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 
-namespace ASP.NET_Core_3___VS2019
+namespace ASP.NetCore3_NLog_Web_Example
 {
     public class Program
     {

@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NLog.Web.AspNetCore2.Example.Models;
+using ASP.NetCore2_NLog_Web_Example.Models;
 using NLog.Web.LayoutRenderers;
 
-namespace NLog.Web.AspNetCore2.Example.Controllers
+namespace ASP.NetCore2_NLog_Web_Example.Controllers
 {
     public class HomeController : Controller
     {

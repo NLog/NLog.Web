@@ -1,6 +1,6 @@
 using System;
 
-namespace ASP.NET_Core_5_NLog_Example.Models
+namespace ASP.NetCore5_NLog_Web_Example.Models
 {
     public class ErrorViewModel
     {

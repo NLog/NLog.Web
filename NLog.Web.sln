@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{A9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.NET 4.6.1 - VS2017", "examples\ASP.NET 4.6.1\Visual Studio 2017\ASP.NET 4.6.1 - VS2017\ASP.NET 4.6.1 - VS2017.csproj", "{0BF1FB4E-D5AE-46DE-9E80-E2DD40235552}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.NET Core 3 - VS2019", "examples\ASP.NET Core 3\ASP.NET Core 3 - VS2019\ASP.NET Core 3 - VS2019.csproj", "{A0DF49D3-74E1-4FD2-8197-017A824B9AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.NET Core 3 - VS2019", "examples\ASP.NET Core 3\ASP.NET Core 3 - VS2019\ASP.NET Core 3 - VS2019.csproj", "{A0DF49D3-74E1-4FD2-8197-017A824B9AED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
