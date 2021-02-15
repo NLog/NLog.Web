@@ -26,7 +26,6 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         private IHttpContextAccessor _httpContextAccessor;
 
-
         /// <summary>
         /// Provides access to the current request HttpContext.
         /// </summary>
@@ -34,7 +33,7 @@ namespace NLog.Web.LayoutRenderers
         [NLogConfigurationIgnoreProperty]
         public IHttpContextAccessor HttpContextAccessor
         {
-            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
+            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor(GetType()));
             set => _httpContextAccessor = value;
         }
 
@@ -42,15 +41,15 @@ namespace NLog.Web.LayoutRenderers
 
         internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
 
-        private static IHttpContextAccessor RetrieveHttpContextAccessor() => DefaultHttpContextAccessor;
+        private static IHttpContextAccessor RetrieveHttpContextAccessor(Type _) => DefaultHttpContextAccessor;
 #else
 
-        private static IHttpContextAccessor RetrieveHttpContextAccessor()
+        private static IHttpContextAccessor RetrieveHttpContextAccessor(Type classType)
         {
             var serviceProvider = ServiceLocator.ServiceProvider;
             if (serviceProvider == null)
             {
-                InternalLogger.Debug("Missing serviceProvider, so no HttpContext");
+                InternalLogger.Debug("{0} - Missing serviceProvider, so no HttpContext", classType);
                 return null;
             }
 
@@ -59,14 +58,14 @@ namespace NLog.Web.LayoutRenderers
                 var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
                 if (httpContextAccessor == null)
                 {
-                    InternalLogger.Debug("Missing IHttpContextAccessor, so no HttpContext");
+                    InternalLogger.Debug("{0} - Missing IHttpContextAccessor, so no HttpContext", classType);
                 }
 
                 return httpContextAccessor;
             }
             catch (ObjectDisposedException ex)
             {
-                InternalLogger.Debug(ex, "ServiceProvider has been disposed, so no HttpContext");
+                InternalLogger.Debug(ex, "{0} - ServiceProvider has been disposed, so no HttpContext", classType);
                 return null;
             }
         }
@@ -113,7 +112,6 @@ namespace NLog.Web.LayoutRenderers
         }
 #endif
 
-
         /// <summary>
         /// Register a custom layout renderer with a callback function <paramref name="func" />. The callback recieves the logEvent and the current configuration.
         /// </summary>
@@ -121,7 +119,8 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="func">Callback that returns the value for the layout renderer.</param>
         public static void Register(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func)
         {
-            object NewFunc(LogEventInfo logEventInfo, LoggingConfiguration configuration) => func(logEventInfo, RetrieveHttpContextAccessor()?.HttpContext, configuration);
+            // TODO Missing caching (and cache-reset) of HttpContextAccessor - Constant lookup in ServiceProvider can lead to deadlock situation
+            object NewFunc(LogEventInfo logEventInfo, LoggingConfiguration configuration) => func(logEventInfo, RetrieveHttpContextAccessor(null)?.HttpContext, configuration);
 
             Register(name, NewFunc);
         }
