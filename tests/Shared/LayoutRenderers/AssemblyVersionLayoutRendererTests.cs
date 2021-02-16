@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AssemblyVersionLayoutRendererTests : TestBase
+    public class AssemblyVersionLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
 #if ASP_NET_CORE
         private const string AssemblyName = "NLog.Web.AspNetCore.Tests";
@@ -42,5 +42,33 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             Assert.Equal("1.2.3.2", result);
         }
+
+#if !ASP_NET_CORE
+        class TestAplication : System.Web.HttpApplication
+        {
+        }
+
+        [Fact]
+        public void HttpContextAssemblyNameVersionTest()
+        {
+            HttpContext.ApplicationInstance = new TestAplication();
+
+            var logFactory = new LogFactory().Setup().SetupExtensions(evt => evt.RegisterAssembly(typeof(IHttpContextAccessor).Assembly)).LoadConfigurationFromXml(@"
+                <nlog throwConfigExceptions='true'>
+                    <targets async='true'>
+                        <target name='memory' type='memory' layout='${assembly-version}' />
+                    </targets>
+                    <rules>
+                        <logger name='*' writeTo='memory' />
+                    </rules>
+                </nlog>
+            ").LogFactory;
+            var target = logFactory.Configuration.AllTargets.OfType<NLog.Targets.MemoryTarget>().First();
+            var logger = logFactory.GetCurrentClassLogger();
+            logger.Info("Hello");
+            logFactory.Flush();
+            Assert.Equal("1.2.3.0", target.Logs.First());
+        }
+#endif
     }
 }

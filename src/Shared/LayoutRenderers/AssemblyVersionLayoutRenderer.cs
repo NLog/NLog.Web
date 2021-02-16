@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using NLog.Common;
 using NLog.Config;
@@ -16,6 +14,14 @@ namespace NLog.Web.LayoutRenderers
     [ThreadSafe]
     public class AssemblyVersionLayoutRenderer : NLog.LayoutRenderers.AssemblyVersionLayoutRenderer
     {
+#if !ASP_NET_CORE
+        /// <summary>
+        /// Support capture of Assembly-Version from active HttpContext
+        /// </summary>
+        public LayoutRenderer ThreadAgnostic => string.IsNullOrEmpty(Name) ? _threadAgnostic : null;
+        private readonly LayoutRenderer _threadAgnostic = new ThreadIdLayoutRenderer();
+#endif
+
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
@@ -28,33 +34,25 @@ namespace NLog.Web.LayoutRenderers
         protected override Assembly GetAssembly()
         {
             var assembly = base.GetAssembly();
-
 #if !ASP_NET_CORE
             if (assembly == null)
             {
                 assembly = GetAspNetEntryAssembly();
             }
 #endif
-
             return assembly;
         }
 
 #if !ASP_NET_CORE
-        private static System.Reflection.Assembly GetAspNetEntryAssembly()
+        private static Assembly GetAspNetEntryAssembly()
         {
-            if (System.Web.HttpContext.Current == null || System.Web.HttpContext.Current.ApplicationInstance == null)
+            var applicatonType = System.Web.HttpContext.Current?.ApplicationInstance?.GetType();
+            while (applicatonType != null && applicatonType.Namespace == "ASP")
             {
-                return null;
+                applicatonType = applicatonType.BaseType;
             }
-
-            var type = System.Web.HttpContext.Current.ApplicationInstance.GetType();
-            while (type != null && type.Namespace == "ASP")
-            {
-                type = type.BaseType;
-            }
-            return type != null ? type.Assembly : null;
+            return applicatonType?.Assembly;
         }
-
 #endif
     }
 }
