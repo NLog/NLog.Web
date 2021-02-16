@@ -1,24 +1,14 @@
 using System;
-using System.Collections;
 using System.IO;
-using System.Reflection;
 #if !ASP_NET_CORE
 using System.Web;
-using System.Web.Routing;
-using System.Collections.Specialized;
-using System.Web.SessionState;
 #else
-using Microsoft.Extensions.Primitives;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 #endif
 using System.Xml;
-
 using NLog.Config;
-
-using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -108,17 +98,5 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
 #endif
-
-        protected NLog.Targets.DebugTarget GetDebugTarget(string targetName, LoggingConfiguration configuration)
-        {
-            var debugTarget = (NLog.Targets.DebugTarget)configuration.FindTargetByName(targetName);
-            Assert.NotNull(debugTarget);
-            return debugTarget;
-        }
-
-        protected string GetDebugLastMessage(string targetName, LoggingConfiguration configuration)
-        {
-            return GetDebugTarget(targetName, configuration).LastMessage;
-        }
     }
 }
