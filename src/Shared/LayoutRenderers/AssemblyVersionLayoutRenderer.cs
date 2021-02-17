@@ -16,18 +16,17 @@ namespace NLog.Web.LayoutRenderers
     {
 #if !ASP_NET_CORE
         /// <summary>
-        /// Support capture of Assembly-Version from active HttpContext
+        /// Support capture of Assembly-Version from active HttpContext ApplicationInstance
         /// </summary>
-        public LayoutRenderer ThreadAgnostic => string.IsNullOrEmpty(Name) ? _threadAgnostic : null;
-        private readonly LayoutRenderer _threadAgnostic = new ThreadIdLayoutRenderer();
+        public LayoutRenderer FixThreadAgnostic => string.IsNullOrEmpty(Name) ? _fixThreadAgnostic : null;
+        private readonly LayoutRenderer _fixThreadAgnostic = new ThreadIdLayoutRenderer();
 #endif
 
         /// <inheritdoc />
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void InitializeLayoutRenderer()
         {
-            InternalLogger.Trace("Extending ${assembly-version} " + nameof(NLog.LayoutRenderers.AssemblyVersionLayoutRenderer) + " with NLog.Web implementation");
-
-            base.Append(builder, logEvent);
+            InternalLogger.Debug("Extending ${assembly-version} " + nameof(NLog.LayoutRenderers.AssemblyVersionLayoutRenderer) + " with NLog.Web implementation");
+            base.InitializeLayoutRenderer();
         }
 
         /// <inheritdoc />
