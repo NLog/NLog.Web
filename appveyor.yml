@@ -1,4 +1,4 @@
-version: 4.10.0.{build}
+version: 4.11.0.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
 image: Visual Studio 2019
@@ -17,7 +17,7 @@ skip_tags: true
 
 build_script:
 - ps: |
-    $versionPrefix = "4.10.0"
+    $versionPrefix = "4.11.0"
     $versionSuffix = ""
     $versionBuild = $versionPrefix + "." + ${env:APPVEYOR_BUILD_NUMBER}
     $versionNuget = $versionPrefix
