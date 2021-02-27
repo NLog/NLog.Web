@@ -36,6 +36,7 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources> <!-- EmbedUntrackedSources for deterministic build -->
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath=""/>

@@ -7,13 +7,13 @@ set version_build=%version_prefix%
 
 call :read_params %*
 
-msbuild NLog.Web.sln /t:restore,rebuild /p:configuration=release /verbosity:minimal
+msbuild NLog.Web.sln /t:restore,rebuild /p:configuration=release /p:ContinuousIntegrationBuild=true /verbosity:minimal
 IF ERRORLEVEL 1 EXIT /B 1
 
-msbuild src\NLog.Web /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
+msbuild src\NLog.Web /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:ContinuousIntegrationBuild=true /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
 IF ERRORLEVEL 1 EXIT /B 1
 
-msbuild src\NLog.Web.AspNetCore /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
+msbuild src\NLog.Web.AspNetCore /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:ContinuousIntegrationBuild=true /p:VersionPrefix=%version_prefix% /p:FileVersion=%version_build% /p:VersionSuffix=%version_suffix%
 IF ERRORLEVEL 1 EXIT /B 1
 
 rem read pass parameters by name
