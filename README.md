@@ -29,7 +29,7 @@ targets and layout-renderes specific to ASP.NET (Core), MVC and IIS.
 - [How to use structured logging](https://github.com/NLog/NLog/wiki/How-to-use-structured-logging)
 
 ### Config
-- All config options: [nlog-project.org/config](http://nlog-project.org/config)
+- All config options: [nlog-project.org/config](https://nlog-project.org/config)
 
 ### Troubleshooting
 - [Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
