@@ -3,6 +3,23 @@
 See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](https://github.com/NLog/NLog.Web/milestones).
 
 Date format: (year/month/day)
+### v4.11-aspnetcore (2021/02/27)
+- [#644](https://github.com/NLog/NLog.Web/pull/644) Added readme.txt for the NuGet packages (#644) (@304NotModified)
+- [#639](https://github.com/NLog/NLog.Web/pull/639) Enable deterministic build (#639) (@304NotModified)
+- [#642](https://github.com/NLog/NLog.Web/pull/642) Added SourceLink (#642) (@304NotModified)
+- [#631](https://github.com/NLog/NLog.Web/pull/631) AspNetLayoutRendererBase - Added more debug-info when failing to lookup HttpContext (#631) (@snakefoot)
+- [#630](https://github.com/NLog/NLog.Web/pull/630) HttpContext - Extended ObjectDisposedException handling (#630) (@snakefoot)
+- [#631](https://github.com/NLog/NLog.Web/pull/631) AspNetLayoutRendererBase - Added more debug-info when failing to lookup HttpContext (#631) (@snakefoot)
+- [#626](https://github.com/NLog/NLog.Web/pull/626) Add AddNLogWeb with NLog LogFactory and NLogAspNetCoreOptions for better isolation (#626) (@snakefoot)
+- [#641](https://github.com/NLog/NLog.Web/pull/641) Bump NLog.Extensions.Logging from 1.7.0 to 1.7.1 (#641) (@dependabot[bot])
+
+### v4.11-aspnet4 (2021/02/27)
+- [#644](https://github.com/NLog/NLog.Web/pull/644) Added readme.txt for the NuGet packages (#644) (@304NotModified)
+- [#639](https://github.com/NLog/NLog.Web/pull/639) Enable deterministic build (#639) (@304NotModified)
+- [#642](https://github.com/NLog/NLog.Web/pull/642) Added SourceLink (#642) (@304NotModified)
+- [#635](https://github.com/NLog/NLog.Web/pull/635) Fix AssemblyVersionLayoutRenderer on ASP.NET to work with async=true (#634, #635) (@snakefoot)
+- [#631](https://github.com/NLog/NLog.Web/pull/631) AspNetLayoutRendererBase - Added more debug-info when failing to lookup HttpContext (#631) (@snakefoot)
+- [#636](https://github.com/NLog/NLog.Web/pull/636) Bump NLog from 4.7.6 to 4.7.8 (#629, #636) (@dependabot[bot])
 
 ### v4.10-aspnetcore (2020/12/30)
 - [#614](https://github.com/NLog/NLog.Web/pull/614) ASPNETCORE_ENVIRONMENT takes now precedence over DOTNET_ENVIRONMENT (#614) (@snakefoot)
