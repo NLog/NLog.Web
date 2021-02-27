@@ -42,7 +42,8 @@ See also https://github.com/NLog/NLog.Web/releases
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources> <!-- EmbedUntrackedSources for deterministic build -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- EmbedUntrackedSources for deterministic build -->
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath=""/>
@@ -100,5 +101,11 @@ See also https://github.com/NLog/NLog.Web/releases
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="readme.txt">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
   </ItemGroup>
 </Project>
