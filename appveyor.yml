@@ -16,25 +16,7 @@ build:
 skip_tags: true
 
 build_script:
-- ps: |
-    $versionPrefix = "4.11.0"
-    $versionSuffix = ""
-    $versionBuild = $versionPrefix + "." + ${env:APPVEYOR_BUILD_NUMBER}
-    $versionNuget = $versionPrefix
-    if ($env:APPVEYOR_PULL_REQUEST_NUMBER)
-    {
-        $versionPrefix = $versionBuild
-        $versionSuffix = "PR" + $env:APPVEYOR_PULL_REQUEST_NUMBER
-    }
-    if ($versionSuffix)
-    {
-        $versionNuget = $versionPrefix + "-" + $versionSuffix
-    }
-    $build_aspnet = "build_aspnet.bat", "-version_prefix=$versionPrefix", "-version_build=$versionBuild", "-version_suffix=$versionSuffix"
-    & cmd /c $build_aspnet
-    if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
-    }
+  - ps: .\build.ps1
 
 deploy:
 - provider: NuGet
