@@ -54,6 +54,22 @@ namespace NLog.Web.Tests
             Assert.Equal("logger1|error1", logged.First());
         }
 
+#if !ASP_NET_CORE1
+        [Fact]
+        public void UseNLog_ReplaceLoggerFactory()
+        {
+            var webhost = CreateWebHost(new NLogAspNetCoreOptions() { ReplaceLoggerFactory = true });
+
+            // Act
+            var loggerFactory = webhost.Services.GetService<ILoggerFactory>();
+            var loggerProvider = webhost.Services.GetService<ILoggerProvider>();
+
+            // Assert
+            Assert.Equal(typeof(NLogLoggerFactory), loggerFactory.GetType());
+            Assert.Equal(typeof(NLogLoggerProvider), loggerProvider.GetType());
+        }
+#endif
+
 #if !ASP_NET_CORE1 && !ASP_NET_CORE2
         [Fact]
         public void LoadConfigurationFromAppSettingsShouldLogTest()
@@ -235,7 +251,7 @@ namespace NLog.Web.Tests
             return webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
         }
 
-#if !ASP_NET_CORE2 && !ASP_NET_CORE3
+#if ASP_NET_CORE1
         public class Startup
         {
             public Startup()
