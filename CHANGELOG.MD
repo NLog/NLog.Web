@@ -3,6 +3,16 @@
 See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](https://github.com/NLog/NLog.Web/milestones).
 
 Date format: (year/month/day)
+
+### v4.12-aspnetcore  (2021/03/29)
+- [#657](https://github.com/NLog/NLog.Web/pull/657) NLogAspNetCoreOptions - Added ReplaceLoggerFactory and RemoveLoggerFactoryFilter (#657) (@snakefoot)
+- [#659](https://github.com/NLog/NLog.Web/pull/659) AspNetLayoutRendererBase.Register should cache IHttpContextAccessor (#659) (@304NotModified)
+- [#656](https://github.com/NLog/NLog.Web/pull/656) Bump NLog.Extensions.Logging to 1.7.2 (#656) (@dependabot[bot])
+
+### v4.12-aspnet  (2021/03/29)
+- [#659](https://github.com/NLog/NLog.Web/pull/659) AspNetLayoutRendererBase.Register should cache IHttpContextAccessor (#659) (@304NotModified)
+- [#655](https://github.com/NLog/NLog.Web/pull/655) Bump NLog to 4.7.9  (#655) (@dependabot[bot])
+
 ### v4.11-aspnetcore (2021/02/27)
 - [#644](https://github.com/NLog/NLog.Web/pull/644) Added readme.txt for the NuGet packages (#644) (@304NotModified)
 - [#639](https://github.com/NLog/NLog.Web/pull/639) Enable deterministic build (#639) (@304NotModified)

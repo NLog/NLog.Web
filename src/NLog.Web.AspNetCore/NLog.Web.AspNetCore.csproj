@@ -21,14 +21,9 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- Added readme.txt for the NuGet packages (#644) (@304NotModified)
-- Added SourceLink (#642) (@304NotModified)
-- Enable deterministic build (#639) (@304NotModified)
-- AspNetLayoutRendererBase - Added more debug-info when failing to lookup HttpContext (#631) (@snakefoot)
-- HttpContext - Extended ObjectDisposedException handling (#630) (@snakefoot)
-- AspNetLayoutRendererBase - Added more debug-info when failing to lookup HttpContext (#631) (@snakefoot)
-- Add AddNLogWeb with NLog LogFactory and NLogAspNetCoreOptions for better isolation (#626) (@snakefoot)
-- Bump NLog.Extensions.Logging from 1.7.0 to 1.7.1 (#641) (@dependabot[bot])
+- NLogAspNetCoreOptions - Added ReplaceLoggerFactory and RemoveLoggerFactoryFilter (#657) (@snakefoot)
+- AspNetLayoutRendererBase.Register should cache IHttpContextAccessor (#659) (@304NotModified)
+- Bump NLog.Extensions.Logging to 1.7.2 (#656) (@dependabot[bot])
 
 See also https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
