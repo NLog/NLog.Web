@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
 using NLog.Layouts;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
@@ -30,11 +25,11 @@ namespace NLog.Web.Tests
         [Fact]
         public void RegisterLayoutRendererTest()
         {
-            var httpcontextMock = SetupHttpAccessorWithHttpContext();
+            var httpContextMock = SetupHttpAccessorWithHttpContext();
 #if ASP_NET_CORE
-            httpcontextMock.Connection.LocalPort.Returns(123);
+            httpContextMock.Connection.LocalPort.Returns(123);
 #else
-            httpcontextMock.Request.RawUrl.Returns("123");
+            httpContextMock.Request.RawUrl.Returns("123");
          
 #endif
 
@@ -47,10 +42,10 @@ namespace NLog.Web.Tests
                     httpContext.Request.RawUrl);
 #endif
             Layout l = "${test-web}";
-            var restult = l.Render(LogEventInfo.CreateNullEvent());
+            var result = l.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal("123", restult);
+            Assert.Equal("123", result);
         }
 
         private static
@@ -68,17 +63,17 @@ namespace NLog.Web.Tests
 #if ASP_NET_CORE
             var serviceProviderMock = Substitute.For<IServiceProvider>();
             serviceProviderMock.GetService(typeof(IHttpContextAccessor)).Returns(httpContextAccessorMock);
-            var httpcontext = Substitute.For<HttpContext>();
+            var httpContext = Substitute.For<HttpContext>();
             ServiceLocator.ServiceProvider = serviceProviderMock;
 #else
-            var httpcontext = Substitute.For<HttpContextBase>();
-            httpContextAccessorMock.HttpContext.Returns(httpcontext);
+            var httpContext = Substitute.For<HttpContextBase>();
+            httpContextAccessorMock.HttpContext.Returns(httpContext);
             AspNetLayoutRendererBase.DefaultHttpContextAccessor = httpContextAccessorMock;
 #endif
 
 
-            httpContextAccessorMock.HttpContext.Returns(httpcontext);
-            return httpcontext;
+            httpContextAccessorMock.HttpContext.Returns(httpContext);
+            return httpContext;
         }
     }
 }

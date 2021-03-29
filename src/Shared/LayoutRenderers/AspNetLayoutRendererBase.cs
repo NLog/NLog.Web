@@ -44,7 +44,7 @@ namespace NLog.Web.LayoutRenderers
         private static IHttpContextAccessor RetrieveHttpContextAccessor(Type _) => DefaultHttpContextAccessor;
 #else
 
-        private static IHttpContextAccessor RetrieveHttpContextAccessor(Type classType)
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(Type classType)
         {
             var serviceProvider = ServiceLocator.ServiceProvider;
             if (serviceProvider == null)
@@ -113,16 +113,14 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Register a custom layout renderer with a callback function <paramref name="func" />. The callback recieves the logEvent and the current configuration.
+        /// Register a custom layout renderer with a callback function <paramref name="func" />. The callback receives the logEvent and the current configuration.
         /// </summary>
         /// <param name="name">Name of the layout renderer - without ${}.</param>
         /// <param name="func">Callback that returns the value for the layout renderer.</param>
         public static void Register(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func)
         {
-            // TODO Missing caching (and cache-reset) of HttpContextAccessor - Constant lookup in ServiceProvider can lead to deadlock situation
-            object NewFunc(LogEventInfo logEventInfo, LoggingConfiguration configuration) => func(logEventInfo, RetrieveHttpContextAccessor(null)?.HttpContext, configuration);
-
-            Register(name, NewFunc);
+            var renderer = new NLogWebLayoutRenderer(name, func);
+            Register(renderer);
         }
     }
 }
