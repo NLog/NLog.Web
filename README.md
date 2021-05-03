@@ -1,6 +1,6 @@
 ![NLog](https://raw.githubusercontent.com/NLog/NLog.github.io/master/images/NLog-logo-only_small.png)
 
-# NLog.Web (ASP.NET & ASP.NET Core) 
+# NLog.Web.AspNetCore
 [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 [![Version](https://img.shields.io/nuget/v/NLog.Web.AspNetCore?label=nuget%20%28ASP.NET%20Core%29)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
 [![Version](https://img.shields.io/nuget/v/NLog.Web?label=nuget%20%28ASP.NET%29)](https://www.nuget.org/packages/NLog.Web)
@@ -13,10 +13,11 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=coverage)](https://sonarcloud.io/component_measures?id=nlog.web&branch=master&metric=coverage) 
 
-These packages are extensions to [NLog](https://github.com/NLog/NLog/). 
+This package is an extension to [NLog](https://github.com/NLog/NLog/). 
 
-The packages contain 
-targets and layout-renderes specific to ASP.NET (Core), MVC and IIS. 
+This package contains targets and layout-renderes specific for ASP.NET Core and with the use of 
+[NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging)
+it integrates into the ASP.NET Core logging as described at [Microsoft docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/).
 
 ## Getting started with NLog
 
@@ -58,34 +59,8 @@ Use the NLog.Web.AspNetCore package
 
 _There is a special package for ASP.NET Core / MVC Core. This is needed because we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging) - which integrates with the ASP.NET Core logging system._
 
-
-## ASP.NET (non-core)
-
-Use the NLog.Web package.
-
-- [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=targets&search=package:nlog.web)
-- [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
-- Simply install the package. NLog will detect the extension automatically. 
-
-
-## HTTP module (ASP.NET non-core)
-
-_note: not listed on https://nlog-project.org/config_
-
-There is a ASP.NET ASP.NET HttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
-
-The `NLogHttpModule` needs a registration in the web.config:
-```xml
-<system.webServer> 
-	<modules runAllManagedModulesForAllRequests="true"> 
-		<add name="NLog" type="NLog.Web.NLogHttpModule, NLog.Web" />
-	</modules>
-</system.webServer>
-```
-
 ## Contributions
 Contributions are highly appreciated! Please make sure if works for ASP.NET and ASP.NET Core if possible and make sure it is covered by unit tests. 
-
 
 ## License
 
