@@ -42,9 +42,11 @@ See also https://github.com/NLog/NLog.Web/releases
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- EmbedUntrackedSources for deterministic build -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath=""/>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />

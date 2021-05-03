@@ -1,7 +1,7 @@
 version: 4.12.0.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
-image: Visual Studio 2019
+image: Visual Studio 2019 Preview
 platform: Any CPU
 
 nuget:
