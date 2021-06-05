@@ -10,7 +10,10 @@ namespace ASP.NetCore5_NLog_Web_Example
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = LogManager.Setup()
+                                   .LoadConfigurationFromAppSettings()
+                                   .GetCurrentClassLogger();
+
             try
             {
                 logger.Debug("init main");
