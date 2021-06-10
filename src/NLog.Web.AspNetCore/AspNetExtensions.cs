@@ -134,8 +134,9 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Apply NLog configuration from XML config.
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, string configFileName)
@@ -144,7 +145,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Apply NLog configuration from XML config.
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
@@ -161,8 +162,9 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
@@ -171,7 +173,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
@@ -181,8 +183,9 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
@@ -192,7 +195,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
@@ -211,8 +214,9 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder"></param>
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, Func<IServiceProvider, LogFactory> factoryBuilder)
@@ -221,7 +225,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
@@ -239,7 +243,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="logFactory">NLog LogFactory</param>
@@ -256,7 +260,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
         {
@@ -264,7 +268,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
@@ -280,7 +284,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         public static IHostBuilder UseNLog(this IHostBuilder builder)
         {
@@ -288,7 +292,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
