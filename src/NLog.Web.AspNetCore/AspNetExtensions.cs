@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NLog.Config;
 using NLog.Web.DependencyInjection;
@@ -347,9 +348,14 @@ namespace NLog.Web
         {
             configuration = SetupConfiguration(serviceProvider, configuration);
             NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default, logFactory ?? LogManager.LogFactory);
-            if (configuration != null && options == null)
+            if (configuration != null)
             {
-                provider.Configure(configuration.GetSection("Logging:NLog"));
+                if (options == null)
+                {
+                    provider.Configure(configuration.GetSection("Logging:NLog"));
+                }
+
+                TryLoadConfigurationFromSection(provider, configuration);
             }
             return provider;
         }
@@ -363,6 +369,28 @@ namespace NLog.Web
                 ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
             }
             return configuration;
+        }
+
+        private static void TryLoadConfigurationFromSection(NLogLoggerProvider loggerProvider, IConfiguration configuration)
+        {
+            if (string.IsNullOrEmpty(loggerProvider.Options.LoggingConfigurationSectionName))
+                return;
+
+            var nlogConfig = configuration.GetSection(loggerProvider.Options.LoggingConfigurationSectionName);
+            if (nlogConfig?.GetChildren()?.Any() == true)
+            {
+                loggerProvider.LogFactory.Setup().LoadConfiguration(configBuilder =>
+                {
+                    if (configBuilder.Configuration.LoggingRules.Count == 0 && configBuilder.Configuration.AllTargets.Count == 0)
+                    {
+                        configBuilder.Configuration = new NLogLoggingConfiguration(nlogConfig, loggerProvider.LogFactory);
+                    }
+                });
+            }
+            else
+            {
+                Common.InternalLogger.Debug("Skip loading NLogLoggingConfiguration from empty config section: {0}", loggerProvider.Options.LoggingConfigurationSectionName);
+            }
         }
 #endif
     }

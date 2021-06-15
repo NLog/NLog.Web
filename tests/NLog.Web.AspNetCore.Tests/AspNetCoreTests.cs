@@ -7,9 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using NLog.Config;
@@ -220,6 +221,42 @@ namespace NLog.Web.Tests
             var webhost = CreateWebHost(new NLogAspNetCoreOptions { RegisterHttpContextAccessor = false });
             Assert.Null(webhost.Services.GetService<IHttpContextAccessor>());
         }
+
+
+        [Fact]
+        public void UseNLog_LoadConfigurationFromSection()
+        {
+            var host = CreateWebHostBuilder().ConfigureAppConfiguration((context, config) =>
+            {
+                var memoryConfig = new Dictionary<string, string>();
+                memoryConfig["NLog:Rules:0:logger"] = "*";
+                memoryConfig["NLog:Rules:0:minLevel"] = "Trace";
+                memoryConfig["NLog:Rules:0:writeTo"] = "inMemory";
+                memoryConfig["NLog:Targets:inMemory:type"] = "Memory";
+                memoryConfig["NLog:Targets:inMemory:layout"] = "${logger}|${message}|${configsetting:NLog.Targets.inMemory.type}";
+                config.AddInMemoryCollection(memoryConfig);
+            }).UseNLog(new NLogAspNetCoreOptions() { LoggingConfigurationSectionName = "NLog", ReplaceLoggerFactory = true }).Build();
+
+            var loggerFact = host.Services.GetService<ILoggerFactory>();
+            var logger = loggerFact.CreateLogger("logger1");
+            logger.LogError("error1");
+
+            var loggerProvider = host.Services.GetService<ILoggerProvider>() as NLogLoggerProvider;
+            var logged = loggerProvider.LogFactory.Configuration.FindTargetByName<Targets.MemoryTarget>("inMemory").Logs;
+
+            Assert.Single(logged);
+            Assert.Equal("logger1|error1|Memory", logged[0]);
+        }
+
+        private static IWebHostBuilder CreateWebHostBuilder()
+        {
+            var builder =
+                Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
+                    .Configure(c => c.New());//.New needed, otherwise:
+                                             // Unhandled Exception: System.ArgumentException: A valid non-empty application name must be provided.
+                                             // Parameter name: applicationName
+            return builder;
+        }
 #endif
 
         /// <summary>
@@ -229,14 +266,9 @@ namespace NLog.Web.Tests
         private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
         {
 #if !ASP_NET_CORE1
-            var webhost =
-                Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
-                    .Configure(c => c.New()) //.New needed, otherwise:
-                                             // Unhandled Exception: System.ArgumentException: A valid non-empty application name must be provided.
-                                             // Parameter name: applicationName
-                    .UseNLog(options) //use NLog for ILoggers and pass httpcontext
-                    .Build();
-            return webhost;
+            return CreateWebHostBuilder()
+                .UseNLog(options)
+                .Build();
 #else
             var host = new WebHostBuilder()
                 .UseKestrel()
