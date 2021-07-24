@@ -1,7 +1,0 @@
-{
-    "sdk": {
-      "version": "5.0.300-preview.21180.15",
-      "rollForward": "latestPatch",
-      "allowPrerelease": true
-    }
-  }
