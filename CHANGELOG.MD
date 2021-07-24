@@ -4,12 +4,21 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
-### v4.12-aspnetcore  (2021/03/29)
+### v4.13 (2021/07/14)
+- **NLog.Web.AspNetCore**
+  - [#670](https://github.com/NLog/NLog.Web/pull/670) NLogAspNetCoreOptions - Added LoggingConfigurationSectionName (#670) (@snakefoot)
+  - [#670](https://github.com/NLog/NLog.Web/pull/670) Bump NLog.Extensions.Logging to 1.7.3 (#670) (@snakefoot)
+  - [#669](https://github.com/NLog/NLog.Web/pull/669) Updated xml-docs for AddNLog-methods to instead use AddNLogWeb (#669) (@snakefoot)
+
+- **NLog.Web**
+  - [#655](https://github.com/NLog/NLog.Web/pull/655) Bump NLog to 4.7.10 (#664) (@dependabot[bot])
+
+### v4.12-aspnetcore (2021/03/29)
 - [#657](https://github.com/NLog/NLog.Web/pull/657) NLogAspNetCoreOptions - Added ReplaceLoggerFactory and RemoveLoggerFactoryFilter (#657) (@snakefoot)
 - [#659](https://github.com/NLog/NLog.Web/pull/659) AspNetLayoutRendererBase.Register should cache IHttpContextAccessor (#659) (@304NotModified)
 - [#656](https://github.com/NLog/NLog.Web/pull/656) Bump NLog.Extensions.Logging to 1.7.2 (#656) (@dependabot[bot])
 
-### v4.12-aspnet  (2021/03/29)
+### v4.12-aspnet (2021/03/29)
 - [#659](https://github.com/NLog/NLog.Web/pull/659) AspNetLayoutRendererBase.Register should cache IHttpContextAccessor (#659) (@304NotModified)
 - [#655](https://github.com/NLog/NLog.Web/pull/655) Bump NLog to 4.7.9  (#655) (@dependabot[bot])
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NLog.Config;
 using NLog.Web.DependencyInjection;
@@ -123,7 +124,7 @@ namespace NLog.Web
         /// Enable NLog as logging provider for Microsoft Extension Logging
         /// </summary>
         /// <param name="builder">The logging builder</param>
-        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, NLogAspNetCoreOptions options)
         {
             AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
@@ -134,8 +135,9 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Apply NLog configuration from XML config.
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, string configFileName)
@@ -144,7 +146,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Apply NLog configuration from XML config.
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
@@ -161,8 +163,9 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
@@ -171,7 +174,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
@@ -181,22 +184,23 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
-        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
         {
             return AddNLogWeb(builder, configuration, options);
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
-        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
         {
             AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
@@ -211,22 +215,21 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
         /// </summary>
+        /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder"></param>
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
-        /// <returns>ILoggingBuilder for chaining</returns>
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, Func<IServiceProvider, LogFactory> factoryBuilder)
         {
             return AddNLogWeb(builder, factoryBuilder);
         }
 
         /// <summary>
-        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
-        /// <returns>ILoggingBuilder for chaining</returns>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, Func<IServiceProvider, LogFactory> factoryBuilder)
         {
             AddNLogLoggerProvider(builder.Services, null, null, (serviceProvider, config, options) =>
@@ -241,11 +244,11 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Configure NLog from API
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
         /// </summary>
         /// <param name="builder">The logging builder</param>
         /// <param name="logFactory">NLog LogFactory</param>
-        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LogFactory logFactory, NLogAspNetCoreOptions options)
         {
             AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
@@ -258,7 +261,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
         {
@@ -266,11 +269,10 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
-        /// <returns></returns>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
             if (builder == null)
@@ -283,7 +285,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         public static IHostBuilder UseNLog(this IHostBuilder builder)
         {
@@ -291,11 +293,10 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// Use NLog for Dependency Injected loggers.
+        /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="options">Options for logging to NLog with Dependency Injected loggers</param>
-        /// <returns></returns>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static IHostBuilder UseNLog(this IHostBuilder builder, NLogAspNetCoreOptions options)
         {
             if (builder == null)
@@ -347,9 +348,14 @@ namespace NLog.Web
         {
             configuration = SetupConfiguration(serviceProvider, configuration);
             NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default, logFactory ?? LogManager.LogFactory);
-            if (configuration != null && options == null)
+            if (configuration != null)
             {
-                provider.Configure(configuration.GetSection("Logging:NLog"));
+                if (options == null)
+                {
+                    provider.Configure(configuration.GetSection("Logging:NLog"));
+                }
+
+                TryLoadConfigurationFromSection(provider, configuration);
             }
             return provider;
         }
@@ -363,6 +369,28 @@ namespace NLog.Web
                 ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
             }
             return configuration;
+        }
+
+        private static void TryLoadConfigurationFromSection(NLogLoggerProvider loggerProvider, IConfiguration configuration)
+        {
+            if (string.IsNullOrEmpty(loggerProvider.Options.LoggingConfigurationSectionName))
+                return;
+
+            var nlogConfig = configuration.GetSection(loggerProvider.Options.LoggingConfigurationSectionName);
+            if (nlogConfig?.GetChildren()?.Any() == true)
+            {
+                loggerProvider.LogFactory.Setup().LoadConfiguration(configBuilder =>
+                {
+                    if (configBuilder.Configuration.LoggingRules.Count == 0 && configBuilder.Configuration.AllTargets.Count == 0)
+                    {
+                        configBuilder.Configuration = new NLogLoggingConfiguration(nlogConfig, loggerProvider.LogFactory);
+                    }
+                });
+            }
+            else
+            {
+                Common.InternalLogger.Debug("Skip loading NLogLoggingConfiguration from empty config section: {0}", loggerProvider.Options.LoggingConfigurationSectionName);
+            }
         }
 #endif
     }

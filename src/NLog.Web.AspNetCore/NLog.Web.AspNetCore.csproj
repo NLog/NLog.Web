@@ -21,8 +21,10 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-Demo for package readme on NuGet.org, see https://docs.microsoft.com/en-us/nuget/nuget-org/package-readme-on-nuget-org
-and https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets#packagereadmefile
+
+- NLogAspNetCoreOptions - Added LoggingConfigurationSectionName (#670) (@snakefoot)
+- Bump NLog.Extensions.Logging to 1.7.3 (#670) (@snakefoot)
+- Updated xml-docs for AddNLog-methods to instead use AddNLogWeb (#669) (@snakefoot)
 
 See also https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
@@ -44,7 +46,7 @@ See also https://github.com/NLog/NLog.Web/releases
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="N.png" Pack="true" PackagePath=""/>
+    <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
     <None Include="..\..\README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
@@ -75,7 +77,7 @@ See also https://github.com/NLog/NLog.Web/releases
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
     <Reference Include="System" />
