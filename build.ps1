@@ -20,7 +20,7 @@ if (-Not $LastExitCode -eq 0) {
     exit $LastExitCode 
 }
 
-msbuild src\NLog.Web.AspNetCore /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:ContinuousIntegrationBuild=true /p:VersionPrefix=$versionPrefix /p:VersionSuffix=$versionSuffix /p:FileVersion=$versionFile
+msbuild src\NLog.Web.AspNetCore /t:rebuild,pack /p:configuration=release /verbosity:minimal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:ContinuousIntegrationBuild=true /p:VersionPrefix=$versionPrefix /p:VersionSuffix=$versionSuffix /p:FileVersion=$versionFile
 if (-Not $LastExitCode -eq 0) {
     exit $LastExitCode 
 }
