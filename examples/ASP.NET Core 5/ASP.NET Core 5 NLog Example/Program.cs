@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using NLog;
 using NLog.Web;
 
 namespace ASP.NetCore5_NLog_Web_Example
@@ -41,7 +42,7 @@ namespace ASP.NetCore5_NLog_Web_Example
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
                 .UseNLog();  // NLog: Setup NLog for Dependency injection
     }
