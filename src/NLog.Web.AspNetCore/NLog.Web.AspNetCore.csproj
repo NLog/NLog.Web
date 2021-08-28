@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
@@ -11,7 +11,6 @@ Supported platforms:
 - For ASP.NET Core 5, .NET 5
 - For ASP.NET Core 3, .NET Core 3.0
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
-- For ASP.NET Core 1, .NET Standard 1.5+ and .NET 4.5.x    
     </Description>
     <Authors>Julian Verdurmen</Authors>
     <Company>NLog</Company>
@@ -47,21 +46,11 @@ See also https://github.com/NLog/NLog.Web/releases
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
-    <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Framework 4.6+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
-    <Title>ASP.NET Core 1 integration for NLog - .NET Standard 1.5</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
@@ -73,15 +62,6 @@ See also https://github.com/NLog/NLog.Web/releases
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' or '$(TargetFramework)' == 'net451' ">
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->

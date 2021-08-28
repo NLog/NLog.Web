@@ -4,7 +4,7 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Hosting;
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
 using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
 using Microsoft.Extensions.DependencyInjection;

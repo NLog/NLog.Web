@@ -2,7 +2,7 @@
 using System.Text;
 #if ASP_NET_CORE
 using System.IO;
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
