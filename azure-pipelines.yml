@@ -1,0 +1,86 @@
+pool:
+  name: Azure Pipelines
+  vmImage: 'windows-2019'
+  demands:
+  - msbuild
+  - visualstudio
+  - vstest
+
+variables:
+  solution: 'NLog.Web.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 5.x'
+  inputs:
+    versionSpec: 5.x
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(solution)'
+    verbosityRestore: Quiet
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: Sonarcloud
+    organization: nlog
+    projectKey: nlog.web
+    projectName: 'NLog Web'
+    projectVersion: '$(Build.BuildId)'
+
+- task: VSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '-v:m'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    maximumCpuCount: true
+
+- task: VSTest@2
+  displayName: 'VsTest - testAssemblies'
+  inputs:
+    testAssemblyVer2: |
+     **\$(buildConfiguration)\**\*test*.dll
+     !**\obj\**
+    runOnlyImpactedTests: false
+    runInParallel: false
+    codeCoverageEnabled: true
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    failOnMinTestsNotRun: true
+    rerunFailedTests: true
+    rerunMaxAttempts: 5
+
+- task: PublishSymbols@2
+  displayName: 'Publish symbols path'
+  inputs:
+    SearchPattern: '**\bin\**\*.pdb'
+    PublishSymbols: false
+  continueOnError: true
+
+- task: CopyFiles@2
+  displayName: 'Nupkg files to artifacts'
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: |
+     artifacts\*.nupkg
+     artifacts\*.snupkg
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run Code Analysis'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish Quality Gate Result'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
