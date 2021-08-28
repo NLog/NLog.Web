@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NLog.Config;
 using NLog.Web.DependencyInjection;
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
 using Microsoft.AspNetCore.Builder;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
@@ -25,7 +25,7 @@ namespace NLog.Web
     /// </summary>
     public static class AspNetExtensions
     {
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
         /// <summary>
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
@@ -39,7 +39,7 @@ namespace NLog.Web
         }
 #endif
 
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
         /// <summary>
         /// Apply NLog configuration from XML config.
         /// </summary>

@@ -62,7 +62,7 @@ namespace NLog.Web.Internal
         }
 #endif
 
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
         internal static string GetString(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))

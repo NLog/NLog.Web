@@ -5,7 +5,7 @@ using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
 #else
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif

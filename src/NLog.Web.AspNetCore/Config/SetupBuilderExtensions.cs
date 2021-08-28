@@ -1,5 +1,5 @@
 ﻿using System;
-#if !ASP_NET_CORE1 && !ASP_NET_CORE2
+#if !ASP_NET_CORE2
 using System.IO;
 using System.Linq;
 #endif
@@ -14,7 +14,7 @@ namespace NLog.Web
     /// </summary>
     public static class SetupBuilderExtensions
     {
-#if !ASP_NET_CORE1 && !ASP_NET_CORE2
+#if !ASP_NET_CORE2
         /// <summary>
         /// Loads NLog LoggingConfiguration from appsettings.json from the NLog-section
         /// </summary>
