@@ -6,6 +6,13 @@ Date format: (year/month/day)
 
 ### v4.13 (2021/07/14)
 - **NLog.Web.AspNetCore**
+- [#677](https://github.com/NLog/NLog.Web/pull/677) Bump NLog.Extensions.Logging from 1.7.3 to 1.7.4 (#677) (@dependabot[bot])
+
+- **NLog.Web**
+- [#674](https://github.com/NLog/NLog.Web/pull/674) Bump NLog from 4.7.10 to 4.7.11  (#674) (@dependabot[bot])
+
+### v4.13 (2021/07/14)
+- **NLog.Web.AspNetCore**
   - [#670](https://github.com/NLog/NLog.Web/pull/670) NLogAspNetCoreOptions - Added LoggingConfigurationSectionName (#670) (@snakefoot)
   - [#670](https://github.com/NLog/NLog.Web/pull/670) Bump NLog.Extensions.Logging to 1.7.3 (#670) (@snakefoot)
   - [#669](https://github.com/NLog/NLog.Web/pull/669) Updated xml-docs for AddNLog-methods to instead use AddNLogWeb (#669) (@snakefoot)

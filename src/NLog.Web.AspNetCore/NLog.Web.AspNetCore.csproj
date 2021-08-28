@@ -21,9 +21,7 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
-- NLogAspNetCoreOptions - Added LoggingConfigurationSectionName (#670) (@snakefoot)
-- Bump NLog.Extensions.Logging to 1.7.3 (#670) (@snakefoot)
-- Updated xml-docs for AddNLog-methods to instead use AddNLogWeb (#669) (@snakefoot)
+- Update dependencies
 
 See also https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
