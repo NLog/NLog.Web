@@ -18,9 +18,13 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <PackageId>NLog.Web</PackageId>
     <PackageTags>nlog;log;logging;target;layoutrenderer;web;asp.net;MVC;httpcontext</PackageTags>
     <PackageReleaseNotes>
+Remember to register NLog.Web in NLog.config
 
-    See https://github.com/NLog/NLog.Web/releases
-
+&lt;extensions&gt;
+    &lt;add assembly="NLog.Web" /&gt;
+&lt;/extensions&gt;
+  
+See https://github.com/NLog/NLog.Web/releases
     </PackageReleaseNotes>
     <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
