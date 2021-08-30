@@ -7,12 +7,12 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
-#if !ASP_NET_CORE
-using System.Web;
-using HttpRequest = System.Web.HttpRequestBase;
-#else
+#if ASP_NET_CORE
 using System.Threading.Tasks;
 using HttpRequest = Microsoft.AspNetCore.Http.HttpRequest;
+#else
+using System.Web;
+using HttpRequest = System.Web.HttpRequestBase;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -135,10 +135,10 @@ namespace NLog.Web.LayoutRenderers
 
         private static Stream GetBodyStream(HttpRequest httpRequest)
         {
-#if !ASP_NET_CORE
-            var body = httpRequest.InputStream;
-#else
+#if ASP_NET_CORE
             var body = httpRequest.Body;
+#else
+            var body = httpRequest.InputStream;
 #endif
             return body;
         }
@@ -173,7 +173,7 @@ namespace NLog.Web.LayoutRenderers
 
         private static Stream EnableRewind(HttpRequest httpRequest, int bufferThreshold)
         {
-#if ASP_NET_CORE2 || ASP_NET_CORE3
+#if ASP_NET_CORE
             Microsoft.AspNetCore.Http.HttpRequestRewindExtensions.EnableBuffering(httpRequest, bufferThreshold);
             return httpRequest.Body;
 #else
