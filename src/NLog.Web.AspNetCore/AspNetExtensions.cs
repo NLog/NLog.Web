@@ -8,7 +8,6 @@ using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
-#if ASP_NET_CORE2 || ASP_NET_CORE3
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-#endif
 
 namespace NLog.Web
 {
@@ -30,32 +28,10 @@ namespace NLog.Web
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
         /// <param name="app"></param>
-#if ASP_NET_CORE2
         [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
-#endif
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
             app.ApplicationServices.SetupNLogServiceLocator();
-        }
-#endif
-
-#if ASP_NET_CORE2
-        /// <summary>
-        /// Apply NLog configuration from XML config.
-        /// </summary>
-        /// <param name="env"></param>
-        /// <param name="configFileRelativePath">relative path to NLog configuration file.</param>
-        /// <returns>LoggingConfiguration for chaining</returns>
-#if ASP_NET_CORE2
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
-#endif
-        public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
-        {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            var fileName = Path.Combine(env.ContentRootPath, configFileRelativePath);
-            LogManager.LoadConfiguration(fileName);
-            return LogManager.Configuration;
         }
 #endif
 
@@ -67,6 +43,7 @@ namespace NLog.Web
         /// Should only be used if the standard approach for configuring NLog is not enough
         /// </remarks>
         /// <param name="serviceProvider"></param>
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
         public static IServiceProvider SetupNLogServiceLocator(this IServiceProvider serviceProvider)
         {
             ServiceLocator.ServiceProvider = serviceProvider;
@@ -75,7 +52,23 @@ namespace NLog.Web
             return serviceProvider;
         }
 
-#if ASP_NET_CORE2 || ASP_NET_CORE3
+#if ASP_NET_CORE2
+        /// <summary>
+        /// Apply NLog configuration from XML config.
+        /// </summary>
+        /// <param name="env"></param>
+        /// <param name="configFileRelativePath">relative path to NLog configuration file.</param>
+        /// <returns>LoggingConfiguration for chaining</returns>
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
+        public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
+        {
+            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
+            var fileName = Path.Combine(env.ContentRootPath, configFileRelativePath);
+            LogManager.LoadConfiguration(fileName);
+            return LogManager.Configuration;
+        }
+#endif
 
         /// <summary>
         /// Apply NLog configuration from XML config.
@@ -392,6 +385,5 @@ namespace NLog.Web
                 Common.InternalLogger.Debug("Skip loading NLogLoggingConfiguration from empty config section: {0}", loggerProvider.Options.LoggingConfigurationSectionName);
             }
         }
-#endif
     }
 }
