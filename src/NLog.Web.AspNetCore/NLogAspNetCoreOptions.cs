@@ -20,5 +20,13 @@ namespace NLog.Web
         /// The default options
         /// </summary>
         public static NLogAspNetCoreOptions Default { get; } = new NLogAspNetCoreOptions();
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="NLogAspNetCoreOptions"/> with default values.
+        /// </summary>
+        public NLogAspNetCoreOptions()
+        {
+            ShutdownOnDispose = true;
+        }
     }
 }
