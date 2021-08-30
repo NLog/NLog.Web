@@ -40,9 +40,7 @@ targets and layout-renderes specific to ASP.NET (Core), MVC and IIS.
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
 ## ASP.NET Core
-ASP.NET Core 2, 3 and 5 are supported!
-
-Supported platforms:
+The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package supports the platforms:
 
 - For ASP.NET Core 5, .NET 5
 - For ASP.NET Core 3, .NET Core 3.0
@@ -54,17 +52,20 @@ Use the NLog.Web.AspNetCore package
 
 - [Supported layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
 
-_There is a special package for ASP.NET Core / MVC Core. This is needed because we can't detect if ASP.NET or ASP.NET Core is used. The package depends on [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging) - which integrates with the ASP.NET Core logging system._
-
-
 ## ASP.NET (non-core)
 
-Use the NLog.Web package.
+The [NLog.Web](https://www.nuget.org/packages/NLog.Web)-package works with classic ASP.NET MVC
 
 - [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=targets&search=package:nlog.web)
 - [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
-- Simply install the package. NLog will detect the extension automatically. 
+- NLog 5.0 requires that NLog.config must include NLog.Web in extensions:
 
+```xml
+  <!-- enable ASP.NET layout renderers -->
+  <extensions>
+    <add assembly="NLog.Web"/>
+  </extensions>
+```
 
 ## HTTP module (ASP.NET non-core)
 
@@ -88,5 +89,3 @@ Contributions are highly appreciated! Please make sure if works for ASP.NET and 
 ## License
 
 BSD
-
-
