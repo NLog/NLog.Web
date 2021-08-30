@@ -343,13 +343,15 @@ namespace NLog.Web
             NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default, logFactory ?? LogManager.LogFactory);
             if (configuration != null)
             {
-                if (options == null)
-                {
-                    provider.Configure(configuration.GetSection("Logging:NLog"));
-                }
-
+                provider.Configure(configuration.GetSection("Logging:NLog"));
                 TryLoadConfigurationFromSection(provider, configuration);
             }
+
+            if (provider.Options.ShutdownOnDispose)
+            {
+                provider.LogFactory.AutoShutdown = false;
+            }
+
             return provider;
         }
 
