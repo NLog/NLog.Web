@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog.Config;
 using NLog.Layouts;
 using NLog.Web.Enums;
 
@@ -55,7 +54,6 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
         /// </summary>
-        [DefaultParameter]
         public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
@@ -138,7 +136,6 @@ namespace NLog.Web.LayoutRenderers
                 // Quoted key
                 builder.Append('{');
                 AppendQuoted(builder, key);
-
                 builder.Append(':');
             }
 
