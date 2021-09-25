@@ -53,7 +53,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"));
 
             renderer.QueryStringKeys = new List<string> { "key" };
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -83,7 +83,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"));
 
             renderer.QueryStringKeys = new List<string> { "Id" };
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -152,14 +152,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void MultipleValuesJsonQuoted()
         {
-            
             var expectedResult = @"{""Id"":""a'b,\""c\""""}";
 
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "a'b", "\"c\""));
 
             renderer.QueryStringKeys = null;
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = false;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -174,7 +172,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
 
             renderer.QueryStringKeys = new List<string> { "Id", "Id2" };
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -205,7 +203,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"));
 
             renderer.QueryStringKeys = new List<string> { "Id" };
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -237,7 +235,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
 
             renderer.QueryStringKeys = new List<string> { "Id", "Id2" };
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());

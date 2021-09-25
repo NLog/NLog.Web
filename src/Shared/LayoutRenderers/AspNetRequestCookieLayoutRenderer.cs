@@ -24,9 +24,10 @@ namespace NLog.Web.LayoutRenderers
     /// <para>Example usage of ${aspnet-request-cookie}</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-cookie:OutputFormat=Flat}
-    /// ${aspnet-request-cookie:OutputFormat=Json}
-    /// ${aspnet-request-cookie:OutputFormat=Json:CookieNames=username}
-    /// ${aspnet-request-cookie:OutputFormat=Json:Exclude=access_token}
+    /// ${aspnet-request-cookie:OutputFormat=JsonArray}
+    /// ${aspnet-request-cookie:OutputFormat=JsonDictionary}
+    /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:CookieNames=username}
+    /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-cookie")]
@@ -93,7 +94,7 @@ namespace NLog.Web.LayoutRenderers
                     continue;
                 }
 
-                if (OutputFormat == AspNetRequestLayoutOutputFormat.Json)
+                if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
                 {
                     // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
                     var isFirst = true;
