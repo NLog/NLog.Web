@@ -17,7 +17,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-host")]
-    [ThreadSafe]
     public class AspNetRequestHostLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

@@ -24,7 +24,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-form")]
-    [ThreadSafe]
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>

@@ -19,7 +19,6 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     [LayoutRenderer("aspnet-environment")]
     [ThreadAgnostic]
-    [ThreadSafe]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
         private static IHostEnvironment _hostEnvironment;

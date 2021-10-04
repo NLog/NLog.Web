@@ -27,6 +27,7 @@ deploy:
 test_script:
   - nuget.exe install OpenCover -ExcludeVersion -DependencyVersion Ignore
   - OpenCover\tools\OpenCover.Console.exe -register:user -returntargetcode -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.Tests\bin\Release\net452\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -output:coverage.xml
+  - OpenCover\tools\OpenCover.Console.exe -register:user -returntargetcode -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.Tests\bin\Release\net461\NLog.Web.Tests.dll\" -appveyor -noshadow"  -returntargetcode -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -mergeoutput -output:coverage.xml
   - OpenCover\tools\OpenCover.Console.exe -register:user -returntargetcode -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"\"c:\projects\nlogweb\tests\NLog.Web.AspNetCore.Tests\bin\Release\net461\NLog.Web.AspNetCore.Tests.dll\" -appveyor -noshadow" -filter:"+[NLog.Web]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -oldstyle -mergeoutput -output:coverage.xml
   - pip install codecov
   - codecov -f "coverage.xml"

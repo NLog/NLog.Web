@@ -12,7 +12,6 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request TraceIdentifier.
     /// </summary>
     [LayoutRenderer("aspnet-traceidentifier")]
-    [ThreadSafe]
     public class AspNetTraceIdentifierLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc />

@@ -26,7 +26,6 @@ namespace NLog.Web.LayoutRenderers
 #endif
     [LayoutRenderer("aspnet-webrootpath")]
     [ThreadAgnostic]
-    [ThreadSafe]
     public class AspNetWebRootPathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE

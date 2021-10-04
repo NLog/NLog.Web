@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>net35</TargetFrameworks>
+    <TargetFrameworks>net35;net46</TargetFrameworks>
     <Product>NLog.Web v$(VersionPrefix)</Product>
     <Description>
 NLog logging for ASP.NET and ASP.NET MVC. Includes targets and layout renderers for websites and web applications.
@@ -33,7 +33,7 @@ See https://github.com/NLog/NLog.Web/releases
     <RepositoryUrl>https://github.com/NLog/NLog.Web.git</RepositoryUrl>
     
     <SignAssembly>true</SignAssembly>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
     
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -49,7 +49,7 @@ See https://github.com/NLog/NLog.Web/releases
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.7.11" />
+    <PackageReference Include="NLog" Version="5.0.0-preview.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>

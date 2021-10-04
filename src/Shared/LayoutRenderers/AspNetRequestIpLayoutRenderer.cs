@@ -23,7 +23,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-ip")]
-    [ThreadSafe]
     public class AspNetRequestIpLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

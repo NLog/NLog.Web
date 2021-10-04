@@ -21,7 +21,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-referrer")]
-    [ThreadSafe]
     public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

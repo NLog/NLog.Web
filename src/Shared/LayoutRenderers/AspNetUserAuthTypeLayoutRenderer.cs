@@ -14,7 +14,6 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User variable.
     /// </summary>
     [LayoutRenderer("aspnet-user-authtype")]
-    [ThreadSafe]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

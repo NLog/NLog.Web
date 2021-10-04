@@ -13,7 +13,6 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Session ID.
     /// </summary>
     [LayoutRenderer("aspnet-sessionid")]
-    [ThreadSafe]
     public class AspNetSessionIdLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

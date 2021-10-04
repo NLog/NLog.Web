@@ -14,7 +14,6 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User variable.
     /// </summary>
     [LayoutRenderer("aspnet-user-identity")]
-    [ThreadSafe]
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

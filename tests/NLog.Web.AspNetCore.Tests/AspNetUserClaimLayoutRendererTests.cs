@@ -10,6 +10,26 @@ namespace NLog.Web.Tests.LayoutRenderers
     public class AspNetUserClaimLayoutRendererTests : LayoutRenderersTestBase<AspNetUserClaimLayoutRenderer>
     {
         [Fact]
+        public override void NullRendersEmptyString()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.ClaimType = string.Empty;
+            httpContext.User.Identity.Returns(null as IIdentity);
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Empty(result);
+
+            // Bonus assert
+            renderer.ClaimType = null;
+            result = renderer.Render(new LogEventInfo());
+            Assert.Empty(result);
+        }
+
+        [Fact]
         public void NullUserIdentityRendersEmptyString()
         {
             // Arrange

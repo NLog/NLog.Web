@@ -30,7 +30,6 @@ namespace NLog.Web.LayoutRenderers
 #endif
     [LayoutRenderer("aspnet-appbasepath")]
     [ThreadAgnostic]
-    [ThreadSafe]
     public class AspNetAppBasePathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE

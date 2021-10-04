@@ -21,7 +21,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-useragent")]
-    [ThreadSafe]
     public class AspNetRequestUserAgent : AspNetLayoutRendererBase
     {
         /// <summary>

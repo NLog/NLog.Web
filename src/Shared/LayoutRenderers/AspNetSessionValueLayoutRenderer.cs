@@ -39,7 +39,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-session")]
-    [ThreadSafe]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
 #if ASP_NET_CORE

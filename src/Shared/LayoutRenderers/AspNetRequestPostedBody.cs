@@ -27,7 +27,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-posted-body")]
-    [ThreadSafe]
     public class AspNetRequestPostedBody : AspNetLayoutRendererBase
     {
         private const int Size64KiloBytes = 64 * 1024;
