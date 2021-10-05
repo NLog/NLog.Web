@@ -26,7 +26,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-headers")]
-    [ThreadSafe]
     public class AspNetRequestHeadersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>

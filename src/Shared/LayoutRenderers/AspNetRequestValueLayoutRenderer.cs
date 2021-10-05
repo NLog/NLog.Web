@@ -31,7 +31,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request")]
-    [ThreadSafe]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -151,7 +150,8 @@ namespace NLog.Web.LayoutRenderers
 #else
         private static string LookupQueryString(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.Query?.TryGetValue(key, out var queryValue) ?? false)
+            var query = httpRequest.Query;
+            if (query != null && query.TryGetValue(key, out var queryValue))
             {
                 return queryValue.ToString();
             }
@@ -161,9 +161,13 @@ namespace NLog.Web.LayoutRenderers
 
         private static string LookupFormValue(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.HasFormContentType && (httpRequest.Form?.TryGetValue(key, out var queryValue) ?? false))
+            if (httpRequest.HasFormContentType)
             {
-                return queryValue.ToString();
+                var form = httpRequest.Form;
+                if (form != null && form.TryGetValue(key, out var queryValue))
+                {
+                    return queryValue.ToString();
+                }
             }
 
             return null;
@@ -182,7 +186,8 @@ namespace NLog.Web.LayoutRenderers
 
         private static string LookupHeaderValue(string key, HttpRequest httpRequest)
         {
-            if (httpRequest.Headers?.TryGetValue(key, out var headerValue) ?? false)
+            var headers = httpRequest.Headers;
+            if (headers != null && headers.TryGetValue(key, out var headerValue))
             {
                 return headerValue.ToString();
             }

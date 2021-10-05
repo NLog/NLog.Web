@@ -33,7 +33,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-application")]
-    [ThreadSafe]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

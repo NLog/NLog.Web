@@ -24,7 +24,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-mvc-action")]
-    [ThreadSafe]
     public class AspNetMvcActionRenderer : AspNetMvcLayoutRendererBase
     {
         /// <summary>

@@ -13,7 +13,6 @@ namespace NLog.Web.AspNetCore.LayoutRenderers
     /// ${aspnet-user-isAuthenticated}
     /// </summary>
     [LayoutRenderer("aspnet-user-isAuthenticated")]
-    [ThreadSafe]
     public class AspNetUserIsAuthenticatedLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

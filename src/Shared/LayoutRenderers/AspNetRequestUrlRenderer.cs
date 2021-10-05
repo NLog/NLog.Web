@@ -29,7 +29,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-url")]
-    [ThreadSafe]
     public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

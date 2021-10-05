@@ -14,7 +14,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-contenttype")]
-    [ThreadSafe]
     public class AspNetRequestContentTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

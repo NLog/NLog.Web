@@ -16,7 +16,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         where TLayoutRenderer : AspNetLayoutRendererBase, new()
     {
         [Fact]
-        public void NullRendersEmptyString()
+        public virtual void NullRendersEmptyString()
         {
             // Arrange
             var (renderer, _) = CreateWithHttpContext();

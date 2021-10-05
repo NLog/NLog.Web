@@ -32,9 +32,9 @@ namespace NLog.Web.Internal
             var value = getVal(container, path?.First() ?? key);
             if (value != null && path?.Length > 1)
             {
-                foreach (var property in path.Skip(1))
+                for (int i = 1; i < path.Length; ++i)
                 {
-                    var propertyInfo = GetPropertyInfo(value, property);
+                    var propertyInfo = GetPropertyInfo(value, path[i]);
                     value = propertyInfo?.GetValue(value, null);
                     if (value == null)
                     {

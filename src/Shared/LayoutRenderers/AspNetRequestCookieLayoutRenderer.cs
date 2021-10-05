@@ -30,7 +30,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-cookie")]
-    [ThreadSafe]
     public class AspNetRequestCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>

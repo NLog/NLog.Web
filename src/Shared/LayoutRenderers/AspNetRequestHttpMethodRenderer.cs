@@ -20,7 +20,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-method")]
-    [ThreadSafe]
     public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

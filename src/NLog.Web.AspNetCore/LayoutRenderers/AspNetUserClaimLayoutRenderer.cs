@@ -12,7 +12,6 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User ClaimType Value Lookup.
     /// </summary>
     [LayoutRenderer("aspnet-user-claim")]
-    [ThreadSafe]
     public class AspNetUserClaimLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

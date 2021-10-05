@@ -41,7 +41,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-item")]
-    [ThreadSafe]
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -84,7 +83,7 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-            var value = PropertyReader.GetValue(Variable, context?.Items, LookupItemValue, EvaluateAsNestedProperties);
+            var value = PropertyReader.GetValue(Variable, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
             var formatProvider = GetFormatProvider(logEvent, Culture);
             builder.Append(Convert.ToString(value, formatProvider));
         }

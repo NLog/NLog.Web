@@ -30,7 +30,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("iis-site-name")]
     // ReSharper disable once InconsistentNaming
     [ThreadAgnostic]
-    [ThreadSafe]
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE

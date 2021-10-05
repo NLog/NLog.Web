@@ -15,7 +15,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-response-statuscode")]
-    [ThreadSafe]
     public class AspNetResponseStatusCodeRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

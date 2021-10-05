@@ -4,6 +4,7 @@ using System.Web;
 using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.Targets.Wrappers
 {
@@ -163,7 +164,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="logEvent">The log event.</param>
         protected override void Write(AsyncLogEventInfo logEvent)
         {
-            LogEventInfoBuffer buffer = GetRequestBuffer();
+            var buffer = GetRequestBuffer();
             if (buffer != null)
             {
                 WrappedTarget.PrecalculateVolatileLayouts(logEvent.LogEvent);
@@ -178,7 +179,7 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        private LogEventInfoBuffer GetRequestBuffer()
+        private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer()
         {
             HttpContext context = HttpContext.Current;
             if (context == null)
@@ -186,19 +187,19 @@ namespace NLog.Web.Targets.Wrappers
                 return null;
             }
 
-            return context.Items[dataSlot] as LogEventInfoBuffer;
+            return context.Items[dataSlot] as NLog.Web.Internal.LogEventInfoBuffer;
         }
 
         private void OnBeginRequest(object sender, EventArgs args)
         {
             InternalLogger.Trace("Setting up ASP.NET request buffer.");
             HttpContext context = HttpContext.Current;
-            context.Items[dataSlot] = new LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+            context.Items[dataSlot] = new NLog.Web.Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
         }
 
         private void OnEndRequest(object sender, EventArgs args)
         {
-            LogEventInfoBuffer buffer = GetRequestBuffer();
+            var buffer = GetRequestBuffer();
             if (buffer != null)
             {
                 InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
