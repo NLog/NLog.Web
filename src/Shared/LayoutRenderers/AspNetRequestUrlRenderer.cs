@@ -17,8 +17,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request URL
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-url}:</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-url}:</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-url:IncludeQueryString=true} - produces http://www.exmaple.com/?t=1
     /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.exmaple.com/

@@ -20,8 +20,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Cookie
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-cookie}</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-cookie}</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-cookie:OutputFormat=Flat}
     /// ${aspnet-request-cookie:OutputFormat=Json}

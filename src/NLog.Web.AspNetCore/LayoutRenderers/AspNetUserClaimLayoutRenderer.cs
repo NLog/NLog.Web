@@ -11,6 +11,9 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET User ClaimType Value Lookup.
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-user-claim}
+    /// </remarks>
     [LayoutRenderer("aspnet-user-claim")]
     public class AspNetUserClaimLayoutRenderer : AspNetLayoutRendererBase
     {

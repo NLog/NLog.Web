@@ -16,8 +16,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Headers
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-headers}</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-headers}</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-headers:OutputFormat=Flat}
     /// ${aspnet-request-headers:OutputFormat=Json}

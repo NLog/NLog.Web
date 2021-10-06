@@ -8,10 +8,11 @@ using NLog.Web.LayoutRenderers;
 namespace NLog.Web.AspNetCore.LayoutRenderers
 {
     /// <summary>
-    /// Is the user authenticated? 0 = not authenticated, 1 = authenticated
-    /// 
-    /// ${aspnet-user-isAuthenticated}
+    /// ASP.NET User Identity Authenticated? (0 = not authenticated, 1 = authenticated)
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-user-isAuthenticated}
+    /// </remarks>
     [LayoutRenderer("aspnet-user-isAuthenticated")]
     public class AspNetUserIsAuthenticatedLayoutRenderer : AspNetLayoutRendererBase
     {

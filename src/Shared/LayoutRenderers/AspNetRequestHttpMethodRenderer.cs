@@ -11,14 +11,11 @@ using System.Web;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Http Request Method.
+    /// ASP.NET Http Request Method (POST / GET)
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-method}:</para>
-    /// <example>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-method} - Produces - Post.
-    /// </code>
-    /// </example>
+    /// <remarks>
+    /// ${aspnet-request-method}
+    /// </remarks>
     [LayoutRenderer("aspnet-request-method")]
     public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {

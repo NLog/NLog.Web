@@ -20,8 +20,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET posted body, e.g. FORM or Ajax POST
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-posted-body}:</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-posted-body}:</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-posted-body} - Produces - {username:xyz,password:xyz}
     /// </code>
