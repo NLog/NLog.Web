@@ -137,6 +137,10 @@ namespace NLog.Web.Targets.Wrappers
         {
             base.InitializeTarget();
 
+            // Prevent double subscribe
+            NLogHttpModule.BeginRequest -= OnBeginRequest;
+            NLogHttpModule.EndRequest -= OnEndRequest;
+
             NLogHttpModule.BeginRequest += OnBeginRequest;
             NLogHttpModule.EndRequest += OnEndRequest;
 
