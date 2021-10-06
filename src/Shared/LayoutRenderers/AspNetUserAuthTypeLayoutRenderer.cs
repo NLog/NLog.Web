@@ -11,8 +11,11 @@ using System.Web;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET User variable.
+    /// ASP.NET User Identity AuthenticationType
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-user-authtype}
+    /// </remarks>
     [LayoutRenderer("aspnet-user-authtype")]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {

@@ -8,8 +8,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Response Status Code.
     /// </summary>
-    /// <para>Example usage of ${aspnet-response-statuscode}:</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-response-statuscode}:</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-response-statuscode} - Produces - 200.
     /// </code>

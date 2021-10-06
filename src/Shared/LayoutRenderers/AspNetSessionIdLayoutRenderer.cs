@@ -12,6 +12,9 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Session ID.
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-sessionid}
+    /// </remarks>
     [LayoutRenderer("aspnet-sessionid")]
     public class AspNetSessionIdLayoutRenderer : AspNetLayoutRendererBase
     {
@@ -22,8 +25,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-            var contextSession = context.TryGetSession();
+            var contextSession = HttpContextAccessor.HttpContext.TryGetSession();
             if (contextSession == null)
                 return;
 

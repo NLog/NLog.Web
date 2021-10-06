@@ -11,6 +11,9 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request TraceIdentifier.
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-traceidentifier}
+    /// </remarks>
     [LayoutRenderer("aspnet-traceidentifier")]
     public class AspNetTraceIdentifierLayoutRenderer : AspNetLayoutRendererBase
     {
