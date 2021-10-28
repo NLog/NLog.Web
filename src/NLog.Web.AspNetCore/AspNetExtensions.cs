@@ -339,8 +339,15 @@ namespace NLog.Web
 
         private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration configuration, NLogAspNetCoreOptions options, NLog.LogFactory logFactory)
         {
-            configuration = SetupConfiguration(serviceProvider, configuration);
             NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default, logFactory ?? LogManager.LogFactory);
+
+            configuration = SetupConfiguration(serviceProvider, configuration);
+
+            if (serviceProvider != null && provider.Options.RegisterServiceProvider)
+            {
+                provider.LogFactory.ServiceRepository.RegisterService(typeof(IServiceProvider), serviceProvider);
+            }
+
             if (configuration != null)
             {
                 provider.Configure(configuration.GetSection("Logging:NLog"));
