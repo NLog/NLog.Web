@@ -2,8 +2,8 @@
 # creates NuGet package at \artifacts
 dotnet --version
 
-$versionPrefix = "4.14.0" # Also update version for minor versions in appveyor.yml 
-$versionSuffix = ""
+$versionPrefix = "5.0" # Also update version for minor versions in appveyor.yml 
+$versionSuffix = "preview.2"
 $versionFile = $versionPrefix + "." + ${env:APPVEYOR_BUILD_NUMBER}
 if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
     $versionPrefix = $versionFile
