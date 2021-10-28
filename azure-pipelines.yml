@@ -45,7 +45,7 @@ steps:
   displayName: 'VsTest - testAssemblies'
   inputs:
     testAssemblyVer2: |
-     **\$(buildConfiguration)\**\*test*.dll
+     **\$(buildConfiguration)\**\NLog.*.Tests.dll
      !**\obj\**
     runOnlyImpactedTests: false
     runInParallel: false
