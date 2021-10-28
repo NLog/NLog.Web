@@ -65,7 +65,7 @@ See also https://github.com/NLog/NLog.Web/releases
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-preview.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-preview.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->
