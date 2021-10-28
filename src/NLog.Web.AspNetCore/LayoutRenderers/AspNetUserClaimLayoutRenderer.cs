@@ -32,7 +32,7 @@ namespace NLog.Web.LayoutRenderers
         {
             if (ClaimType?.Trim().StartsWith("ClaimTypes.", StringComparison.OrdinalIgnoreCase) == true || ClaimType?.Trim().StartsWith("ClaimType.", StringComparison.OrdinalIgnoreCase) == true)
             {
-                var fieldName = ClaimType.Substring(ClaimType.IndexOf(".") + 1).Trim();
+                var fieldName = ClaimType.Substring(ClaimType.IndexOf('.') + 1).Trim();
                 var claimTypesField = typeof(ClaimTypes).GetField(fieldName, BindingFlags.Static | BindingFlags.Public);
                 if (claimTypesField != null)
                 {
@@ -59,7 +59,7 @@ namespace NLog.Web.LayoutRenderers
                     return;
                 }
 
-                var claimsIdentity = claimsPrincipel?.Identity as ClaimsIdentity;    // Prioritize primary identity
+                var claimsIdentity = claimsPrincipel.Identity as ClaimsIdentity;    // Prioritize primary identity
                 var claim = claimsIdentity?.FindFirst(ClaimType) ?? claimsPrincipel.FindFirst(ClaimType);
                 if (claim != null)
                 {

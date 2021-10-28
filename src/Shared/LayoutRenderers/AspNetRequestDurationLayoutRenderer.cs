@@ -38,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
         {
             if (DurationMsFormat == null && string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture))
             {
-                System.Threading.Interlocked.CompareExchange(ref DurationMsFormat, System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 1000), i => i.ToString())), null);
+                System.Threading.Interlocked.CompareExchange(ref DurationMsFormat, Enumerable.Range(0, 1000).Select(i => i.ToString(System.Globalization.CultureInfo.InvariantCulture)).ToArray(), null);
             }
 
 #if !ASP_NET_CORE
@@ -174,8 +174,8 @@ namespace NLog.Web.LayoutRenderers
                 activity = parent;
                 parent = activity.Parent;
 
-                if (activity?.StartTimeUtc > DateTime.MinValue)
-                    startTimeUtc = activity?.StartTimeUtc;
+                if (activity.StartTimeUtc > DateTime.MinValue)
+                    startTimeUtc = activity.StartTimeUtc;
             }
 
             if (startTimeUtc > DateTime.MinValue)

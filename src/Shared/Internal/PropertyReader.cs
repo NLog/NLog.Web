@@ -27,7 +27,7 @@ namespace NLog.Web.Internal
 
         private static object GetValueAsNestedProperties<T>(string key, T container, Func<T, string, object> getVal)
         {
-            var path = key.IndexOf('.') >= 0 ? key.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries) : null;
+            var path = key.Contains('.') ? key.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries) : null;
 
             var value = getVal(container, path?.First() ?? key);
             if (value != null && path?.Length > 1)

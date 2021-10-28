@@ -28,11 +28,11 @@ namespace NLog.Web.AspNetCore.LayoutRenderers
                 var httpContext = HttpContextAccessor.HttpContext;
                 if (httpContext.User?.Identity?.IsAuthenticated == true)
                 {
-                    builder.Append(1);
+                    builder.Append('1');
                 }
                 else
                 {
-                    builder.Append(0);
+                    builder.Append('0');
                 }
             }
             catch (ObjectDisposedException ex)

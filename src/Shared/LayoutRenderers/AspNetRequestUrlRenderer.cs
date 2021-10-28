@@ -34,12 +34,12 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To specify whether to include / exclude the Query string. Default is false.
         /// </summary>
-        public bool IncludeQueryString { get; set; } = false;
+        public bool IncludeQueryString { get; set; }
 
         /// <summary>
         /// To specify whether to include / exclude the Port. Default is false.
         /// </summary>
-        public bool IncludePort { get; set; } = false;
+        public bool IncludePort { get; set; }
 
         /// <summary>
         /// To specify whether to exclude / include the host. Default is true.
@@ -57,7 +57,7 @@ namespace NLog.Web.LayoutRenderers
         /// To specify whether to use raw path and full query. Default is false.
         /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
         /// </summary>
-        public bool UseRawTarget { get; set; } = false;
+        public bool UseRawTarget { get; set; }
         
 #endif        
 
