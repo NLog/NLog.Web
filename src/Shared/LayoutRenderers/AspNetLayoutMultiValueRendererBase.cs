@@ -12,44 +12,35 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     public abstract class AspNetLayoutMultiValueRendererBase : AspNetLayoutRendererBase
     {
-        private string _itemSeparator = ",";
-        private Layout _itemSeparatorLayout = ",";
-        private string _valueSeparator = "=";
-        private Layout _valueSeparatorLayout = "=";
-
         /// <summary>
         /// Separator between item. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
         /// <remarks>Render with <see cref="GetRenderedItemSeparator" /></remarks>
-        public string ItemSeparator
-        {
-            get => _itemSeparator;
-            set
-            {
-                _itemSeparator = value;
-                _itemSeparatorLayout = value;
-            }
-        }
+        public string ItemSeparator { get => _itemSeparatorLayout?.OriginalText; set => _itemSeparatorLayout = new SimpleLayout(value ?? ""); }
+        private SimpleLayout _itemSeparatorLayout = new SimpleLayout(",");
 
         /// <summary>
         /// Separator between value and key. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
         /// <remarks>Render with <see cref="GetRenderedValueSeparator" /></remarks>
-        public string ValueSeparator
-        {
-            get => _valueSeparator;
-            set
-            {
-                _valueSeparator = value;
-                _valueSeparatorLayout = value;
-            }
-        }
+        public string ValueSeparator { get => _valueSeparatorLayout?.OriginalText; set => _valueSeparatorLayout = new SimpleLayout(value ?? ""); }
+        private SimpleLayout _valueSeparatorLayout = new SimpleLayout("=");
 
         /// <summary>
-        /// Single item in array? Only used for <see cref="AspNetRequestLayoutOutputFormat.Json" />
-        /// Mutliple items are always in an array.
+        /// Get or set whether single key/value-pair be rendered as Json-Array.
         /// </summary>
-        public bool SingleAsArray { get; set; } = true;
+        [Obsolete("Replaced by OutputFormat = JsonArray / JsonDictionary. Marked obsolete with NLog.Web ver. 5.0")]
+        public bool SingleAsArray
+        {
+            get => OutputFormat != AspNetRequestLayoutOutputFormat.JsonDictionary;
+            set
+            {
+                if (!value)
+                    OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
+                else if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                    OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
+            }
+        }
 
         /// <summary>
         /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
@@ -66,17 +57,6 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="pairs">The key/value pairs.</param>
         /// <param name="builder">Add to this builder.</param>
-        [Obsolete("use SerializePairs with logEvent to support Layouts for Separator. This overload will be removed in NLog.Web(aspNetCore) 5")]
-        protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
-        {
-            SerializePairs(pairs, builder, null);
-        }
-
-        /// <summary>
-        /// Serialize multiple key/value pairs
-        /// </summary>
-        /// <param name="pairs">The key/value pairs.</param>
-        /// <param name="builder">Add to this builder.</param>
         /// <param name="logEvent">Log event for rendering separators.</param>
         protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder, LogEventInfo logEvent)
         {
@@ -85,7 +65,8 @@ namespace NLog.Web.LayoutRenderers
                 case AspNetRequestLayoutOutputFormat.Flat:
                     SerializePairsFlat(pairs, builder, logEvent);
                     break;
-                case AspNetRequestLayoutOutputFormat.Json:
+                case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
                     SerializePairsJson(pairs, builder);
                     break;
             }
@@ -94,35 +75,40 @@ namespace NLog.Web.LayoutRenderers
         private void SerializePairsJson(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
         {
             var firstItem = true;
-            var pairsList = pairs.ToList();
 
-            if (pairsList.Count == 0)
+            foreach (var item in pairs)
             {
-                return;
-            }
-
-            var addArray = pairsList.Count > (SingleAsArray || ValuesOnly ? 0 : 1);
-
-            if (addArray)
-            {
-                builder.Append('[');
-            }
-
-            foreach (var kpv in pairsList)
-            {
-                if (!firstItem)
+                if (firstItem)
+                {
+                    if (!ValuesOnly && OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                    {
+                        builder.Append('{');
+                    }
+                    else
+                    {
+                        builder.Append('[');
+                    }
+                }
+                else
                 {
                     builder.Append(',');
                 }
 
-                SerializePairJson(builder, kpv);
+                SerializePairJson(builder, item);
 
                 firstItem = false;
             }
 
-            if (addArray)
+            if (!firstItem)
             {
-                builder.Append(']');
+                if (!ValuesOnly && OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                {
+                    builder.Append('}');
+                }
+                else
+                {
+                    builder.Append(']');
+                }
             }
         }
 
@@ -134,7 +120,10 @@ namespace NLog.Web.LayoutRenderers
             if (!ValuesOnly)
             {
                 // Quoted key
-                builder.Append('{');
+                if (OutputFormat != AspNetRequestLayoutOutputFormat.JsonDictionary)
+                {
+                    builder.Append('{');
+                }
                 AppendQuoted(builder, key);
                 builder.Append(':');
             }
@@ -142,7 +131,7 @@ namespace NLog.Web.LayoutRenderers
             // Quoted value
             AppendQuoted(builder, value);
 
-            if (!ValuesOnly)
+            if (!ValuesOnly && OutputFormat != AspNetRequestLayoutOutputFormat.JsonDictionary)
             {
                 builder.Append('}');
             }

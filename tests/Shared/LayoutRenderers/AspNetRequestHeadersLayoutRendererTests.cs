@@ -57,7 +57,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void KeyNotFoundRendersEmptyString_Json_Formatting()
         {
             var renderer = CreateRenderer();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.HeaderNames = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
@@ -128,7 +128,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "[{\"key\":\"TEST\"}]";
 
             var renderer = CreateRenderer(addSecondHeader: false);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -141,24 +141,33 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "{\"key\":\"TEST\"}";
 
             var renderer = CreateRenderer(addSecondHeader: false);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = false;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
 
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(expectedResult, result);
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void KeyFoundRendersValue_Multiple_Headers_Json_Formatting(bool singleAsArray)
+        [Fact]
+        public void KeyFoundRendersValue_Multiple_Headers_Json_Formatting()
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
 
             var renderer = CreateRenderer();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = singleAsArray;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void KeyFoundRendersValue_Multiple_Headers_Json_Formatting_no_array()
+        {
+            var expectedResult = "{\"key\":\"TEST\",\"Key1\":\"TEST1\"}";
+
+            var renderer = CreateRenderer();
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -182,7 +191,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void KeyNotFoundRendersEmptyString_Json_Formatting_ValuesOnly()
         {
             var renderer = CreateRenderer();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.HeaderNames = new List<string> { "notfound" };
             renderer.ValuesOnly = true;
 
@@ -238,7 +247,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "[\"TEST\"]";
 
             var renderer = CreateRenderer(addSecondHeader: false);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -254,8 +263,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = CreateRenderer(addSecondHeader: false);
 
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = false;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -263,17 +271,14 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void KeyFoundRendersValue_Header_Multiple_Items_Json_Formatting_ValuesOnly(bool singleAsArray)
+        [Fact]
+        public void KeyFoundRendersValue_Header_Multiple_Items_Json_Formatting_ValuesOnly()
         {
             var expectedResult = "[\"TEST\",\"TEST1\"]";
 
             var renderer = CreateRenderer();
 
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = singleAsArray;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());

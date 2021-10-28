@@ -12,8 +12,6 @@ using System.Web;
 using Microsoft.Extensions.Primitives;
 #endif
 
-
-
 namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetCookieLayoutRendererTests : TestInvolvingAspNetHttpContext
@@ -59,7 +57,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void KeyNotFoundRendersEmptyString_Json_Formatting()
         {
             var renderer = CreateRenderer();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.CookieNames = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
@@ -130,7 +128,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "[{\"key\":\"TEST\"}]";
 
             var renderer = CreateRenderer(addSecondCookie: false);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -143,24 +141,33 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "{\"key\":\"TEST\"}";
 
             var renderer = CreateRenderer(addSecondCookie: false);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = false;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
 
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(expectedResult, result);
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void KeyFoundRendersValue_Multiple_Cookies_Json_Formatting(bool singleAsArray)
+        [Fact]
+        public void KeyFoundRendersValue_Multiple_Cookies_Json_Formatting()
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"}]";
 
             var renderer = CreateRenderer();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = singleAsArray;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void KeyFoundRendersValue_Multiple_Cookies_Json_Formatting_no_array()
+        {
+            var expectedResult = "{\"key\":\"TEST\",\"Key1\":\"TEST1\"}";
+
+            var renderer = CreateRenderer();
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -184,7 +191,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void KeyNotFoundRendersEmptyString_Json_Formatting_ValuesOnly()
         {
             var renderer = CreateRenderer();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             renderer.CookieNames = new List<string> { "notfound" };
             renderer.ValuesOnly = true;
 
@@ -234,30 +241,15 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-        [Fact]
-        public void KeyFoundRendersValue_Single_Item_Json_Formatting_ValuesOnly()
+        [Theory]
+        [InlineData(AspNetRequestLayoutOutputFormat.JsonArray)]
+        [InlineData(AspNetRequestLayoutOutputFormat.JsonDictionary)]
+        public void KeyFoundRendersValue_Single_Item_JsonArray_Formatting_ValuesOnly(AspNetRequestLayoutOutputFormat outputFormat)
         {
             var expectedResult = "[\"TEST\"]";
 
             var renderer = CreateRenderer(addSecondCookie: false);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.ValuesOnly = true;
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Equal(expectedResult, result);
-        }
-
-        [Fact]
-        public void KeyFoundRendersValue_Single_Item_Json_Formatting_no_array_ValuesOnly()
-        {
-            // With ValuesOnly enabled, only arrays are valid
-            var expectedResult = "[\"TEST\"]";
-
-            var renderer = CreateRenderer(addSecondCookie: false);
-
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = false;
+            renderer.OutputFormat = outputFormat;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -266,16 +258,15 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void KeyFoundRendersValue_Cookie_Multiple_Items_Json_Formatting_ValuesOnly(bool singleAsArray)
+        [InlineData(AspNetRequestLayoutOutputFormat.JsonArray)]
+        [InlineData(AspNetRequestLayoutOutputFormat.JsonDictionary)]
+        public void KeyFoundRendersValue_Multiple_Items_Json_Formatting_ValuesOnly(AspNetRequestLayoutOutputFormat outputFormat)
         {
             var expectedResult = "[\"TEST\",\"TEST1\"]";
 
             var renderer = CreateRenderer();
 
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
-            renderer.SingleAsArray = singleAsArray;
+            renderer.OutputFormat = outputFormat;
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -304,7 +295,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var expectedResult = "[{\"key\":\"TEST\"},{\"Key1\":\"TEST1\"},{\"key2\":\"Test\"},{\"key3\":\"Test456\"}]";
             var renderer = CreateRenderer(addSecondCookie: true, addMultiValueCookieKey: true);
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -347,7 +338,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var layoutRender = new AspNetRequestCookieLayoutRenderer()
             {
                 CookieNames = new List<string> { "key", "key1" },
-                OutputFormat = AspNetRequestLayoutOutputFormat.Json
+                OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray
             };
 
             var httpContextAccessorMock = CreateHttpContextAccessorMockWithCookie(cookie);
