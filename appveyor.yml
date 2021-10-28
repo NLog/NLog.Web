@@ -25,7 +25,7 @@ deploy:
   on:
     branch: master
 test_script:
-  - dotnet test NLog.Web.sln
+  - msbuild NLog.Web.sln /t:test /verbosity:minimal
 
 artifacts:
 - path: '**\NLog.Web.*.nupkg'
