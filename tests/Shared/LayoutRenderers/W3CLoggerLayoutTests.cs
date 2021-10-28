@@ -54,7 +54,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void W3CLoggerLayoutWithContextTest()
         {
-            var httpContextMock = SetupHttpAccessorWithHttpContext("www.google.com:80", "http", "/Test.asp", "?t=1");
+            var httpContextMock = SetupHttpAccessorWithHttpContext("nlog-project.org:80", "http", "/Test.asp", "?t=1");
 
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
@@ -69,7 +69,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var logEvent = new LogEventInfo(LogLevel.Info, null, "RequestLogging");
             logger.Log(logEvent);
             string expectedFieldHeaders = "c-ip cs-username s-computername cs-method cs-uri-stem cs-uri-query sc-status sc-bytes cs-bytes time-taken cs-host cs(User-Agent)";
-            string expectedFieldValues = $"- - {Environment.MachineName} - /Test.asp ?t=1 200 7 42 - www.google.com -";
+            string expectedFieldValues = $"- - {Environment.MachineName} - /Test.asp ?t=1 200 7 42 - nlog-project.org -";
             string expectedHeader = $@"#Software: Microsoft Internet Information Server{System.Environment.NewLine}#Version: 1.0{System.Environment.NewLine}#Start-Date: {logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}{System.Environment.NewLine}#Fields: date time {expectedFieldHeaders}";
             string expectedBody = $@"{logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)} {expectedFieldValues}";
 
