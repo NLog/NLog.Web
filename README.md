@@ -1,10 +1,14 @@
 ![NLog](https://raw.githubusercontent.com/NLog/NLog.github.io/master/images/NLog-logo-only_small.png)
 
 # NLog.Web (ASP.NET & ASP.NET Core) 
-[![AppVeyor](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
-[![Version](https://img.shields.io/nuget/v/NLog.Web.AspNetCore?label=nuget%20%28ASP.NET%20Core%29)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
-[![Version](https://img.shields.io/nuget/v/NLog.Web?label=nuget%20%28ASP.NET%29)](https://www.nuget.org/packages/NLog.Web)
 
+[![NuGet Release](https://img.shields.io/nuget/v/NLog.Extensions.Logging.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Extensions.Logging.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
+
+[![NuGet Release](https://img.shields.io/nuget/v/NLog.Extensions.Hosting.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Extensions.Hosting.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web)
+
+[![Build status](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=ncloc)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=bugs)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=vulnerabilities)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
@@ -15,8 +19,7 @@
 
 These packages are extensions to [NLog](https://github.com/NLog/NLog/). 
 
-The packages contain 
-targets and layout-renderes specific to ASP.NET (Core), MVC and IIS. 
+The packages contain targets and layout-renderes specific to ASP.NET (Core), MVC and IIS.
 
 ## Getting started with NLog
 
