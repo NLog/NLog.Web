@@ -4,6 +4,22 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v5.0-preview 3 (2021/10/28)
+
+- **NLog.Web.AspNetCore**
+- [#701](https://github.com/NLog/NLog.Web/pull/701) Replaced platform NetCoreApp3.0 with NetCoreApp3.1 and added Net5.0 (#701) (@snakefoot)
+- [#683](https://github.com/NLog/NLog.Web/pull/683) Dropped support for ASP.NET Core 1 and NetStandard1.5 + Net452 (#683) (@304NotModified)
+- [#691](https://github.com/NLog/NLog.Web/pull/691) Enabled ShutdownOnDispose by default to follow lifetime of the ServiceProvider (#691) (@snakefoot)
+- [#700](https://github.com/NLog/NLog.Web/pull/700) Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
+- [#697](https://github.com/NLog/NLog.Web/pull/697) Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
+
+- **NLog.Web**
+- [#701](https://github.com/NLog/NLog.Web/pull/701) Added platform Net46 (#701) (@snakefoot)
+- [#700](https://github.com/NLog/NLog.Web/pull/700) Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
+- [#697](https://github.com/NLog/NLog.Web/pull/697) Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
+
+See [Release post for NLog 5](https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html)
+
 ### v4.14 (2021/08/28)
 - **NLog.Web.AspNetCore**
 - [#677](https://github.com/NLog/NLog.Web/pull/677) Bump NLog.Extensions.Logging from 1.7.3 to 1.7.4 (#677) (@dependabot[bot])
