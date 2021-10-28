@@ -51,6 +51,11 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IncludeScheme { get; set; } = true;
 
+        /// <summary>
+        /// To specify whether to exclude / include the url-path. Default is true.
+        /// </summary>
+        public bool IncludePath { get; set; } = true;
+
 #if ASP_NET_CORE
 
         /// <summary>
@@ -107,8 +112,15 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(url.Port);
             }
 
-            var pathAndQuery = IncludeQueryString ? url.PathAndQuery : url.AbsolutePath;
-            builder.Append(pathAndQuery);
+            if (IncludePath)
+            {
+                var pathAndQuery = IncludeQueryString ? url.PathAndQuery : url.AbsolutePath;
+                builder.Append(pathAndQuery);
+            }
+            else if (IncludeQueryString)
+            {
+                builder.Append(url.Query);
+            }
         }
 #else
         private void RenderUrl(HttpRequest httpRequest, StringBuilder builder)
@@ -130,20 +142,26 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(httpRequest.Host.Port.Value);
             }
 
-            IHttpRequestFeature httpRequestFeature;
-            if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
+            if (IncludePath)
             {
-                builder.Append(httpRequestFeature.RawTarget);
-            }
-            else
-            {
-                builder.Append(httpRequest.PathBase.ToUriComponent());
-                builder.Append(httpRequest.Path.ToUriComponent());
-
-                if (IncludeQueryString)
+                IHttpRequestFeature httpRequestFeature;
+                if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
                 {
-                    builder.Append(httpRequest.QueryString.Value);
+                    builder.Append(httpRequestFeature.RawTarget);
                 }
+                else
+                {
+                    builder.Append((httpRequest.PathBase + httpRequest.Path).ToUriComponent());
+
+                    if (IncludeQueryString)
+                    {
+                        builder.Append(httpRequest.QueryString.Value);
+                    }
+                }
+            }
+            else if (IncludeQueryString)
+            {
+                builder.Append(httpRequest.QueryString.Value);
             }
         }
 #endif

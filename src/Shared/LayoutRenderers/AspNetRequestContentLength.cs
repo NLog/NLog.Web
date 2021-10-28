@@ -6,16 +6,16 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request User Agent String
+    /// ASP.NET request contentlength of the posted body
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-useragent}
+    /// ${aspnet-request-contentlength}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-useragent")]
-    public class AspNetRequestUserAgent : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-contentlength")]
+    public class AspNetRequestContentLength : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the ASP.NET User Agent
+        /// Renders the ASP.NET posted body
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -27,16 +27,11 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var userAgent = string.Empty;
-#if !ASP_NET_CORE
-            userAgent = httpRequest.UserAgent;
-#else
-            if (httpRequest.Headers.TryGetValue("User-Agent", out var userAgentValue))
+            long? contentLength = httpRequest.ContentLength;
+            if (contentLength > 0L)
             {
-                userAgent = userAgentValue.ToString();
+                builder.Append(contentLength.Value);
             }
-#endif
-            builder.Append(userAgent);
         }
     }
 }

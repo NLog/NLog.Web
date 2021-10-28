@@ -19,7 +19,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
         private string _formatString;
 #elif ASP_NET_CORE2
-        private Layouts.Layout _scopeTiming;
+        private NLog.Layouts.SimpleLayout _scopeTiming;
 #endif
 
         /// <summary>
