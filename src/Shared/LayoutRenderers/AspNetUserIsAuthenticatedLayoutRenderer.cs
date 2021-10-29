@@ -5,7 +5,7 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.LayoutRenderers;
 
-namespace NLog.Web.AspNetCore.LayoutRenderers
+namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// ASP.NET User Identity Authenticated? (0 = not authenticated, 1 = authenticated)
