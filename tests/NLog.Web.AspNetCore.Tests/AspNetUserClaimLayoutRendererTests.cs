@@ -9,8 +9,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetUserClaimLayoutRendererTests : LayoutRenderersTestBase<AspNetUserClaimLayoutRenderer>
     {
-        [Fact]
-        public override void NullRendersEmptyString()
+        protected override void NullRendersEmptyString()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
