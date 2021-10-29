@@ -12,7 +12,7 @@ using NLog.Config;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public abstract class TestInvolvingAspNetHttpContext : TestBase, IDisposable
+    public abstract class TestInvolvingAspNetHttpContext : TestBase
     {
         private static readonly Uri DefaultTestUri = new Uri("http://stackoverflow.com/");
 
@@ -24,27 +24,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 #if !ASP_NET_CORE
             HttpContext.Current = HttpContext;
 #endif
-        }
-
-        /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            CleanUp();
-        }
-
-        protected virtual void CleanUp()
-        {
-        }
-
-        protected XmlLoggingConfiguration CreateConfigurationFromString(string configXml)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(configXml);
-            using (var stringReader = new StringReader(doc.DocumentElement.OuterXml))
-            using (XmlReader reader = XmlReader.Create(stringReader))
-                return new XmlLoggingConfiguration(reader, null);
         }
 
 #if !ASP_NET_CORE
