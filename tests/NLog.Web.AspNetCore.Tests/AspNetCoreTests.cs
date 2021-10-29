@@ -28,6 +28,7 @@ namespace NLog.Web.Tests
         public void Dispose()
         {
             LogManager.Configuration = null;
+            GC.SuppressFinalize(this);
         }
 
         #endregion
