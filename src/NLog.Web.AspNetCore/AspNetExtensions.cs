@@ -196,10 +196,10 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
         {
-            AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, config, opt) =>
+            AddNLogLoggerProvider(builder.Services, null, options, (serviceProvider, providedConfig, opt) =>
             {
                 var logFactory = configuration?.LogFactory ?? LogManager.LogFactory;
-                var provider = CreateNLogLoggerProvider(serviceProvider, config, opt, logFactory);
+                var provider = CreateNLogLoggerProvider(serviceProvider, providedConfig, opt, logFactory);
                 // Delay initialization of targets until we have loaded config-settings
                 logFactory.Configuration = configuration;
                 return provider;
