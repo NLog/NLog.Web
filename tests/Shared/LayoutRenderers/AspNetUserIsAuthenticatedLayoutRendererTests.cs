@@ -15,7 +15,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetUserIsAuthenticatedLayoutRendererTests : LayoutRenderersTestBase<AspNetUserIsAuthenticatedLayoutRenderer>
     {
-        public override void NullRendersEmptyString()
+        protected override void NullRendersEmptyString()
         {
             // Arrange
             var (renderer, _) = CreateWithHttpContext();

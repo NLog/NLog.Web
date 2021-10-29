@@ -11,7 +11,7 @@ using NLog.Web;
 
 namespace ASP.NetCore3_NLog_Web_Example
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
