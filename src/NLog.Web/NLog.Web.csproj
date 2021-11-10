@@ -50,7 +50,7 @@ See https://github.com/NLog/NLog.Web/releases
   </Target>
   <ItemGroup>
     <PackageReference Include="NLog" Version="5.0.0-preview.3" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
