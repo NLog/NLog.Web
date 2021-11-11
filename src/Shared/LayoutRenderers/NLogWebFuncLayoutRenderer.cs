@@ -13,24 +13,25 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Specialized layout render which has a cached <see cref="IHttpContextAccessor"/>
     /// </summary>
-    internal class NLogWebLayoutRenderer : FuncLayoutRenderer
+    internal class NLogWebFuncLayoutRenderer : FuncLayoutRenderer
     {
-        readonly Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> _func;
-
-#if !ASP_NET_CORE
-
-        private static IHttpContextAccessor HttpContextAccessor { get; } = AspNetLayoutRendererBase.DefaultHttpContextAccessor;
-#else
-
+        private readonly Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> _func;
         private IHttpContextAccessor _httpContextAccessor;
-        public IHttpContextAccessor HttpContextAccessor
+
+        internal IHttpContextAccessor HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = AspNetLayoutRendererBase.RetrieveHttpContextAccessor(GetType()));
             set => _httpContextAccessor = value;
         }
-#endif
 
-        public NLogWebLayoutRenderer(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func) : base(name)
+        /// <inheritdoc />
+        protected override void CloseLayoutRenderer()
+        {
+            _httpContextAccessor = null;
+            base.CloseLayoutRenderer();
+        }
+
+        public NLogWebFuncLayoutRenderer(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func) : base(name)
         {
             _func = func;
         }

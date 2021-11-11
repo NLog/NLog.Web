@@ -15,22 +15,14 @@ namespace NLog.Web.Tests
 {
     public class RegisterCustomLayoutRenderer : TestBase
     {
-#if !ASP_NET_CORE
-        ~RegisterCustomLayoutRenderer()
-        {
-            AspNetLayoutRendererBase.DefaultHttpContextAccessor = new DefaultHttpContextAccessor();
-        }
-#endif
-
         [Fact]
         public void RegisterLayoutRendererTest()
         {
-            var httpContextMock = SetupHttpAccessorWithHttpContext();
+            var httpContextMock = Substitute.For<IHttpContextAccessor>();
 #if ASP_NET_CORE
-            httpContextMock.Connection.LocalPort.Returns(123);
+            httpContextMock.HttpContext.Connection.LocalPort.Returns(123);
 #else
-            httpContextMock.Request.RawUrl.Returns("123");
-         
+            httpContextMock.HttpContext.Request.RawUrl.Returns("123");
 #endif
 
             // Act
@@ -41,39 +33,12 @@ namespace NLog.Web.Tests
 #else
                     httpContext.Request.RawUrl);
 #endif
-            Layout l = "${test-web}";
+            SimpleLayout l = "${test-web}";
+            (l.Renderers.FirstOrDefault() as NLogWebFuncLayoutRenderer).HttpContextAccessor = httpContextMock;
             var result = l.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
             Assert.Equal("123", result);
-        }
-
-        private static
-#if ASP_NET_CORE
-            HttpContext
-#else
-            HttpContextBase
-#endif
-
-            SetupHttpAccessorWithHttpContext()
-        {
-            var httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
-
-
-#if ASP_NET_CORE
-            var serviceProviderMock = Substitute.For<IServiceProvider>();
-            serviceProviderMock.GetService(typeof(IHttpContextAccessor)).Returns(httpContextAccessorMock);
-            var httpContext = Substitute.For<HttpContext>();
-            ServiceLocator.ServiceProvider = serviceProviderMock;
-#else
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContextAccessorMock.HttpContext.Returns(httpContext);
-            AspNetLayoutRendererBase.DefaultHttpContextAccessor = httpContextAccessorMock;
-#endif
-
-
-            httpContextAccessorMock.HttpContext.Returns(httpContext);
-            return httpContext;
         }
     }
 }

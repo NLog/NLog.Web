@@ -38,10 +38,8 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-
         internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
-
-        private static IHttpContextAccessor RetrieveHttpContextAccessor(Type _) => DefaultHttpContextAccessor;
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(Type _) => DefaultHttpContextAccessor;
 #else
 
         internal static IHttpContextAccessor RetrieveHttpContextAccessor(Type classType)
@@ -102,15 +100,12 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
 
-#if ASP_NET_CORE
-
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {
             _httpContextAccessor = null;
             base.CloseLayoutRenderer();
         }
-#endif
 
         /// <summary>
         /// Register a custom layout renderer with a callback function <paramref name="func" />. The callback receives the logEvent and the current configuration.
@@ -119,7 +114,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="func">Callback that returns the value for the layout renderer.</param>
         public static void Register(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func)
         {
-            var renderer = new NLogWebLayoutRenderer(name, func);
+            var renderer = new NLogWebFuncLayoutRenderer(name, func);
             Register(renderer);
         }
     }
