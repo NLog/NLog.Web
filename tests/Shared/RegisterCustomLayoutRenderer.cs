@@ -26,19 +26,28 @@ namespace NLog.Web.Tests
 #endif
 
             // Act
-            AspNetLayoutRendererBase.Register("test-web",
+            var logFactory = new LogFactory().Setup().RegisterNLogWeb().SetupExtensions(ext =>
+                ext.RegisterAspNetLayoutRenderer("test-web",
                 (logEventInfo, httpContext, loggingConfiguration) =>
 #if ASP_NET_CORE
-                    httpContext.Connection.LocalPort);
+                    httpContext.Connection.LocalPort)
 #else
-                    httpContext.Request.RawUrl);
+                    httpContext.Request.RawUrl)
 #endif
-            SimpleLayout l = "${test-web}";
-            (l.Renderers.FirstOrDefault() as NLogWebFuncLayoutRenderer).HttpContextAccessor = httpContextMock;
-            var result = l.Render(LogEventInfo.CreateNullEvent());
+            ).LoadConfiguration(builder =>
+            {
+                builder.ForLogger().WriteTo(new NLog.Targets.MemoryTarget("hello") { Layout = "${test-web}" });
+            }).LogFactory;
+
+            var target = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("hello");
+            var layoutRenderer = (target.Layout as NLog.Layouts.SimpleLayout).Renderers.FirstOrDefault() as NLogWebFuncLayoutRenderer;
+            layoutRenderer.HttpContextAccessor = httpContextMock;
+
+            logFactory.GetCurrentClassLogger().Info("Hello World");
 
             // Assert
-            Assert.Equal("123", result);
+            Assert.Single(target.Logs);
+            Assert.Equal("123", target.Logs[0]);
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Reflection;
+using System.Web;
 using NLog.Config;
-using NLog.Web.DependencyInjection;
 using NLog.Web.LayoutRenderers;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace NLog.Web
 {
@@ -13,21 +11,12 @@ namespace NLog.Web
     public static class SetupExtensionsBuilderExtensions
     {
         /// <summary>
-        /// Register the NLog.Web.AspNetCore LayoutRenderers
+        /// Register the NLog.Web LayoutRenderers
         /// </summary>
-        /// <remarks>
-        /// If not providing <paramref name="serviceProvider"/>, then output from aspnet-layoutrenderers will remain empty
-        /// </remarks>
-        public static ISetupExtensionsBuilder RegisterNLogWeb(this ISetupExtensionsBuilder setupBuilder, IServiceProvider serviceProvider = null)
+        public static ISetupExtensionsBuilder RegisterNLogWeb(this ISetupExtensionsBuilder setupBuilder)
         {
-            if (serviceProvider != null)
-            {
-                ServiceLocator.ServiceProvider = serviceProvider;
-            }
-
-            return setupBuilder.RegisterAssembly(typeof(NLogAspNetCoreOptions).GetTypeInfo().Assembly);
+            return setupBuilder.RegisterAssembly(typeof(SetupExtensionsBuilderExtensions).Assembly);
         }
-
 
         /// <summary>
         /// Register a custom layout renderer using custom delegate-method <paramref name="layoutMethod" />
