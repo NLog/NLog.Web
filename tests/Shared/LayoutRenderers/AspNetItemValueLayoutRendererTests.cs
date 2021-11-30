@@ -84,14 +84,15 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items.Contains("key").Returns(true);
             httpContext.Items["key"].Returns(expectedValue);
 #endif
-
+            var culture = CultureInfo.CurrentUICulture;
             renderer.Variable = "key";
+            renderer.Culture = culture;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Equal(Convert.ToString(expectedValue, CultureInfo.CurrentUICulture), result);
+            Assert.Equal(Convert.ToString(expectedValue, culture), result);
         }
 
         [Theory, MemberData(nameof(NestedPropertyData))]
@@ -106,15 +107,16 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items.Contains(itemKey).Returns(true);
             httpContext.Items[itemKey].Returns(data);
 #endif
-
+            var culture = CultureInfo.CurrentUICulture;
             renderer.Variable = variable;
             renderer.EvaluateAsNestedProperties = true;
+            renderer.Culture = culture;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Equal(Convert.ToString(expectedValue, CultureInfo.CurrentUICulture), result);
+            Assert.Equal(Convert.ToString(expectedValue, culture), result);
         }
 
         public static IEnumerable<object[]> VariableFoundData

@@ -44,14 +44,6 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspNetItemValueLayoutRenderer" /> class.
-        /// </summary>
-        public AspNetItemValueLayoutRenderer()
-        {
-            Culture = CultureInfo.CurrentUICulture;
-        }
-
-        /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
@@ -68,7 +60,7 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; }
+        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <summary>
         /// Renders the specified ASP.NET Item value and appends it to the specified <see cref="StringBuilder" />.

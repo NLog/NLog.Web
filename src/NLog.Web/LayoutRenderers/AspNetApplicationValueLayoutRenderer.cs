@@ -44,6 +44,12 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get; set; }
 
         /// <summary>
+        /// Gets or sets the culture used for rendering.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+
+        /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
@@ -60,8 +66,9 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-            
-            builder.Append(Convert.ToString(application[Variable], CultureInfo.CurrentUICulture));
+
+            var culture = GetFormatProvider(logEvent, Culture);
+            builder.Append(Convert.ToString(application[Variable], culture));
         }
     }
 }
