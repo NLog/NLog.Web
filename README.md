@@ -24,6 +24,7 @@ The packages contain targets and layout-renderes specific to ASP.NET (Core), MVC
 ## Getting started with NLog
 
 
+- [Getting started for ASP.NET Core 6](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
 - [Getting started for ASP.NET Core 5](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-5)
 - [Getting started for ASP.NET Core 3](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3)
 - [Getting started for ASP.NET Core 2](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-2)
@@ -45,6 +46,7 @@ For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https
 ## ASP.NET Core
 The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package supports the platforms:
 
+- For ASP.NET Core 6, .NET 6
 - For ASP.NET Core 5, .NET 5
 - For ASP.NET Core 3, .NET Core 3.0
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+

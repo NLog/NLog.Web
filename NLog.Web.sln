@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29324.140
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52CA242D-DB20-41D9-8B79-A5A965ECA105}"
 	ProjectSection(SolutionItems) = preProject
@@ -27,6 +27,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.NET Core 3 - VS2019", "examples\ASP.NET Core 3\ASP.NET Core 3 - VS2019\ASP.NET Core 3 - VS2019.csproj", "{A0DF49D3-74E1-4FD2-8197-017A824B9AED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.NET Core 5 NLog Example", "examples\ASP.NET Core 5\ASP.NET Core 5 NLog Example\ASP.NET Core 5 NLog Example.csproj", "{6B629300-2FD1-4465-B077-24D01E2BB5E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.NET Core 6 NLog Example", "examples\ASP.NET Core 6\ASP.NET Core 6 NLog Example\ASP.NET Core 6 NLog Example.csproj", "{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{6B629300-2FD1-4465-B077-24D01E2BB5E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B629300-2FD1-4465-B077-24D01E2BB5E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B629300-2FD1-4465-B077-24D01E2BB5E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{0BF1FB4E-D5AE-46DE-9E80-E2DD40235552} = {A9FB260C-9052-45D3-827A-20590F9D2FEF}
 		{A0DF49D3-74E1-4FD2-8197-017A824B9AED} = {A9FB260C-9052-45D3-827A-20590F9D2FEF}
 		{6B629300-2FD1-4465-B077-24D01E2BB5E7} = {A9FB260C-9052-45D3-827A-20590F9D2FEF}
+		{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516} = {A9FB260C-9052-45D3-827A-20590F9D2FEF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B8468549-60D6-49AC-A6F7-44391E4C392C}
