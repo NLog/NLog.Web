@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
 
 Supported platforms:
 
+- For ASP.NET Core 6, .NET 6
 - For ASP.NET Core 5, .NET 5
 - For ASP.NET Core 3, .NET Core 3.0
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
@@ -72,6 +73,10 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <Title>ASP.NET Core 5 integration for NLog - .NET 5.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <Title>ASP.NET Core 6 integration for NLog - .NET 6.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-preview.3" />
   </ItemGroup>
@@ -88,6 +93,9 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>

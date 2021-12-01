@@ -108,6 +108,7 @@ namespace NLog.Web.Tests
                 logger.Info("Hello World");
 
                 // Assert
+                logFactory.Dispose();
                 var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
                 Assert.Contains("Hello World", fileOutput);
             }
@@ -149,6 +150,7 @@ namespace NLog.Web.Tests
                 logger.Info("Hello World");
 
                 // Assert
+                logFactory.Dispose();
                 var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
                 Assert.Contains("Hello World", fileOutput);
             }
