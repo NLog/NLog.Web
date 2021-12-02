@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using NLog.Config;
@@ -31,14 +32,14 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the culture used for rendering. 
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public System.Globalization.CultureInfo Culture { get; set; } = System.Globalization.CultureInfo.InvariantCulture;
+        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <inheritdoc/>
         protected override void InitializeLayoutRenderer()
         {
-            if (DurationMsFormat == null && string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture))
+            if (DurationMsFormat == null && string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, CultureInfo.InvariantCulture))
             {
-                System.Threading.Interlocked.CompareExchange(ref DurationMsFormat, Enumerable.Range(0, 1000).Select(i => i.ToString(System.Globalization.CultureInfo.InvariantCulture)).ToArray(), null);
+                System.Threading.Interlocked.CompareExchange(ref DurationMsFormat, Enumerable.Range(0, 1000).Select(i => i.ToString(CultureInfo.InvariantCulture)).ToArray(), null);
             }
 
 #if !ASP_NET_CORE
@@ -47,9 +48,9 @@ namespace NLog.Web.LayoutRenderers
                 _formatString = "{0:" + Format + "}";
             }
 #elif ASP_NET_CORE2
-            if (string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture))
+            if (string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, CultureInfo.InvariantCulture))
                 _scopeTiming = new NLog.Layouts.SimpleLayout("${scopetiming}");
-            else if (ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture))
+            else if (ReferenceEquals(Culture, CultureInfo.InvariantCulture))
                 _scopeTiming = new NLog.Layouts.SimpleLayout($"${{scopetiming:Format={Format}}}");
             else
                 _scopeTiming = new NLog.Layouts.SimpleLayout($"${{scopetiming:Format={Format}:Culture={Culture}}}");
@@ -92,7 +93,7 @@ namespace NLog.Web.LayoutRenderers
 
         private void RenderDurationMs(StringBuilder builder, double durationMs)
         {
-            if (ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture))
+            if (ReferenceEquals(Culture, CultureInfo.InvariantCulture))
             {
                 var truncateMs = (long)durationMs;
                 if (DurationMsFormat != null && truncateMs >= 0 && truncateMs <= DurationMsFormat.Length)
