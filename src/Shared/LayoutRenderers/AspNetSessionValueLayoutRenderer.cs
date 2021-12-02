@@ -59,6 +59,12 @@ namespace NLog.Web.LayoutRenderers
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
+        /// Format string for conversion from object to string.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Format { get; set; }
+
+        /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
@@ -113,7 +119,7 @@ namespace NLog.Web.LayoutRenderers
             if (value != null)
             {
                 var formatProvider = GetFormatProvider(logEvent, Culture);
-                builder.Append(Convert.ToString(value, formatProvider));
+                builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
             }
         }
 

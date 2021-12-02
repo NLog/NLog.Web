@@ -44,6 +44,12 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get; set; }
 
         /// <summary>
+        /// Format string for conversion from object to string.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Format { get; set; }
+
+        /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
@@ -67,8 +73,8 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var culture = GetFormatProvider(logEvent, Culture);
-            builder.Append(Convert.ToString(application[Variable], culture));
+            var formatProvider = GetFormatProvider(logEvent, Culture);
+            builder.AppendFormattedValue(application[Variable], Format, formatProvider, ValueFormatter);
         }
     }
 }
