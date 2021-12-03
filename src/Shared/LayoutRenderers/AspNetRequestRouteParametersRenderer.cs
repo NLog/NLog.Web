@@ -44,9 +44,9 @@ namespace NLog.Web.LayoutRenderers
             }
 
 #if !ASP_NET_CORE
-            RouteValueDictionary routeParameters = RouteTable.Routes?.GetRouteData(context).Values;
+            RouteValueDictionary routeParameters = RouteTable.Routes?.GetRouteData(context)?.Values;
 #else
-            RouteValueDictionary routeParameters = context.GetRouteData().Values;
+            RouteValueDictionary routeParameters = context.GetRouteData()?.Values;
 #endif
 
             bool printAllRouteParameter = RouteParameterKeys == null || RouteParameterKeys.Count == 0;
