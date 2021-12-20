@@ -23,11 +23,11 @@ Supported platforms:
     <PackageReleaseNotes>
 ## Improvements
 
-- Replaced platform NetCoreApp3.0 with NetCoreApp3.1 and added Net5.0 (#701) (@snakefoot)
-- Dropped support for ASP.NET Core 1 and NetStandard1.5 + Net452 (#683) (@304NotModified)
-- Enabled ShutdownOnDispose by default to follow lifetime of the ServiceProvider (#691) (@snakefoot)
-- Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
-- Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
+- [#734] LogManager.Setup() - Added support for RegisterAspNetLayoutRenderer (#734) (@snakefoot)
+- [#735] Changed format Culture to InvariantCulture to match default NLog Culture (#735) (@snakefoot)
+- [#736] Added sample for ASP.NET Core 6.0 on .NET 6 (#736) (@ThomasArdal)
+- [#740] Added ${aspnet-request-routeparameters} (#740) (@ThomasArdal)
+- [#741] Changed from Convert.ToString to IValueFormatter to be like NLog default (#741) (@snakefoot)
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
@@ -78,7 +78,7 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-preview.3" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-rc1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->
