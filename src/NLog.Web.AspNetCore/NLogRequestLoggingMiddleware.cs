@@ -66,7 +66,7 @@ namespace NLog.Web
             else
             {
                 var statusCode = httpContext.Response?.StatusCode ?? 0;
-                if (statusCode < 100 || statusCode >= 400)
+                if (statusCode < 100 || (statusCode >= 400 && statusCode < 600))
                 {
                     _logger.LogWarning("HttpRequest Failed");
                 }

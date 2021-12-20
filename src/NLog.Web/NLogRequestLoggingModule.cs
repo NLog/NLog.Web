@@ -33,7 +33,7 @@ namespace NLog.Web
             {
                 if (exception != null)
                     Logger.Error(exception, "HttpRequest Exception");
-                else if (statusCode < 100 || statusCode >= 400)
+                else if (statusCode < 100 || (statusCode >= 400 && statusCode < 600))
                     Logger.Warn("HttpRequest Failed");
                 else
                     Logger.Info("HttpRequest Completed");
