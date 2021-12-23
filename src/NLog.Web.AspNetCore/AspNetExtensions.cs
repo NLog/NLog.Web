@@ -28,7 +28,7 @@ namespace NLog.Web
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
         /// <param name="app"></param>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
             app.ApplicationServices.SetupNLogServiceLocator();
@@ -43,7 +43,7 @@ namespace NLog.Web
         /// Should only be used if the standard approach for configuring NLog is not enough
         /// </remarks>
         /// <param name="serviceProvider"></param>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static IServiceProvider SetupNLogServiceLocator(this IServiceProvider serviceProvider)
         {
             ServiceLocator.ServiceProvider = serviceProvider;
@@ -59,7 +59,7 @@ namespace NLog.Web
         /// <param name="env"></param>
         /// <param name="configFileRelativePath">relative path to NLog configuration file.</param>
         /// <returns>LoggingConfiguration for chaining</returns>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static LoggingConfiguration ConfigureNLog(this IHostingEnvironment env, string configFileRelativePath)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
@@ -79,7 +79,7 @@ namespace NLog.Web
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
         /// >
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
@@ -95,7 +95,7 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, and NLog.Web.NLogBuilder.ConfigureNLog(). Or AddNLog() on ILoggingBuilder")]
+        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
