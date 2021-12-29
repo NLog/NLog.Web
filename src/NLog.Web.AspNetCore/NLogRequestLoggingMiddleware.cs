@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 
 namespace NLog.Web
@@ -70,6 +71,14 @@ namespace NLog.Web
                 {
                     _logger.LogWarning("HttpRequest Failed");
                 }
+                else if (IsExcludedHttpRequest(httpContext))
+                {
+                    _logger.LogDebug("HttpRequest Completed");
+                }
+                else if (IsSlowHttpRequest())
+                {
+                    _logger.LogWarning("HttpRequest Slow");
+                }
                 else
                 {
                     _logger.LogInformation("HttpRequest Completed");
@@ -77,6 +86,50 @@ namespace NLog.Web
             }
 
             return false;   // Exception Filter should not suppress the Exception
+        }
+
+        private bool IsSlowHttpRequest()
+        {
+#if !ASP_NET_CORE2
+            var currentActivity = System.Diagnostics.Activity.Current;
+            var activityStartTime = DateTime.MinValue;
+            while (currentActivity != null)
+            {
+                if (currentActivity.StartTimeUtc > DateTime.MinValue)
+                    activityStartTime = currentActivity.StartTimeUtc;
+                currentActivity = currentActivity.Parent;
+            }
+            if (activityStartTime > DateTime.MinValue)
+            {
+                var currentDuration = DateTime.UtcNow - activityStartTime;
+                if (currentDuration > TimeSpan.FromMilliseconds(_options.DurationThresholdMs))
+                {
+                    return true;
+                }
+            }
+#endif
+
+            return false;
+        }
+
+        private bool IsExcludedHttpRequest(HttpContext httpContext)
+        {
+            if (_options.ExcludeRequestPaths.Count > 0)
+            {
+                var requestPath = httpContext.Features.Get<IHttpRequestFeature>()?.Path;
+                if (string.IsNullOrEmpty(requestPath))
+                {
+                    requestPath = httpContext.Request?.Path;
+                    if (string.IsNullOrEmpty(requestPath))
+                    {
+                        return false;
+                    }
+                }
+
+                return _options.ExcludeRequestPaths.Contains(requestPath);
+            }
+
+            return false;
         }
     }
 }
