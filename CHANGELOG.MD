@@ -4,6 +4,12 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v5.0-rc2 (2022/01/19)
+
+- **NLog.Web.AspNetCore**
+  - [#749](https://github.com/NLog/NLog.Web/pull/749) Include ContentRootPath when scanning for NLog.config candidate (#749) (@snakefoot)
+  - [#747](https://github.com/NLog/NLog.Web/pull/747) NLogRequestLogging - Added DurationThresholdMs + ExcludeRequestPaths (#747) (@snakefoot)
+
 ### v5.0-rc1 (2021/12/20)
 
 - **NLog.Web.AspNetCore**

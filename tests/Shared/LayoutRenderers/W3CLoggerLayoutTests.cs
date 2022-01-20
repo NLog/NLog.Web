@@ -30,10 +30,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
                 var layout = new NLog.Web.Layouts.W3CExtendedLogLayout();
-                var headerTarget = new NLog.Targets.MemoryTarget() { Name = "Header", Layout = layout.Header };
-                var bodyTarget = new NLog.Targets.MemoryTarget() { Name = "Body", Layout = layout };
-                builder.Configuration.AddRuleForAllLevels(headerTarget);
-                builder.Configuration.AddRuleForAllLevels(bodyTarget);
+                var target = new NLog.Targets.MemoryTarget() { Name = "Debug", Layout = layout };
+                builder.Configuration.AddRuleForAllLevels(target);
             }).LogFactory;
 
             var logger = logFactory.GetCurrentClassLogger();
@@ -44,8 +42,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             string expectedHeader = $@"#Software: Microsoft Internet Information Server{System.Environment.NewLine}#Version: 1.0{System.Environment.NewLine}#Start-Date: {logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}{System.Environment.NewLine}#Fields: date time {expectedFieldHeaders}";
             string expectedBody= $@"{logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)} {expectedFieldValues}";
 
-            var header = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Header")?.Logs?.FirstOrDefault();
-            var body = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Body")?.Logs?.FirstOrDefault();
+            var header = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Debug")?.Logs?.FirstOrDefault();
+            var body = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Debug")?.Logs?.LastOrDefault();
 
             Assert.Equal(expectedHeader, header);
             Assert.Equal(expectedBody, body);
@@ -59,10 +57,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
                 var layout = new NLog.Web.Layouts.W3CExtendedLogLayout();
-                var headerTarget = new NLog.Targets.MemoryTarget() { Name = "Header", Layout = layout.Header };
-                var bodyTarget = new NLog.Targets.MemoryTarget() { Name = "Body", Layout = layout };
-                builder.Configuration.AddRuleForAllLevels(headerTarget);
-                builder.Configuration.AddRuleForAllLevels(bodyTarget);
+                var target = new NLog.Targets.MemoryTarget() { Name = "Debug", Layout = layout };
+                builder.Configuration.AddRuleForAllLevels(target);
             }).LogFactory;
 
             var logger = logFactory.GetCurrentClassLogger();
@@ -73,8 +69,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             string expectedHeader = $@"#Software: Microsoft Internet Information Server{System.Environment.NewLine}#Version: 1.0{System.Environment.NewLine}#Start-Date: {logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}{System.Environment.NewLine}#Fields: date time {expectedFieldHeaders}";
             string expectedBody = $@"{logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)} {expectedFieldValues}";
 
-            var header = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Header")?.Logs?.FirstOrDefault();
-            var body = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Body")?.Logs?.FirstOrDefault();
+            var header = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Debug")?.Logs?.FirstOrDefault();
+            var body = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Debug")?.Logs?.LastOrDefault();
 
             Assert.Equal(expectedHeader, header);
             Assert.Equal(expectedBody, body);
