@@ -47,7 +47,7 @@ namespace NLog.Web.LayoutRenderers
             var serviceProvider = ServiceLocator.ServiceProvider;
             if (serviceProvider == null)
             {
-                InternalLogger.Debug("{0} - Missing serviceProvider, so no HttpContext", classType);
+                InternalLogger.Debug("{0} - No available HttpContext, because ServiceProvider is not registered", classType);
                 return null;
             }
 
@@ -56,14 +56,14 @@ namespace NLog.Web.LayoutRenderers
                 var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
                 if (httpContextAccessor == null)
                 {
-                    InternalLogger.Debug("{0} - Missing IHttpContextAccessor, so no HttpContext", classType);
+                    InternalLogger.Debug("{0} - No available HttpContext, because IHttpContextAccessor is not registered", classType);
                 }
 
                 return httpContextAccessor;
             }
             catch (ObjectDisposedException ex)
             {
-                InternalLogger.Debug(ex, "{0} - ServiceProvider has been disposed, so no HttpContext", classType);
+                InternalLogger.Debug(ex, "{0} - No available HttpContext, because ServiceProvider has been disposed", classType);
                 return null;
             }
         }
@@ -84,7 +84,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (httpContextAccessor.HttpContext == null)
             {
-                InternalLogger.Debug("No available HttpContext. Logging outside valid request context?");
+                InternalLogger.Debug("No available HttpContext, because outside valid request context. Logger: {0}", logEvent.LoggerName);
                 return;
             }
 
