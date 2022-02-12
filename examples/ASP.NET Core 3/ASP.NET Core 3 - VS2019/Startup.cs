@@ -45,20 +45,12 @@ namespace ASP.NetCore3_NLog_Web_Example
             app.UseRouting();
             app.UseAuthorization();
 
-            // needed for  ${aspnet-request-posted-body} with an API Controller. Must be before app.UseEndpoints
-            app.Use(async (context, next) => {
-                context.Request.EnableBuffering();
-                await next();
-            });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
-         
         }
     }
 }
