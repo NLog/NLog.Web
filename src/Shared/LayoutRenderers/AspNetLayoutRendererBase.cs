@@ -8,7 +8,6 @@ using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
-using Microsoft.Extensions.DependencyInjection;
 using NLog.Web.DependencyInjection;
 #else
 using System.Web;
@@ -33,39 +32,18 @@ namespace NLog.Web.LayoutRenderers
         [NLogConfigurationIgnoreProperty]
         public IHttpContextAccessor HttpContextAccessor
         {
-            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor(GetType()));
+            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _httpContextAccessor = value;
         }
 
 #if !ASP_NET_CORE
         internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(Type _) => DefaultHttpContextAccessor;
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration) => DefaultHttpContextAccessor;
 #else
 
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(Type classType)
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
         {
-            var serviceProvider = ServiceLocator.ServiceProvider;
-            if (serviceProvider == null)
-            {
-                InternalLogger.Debug("{0} - No available HttpContext, because ServiceProvider is not registered", classType);
-                return null;
-            }
-
-            try
-            {
-                var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
-                if (httpContextAccessor == null)
-                {
-                    InternalLogger.Debug("{0} - No available HttpContext, because IHttpContextAccessor is not registered", classType);
-                }
-
-                return httpContextAccessor;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                InternalLogger.Debug(ex, "{0} - No available HttpContext, because ServiceProvider has been disposed", classType);
-                return null;
-            }
+            return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
         }
 #endif
 

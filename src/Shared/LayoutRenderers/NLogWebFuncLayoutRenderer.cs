@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
 
         internal IHttpContextAccessor HttpContextAccessor
         {
-            get => _httpContextAccessor ?? (_httpContextAccessor = AspNetLayoutRendererBase.RetrieveHttpContextAccessor(GetType()));
+            get => _httpContextAccessor ?? (_httpContextAccessor = AspNetLayoutRendererBase.RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _httpContextAccessor = value;
         }
 

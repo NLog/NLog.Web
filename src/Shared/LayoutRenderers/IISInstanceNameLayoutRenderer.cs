@@ -12,7 +12,6 @@ using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #if ASP_NET_CORE3
 using Microsoft.Extensions.Hosting;
 #endif
-using Microsoft.Extensions.DependencyInjection;
 using NLog.Web.DependencyInjection;
 #endif
 
@@ -33,9 +32,9 @@ namespace NLog.Web.LayoutRenderers
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
-        private static IHostEnvironment _hostEnvironment;
+        private IHostEnvironment _hostEnvironment;
 
-        private static IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ServiceProvider?.GetService<IHostEnvironment>());
+        private IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
 #endif
 
         /// <summary>
