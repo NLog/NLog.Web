@@ -15,65 +15,39 @@ namespace NLog.Web.Tests
 {
     public class RegisterCustomLayoutRenderer : TestBase
     {
-#if !ASP_NET_CORE
-        ~RegisterCustomLayoutRenderer()
-        {
-            AspNetLayoutRendererBase.DefaultHttpContextAccessor = new DefaultHttpContextAccessor();
-        }
-#endif
-
         [Fact]
         public void RegisterLayoutRendererTest()
         {
-            var httpContextMock = SetupHttpAccessorWithHttpContext();
+            var httpContextMock = Substitute.For<IHttpContextAccessor>();
 #if ASP_NET_CORE
-            httpContextMock.Connection.LocalPort.Returns(123);
+            httpContextMock.HttpContext.Connection.LocalPort.Returns(123);
 #else
-            httpContextMock.Request.RawUrl.Returns("123");
-         
+            httpContextMock.HttpContext.Request.RawUrl.Returns("123");
 #endif
 
             // Act
-            AspNetLayoutRendererBase.Register("test-web",
+            var logFactory = new LogFactory().Setup().RegisterNLogWeb().SetupExtensions(ext =>
+                ext.RegisterAspNetLayoutRenderer("test-web",
                 (logEventInfo, httpContext, loggingConfiguration) =>
 #if ASP_NET_CORE
-                    httpContext.Connection.LocalPort);
+                    httpContext.Connection.LocalPort)
 #else
-                    httpContext.Request.RawUrl);
+                    httpContext.Request.RawUrl)
 #endif
-            Layout l = "${test-web}";
-            var result = l.Render(LogEventInfo.CreateNullEvent());
+            ).LoadConfiguration(builder =>
+            {
+                builder.ForLogger().WriteTo(new NLog.Targets.MemoryTarget("hello") { Layout = "${test-web}" });
+            }).LogFactory;
+
+            var target = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("hello");
+            var layoutRenderer = (target.Layout as NLog.Layouts.SimpleLayout).Renderers.FirstOrDefault() as NLogWebFuncLayoutRenderer;
+            layoutRenderer.HttpContextAccessor = httpContextMock;
+
+            logFactory.GetCurrentClassLogger().Info("Hello World");
 
             // Assert
-            Assert.Equal("123", result);
-        }
-
-        private static
-#if ASP_NET_CORE
-            HttpContext
-#else
-            HttpContextBase
-#endif
-
-            SetupHttpAccessorWithHttpContext()
-        {
-            var httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
-
-
-#if ASP_NET_CORE
-            var serviceProviderMock = Substitute.For<IServiceProvider>();
-            serviceProviderMock.GetService(typeof(IHttpContextAccessor)).Returns(httpContextAccessorMock);
-            var httpContext = Substitute.For<HttpContext>();
-            ServiceLocator.ServiceProvider = serviceProviderMock;
-#else
-            var httpContext = Substitute.For<HttpContextBase>();
-            httpContextAccessorMock.HttpContext.Returns(httpContext);
-            AspNetLayoutRendererBase.DefaultHttpContextAccessor = httpContextAccessorMock;
-#endif
-
-
-            httpContextAccessorMock.HttpContext.Returns(httpContext);
-            return httpContext;
+            Assert.Single(target.Logs);
+            Assert.Equal("123", target.Logs[0]);
         }
     }
 }

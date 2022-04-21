@@ -6,18 +6,12 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET host.
+    /// ASP.NET Request DNS name of the remote client
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer host.
+    /// ${aspnet-request-host}
     /// </remarks>
-    /// <example>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-host}    
-    /// </code>
-    /// </example>
     [LayoutRenderer("aspnet-request-host")]
-    [ThreadSafe]
     public class AspNetRequestHostLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

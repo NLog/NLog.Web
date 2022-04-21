@@ -4,10 +4,9 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Hosting;
-#if ASP_NET_CORE1 || ASP_NET_CORE2
+#if ASP_NET_CORE2
 using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
-using Microsoft.Extensions.DependencyInjection;
 using NLog.Web.DependencyInjection;
 #else
 using System.Web.Hosting;
@@ -26,13 +25,12 @@ namespace NLog.Web.LayoutRenderers
 #endif
     [LayoutRenderer("aspnet-webrootpath")]
     [ThreadAgnostic]
-    [ThreadSafe]
     public class AspNetWebRootPathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
-        private static IWebHostEnvironment _webHostEnvironment;
+        private IWebHostEnvironment _webHostEnvironment;
 
-        private static IWebHostEnvironment WebHostEnvironment => _webHostEnvironment ?? (_webHostEnvironment = ServiceLocator.ServiceProvider?.GetService<IWebHostEnvironment>());
+        private IWebHostEnvironment WebHostEnvironment => _webHostEnvironment ?? (_webHostEnvironment = ServiceLocator.ResolveService<IWebHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
 
         private string WebRootPath => WebHostEnvironment?.WebRootPath;
 #else

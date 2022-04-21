@@ -24,6 +24,7 @@ namespace ASP.NetCore3_NLog_Web_Example.Controllers
         {
             try
             {
+                await Task.Delay(5).ConfigureAwait(false);
                 throw new ApplicationException("Test log message");
             }
             catch (Exception ex)

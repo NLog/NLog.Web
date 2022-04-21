@@ -11,7 +11,6 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     [LayoutRenderer("assembly-version")]
     [ThreadAgnostic]
-    [ThreadSafe]
     public class AssemblyVersionLayoutRenderer : NLog.LayoutRenderers.AssemblyVersionLayoutRenderer
     {
 #if !ASP_NET_CORE

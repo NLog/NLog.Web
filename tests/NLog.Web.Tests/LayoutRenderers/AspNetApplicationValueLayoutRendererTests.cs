@@ -16,9 +16,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullHttpContextRendersEmptyString()
         {
             var renderer = new AspNetApplicationValueLayoutRenderer();
+            renderer.Variable = string.Empty;
 
             string result = renderer.Render(new LogEventInfo());
+            Assert.Empty(result);
 
+            renderer.Variable = null;
+            result = renderer.Render(new LogEventInfo());
             Assert.Empty(result);
         }
 
@@ -28,11 +32,14 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
 
             var renderer = new AspNetApplicationValueLayoutRenderer();
-            renderer.Variable = null;
+            renderer.Variable = string.Empty;
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
+            Assert.Empty(result);
 
+            renderer.Variable = null;
+            result = renderer.Render(new LogEventInfo());
             Assert.Empty(result);
         }
 
@@ -56,13 +63,15 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Application["key"].Returns(expectedValue);
 
+            var culture = CultureInfo.CurrentUICulture;
             var renderer = new AspNetApplicationValueLayoutRenderer();
             renderer.Variable = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            renderer.Culture = culture;
 
             string result = renderer.Render(new LogEventInfo());
 
-            Assert.Equal(Convert.ToString(expectedValue, CultureInfo.CurrentUICulture), result);
+            Assert.Equal(Convert.ToString(expectedValue, culture), result);
         }
 
         public static IEnumerable<object[]> VariableFoundData

@@ -2,6 +2,8 @@
 using System.Reflection;
 using NLog.Config;
 using NLog.Web.DependencyInjection;
+using NLog.Web.LayoutRenderers;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace NLog.Web
 {
@@ -24,6 +26,19 @@ namespace NLog.Web
             }
 
             return setupBuilder.RegisterAssembly(typeof(NLogAspNetCoreOptions).GetTypeInfo().Assembly);
+        }
+
+
+        /// <summary>
+        /// Register a custom layout renderer using custom delegate-method <paramref name="layoutMethod" />
+        /// </summary>
+        /// <param name="setupBuilder">Fluent style</param>
+        /// <param name="name">Name of the layout renderer - without ${}.</param>
+        /// <param name="layoutMethod">Delegate method that returns layout renderer output.</param>
+        public static ISetupExtensionsBuilder RegisterAspNetLayoutRenderer(this ISetupExtensionsBuilder setupBuilder, string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> layoutMethod)
+        {
+            AspNetLayoutRendererBase.Register(name, layoutMethod);
+            return setupBuilder;
         }
     }
 }

@@ -28,6 +28,7 @@ namespace NLog.Web.Tests
         public void Dispose()
         {
             LogManager.Configuration = null;
+            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -55,7 +56,6 @@ namespace NLog.Web.Tests
             Assert.Equal("logger1|error1", logged.First());
         }
 
-#if !ASP_NET_CORE1
         [Fact]
         public void UseNLog_ReplaceLoggerFactory()
         {
@@ -69,9 +69,8 @@ namespace NLog.Web.Tests
             Assert.Equal(typeof(NLogLoggerFactory), loggerFactory.GetType());
             Assert.Equal(typeof(NLogLoggerProvider), loggerProvider.GetType());
         }
-#endif
 
-#if !ASP_NET_CORE1 && !ASP_NET_CORE2
+#if !ASP_NET_CORE2
         [Fact]
         public void LoadConfigurationFromAppSettingsShouldLogTest()
         {
@@ -109,6 +108,7 @@ namespace NLog.Web.Tests
                 logger.Info("Hello World");
 
                 // Assert
+                logFactory.Dispose();
                 var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
                 Assert.Contains("Hello World", fileOutput);
             }
@@ -150,6 +150,7 @@ namespace NLog.Web.Tests
                 logger.Info("Hello World");
 
                 // Assert
+                logFactory.Dispose();
                 var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
                 Assert.Contains("Hello World", fileOutput);
             }
@@ -214,7 +215,6 @@ namespace NLog.Web.Tests
             Assert.NotNull(webhost.Services.GetService<IHttpContextAccessor>());
         }
 
-#if !ASP_NET_CORE1
         [Fact]
         public void SkipRegisterHttpContext()
         {
@@ -257,7 +257,6 @@ namespace NLog.Web.Tests
                                              // Parameter name: applicationName
             return builder;
         }
-#endif
 
         /// <summary>
         /// Create webhost with UseNlog
@@ -265,43 +264,15 @@ namespace NLog.Web.Tests
         /// <returns></returns>
         private static IWebHost CreateWebHost(NLogAspNetCoreOptions options = null)
         {
-#if !ASP_NET_CORE1
             return CreateWebHostBuilder()
                 .UseNLog(options)
                 .Build();
-#else
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseStartup<Startup>()
-                .Build();
-            return host;
-#endif
         }
 
         private static ILoggerFactory GetLoggerFactory(IWebHost webhost)
         {
             return webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
         }
-
-#if ASP_NET_CORE1
-        public class Startup
-        {
-            public Startup()
-            {
-            }
-
-            public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-            {
-                app.AddNLogWeb();
-                loggerFactory.AddNLog();
-            }
-
-            public void ConfigureServices(IServiceCollection services)
-            {
-                services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            }
-        }
-#endif
     }
 }
 

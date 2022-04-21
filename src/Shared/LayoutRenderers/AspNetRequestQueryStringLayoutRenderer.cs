@@ -16,17 +16,17 @@ using Microsoft.AspNetCore.Http;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request Cookie
+    /// ASP.NET Request Query String
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-querystring}:</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-querystring}:</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-querystring:OutputFormat=Flat}
-    /// ${aspnet-request-querystring:OutputFormat=Json}
+    /// ${aspnet-request-querystring:OutputFormat=JsonArray}
+    /// ${aspnet-request-querystring:OutputFormat=JsonDictionary}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-querystring")]
-    [ThreadSafe]
     public class AspNetQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>

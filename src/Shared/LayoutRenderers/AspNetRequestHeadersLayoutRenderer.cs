@@ -16,17 +16,17 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Headers
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-headers}</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-headers}</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-headers:OutputFormat=Flat}
-    /// ${aspnet-request-headers:OutputFormat=Json}
-    /// ${aspnet-request-headers:OutputFormat=Json:HeaderNames=username}
-    /// ${aspnet-request-headers:OutputFormat=Json:Exclude=access_token}
+    /// ${aspnet-request-headers:OutputFormat=JsonArray}
+    /// ${aspnet-request-headers:OutputFormat=JsonDictionary}
+    /// ${aspnet-request-headers:OutputFormat=JsonDictionary:HeaderNames=username}
+    /// ${aspnet-request-headers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-headers")]
-    [ThreadSafe]
     public class AspNetRequestHeadersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>

@@ -12,16 +12,12 @@ using System.Collections.Specialized;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request Referrer
+    /// ASP.NET Request Referrer URL String
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-referrer}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-referrer} - Produces - Referrer URL String from the Request.
-    /// </code>
-    /// </example>
+    /// <remarks>
+    /// ${aspnet-request-referrer}
+    /// </remarks>
     [LayoutRenderer("aspnet-request-referrer")]
-    [ThreadSafe]
     public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

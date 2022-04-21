@@ -41,17 +41,8 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-item")]
-    [ThreadSafe]
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AspNetItemValueLayoutRenderer" /> class.
-        /// </summary>
-        public AspNetItemValueLayoutRenderer()
-        {
-            Culture = CultureInfo.CurrentUICulture;
-        }
-
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
@@ -66,10 +57,16 @@ namespace NLog.Web.LayoutRenderers
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
+        /// Format string for conversion from object to string.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Format { get; set; }
+
+        /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; }
+        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <summary>
         /// Renders the specified ASP.NET Item value and appends it to the specified <see cref="StringBuilder" />.
@@ -84,9 +81,9 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-            var value = PropertyReader.GetValue(Variable, context?.Items, LookupItemValue, EvaluateAsNestedProperties);
+            var value = PropertyReader.GetValue(Variable, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
             var formatProvider = GetFormatProvider(logEvent, Culture);
-            builder.Append(Convert.ToString(value, formatProvider));
+            builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
         }
 
 #if !ASP_NET_CORE

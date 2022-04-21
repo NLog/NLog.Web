@@ -33,7 +33,6 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-application")]
-    [ThreadSafe]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -43,6 +42,18 @@ namespace NLog.Web.LayoutRenderers
         [RequiredParameter]
         [DefaultParameter]
         public string Variable { get; set; }
+
+        /// <summary>
+        /// Format string for conversion from object to string.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Format { get; set; }
+
+        /// <summary>
+        /// Gets or sets the culture used for rendering.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
@@ -61,8 +72,9 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-            
-            builder.Append(Convert.ToString(application[Variable], CultureInfo.CurrentUICulture));
+
+            var formatProvider = GetFormatProvider(logEvent, Culture);
+            builder.AppendFormattedValue(application[Variable], Format, formatProvider, ValueFormatter);
         }
     }
 }

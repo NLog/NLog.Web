@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>netstandard1.5;net451;net461;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
 
 Supported platforms:
 
+- For ASP.NET Core 6, .NET 6
 - For ASP.NET Core 5, .NET 5
 - For ASP.NET Core 3, .NET Core 3.0
 - For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
-- For ASP.NET Core 1, .NET Standard 1.5+ and .NET 4.5.x    
     </Description>
     <Authors>Julian Verdurmen</Authors>
     <Company>NLog</Company>
@@ -21,12 +21,14 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
     <PackageReleaseNotes>
+## Improvements
 
-- NLogAspNetCoreOptions - Added LoggingConfigurationSectionName (#670) (@snakefoot)
-- Bump NLog.Extensions.Logging to 1.7.3 (#670) (@snakefoot)
-- Updated xml-docs for AddNLog-methods to instead use AddNLogWeb (#669) (@snakefoot)
+- [#749] Include ContentRootPath when scanning for NLog.config candidate (#749) (@snakefoot)
+- [#747] NLogRequestLogging - Added DurationThresholdMs + ExcludeRequestPaths (#747) (@snakefoot)
 
-See also https://github.com/NLog/NLog.Web/releases
+Full changelog: https://github.com/NLog/NLog.Web/releases
+
+NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html
     </PackageReleaseNotes>
     <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
@@ -34,7 +36,7 @@ See also https://github.com/NLog/NLog.Web/releases
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <RootNamespace>NLog.Web</RootNamespace>
@@ -52,41 +54,30 @@ See also https://github.com/NLog/NLog.Web/releases
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Title>ASP.NET Core 1 integration for NLog - .NET Framework 4.5.1+</Title>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
-    <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Framework 4.6+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
-    <Title>ASP.NET Core 1 integration for NLog - .NET Standard 1.5</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE1</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-    <Title>ASP.NET Core 3 integration for NLog - .NET Core 3</Title>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <Title>ASP.NET Core 3 integration for NLog - .NET Core 3.1</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <Title>ASP.NET Core 5 integration for NLog - .NET 5.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <Title>ASP.NET Core 6 integration for NLog - .NET 6.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.3" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' or '$(TargetFramework)' == 'net451' ">
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="1.1.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-rc2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->
@@ -95,9 +86,15 @@ See also https://github.com/NLog/NLog.Web/releases
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>

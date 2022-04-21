@@ -5,15 +5,15 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.LayoutRenderers;
 
-namespace NLog.Web.AspNetCore.LayoutRenderers
+namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Is the user authenticated? 0 = not authenticated, 1 = authenticated
-    /// 
-    /// ${aspnet-user-isAuthenticated}
+    /// ASP.NET User Identity Authenticated? (0 = not authenticated, 1 = authenticated)
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-user-isAuthenticated}
+    /// </remarks>
     [LayoutRenderer("aspnet-user-isAuthenticated")]
-    [ThreadSafe]
     public class AspNetUserIsAuthenticatedLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
@@ -28,11 +28,11 @@ namespace NLog.Web.AspNetCore.LayoutRenderers
                 var httpContext = HttpContextAccessor.HttpContext;
                 if (httpContext.User?.Identity?.IsAuthenticated == true)
                 {
-                    builder.Append(1);
+                    builder.Append('1');
                 }
                 else
                 {
-                    builder.Append(0);
+                    builder.Append('0');
                 }
             }
             catch (ObjectDisposedException ex)

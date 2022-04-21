@@ -8,13 +8,10 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET HttpRequest Content-Type Header
     /// </summary>
-    /// <example>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
     /// ${aspnet-request-contenttype}
-    /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-contenttype")]
-    [ThreadSafe]
     public class AspNetRequestContentTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

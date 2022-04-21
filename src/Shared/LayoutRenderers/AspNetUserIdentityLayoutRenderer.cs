@@ -11,10 +11,12 @@ using System.Web;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET User variable.
+    /// ASP.NET User Identity Name
     /// </summary>
+    /// <remarks>
+    /// ${aspnet-user-identity}
+    /// </remarks>
     [LayoutRenderer("aspnet-user-identity")]
-    [ThreadSafe]
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>

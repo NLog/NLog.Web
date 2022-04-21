@@ -1,5 +1,0 @@
-exclude:
-- /examples/*
-component_depth: 1
-languages:
-- csharp

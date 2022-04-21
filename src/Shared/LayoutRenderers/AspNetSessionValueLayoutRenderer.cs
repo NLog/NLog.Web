@@ -39,19 +39,11 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-session")]
-    [ThreadSafe]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
 #if ASP_NET_CORE
         private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
 #endif
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AspNetSessionValueLayoutRenderer" /> class.
-        /// </summary>
-        public AspNetSessionValueLayoutRenderer()
-        {
-            Culture = CultureInfo.CurrentUICulture;
-        }
 
         /// <summary>
         /// Gets or sets the session variable name.
@@ -67,10 +59,16 @@ namespace NLog.Web.LayoutRenderers
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
+        /// Format string for conversion from object to string.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Format { get; set; }
+
+        /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; }
+        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
 #if ASP_NET_CORE
         /// <summary>
@@ -121,7 +119,7 @@ namespace NLog.Web.LayoutRenderers
             if (value != null)
             {
                 var formatProvider = GetFormatProvider(logEvent, Culture);
-                builder.Append(Convert.ToString(value, formatProvider));
+                builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
             }
         }
 

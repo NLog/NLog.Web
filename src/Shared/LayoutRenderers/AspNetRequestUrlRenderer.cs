@@ -17,8 +17,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request URL
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-url}:</para>
     /// <example>
+    /// <para>Example usage of ${aspnet-request-url}:</para>
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-request-url:IncludeQueryString=true} - produces http://www.exmaple.com/?t=1
     /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.exmaple.com/
@@ -29,18 +29,17 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-url")]
-    [ThreadSafe]
     public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// To specify whether to include / exclude the Query string. Default is false.
         /// </summary>
-        public bool IncludeQueryString { get; set; } = false;
+        public bool IncludeQueryString { get; set; }
 
         /// <summary>
         /// To specify whether to include / exclude the Port. Default is false.
         /// </summary>
-        public bool IncludePort { get; set; } = false;
+        public bool IncludePort { get; set; }
 
         /// <summary>
         /// To specify whether to exclude / include the host. Default is true.
@@ -52,13 +51,18 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IncludeScheme { get; set; } = true;
 
+        /// <summary>
+        /// To specify whether to exclude / include the url-path. Default is true.
+        /// </summary>
+        public bool IncludePath { get; set; } = true;
+
 #if ASP_NET_CORE
 
         /// <summary>
         /// To specify whether to use raw path and full query. Default is false.
         /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
         /// </summary>
-        public bool UseRawTarget { get; set; } = false;
+        public bool UseRawTarget { get; set; }
         
 #endif        
 
@@ -108,8 +112,15 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(url.Port);
             }
 
-            var pathAndQuery = IncludeQueryString ? url.PathAndQuery : url.AbsolutePath;
-            builder.Append(pathAndQuery);
+            if (IncludePath)
+            {
+                var pathAndQuery = IncludeQueryString ? url.PathAndQuery : url.AbsolutePath;
+                builder.Append(pathAndQuery);
+            }
+            else if (IncludeQueryString)
+            {
+                builder.Append(url.Query);
+            }
         }
 #else
         private void RenderUrl(HttpRequest httpRequest, StringBuilder builder)
@@ -131,20 +142,26 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(httpRequest.Host.Port.Value);
             }
 
-            IHttpRequestFeature httpRequestFeature;
-            if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
+            if (IncludePath)
             {
-                builder.Append(httpRequestFeature.RawTarget);
-            }
-            else
-            {
-                builder.Append(httpRequest.PathBase.ToUriComponent());
-                builder.Append(httpRequest.Path.ToUriComponent());
-
-                if (IncludeQueryString)
+                IHttpRequestFeature httpRequestFeature;
+                if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
                 {
-                    builder.Append(httpRequest.QueryString.Value);
+                    builder.Append(httpRequestFeature.RawTarget);
                 }
+                else
+                {
+                    builder.Append((httpRequest.PathBase + httpRequest.Path).ToUriComponent());
+
+                    if (IncludeQueryString)
+                    {
+                        builder.Append(httpRequest.QueryString.Value);
+                    }
+                }
+            }
+            else if (IncludeQueryString)
+            {
+                builder.Append(httpRequest.QueryString.Value);
             }
         }
 #endif

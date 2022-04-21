@@ -15,15 +15,12 @@ using System.Web;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Render the request IP for ASP.NET Core
+    /// ASP.NET Request IP address of the remote client
     /// </summary>
-    /// <example>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
     /// ${aspnet-request-ip}
-    /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-ip")]
-    [ThreadSafe]
     public class AspNetRequestIpLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
