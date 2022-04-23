@@ -22,9 +22,19 @@ namespace NLog.Web
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
 
+            var currentBasePath = basePath;
+            if (currentBasePath is null)
+            {
+                currentBasePath = AppContext.BaseDirectory;
+                if (string.IsNullOrEmpty(currentBasePath))
+                {
+                    currentBasePath = Directory.GetCurrentDirectory();
+                }
+            }
+
             var builder = new ConfigurationBuilder()
                 // Host Configuration
-                .SetBasePath(basePath ?? Directory.GetCurrentDirectory())
+                .SetBasePath(currentBasePath)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .AddEnvironmentVariables(prefix: "DOTNET_")
                 // App Configuration
