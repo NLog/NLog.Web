@@ -25,4 +25,9 @@ if (-Not $LastExitCode -eq 0) {
     exit $LastExitCode 
 }
 
-exit $LastExitCode
+dotnet list ./src/NLog.Web.AspNetCore package --vulnerable --include-transitive | findstr /S /c:"has the following vulnerable packages"
+if (-Not $LastExitCode -eq 1)
+{
+	dotnet list ./src/NLog.Web.AspNetCore package --vulnerable --include-transitive
+	exit 1
+}
