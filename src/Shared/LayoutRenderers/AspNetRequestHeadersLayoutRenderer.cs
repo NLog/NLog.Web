@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using System;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
-using System.Linq;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
@@ -78,7 +77,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
         private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool checkForExclude)
         {
-            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.Cast<string>().ToList();
+            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.Cast<string>();
             foreach (var headerName in headerNames)
             {
                 if (checkForExclude && Exclude.Contains(headerName))

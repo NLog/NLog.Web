@@ -48,14 +48,13 @@ namespace NLog.Web.LayoutRenderers
 #else
             RouteValueDictionary routeParameters = context.GetRouteData()?.Values;
 #endif
-
-            bool printAllRouteParameter = RouteParameterKeys == null || RouteParameterKeys.Count == 0;
-            List<string> routeParameterKeys = RouteParameterKeys;
             if (routeParameters == null || routeParameters.Count == 0)
             {
                 return;
             }
 
+            var routeParameterKeys = RouteParameterKeys;
+            bool printAllRouteParameter = routeParameterKeys == null || routeParameterKeys.Count == 0;
             if (printAllRouteParameter)
             {
                 routeParameterKeys = routeParameters.Keys.ToList();
@@ -70,13 +69,12 @@ namespace NLog.Web.LayoutRenderers
             foreach (string key in routeParameterKeys)
             {
                 // This platform specific code is to prevent an unncessary .ToString call otherwise. 
-
                 if (!routeParameters.TryGetValue(key, out object objValue))
                 {
                     continue;
                 }
 
-                string value = objValue.ToString();
+                string value = objValue?.ToString();
                 if (!string.IsNullOrEmpty(value))
                 {
                     yield return new KeyValuePair<string, string>(key, value);
