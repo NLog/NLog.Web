@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
-using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
-
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -48,17 +44,19 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var printAllQueryString = QueryStringKeys == null || QueryStringKeys.Count == 0;
-            var queryStringKeys = QueryStringKeys;
 #if !ASP_NET_CORE
             var queryStrings = httpRequest.QueryString;
+#else
+            var queryStrings = httpRequest.Query;
+#endif
             if (queryStrings == null || queryStrings.Count == 0)
                 return;
 
+            var queryStringKeys = QueryStringKeys;
+            var printAllQueryString = queryStringKeys == null || queryStringKeys.Count == 0;
             if (printAllQueryString)
             {
-                queryStringKeys = new List<string>(queryStrings.Keys.Count);
-
+                queryStringKeys = new List<string>(queryStrings.Count);
                 foreach (var key in queryStrings.Keys)
                 {
                     if (key != null)
@@ -67,18 +65,6 @@ namespace NLog.Web.LayoutRenderers
                     }
                 }
             }
-#else
-            var queryStrings = httpRequest.Query;
-            if (queryStrings == null || queryStrings.Count == 0)
-            {
-                return;
-            }
-
-            if (printAllQueryString)
-            {
-                queryStringKeys = queryStrings.Keys.ToList();
-            }
-#endif
 
             var pairs = GetPairs(queryStrings, queryStringKeys);
             SerializePairs(pairs, builder, logEvent);

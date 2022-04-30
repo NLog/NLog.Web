@@ -149,7 +149,7 @@ namespace NLog.Web
             {
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options);
                 // Delay initialization of targets until we have loaded config-settings
-                LogManager.LoadConfiguration(configFileName);
+                provider.LogFactory.Setup().LoadConfigurationFromFile(configFileName);
                 return provider;
             });
             return builder;
