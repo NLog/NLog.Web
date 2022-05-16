@@ -49,7 +49,7 @@ See https://github.com/NLog/NLog.Web/releases
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.0.0-rc2" />
+    <PackageReference Include="NLog" Version="5.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
