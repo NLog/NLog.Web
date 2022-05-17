@@ -4,6 +4,33 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v5.0 (2022/05/17)
+
+- **NLog.Web.AspNetCore**
+  - [#749](https://github.com/NLog/NLog.Web/pull/749) Include ContentRootPath when scanning for NLog.config candidate (#749) (@snakefoot)
+  - [#747](https://github.com/NLog/NLog.Web/pull/747) NLogRequestLogging - Added DurationThresholdMs + ExcludeRequestPaths (#747) (@snakefoot)
+  - [#734](https://github.com/NLog/NLog.Web/pull/734) LogManager.Setup() - Added support for RegisterAspNetLayoutRenderer (#734) (@snakefoot)
+  - [#735](https://github.com/NLog/NLog.Web/pull/735) Changed format Culture to InvariantCulture to match default NLog Culture (#735) (@snakefoot)
+  - [#736](https://github.com/NLog/NLog.Web/pull/736) Added sample for ASP.NET Core 6.0 on .NET 6 (#736) (@ThomasArdal)
+  - [#740](https://github.com/NLog/NLog.Web/pull/740) Added ${aspnet-request-routeparameters} (#740) (@ThomasArdal)
+  - [#741](https://github.com/NLog/NLog.Web/pull/741) Changed from Convert.ToString to IValueFormatter to be like NLog default (#741) (@snakefoot)
+  - [#701](https://github.com/NLog/NLog.Web/pull/701) Replaced platform NetCoreApp3.0 with NetCoreApp3.1 and added Net5.0 (#701) (@snakefoot)
+  - [#683](https://github.com/NLog/NLog.Web/pull/683) Dropped support for ASP.NET Core 1 and NetStandard1.5 + Net452 (#683) (@304NotModified)
+  - [#691](https://github.com/NLog/NLog.Web/pull/691) Enabled ShutdownOnDispose by default to follow lifetime of the ServiceProvider (#691) (@snakefoot)
+  - [#700](https://github.com/NLog/NLog.Web/pull/700) Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
+  - [#697](https://github.com/NLog/NLog.Web/pull/697) Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
+
+- **NLog.Web**
+  - [#734](https://github.com/NLog/NLog.Web/pull/734) LogManager.Setup() - Added support for RegisterNLogWeb + RegisterAspNetLayoutRenderer (#734) (@snakefoot)
+  - [#735](https://github.com/NLog/NLog.Web/pull/735) Changed format Culture to InvariantCulture to match default NLog Culture (#735) (@snakefoot)
+  - [#740](https://github.com/NLog/NLog.Web/pull/740) Added ${aspnet-request-routeparameters} (#740) (@ThomasArdal)
+  - [#741](https://github.com/NLog/NLog.Web/pull/741) Changed from Convert.ToString to IValueFormatter to be like NLog default (#741) (@snakefoot)
+  - [#701](https://github.com/NLog/NLog.Web/pull/701) Added platform Net46 (#701) (@snakefoot)
+  - [#700](https://github.com/NLog/NLog.Web/pull/700) Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
+  - [#697](https://github.com/NLog/NLog.Web/pull/697) Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
+
+See also [List of major changes in NLog 5](https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html)
+
 ### v5.0-rc2 (2022/01/19)
 
 - **NLog.Web.AspNetCore**
@@ -25,8 +52,6 @@ Date format: (year/month/day)
   - [#740](https://github.com/NLog/NLog.Web/pull/740) Added ${aspnet-request-routeparameters} (#740) (@ThomasArdal)
   - [#741](https://github.com/NLog/NLog.Web/pull/741) Changed from Convert.ToString to IValueFormatter to be like NLog default (#741) (@snakefoot)
 
-See also [Release post for NLog 5](https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html)
-
 ### v5.0-preview 3 (2021/10/28)
 
 - **NLog.Web.AspNetCore**
@@ -40,8 +65,6 @@ See also [Release post for NLog 5](https://nlog-project.org/2021/08/25/nlog-5-0-
   - [#701](https://github.com/NLog/NLog.Web/pull/701) Added platform Net46 (#701) (@snakefoot)
   - [#700](https://github.com/NLog/NLog.Web/pull/700) Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
   - [#697](https://github.com/NLog/NLog.Web/pull/697) Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
-
-See also [Release post for NLog 5](https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html)
 
 ### v4.14 (2021/08/28)
 - **NLog.Web.AspNetCore**

@@ -227,7 +227,7 @@ namespace NLog.Web
         {
             AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
             {
-                config = SetupConfiguration(serviceProvider, config);
+                config = SetupNLogConfigSettings(serviceProvider, config);
                 // Delay initialization of targets until we have loaded config-settings
                 var logFactory = factoryBuilder(serviceProvider);
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options, logFactory);
@@ -301,47 +301,55 @@ namespace NLog.Web
             return builder;
         }
 
-        private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration configuration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, IHostEnvironment, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
+        private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, IHostEnvironment, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
 
+            options = options ?? NLogAspNetCoreOptions.Default;
+            options.Configure(hostConfiguration?.GetSection("Logging:NLog"));
+
             var sharedFactory = factory;
 
-            if ((options ?? NLogAspNetCoreOptions.Default).ReplaceLoggerFactory)
+            if (options.ReplaceLoggerFactory)
             {
                 NLogLoggerProvider singleInstance = null;   // Ensure that registration of ILoggerFactory and ILoggerProvider shares the same single instance
                 sharedFactory = (provider, cfg, env, opt) => singleInstance ?? (singleInstance = factory(provider, cfg, env, opt));
 
                 services.AddLogging(builder => builder?.ClearProviders());  // Cleanup the existing LoggerFactory, before replacing it with NLogLoggerFactory
-                services.Replace(ServiceDescriptor.Singleton<ILoggerFactory, NLogLoggerFactory>(serviceProvider => new NLogLoggerFactory(sharedFactory(serviceProvider, configuration, hostEnvironment, options))));
+                services.Replace(ServiceDescriptor.Singleton<ILoggerFactory, NLogLoggerFactory>(serviceProvider => new NLogLoggerFactory(sharedFactory(serviceProvider, hostConfiguration, hostEnvironment, options))));
             }
 
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => sharedFactory(serviceProvider, configuration, hostEnvironment, options)));
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, NLogLoggerProvider>(serviceProvider => sharedFactory(serviceProvider, hostConfiguration, hostEnvironment, options)));
 
-            if ((options ?? NLogAspNetCoreOptions.Default).RemoveLoggerFactoryFilter)
+            if (options.RemoveLoggerFactoryFilter)
             {
                 // Will forward all messages to NLog if not specifically overridden by user
                 services.AddLogging(builder => builder?.AddFilter<NLogLoggerProvider>(null, Microsoft.Extensions.Logging.LogLevel.Trace));
             }
 
             //note: this one is called before  services.AddSingleton<ILoggerFactory>
-            if ((options ?? NLogAspNetCoreOptions.Default).RegisterHttpContextAccessor)
+            if (options.RegisterHttpContextAccessor)
             {
                 services.AddHttpContextAccessor();
             }
         }
 
-        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration configuration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options)
+        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options)
         {
-            return CreateNLogLoggerProvider(serviceProvider, configuration, hostEnvironment, options, null);
+            return CreateNLogLoggerProvider(serviceProvider, hostConfiguration, hostEnvironment, options, null);
         }
 
-        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration configuration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, NLog.LogFactory logFactory)
+        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, NLog.LogFactory logFactory)
         {
-            NLogLoggerProvider provider = new NLogLoggerProvider(options ?? NLogAspNetCoreOptions.Default, logFactory ?? LogManager.LogFactory);
+            NLogLoggerProvider provider = new NLogLoggerProvider(options, logFactory ?? LogManager.LogFactory);
 
-            configuration = SetupConfiguration(serviceProvider, configuration);
+            var configuration = SetupNLogConfigSettings(serviceProvider, hostConfiguration);
+
+            if (configuration != null && (!ReferenceEquals(configuration, hostConfiguration) || options == null))
+            {
+                provider.Configure(configuration.GetSection("Logging:NLog"));
+            }
 
             if (serviceProvider != null && provider.Options.RegisterServiceProvider)
             {
@@ -350,7 +358,6 @@ namespace NLog.Web
 
             if (configuration != null)
             {
-                provider.Configure(configuration.GetSection("Logging:NLog"));
                 TryLoadConfigurationFromSection(provider, configuration);
             }
 
@@ -395,7 +402,7 @@ namespace NLog.Web
             });
         }
 
-        private static IConfiguration SetupConfiguration(IServiceProvider serviceProvider, IConfiguration configuration)
+        private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             ServiceLocator.ServiceProvider = serviceProvider;
             configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);

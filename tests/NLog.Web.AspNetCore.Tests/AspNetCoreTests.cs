@@ -248,6 +248,26 @@ namespace NLog.Web.Tests
             Assert.Equal("logger1|error1|Memory", logged[0]);
         }
 
+        [Fact]
+        public void UseNLog_ReplaceLoggerFactory_FromConfiguration()
+        {
+            var host = CreateWebHostBuilder().ConfigureAppConfiguration((context, config) =>
+            {
+                var memoryConfig = new Dictionary<string, string>();
+                memoryConfig["Logging:NLog:ReplaceLoggerFactory"] = "True";
+                memoryConfig["Logging:NLog:RemoveLoggerFactoryFilter"] = "False";
+                config.AddInMemoryCollection(memoryConfig);
+            }).UseNLog().Build();
+
+            // Act
+            var loggerFactory = host.Services.GetService<ILoggerFactory>();
+            var loggerProvider = host.Services.GetService<ILoggerProvider>();
+
+            // Assert
+            Assert.Equal(typeof(NLogLoggerFactory), loggerFactory.GetType());
+            Assert.Equal(typeof(NLogLoggerProvider), loggerProvider.GetType());
+        }
+
         private static IWebHostBuilder CreateWebHostBuilder()
         {
             var builder =
