@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\ASP.NET Core 5\ASP.NET Core 5 NLog Example\ASP.NET Core 5 NLog Example.csproj" />
   </ItemGroup>
 
 </Project>
