@@ -3,10 +3,10 @@
 # NLog.Web (ASP.NET & ASP.NET Core) 
 
 [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
+<!--[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)-->
 
 [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web)
+<!--[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web) -->
 
 [![Build status](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=ncloc)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
