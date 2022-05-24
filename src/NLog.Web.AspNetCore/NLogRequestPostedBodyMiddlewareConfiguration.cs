@@ -31,7 +31,7 @@ namespace NLog.Web
 
         /// <summary>
         /// If this returns true, the post request body will be captured
-        /// Defaults to true if content length &lt;= 8192
+        /// Defaults to true if content length &lt;= 30KB
         /// This can be used to capture only certain content types,
         /// only certain hosts, only below a certain request body size, and so forth
         /// </summary>
@@ -40,11 +40,11 @@ namespace NLog.Web
 
         /// <summary>
         /// The default predicate for ShouldCapture
-        /// Returns true if content length &lt;= 8192
+        /// Returns true if content length &lt;= 30KB
         /// </summary>
         public static bool DefaultCapture(HttpContext context)
         {
-            return context?.Request?.ContentLength != null && context?.Request?.ContentLength <= 8192;
+            return context?.Request?.ContentLength != null && context?.Request?.ContentLength <= 30 * 1024;
         }
     }
 }

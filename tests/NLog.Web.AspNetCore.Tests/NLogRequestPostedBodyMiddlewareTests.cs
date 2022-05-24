@@ -132,8 +132,8 @@ namespace NLog.Web.Tests
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
             defaultContext.Request.Body = new MemoryStream();
-            defaultContext.Request.Body.Write(new byte[8193],0,8193);
-            defaultContext.Request.ContentLength = 8193;
+            defaultContext.Request.Body.Write(new byte[30 * 1024 + 1],0, 30 * 1024 + 1);
+            defaultContext.Request.ContentLength = 30 * 1024 + 1;
 
             // Act
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);

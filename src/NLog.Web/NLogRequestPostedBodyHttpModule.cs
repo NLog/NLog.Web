@@ -72,7 +72,7 @@ namespace NLog.Web
                 return;
             }
 
-            if (contentLength == null || contentLength > 8192)
+            if (contentLength == null || contentLength > 30 * 1024)
             {
                 return;
             }

@@ -91,12 +91,12 @@ namespace NLog.Web.Tests
         {
             // Arrange
             var stream = new MemoryStream();
-            stream.Write(new byte[8193], 0, 8193);
+            stream.Write(new byte[30*1024+1], 0, 30 * 1024 + 1);
             var items = new Dictionary<object, object>();
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(stream, 8193, items);
+            httpModule.CaptureRequestPostedBody(stream, 30 * 1024 + 1, items);
 
             // Assert
             Assert.NotNull(items);
