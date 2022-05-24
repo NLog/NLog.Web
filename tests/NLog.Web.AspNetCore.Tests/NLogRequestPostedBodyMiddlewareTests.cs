@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NLog.Web.LayoutRenderers;
+using NSubstitute;
 using Xunit;
 
 namespace NLog.Web.Tests
@@ -34,6 +35,41 @@ namespace NLog.Web.Tests
             // Act
 
             long streamBeforePosition = defaultContext.Request.Body.Position;
+
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            long streamAfterPosition = defaultContext.Request.Body.Position;
+
+            // Assert
+            Assert.NotNull(defaultContext.Items);
+            Assert.Single(defaultContext.Items);
+            Assert.NotNull(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
+            Assert.Equal("This is a test request body", defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
+            Assert.Equal(streamBeforePosition, streamAfterPosition);
+        }
+
+        [Fact]
+        public void SuccessWithCustomConfigurationTest()
+        {
+            // Arrange
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+            defaultContext.Request.Body = new MemoryStream();
+            byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
+            defaultContext.Request.Body.Write(bodyBytes);
+            defaultContext.Request.ContentLength = bodyBytes.Length;
+
+            // Act
+
+            long streamBeforePosition = defaultContext.Request.Body.Position;
+
+            var configuration = new NLogRequestPostedBodyMiddlewareConfiguration
+            {
+                BufferSize = 4096,
+                DetectEncodingFromByteOrderMark = false,
+                Encoding = Encoding.ASCII
+            };
 
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
             middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -125,6 +161,51 @@ namespace NLog.Web.Tests
             Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
         }
+        /*
+        [Fact]
+        public void CannotReadLengthTest()
+        {
+            // Arrange
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+            var stream = Substitute.For<MemoryStream>();
+            byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
+            stream.Write(bodyBytes);  // Throws an InvalidProgramException: Cannot create boxed ByRef-like values
+            defaultContext.Request.Body = stream;
+            defaultContext.Request.ContentLength = bodyBytes.Length;
+
+            defaultContext.Request.Body.CanRead.Returns(false);
+
+            // Act
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // Assert
+            Assert.NotNull(defaultContext.Items);
+            Assert.Empty(defaultContext.Items);
+        }
+
+        [Fact]
+        public void CannotSeekLengthTest()
+        {
+            // Arrange
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+            var stream = Substitute.For<MemoryStream>();
+            byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
+            stream.Write(bodyBytes);  // Throws an InvalidProgramException: Cannot create boxed ByRef-like values
+            defaultContext.Request.Body = stream;
+            defaultContext.Request.ContentLength = bodyBytes.Length;
+
+            defaultContext.Request.Body.CanSeek.Returns(false);
+
+            // Act
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // Assert
+            Assert.NotNull(defaultContext.Items);
+            Assert.Empty(defaultContext.Items);
+        }
+        */
 #endif
     }
 }

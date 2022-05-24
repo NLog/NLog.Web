@@ -1,4 +1,9 @@
 ﻿using System.Collections.Generic;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http;
+#else
+using System.Web;
+#endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
@@ -21,16 +26,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             var result = renderer.Render(new LogEventInfo());
             // Assert
             Assert.Equal(expected, result);
-        }
-
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetRequestValueLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Equal(string.Empty,result);
         }
 
         [Fact]
@@ -58,6 +53,23 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void NonEmptyItemsWithoutPostedBodyRendersEmptyString()
+        {
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            httpContext.Items.Returns(new Dictionary<object, object>
+            {
+                {AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey + "X","Not the Posted Body Value"}
+            });
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.NotEmpty(httpContext.Items);
+
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
         public void NotStringTypeRendersEmptyString()
         {
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -69,6 +81,25 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             string result = renderer.Render(new LogEventInfo());
 
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void NullHttpContextRendersEmptyString()
+        {
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            renderer.HttpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            renderer.HttpContextAccessor.HttpContext.ReturnsNull();
+
+            string expected = "This is a test of the request posted body layout renderer.";
+            var items = new Dictionary<object, object> {{AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey, expected}};
+            httpContext.Items.Returns(items);
+
+            // Act
+            var result = renderer.Render(new LogEventInfo());
+
+            // Assert
             Assert.Equal(string.Empty, result);
         }
     }

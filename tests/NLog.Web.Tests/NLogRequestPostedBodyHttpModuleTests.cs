@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Web;
 using NLog.Web.LayoutRenderers;
+using NSubstitute;
 using Xunit;
 
 namespace NLog.Web.Tests
@@ -23,6 +25,9 @@ namespace NLog.Web.Tests
             long streamBeforePosition = stream.Position;
 
             var httpModule = new NLogRequestPostedBodyHttpModule();
+
+            httpModule.Init(new HttpApplication());
+
             httpModule.CaptureRequestPostedBody(stream, bodyBytes.Length, items);
 
             long streamAfterPosition = stream.Position;
@@ -36,6 +41,10 @@ namespace NLog.Web.Tests
             Assert.Equal("This is a test request body", items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
 #endif
             Assert.Equal(streamBeforePosition, streamAfterPosition);
+
+            Assert.Equal("NLog Request Posted Body Module", httpModule.ModuleName);
+
+            httpModule.Dispose();
         }
 
         [Fact]
@@ -106,6 +115,46 @@ namespace NLog.Web.Tests
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
             httpModule.CaptureRequestPostedBody(stream, null, items);
+
+            // Assert
+            Assert.NotNull(items);
+            Assert.Empty(items);
+        }
+
+        [Fact]
+        public void CannotReadLengthTest()
+        {
+            // Arrange
+            var stream = Substitute.For<MemoryStream>();
+            byte[] bodyBytes = Encoding.UTF8.GetBytes("This is a test request body");
+            stream.Write(bodyBytes, 0, bodyBytes.Length);
+            var items = new Dictionary<object, object>();
+
+            stream.CanRead.Returns(false);
+
+            // Act
+            var httpModule = new NLogRequestPostedBodyHttpModule();
+            httpModule.CaptureRequestPostedBody(stream, bodyBytes.Length, items);
+
+            // Assert
+            Assert.NotNull(items);
+            Assert.Empty(items);
+        }
+
+        [Fact]
+        public void CannotSeekLengthTest()
+        {
+            // Arrange
+            var stream = Substitute.For<MemoryStream>();
+            byte[] bodyBytes = Encoding.UTF8.GetBytes("This is a test request body");
+            stream.Write(bodyBytes, 0, bodyBytes.Length);
+            var items = new Dictionary<object, object>();
+
+            stream.CanSeek.Returns(false);
+
+            // Act
+            var httpModule = new NLogRequestPostedBodyHttpModule();
+            httpModule.CaptureRequestPostedBody(stream, bodyBytes.Length, items);
 
             // Assert
             Assert.NotNull(items);
