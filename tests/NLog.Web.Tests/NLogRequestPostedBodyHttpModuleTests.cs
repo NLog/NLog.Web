@@ -131,6 +131,7 @@ namespace NLog.Web.Tests
             var items = new Dictionary<object, object>();
 
             stream.CanRead.Returns(false);
+            stream.CanSeek.Returns(true);
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
@@ -150,6 +151,7 @@ namespace NLog.Web.Tests
             stream.Write(bodyBytes, 0, bodyBytes.Length);
             var items = new Dictionary<object, object>();
 
+            stream.CanRead.Returns(true);
             stream.CanSeek.Returns(false);
 
             // Act

@@ -10,7 +10,7 @@ namespace NLog.Web.Tests
 {
     public class NLogRequestPostedBodyMiddlewareTests
     {
-#if !ASP_NET_CORE2
+//#if !ASP_NET_CORE2
 
         /// <summary>
         /// This acts as a parameter for the RequestDelegate parameter for the middleware InvokeAsync method
@@ -29,7 +29,7 @@ namespace NLog.Web.Tests
             DefaultHttpContext defaultContext = new DefaultHttpContext();
             defaultContext.Request.Body = new MemoryStream();
             byte[] bodyBytes = Encoding.UTF8.GetBytes("This is a test request body");
-            defaultContext.Request.Body.Write(bodyBytes);
+            defaultContext.Request.Body.Write(bodyBytes,0,bodyBytes.Length);
             defaultContext.Request.ContentLength = bodyBytes.Length;
 
             // Act
@@ -57,7 +57,7 @@ namespace NLog.Web.Tests
             DefaultHttpContext defaultContext = new DefaultHttpContext();
             defaultContext.Request.Body = new MemoryStream();
             byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
-            defaultContext.Request.Body.Write(bodyBytes);
+            defaultContext.Request.Body.Write(bodyBytes, 0, bodyBytes.Length);
             defaultContext.Request.ContentLength = bodyBytes.Length;
 
             // Act
@@ -132,7 +132,7 @@ namespace NLog.Web.Tests
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
             defaultContext.Request.Body = new MemoryStream();
-            defaultContext.Request.Body.Write(new byte[8193]);
+            defaultContext.Request.Body.Write(new byte[8193],0,8193);
             defaultContext.Request.ContentLength = 8193;
 
             // Act
@@ -150,7 +150,7 @@ namespace NLog.Web.Tests
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
             defaultContext.Request.Body = new MemoryStream();
-            defaultContext.Request.Body.Write(new byte[128]);
+            defaultContext.Request.Body.Write(new byte[128],0,128);
             defaultContext.Request.ContentLength = null;
 
             // Act
@@ -206,6 +206,6 @@ namespace NLog.Web.Tests
             Assert.Empty(defaultContext.Items);
         }
         */
-#endif
+//#endif
     }
 }
