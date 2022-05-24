@@ -66,6 +66,9 @@ namespace NLog.Web
                 return;
             }
 
+            // This is required, otherwise reading the request will destructively read the request
+            context.Request.EnableBuffering();
+
             // If we cannot reset the stream position to zero, and then back to the original position
             // we cannot capture the body
             if (!context.Request.Body.CanSeek)
@@ -75,9 +78,6 @@ namespace NLog.Web
                 await next(context).ConfigureAwait(false);
                 return;
             }
-
-            // This is required, otherwise reading the request will destructively read the request
-            context.Request.EnableBuffering();
 
             // Use the predicate in the configuration instance that takes the HttpContext as an argument
             if (_configuration.ShouldCapture(context))
