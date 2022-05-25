@@ -129,7 +129,7 @@ namespace NLog.Web
         /// <returns></returns>
         protected string GetString(Stream stream)
         {
-            string responseText = string.Empty;
+            string responseText = null;
 
             // Save away the original stream position
             var originalPosition = stream.Position;
