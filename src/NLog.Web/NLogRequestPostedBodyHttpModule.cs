@@ -116,8 +116,18 @@ namespace NLog.Web
 
 #else
             byte[] byteArray = new byte[stream.Length];
-            stream.Read(byteArray, 0, byteArray.Length);
-            responseText = Encoding.UTF8.GetString(byteArray);
+
+            using (var ms = new MemoryStream())
+            {
+                int read = 0;
+
+                while ((read = stream.Read(byteArray, 0, byteArray.Length)) > 0)
+                {
+                    ms.Write(byteArray, 0, read);
+                }
+
+                responseText = Encoding.UTF8.GetString(ms.ToArray());
+            }
 #endif
             // This is required to reset the stream position to the original, in order to
             // properly let the next reader process the stream from the original point
