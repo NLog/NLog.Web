@@ -16,46 +16,23 @@ namespace NLog.Web
     /// The following are saved in the HttpContext.Items collection
     ///
     /// __nlog-aspnet-request-posted-body
+    ///
+    /// To use, subclass this class and set your own Configuration
     /// </summary>
     public class NLogRequestPostedBodyHttpModule : IHttpModule
     {
         /// <summary>
         /// The name of the HttpModule
+        /// You may override in the subclass with your own name
         /// </summary>
-        public string ModuleName => "NLog Request Posted Body Module";
+        public string ModuleName { get; set; } = "NLog Request Posted Body Module";
 
         /// <summary>
-        /// Defaults to UTF-8
+        /// The configuration for the HttpModule
         /// </summary>
-        public Encoding Encoding { get; set; } = Encoding.UTF8;
+        public NLogRequestPostedBodyMiddlewareConfiguration Configuration { get; set; } =
+            NLogRequestPostedBodyMiddlewareConfiguration.Default;
 
-        /// <summary>
-        /// Defaults to 1024
-        /// </summary>
-        public int BufferSize { get; set; } = 1024;
-
-        /// <summary>
-        /// Defaults to true
-        /// </summary>
-        public bool DetectEncodingFromByteOrderMark { get; set; } = true;
-
-        /// <summary>
-        /// If this returns true, the post request body will be captured
-        /// Defaults to true if content length &lt;= 30KB
-        /// This can be used to capture only certain content types,
-        /// only certain hosts, only below a certain request body size, and so forth
-        /// </summary>
-        /// <returns></returns>
-        public Predicate<HttpApplication> ShouldCapture { get; set; } = DefaultCapture;
-
-        /// <summary>
-        /// The default predicate for ShouldCapture
-        /// Returns true if content length &lt;= 30KB
-        /// </summary>
-        public static bool DefaultCapture(HttpApplication app)
-        {
-            return app?.Context?.Request?.ContentLength != null && app?.Context?.Request?.ContentLength <= 30 * 1024;
-        }
 
         /// <summary>
         /// Hook in to the BeginRequest event to capture the request posted body
@@ -78,7 +55,7 @@ namespace NLog.Web
             CaptureRequestPostedBody(
                 app?.Request?.InputStream,
                 app?.Context?.Items,
-                ShouldCapture(app));
+                Configuration.ShouldCapture(app));
         }
 
         /// <summary>
@@ -149,9 +126,9 @@ namespace NLog.Web
 
             using (var streamReader = new StreamReader(
                        stream,
-                       Encoding,
-                       detectEncodingFromByteOrderMarks: DetectEncodingFromByteOrderMark,
-                       bufferSize: BufferSize,
+                       Configuration.Encoding,
+                       detectEncodingFromByteOrderMarks: Configuration.DetectEncodingFromByteOrderMark,
+                       bufferSize: Configuration.BufferSize,
                        leaveOpen: true))
             {
                 // This is the most straight forward logic to read the entire body
@@ -170,7 +147,7 @@ namespace NLog.Web
                     ms.Write(byteArray, 0, read);
                 }
 
-                responseText = Encoding.GetString(ms.ToArray());
+                responseText = Configuration.Encoding.GetString(ms.ToArray());
             }
 #endif
             // This is required to reset the stream position to the original, in order to

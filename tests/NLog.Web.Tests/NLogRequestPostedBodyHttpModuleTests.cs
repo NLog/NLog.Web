@@ -58,8 +58,11 @@ namespace NLog.Web.Tests
 
             var httpModule = new NLogRequestPostedBodyHttpModule
             {
-                Encoding = Encoding.ASCII,
-                DetectEncodingFromByteOrderMark = false
+                Configuration = new NLogRequestPostedBodyMiddlewareConfiguration
+                {
+                    Encoding = Encoding.ASCII,
+                    DetectEncodingFromByteOrderMark = false
+                }
             };
 
             httpModule.Init(new HttpApplication());
