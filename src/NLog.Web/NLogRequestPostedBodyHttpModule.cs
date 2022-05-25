@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-#if NET46_OR_GREATER
 using System.Text;
-#endif
 using System.Web;
 using NLog.Web.LayoutRenderers;
 
@@ -115,6 +113,11 @@ namespace NLog.Web
                 // This is the most straight forward logic to read the entire body
                 responseText = streamReader.ReadToEnd();
             }
+
+#else
+            byte[] byteArray = new byte[stream.Length];
+            stream.Read(byteArray, 0, byteArray.Length);
+            responseText = Encoding.UTF8.GetString(byteArray);
 #endif
             // This is required to reset the stream position to the original, in order to
             // properly let the next reader process the stream from the original point

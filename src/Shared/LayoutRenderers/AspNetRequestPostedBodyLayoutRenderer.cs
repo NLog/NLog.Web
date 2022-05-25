@@ -9,8 +9,6 @@ namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// ASP.NET posted body, e.g. FORM or Ajax POST
-    /// This this only works on .NET 4.6 or above due to a required
-    /// StreamReader constructor not being available
     /// </summary>
     /// <para>Example usage of ${aspnet-request-posted-body}:</para>
     /// <example>

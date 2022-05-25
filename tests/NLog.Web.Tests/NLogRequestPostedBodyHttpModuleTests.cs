@@ -37,11 +37,8 @@ namespace NLog.Web.Tests
             Assert.Single(items);
             Assert.NotNull(items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
             Assert.True(items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
-#if NET46_OR_GREATER
             Assert.Equal("This is a test request body", items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
-#endif
             Assert.Equal(streamBeforePosition, streamAfterPosition);
-
             Assert.Equal("NLog Request Posted Body Module", httpModule.ModuleName);
 
             httpModule.Dispose();
