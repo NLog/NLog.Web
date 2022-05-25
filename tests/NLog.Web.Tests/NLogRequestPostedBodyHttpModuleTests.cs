@@ -28,7 +28,7 @@ namespace NLog.Web.Tests
 
             httpModule.Init(new HttpApplication());
 
-            httpModule.CaptureRequestPostedBody(stream, bodyBytes.Length, items);
+            httpModule.CaptureRequestPostedBody(stream, items, true);
 
             long streamAfterPosition = stream.Position;
 
@@ -55,7 +55,7 @@ namespace NLog.Web.Tests
             long streamBeforePosition = stream.Position;
 
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(stream, 0, items);
+            httpModule.CaptureRequestPostedBody(stream, items, true);
 
             long streamAfterPosition = stream.Position;
 
@@ -72,11 +72,11 @@ namespace NLog.Web.Tests
         public void NullBodyTest()
         {
             // Arrange
-            var items = new Dictionary<object, object>(); ;
+            var items = new Dictionary<object, object>();
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(null, 0, items);
+            httpModule.CaptureRequestPostedBody(null, items, true);
 
             // Assert
             Assert.NotNull(items);
@@ -93,7 +93,7 @@ namespace NLog.Web.Tests
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(stream, 30 * 1024 + 1, items);
+            httpModule.CaptureRequestPostedBody(stream, items, false);
 
             // Assert
             Assert.NotNull(items);
@@ -111,7 +111,7 @@ namespace NLog.Web.Tests
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(stream, null, items);
+            httpModule.CaptureRequestPostedBody(stream, items, false);
 
             // Assert
             Assert.NotNull(items);
@@ -132,7 +132,7 @@ namespace NLog.Web.Tests
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(stream, bodyBytes.Length, items);
+            httpModule.CaptureRequestPostedBody(stream, items, true);
 
             // Assert
             Assert.NotNull(items);
@@ -153,7 +153,7 @@ namespace NLog.Web.Tests
 
             // Act
             var httpModule = new NLogRequestPostedBodyHttpModule();
-            httpModule.CaptureRequestPostedBody(stream, bodyBytes.Length, items);
+            httpModule.CaptureRequestPostedBody(stream, items, true);
 
             // Assert
             Assert.NotNull(items);
