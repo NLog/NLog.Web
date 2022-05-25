@@ -35,6 +35,11 @@ namespace NLog.Web
         public int BufferSize { get; set; } = 1024;
 
         /// <summary>
+        /// Defaults to true
+        /// </summary>
+        public bool DetectEncodingFromByteOrderMark { get; set; } = true;
+
+        /// <summary>
         /// If this returns true, the post request body will be captured
         /// Defaults to true if content length &lt;= 30KB
         /// This can be used to capture only certain content types,
@@ -144,8 +149,8 @@ namespace NLog.Web
 
             using (var streamReader = new StreamReader(
                        stream,
-                       Encoding.UTF8,
-                       detectEncodingFromByteOrderMarks: true,
+                       Encoding,
+                       detectEncodingFromByteOrderMarks: DetectEncodingFromByteOrderMark,
                        bufferSize: BufferSize,
                        leaveOpen: true))
             {
