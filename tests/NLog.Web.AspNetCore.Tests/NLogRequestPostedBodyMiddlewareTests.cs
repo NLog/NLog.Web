@@ -66,9 +66,7 @@ namespace NLog.Web.Tests
 
             var configuration = new NLogRequestPostedBodyMiddlewareConfiguration
             {
-                BufferSize = 4096,
-                DetectEncodingFromByteOrderMark = false,
-                Encoding = Encoding.ASCII
+                DetectEncodingFromByteOrderMark = false
             };
 
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);

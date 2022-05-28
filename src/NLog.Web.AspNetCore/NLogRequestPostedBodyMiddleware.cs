@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NLog.Common;
@@ -109,9 +110,9 @@ namespace NLog.Web
             // These default to UTF-8, true, and 1024.
             using (var streamReader = new StreamReader(
                        stream,
-                       _configuration.Encoding,
+                       Encoding.UTF8,
                        _configuration.DetectEncodingFromByteOrderMark,
-                       _configuration.BufferSize,
+                       1024,
                        leaveOpen: true))
             {
                 // This is the most straight forward logic to read the entire body

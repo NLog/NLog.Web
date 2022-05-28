@@ -30,8 +30,8 @@ namespace NLog.Web
         /// <summary>
         /// The configuration for the HttpModule
         /// </summary>
-        public NLogRequestPostedBodyMiddlewareConfiguration Configuration { get; set; } =
-            NLogRequestPostedBodyMiddlewareConfiguration.Default;
+        public NLogRequestPostedBodyHttpModuleConfiguration Configuration { get; set; } =
+            NLogRequestPostedBodyHttpModuleConfiguration.Default;
 
 
         /// <summary>

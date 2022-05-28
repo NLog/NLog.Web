@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Web;
 
 namespace NLog.Web
@@ -7,17 +6,17 @@ namespace NLog.Web
     /// <summary>
     /// Contains the configuration for the NLogRequestPostedBodyMiddleware
     /// </summary>
-    public class NLogRequestPostedBodyMiddlewareConfiguration
+    public class NLogRequestPostedBodyHttpModuleConfiguration
     {
         /// <summary>
         /// The default configuration
         /// </summary>
-        public static readonly NLogRequestPostedBodyMiddlewareConfiguration Default = new NLogRequestPostedBodyMiddlewareConfiguration();
+        public static readonly NLogRequestPostedBodyHttpModuleConfiguration Default = new NLogRequestPostedBodyHttpModuleConfiguration();
 
         /// <summary>
         /// Defaults to true
         /// </summary>
-        internal bool DetectEncodingFromByteOrderMark { get; set; } = true;
+        public bool DetectEncodingFromByteOrderMark { get; set; } = true;
 
         /// <summary>
         /// The maximum request size that will be captured
@@ -41,7 +40,7 @@ namespace NLog.Web
         public static bool DefaultCapture(HttpApplication app)
         {
             return app?.Context?.Request?.ContentLength != null && app?.Context?.Request?.ContentLength <=
-                new NLogRequestPostedBodyMiddlewareConfiguration().MaximumRequestSize;
+                new NLogRequestPostedBodyHttpModuleConfiguration().MaximumRequestSize;
         }
     }
 }
