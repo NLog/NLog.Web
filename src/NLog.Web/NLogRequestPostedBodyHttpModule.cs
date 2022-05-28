@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Web;
 using NLog.Common;
@@ -52,54 +53,97 @@ namespace NLog.Web
         {
             HttpApplication app = sender as HttpApplication;
 
-            CaptureRequestPostedBody(
-                app?.Request?.InputStream,
-                app?.Context?.Items,
-                Configuration.ShouldCapture(app));
+            if (ShouldCaptureRequestBody(app))
+            {
+                TryCaptureRequestPostedBody(app?.Request?.InputStream, app?.Context?.Items);
+            }
         }
 
         /// <summary>
-        /// Public to be unit testable, HttpContext and HttpRequest are un-mockable
-        /// unless you are using ASP.NET Core.  HttpContext and HttpRequest are sealed
-        /// and no not have an interface so NSubstitute throws an Exception mocking them.
+        /// The method to decide if we should capture the post request body or not.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        private bool ShouldCaptureRequestBody(HttpApplication app)
+        {
+            // Perform null checking
+            if (app == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication is null");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
+            // Perform null checking
+            if (app.Context == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext is null");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
+            // Perform null checking
+            if (app.Context.Request == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request stream is null");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
+            // Perform request stream specific checks
+            if (!ShouldCaptureStream(app.Context.Request.InputStream))
+            {
+                return false;
+            }
+
+            return (Configuration.ShouldCapture(app));
+        }
+
+        /// <summary>
+        /// Stream specific verifications
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        private bool ShouldCaptureStream(Stream stream)
+        {
+            // Perform null checking
+            if (stream == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is null");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
+            // If we cannot read the stream we cannot capture the body
+            if (!stream.CanRead)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is non-readable");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
+            // If we cannot seek the stream we cannot capture the body
+            if (!stream.CanSeek)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is non-seekable");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Perform the actual capture of the request body
         /// </summary>
         /// <param name="bodyStream"></param>
         /// <param name="items"></param>
-        /// <param name="shouldCapture"></param>
-        public void CaptureRequestPostedBody(
-            Stream bodyStream,
-            IDictionary items,
-            bool shouldCapture)
+        private void TryCaptureRequestPostedBody(Stream bodyStream,IDictionary items)
         {
-            if (bodyStream == null)
+            var requestBody = GetString(bodyStream);
+            if (!string.IsNullOrEmpty(requestBody))
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.InputStream stream is null");
-                return;
-            }
-
-            if (!bodyStream.CanRead)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.InputStream stream is non-readable");
-                return;
-            }
-
-            if (!bodyStream.CanSeek)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.InputStream stream is non-seekable");
-                return;
-            }
-
-            if (shouldCapture)
-            {
-                var requestBody = GetString(bodyStream);
-                if (!string.IsNullOrEmpty(requestBody))
-                {
-                    items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
-                }
-            }
-            else
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: ShouldCapture(HttpContext) predicate returned false");
+                items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
             }
         }
 
