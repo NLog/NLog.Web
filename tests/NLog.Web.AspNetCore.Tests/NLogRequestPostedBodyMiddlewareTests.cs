@@ -10,14 +10,12 @@ namespace NLog.Web.Tests
 {
     public class NLogRequestPostedBodyMiddlewareTests
     {
-//#if !ASP_NET_CORE2
-
         /// <summary>
         /// This acts as a parameter for the RequestDelegate parameter for the middleware InvokeAsync method
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        private Task Next(HttpContext context)
+        private static Task Next(HttpContext context)
         {
             return Task.CompletedTask;
         }
@@ -69,7 +67,7 @@ namespace NLog.Web.Tests
                 DetectEncodingFromByteOrderMark = false
             };
 
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(configuration);
             middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
 
             long streamAfterPosition = defaultContext.Request.Body.Position;
@@ -92,12 +90,8 @@ namespace NLog.Web.Tests
             defaultContext.Request.ContentLength = 0;
 
             // Act
-            long streamBeforePosition = defaultContext.Request.Body.Position;
-
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
             middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
-
-            long streamAfterPosition = defaultContext.Request.Body.Position;
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -156,22 +150,21 @@ namespace NLog.Web.Tests
             Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
         }
-        /*
+
         [Fact]
         public void CannotReadLengthTest()
         {
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
-            var stream = Substitute.For<MemoryStream>();
-            byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
-            stream.Write(bodyBytes);  // Throws an InvalidProgramException: Cannot create boxed ByRef-like values
-            defaultContext.Request.Body = stream;
-            defaultContext.Request.ContentLength = bodyBytes.Length;
+
+            defaultContext.Request.Body = Substitute.For<Stream>();
 
             defaultContext.Request.Body.CanRead.Returns(false);
+            defaultContext.Request.Body.CanSeek.Returns(true);
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            var middlewareInstance =
+                new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
             middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
@@ -184,23 +177,20 @@ namespace NLog.Web.Tests
         {
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
-            var stream = Substitute.For<MemoryStream>();
-            byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
-            stream.Write(bodyBytes);  // Throws an InvalidProgramException: Cannot create boxed ByRef-like values
-            defaultContext.Request.Body = stream;
-            defaultContext.Request.ContentLength = bodyBytes.Length;
 
+            defaultContext.Request.Body = Substitute.For<Stream>();
+
+            defaultContext.Request.Body.CanRead.Returns(true);
             defaultContext.Request.Body.CanSeek.Returns(false);
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            var middlewareInstance =
+                new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
             middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
         }
-        */
-//#endif
     }
 }
