@@ -15,19 +15,15 @@ namespace NLog.Web
         public static readonly NLogRequestPostedBodyMiddlewareConfiguration Default = new NLogRequestPostedBodyMiddlewareConfiguration();
 
         /// <summary>
-        /// Defaults to UTF-8
-        /// </summary>
-        public Encoding Encoding { get; set; } = Encoding.UTF8;
-
-        /// <summary>
-        /// Defaults to 1024
-        /// </summary>
-        public int BufferSize { get; set; } = 1024;
-
-        /// <summary>
         /// Defaults to true
         /// </summary>
-        public bool DetectEncodingFromByteOrderMark { get; set; } = true;
+        internal bool DetectEncodingFromByteOrderMark { get; set; } = true;
+
+        /// <summary>
+        /// The maximum request size that will be captured
+        /// Defaults to 30KB
+        /// </summary>
+        public int MaximumRequestSize { get; set; } = 30 * 1024;
 
         /// <summary>
         /// If this returns true, the post request body will be captured
@@ -44,7 +40,8 @@ namespace NLog.Web
         /// </summary>
         public static bool DefaultCapture(HttpApplication app)
         {
-            return app?.Context?.Request?.ContentLength != null && app?.Context?.Request?.ContentLength <= 30 * 1024;
+            return app?.Context?.Request?.ContentLength != null && app?.Context?.Request?.ContentLength <=
+                new NLogRequestPostedBodyMiddlewareConfiguration().MaximumRequestSize;
         }
     }
 }

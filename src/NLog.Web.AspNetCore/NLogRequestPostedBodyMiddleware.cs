@@ -39,13 +39,32 @@ namespace NLog.Web
         /// <returns></returns>
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            if (ShouldCaptureRequestBody(context))
+            {
+                // This is required, otherwise reading the request will destructively read the request
+                context.Request.EnableBuffering();
+
+                // Save the POST request body in HttpContext.Items with a key of '__nlog-aspnet-request-posted-body'
+                var requestBody = await GetString(context?.Request.Body).ConfigureAwait(false);
+
+                if (!string.IsNullOrEmpty(requestBody))
+                {
+                    context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
+                }
+            }
+
+            // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+            await next(context).ConfigureAwait(false);
+        }
+
+        private bool ShouldCaptureRequestBody(HttpContext context)
+        {
             // Perform null checking
             if (context.Request == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request stream is null");
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-                await next(context).ConfigureAwait(false);
-                return;
+                return false;
             }
 
             // Perform null checking
@@ -53,8 +72,7 @@ namespace NLog.Web
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is null");
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-                await next(context).ConfigureAwait(false);
-                return;
+                return false;
             }
 
             // If we cannot read the stream we cannot capture the body
@@ -62,37 +80,10 @@ namespace NLog.Web
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-readable");
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-                await next(context).ConfigureAwait(false);
-                return;
+                return false;
             }
 
-            // This is required, otherwise reading the request will destructively read the request
-            context.Request.EnableBuffering();
-
-            // If we cannot reset the stream position to zero, and then back to the original position
-            // we cannot capture the body
-            if (!context.Request.Body.CanSeek)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-seekable");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-                await next(context).ConfigureAwait(false);
-                return;
-            }
-
-            // Use the predicate in the configuration instance that takes the HttpContext as an argument
-            if (_configuration.ShouldCapture(context))
-            {
-                // Save the POST request body in HttpContext.Items with a key of '__nlog-aspnet-request-posted-body'
-                context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] =
-                    await GetString(context?.Request.Body).ConfigureAwait(false);
-            }
-            else
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: _configuration.ShouldCapture(HttpContext) predicate returned false");
-            }
-
-            // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-            await next(context).ConfigureAwait(false);
+            return (_configuration.ShouldCapture(context));
         }
 
         /// <summary>

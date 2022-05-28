@@ -103,11 +103,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Single(defaultContext.Items);
-            Assert.NotNull(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
-            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
-            Assert.Equal(string.Empty, defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
-            Assert.Equal(streamBeforePosition, streamAfterPosition);
+            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
         }
 
         [Fact]

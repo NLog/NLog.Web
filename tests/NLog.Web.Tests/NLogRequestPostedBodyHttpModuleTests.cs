@@ -13,7 +13,7 @@ namespace NLog.Web.Tests
 #if !ASP_NET_CORE
 
         [Fact]
-        public void SuccessUTF8Test()
+        public void SuccessTest()
         {
             // Arrange
             var stream = new MemoryStream();
@@ -25,45 +25,6 @@ namespace NLog.Web.Tests
             long streamBeforePosition = stream.Position;
 
             var httpModule = new NLogRequestPostedBodyHttpModule();
-
-            httpModule.Init(new HttpApplication());
-
-            httpModule.CaptureRequestPostedBody(stream, items, true);
-
-            long streamAfterPosition = stream.Position;
-
-            // Assert
-            Assert.NotNull(items);
-            Assert.Single(items);
-            Assert.NotNull(items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
-            Assert.True(items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
-            Assert.Equal("This is a test request body", items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
-            Assert.Equal(streamBeforePosition, streamAfterPosition);
-            Assert.Equal("NLog Request Posted Body Module", httpModule.ModuleName);
-
-            httpModule.Dispose();
-        }
-
-        [Fact]
-        public void SuccessASCIITest()
-        {
-            // Arrange
-            var stream = new MemoryStream();
-            byte[] bodyBytes = Encoding.ASCII.GetBytes("This is a test request body");
-            stream.Write(bodyBytes, 0, bodyBytes.Length);
-            var items = new Dictionary<object, object>();
-
-            // Act
-            long streamBeforePosition = stream.Position;
-
-            var httpModule = new NLogRequestPostedBodyHttpModule
-            {
-                Configuration = new NLogRequestPostedBodyMiddlewareConfiguration
-                {
-                    Encoding = Encoding.ASCII,
-                    DetectEncodingFromByteOrderMark = false
-                }
-            };
 
             httpModule.Init(new HttpApplication());
 
@@ -100,11 +61,7 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(items);
-            Assert.Single(items);
-            Assert.NotNull(items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
-            Assert.True(items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
-            Assert.Equal(string.Empty, items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
-            Assert.Equal(streamBeforePosition, streamAfterPosition);
+            Assert.Empty(items);
         }
 
         [Fact]

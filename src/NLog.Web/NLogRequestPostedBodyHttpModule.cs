@@ -40,7 +40,7 @@ namespace NLog.Web
         /// <param name="context"></param>
         public void Init(HttpApplication context)
         {
-            context.BeginRequest += InterceptRequest;
+            context.BeginRequest += BeginRequest;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace NLog.Web
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        protected void InterceptRequest(object sender, EventArgs args)
+        private void BeginRequest(object sender, EventArgs args)
         {
             HttpApplication app = sender as HttpApplication;
 
@@ -91,7 +91,11 @@ namespace NLog.Web
 
             if (shouldCapture)
             {
-                items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = GetString(bodyStream);
+                var requestBody = GetString(bodyStream);
+                if (!string.IsNullOrEmpty(requestBody))
+                {
+                    items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
+                }
             }
             else
             {
@@ -104,7 +108,7 @@ namespace NLog.Web
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        protected string GetString(Stream stream)
+        private string GetString(Stream stream)
         {
             string responseText = null;
 
@@ -126,9 +130,9 @@ namespace NLog.Web
 
             using (var streamReader = new StreamReader(
                        stream,
-                       Configuration.Encoding,
+                       Encoding.UTF8,
                        detectEncodingFromByteOrderMarks: Configuration.DetectEncodingFromByteOrderMark,
-                       bufferSize: Configuration.BufferSize,
+                       bufferSize: 1024,
                        leaveOpen: true))
             {
                 // This is the most straight forward logic to read the entire body
@@ -147,7 +151,7 @@ namespace NLog.Web
                     ms.Write(byteArray, 0, read);
                 }
 
-                responseText = Configuration.Encoding.GetString(ms.ToArray());
+                responseText = Encoding.UTF8.GetString(ms.ToArray());
             }
 #endif
             // This is required to reset the stream position to the original, in order to
