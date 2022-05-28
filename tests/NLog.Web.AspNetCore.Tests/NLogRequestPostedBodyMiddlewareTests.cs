@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 namespace NLog.Web.Tests
@@ -97,6 +98,22 @@ namespace NLog.Web.Tests
             Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
             Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+        }
+
+        [Fact]
+        public void NullRequestTest()
+        {
+            // Arrange
+            HttpContext defaultContext = Substitute.For<HttpContext>();
+            defaultContext.Request.ReturnsNull();
+
+            // Act
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // Assert
+            Assert.NotNull(defaultContext.Items);
+            Assert.Empty(defaultContext.Items);
         }
 
         [Fact]
