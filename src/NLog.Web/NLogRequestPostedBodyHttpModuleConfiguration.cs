@@ -31,15 +31,15 @@ namespace NLog.Web
         /// only certain hosts, only below a certain request body size, and so forth
         /// </summary>
         /// <returns></returns>
-        public Predicate<HttpApplication> ShouldCapture { get; set; } = DefaultCapture;
+        public Predicate<HttpContext> ShouldCapture { get; set; } = DefaultCapture;
 
         /// <summary>
         /// The default predicate for ShouldCapture
         /// Returns true if content length &lt;= 30KB
         /// </summary>
-        public static bool DefaultCapture(HttpApplication app)
+        public static bool DefaultCapture(HttpContext context)
         {
-            return app?.Context?.Request?.ContentLength != null && app?.Context?.Request?.ContentLength <=
+            return context?.Request?.ContentLength != null && context?.Request?.ContentLength <=
                 new NLogRequestPostedBodyHttpModuleConfiguration().MaximumRequestSize;
         }
     }

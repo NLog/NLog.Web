@@ -96,7 +96,7 @@ namespace NLog.Web
                 return false;
             }
 
-            return (Configuration.ShouldCapture(app));
+            return (Configuration.ShouldCapture(app.Context));
         }
 
         /// <summary>
