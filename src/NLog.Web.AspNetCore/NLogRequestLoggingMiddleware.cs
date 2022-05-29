@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 
 namespace NLog.Web
@@ -60,76 +59,32 @@ namespace NLog.Web
         /// </summary>
         private bool LogHttpRequest(HttpContext httpContext, Exception exception)
         {
-            if (exception != null)
+            var logLevel = _options.ShouldLogRequest?.Invoke(httpContext, exception) ?? Microsoft.Extensions.Logging.LogLevel.None;
+            if (logLevel != Microsoft.Extensions.Logging.LogLevel.None)
             {
-                _logger.LogError(exception, "HttpRequest Exception");
-            }
-            else
-            {
-                var statusCode = httpContext.Response?.StatusCode ?? 0;
-                if (statusCode < 100 || (statusCode >= 400 && statusCode < 600))
+                if (exception != null)
                 {
-                    _logger.LogWarning("HttpRequest Failed");
-                }
-                else if (IsExcludedHttpRequest(httpContext))
-                {
-                    _logger.LogDebug("HttpRequest Completed");
-                }
-                else if (IsSlowHttpRequest())
-                {
-                    _logger.LogWarning("HttpRequest Slow");
+                    _logger.Log(logLevel, 0, exception, "HttpRequest Exception", Array.Empty<object>());
                 }
                 else
                 {
-                    _logger.LogInformation("HttpRequest Completed");
+                    switch (logLevel)
+                    {
+                        case Microsoft.Extensions.Logging.LogLevel.Trace:
+                        case Microsoft.Extensions.Logging.LogLevel.Debug:
+                        case Microsoft.Extensions.Logging.LogLevel.Information:
+                            _logger.Log(logLevel, 0, null, "HttpRequest Completed", Array.Empty<object>());
+                            break;
+                        case Microsoft.Extensions.Logging.LogLevel.Warning:
+                        case Microsoft.Extensions.Logging.LogLevel.Error:
+                        case Microsoft.Extensions.Logging.LogLevel.Critical:
+                            _logger.Log(logLevel, 0, null, "HttpRequest Failure", Array.Empty<object>());
+                            break;
+                    }
                 }
             }
 
             return false;   // Exception Filter should not suppress the Exception
-        }
-
-        private bool IsSlowHttpRequest()
-        {
-#if !ASP_NET_CORE2
-            var currentActivity = System.Diagnostics.Activity.Current;
-            var activityStartTime = DateTime.MinValue;
-            while (currentActivity != null)
-            {
-                if (currentActivity.StartTimeUtc > DateTime.MinValue)
-                    activityStartTime = currentActivity.StartTimeUtc;
-                currentActivity = currentActivity.Parent;
-            }
-            if (activityStartTime > DateTime.MinValue)
-            {
-                var currentDuration = DateTime.UtcNow - activityStartTime;
-                if (currentDuration > TimeSpan.FromMilliseconds(_options.DurationThresholdMs))
-                {
-                    return true;
-                }
-            }
-#endif
-
-            return false;
-        }
-
-        private bool IsExcludedHttpRequest(HttpContext httpContext)
-        {
-            if (_options.ExcludeRequestPaths.Count > 0)
-            {
-                var requestPath = httpContext.Features.Get<IHttpRequestFeature>()?.Path;
-                if (string.IsNullOrEmpty(requestPath))
-                {
-                    requestPath = httpContext.Request?.Path;
-                    if (string.IsNullOrEmpty(requestPath))
-                    {
-                        return false;
-                    }
-                }
-
-                return _options.ExcludeRequestPaths.Contains(requestPath);
-            }
-
-            return false;
         }
     }
 }
