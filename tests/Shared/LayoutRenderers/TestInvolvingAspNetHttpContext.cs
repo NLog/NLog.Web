@@ -14,7 +14,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public abstract class TestInvolvingAspNetHttpContext : TestBase
     {
-        private static readonly Uri DefaultTestUri = new Uri("http://stackoverflow.com/");
+        private static readonly Uri DefaultTestUri = new Uri("https://nlog-project.org/documentation/");
 
         protected HttpContext HttpContext;
 

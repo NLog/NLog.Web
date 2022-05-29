@@ -10,31 +10,49 @@ namespace NLog.Web
     public class NLogRequestLoggingModule : IHttpModule
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetLogger("NLogRequestLogging");
+        private readonly NLog.Logger _logger;
 
         /// <summary>
         /// Get or set duration time in milliseconds, before a HttpRequest is seen as slow (Logged as warning)
         /// </summary>
-        public int DurationThresholdMs { get; set; } = 300;
+        public int DurationThresholdMs { get => (int)_durationThresholdMs.TotalMilliseconds; set => _durationThresholdMs = TimeSpan.FromMilliseconds(value); }
+        private TimeSpan _durationThresholdMs = TimeSpan.FromMilliseconds(300);
 
         /// <summary>
         /// Gets or sets request-paths where LogLevel should be reduced (Logged as debug)
         /// </summary>
-        public HashSet<string> ExcludeRequestPaths { get; } = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+        public HashSet<string> ExcludeRequestPaths { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Initializes new instance of the <see cref="NLogRequestLoggingModule"/> class
+        /// </summary>
+        public NLogRequestLoggingModule()
+        {
+            _logger = Logger;
+        }
+
+        /// <summary>
+        /// Initializes new instance of the <see cref="NLogRequestLoggingModule"/> class
+        /// </summary>
+        internal NLogRequestLoggingModule(Logger logger)
+        {
+            _logger = logger;
+        }
 
         void IHttpModule.Init(HttpApplication context)
         {
-            context.EndRequest += LogHttpRequest;
+            context.EndRequest += (sender, args) => OnEndRequest((sender as HttpApplication)?.Context);
         }
 
-        private void LogHttpRequest(object sender, EventArgs e)
+        internal void OnEndRequest(HttpContext context)
         {
             Exception exception = null;
             int statusCode = 0;
 
             try
             {
-                exception = HttpContext.Current?.Server?.GetLastError();
-                statusCode = HttpContext.Current?.Response?.StatusCode ?? 0;
+                exception = context?.Server?.GetLastError();
+                statusCode = context?.Response?.StatusCode ?? 0;
             }
             catch
             {
@@ -43,15 +61,15 @@ namespace NLog.Web
             finally
             {
                 if (exception != null)
-                    Logger.Error(exception, "HttpRequest Exception");
+                    _logger.Error(exception, "HttpRequest Exception");
                 else if (statusCode < 100 || (statusCode >= 400 && statusCode < 600))
-                    Logger.Warn("HttpRequest Failed");
-                else if (IsExcludedHttpRequest(HttpContext.Current))
-                    Logger.Debug("HttpRequest Completed");
-                else if (IsSlowHttpRequest(HttpContext.Current))
-                    Logger.Warn("HttpRequest Slow");
+                    _logger.Warn("HttpRequest Failure");
+                else if (IsExcludedHttpRequest(context))
+                    _logger.Debug("HttpRequest Completed");
+                else if (IsSlowHttpRequest(context))
+                    _logger.Warn("HttpRequest Slow");
                 else
-                    Logger.Info("HttpRequest Completed");
+                    _logger.Info("HttpRequest Completed");
             }
         }
 
@@ -68,7 +86,7 @@ namespace NLog.Web
                 if (timestamp > DateTime.MinValue)
                 {
                     var currentDuration = DateTime.UtcNow - timestamp.ToUniversalTime();
-                    if (currentDuration > TimeSpan.FromMilliseconds(DurationThresholdMs))
+                    if (currentDuration > _durationThresholdMs)
                     {
                         return true;
                     }
