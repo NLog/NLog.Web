@@ -23,7 +23,7 @@ namespace NLog.Web
     {
         private readonly RequestDelegate _next;
 
-        private NLogRequestPostedBodyMiddlewareConfiguration _configuration { get; }
+        private readonly NLogRequestPostedBodyMiddlewareConfiguration _configuration;
 
         /// <summary>
         /// Constructor that takes a configuration
@@ -49,7 +49,7 @@ namespace NLog.Web
                 context.Request.EnableBuffering();
 
                 // Save the POST request body in HttpContext.Items with a key of '__nlog-aspnet-request-posted-body'
-                var requestBody = await GetString(context?.Request.Body).ConfigureAwait(false);
+                var requestBody = await GetString(context.Request.Body).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(requestBody))
                 {
@@ -64,9 +64,16 @@ namespace NLog.Web
         private bool ShouldCaptureRequestBody(HttpContext context)
         {
             // Perform null checking
+            if (context == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext is null");
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                return false;
+            }
+
             if (context.Request == null)
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request stream is null");
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request is null");
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
