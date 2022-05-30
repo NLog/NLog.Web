@@ -19,16 +19,20 @@ namespace NLog.Web
     /// Usage: app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
     /// Register the NLogRequestPostBodyMiddlewareConfiguration in the IoC so that the config gets passed to the constructor
     /// </summary>
-    public class NLogRequestPostedBodyMiddleware : IMiddleware
+    public class NLogRequestPostedBodyMiddleware
     {
+        private readonly RequestDelegate _next;
+
         private NLogRequestPostedBodyMiddlewareConfiguration _configuration { get; }
 
         /// <summary>
         /// Constructor that takes a configuration
         /// </summary>
+        /// <param name="next"></param>
         /// <param name="configuration"></param>
-        public NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration configuration)
+        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareConfiguration configuration)
         {
+            _next = next;
             _configuration = configuration;
         }
 
@@ -36,9 +40,8 @@ namespace NLog.Web
         /// This allows interception of the HTTP pipeline for logging purposes
         /// </summary>
         /// <param name="context">The HttpContext</param>
-        /// <param name="next">The RequestDelegate that is to be executed next in the HTTP pipeline</param>
         /// <returns></returns>
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        public async Task Invoke(HttpContext context)
         {
             if (ShouldCaptureRequestBody(context))
             {
@@ -55,7 +58,7 @@ namespace NLog.Web
             }
 
             // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-            await next(context).ConfigureAwait(false);
+            await _next(context).ConfigureAwait(false);
         }
 
         private bool ShouldCaptureRequestBody(HttpContext context)

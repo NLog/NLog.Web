@@ -35,8 +35,8 @@ namespace NLog.Web.Tests
 
             long streamBeforePosition = defaultContext.Request.Body.Position;
 
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             long streamAfterPosition = defaultContext.Request.Body.Position;
 
@@ -68,8 +68,8 @@ namespace NLog.Web.Tests
                 DetectEncodingFromByteOrderMark = false
             };
 
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(configuration);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, configuration);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             long streamAfterPosition = defaultContext.Request.Body.Position;
 
@@ -91,8 +91,8 @@ namespace NLog.Web.Tests
             defaultContext.Request.ContentLength = 0;
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -108,8 +108,8 @@ namespace NLog.Web.Tests
             defaultContext.Request.ReturnsNull();
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -124,8 +124,8 @@ namespace NLog.Web.Tests
             defaultContext.Request.Body = null;
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -142,8 +142,8 @@ namespace NLog.Web.Tests
             defaultContext.Request.ContentLength = 30 * 1024 + 1;
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -160,8 +160,8 @@ namespace NLog.Web.Tests
             defaultContext.Request.ContentLength = null;
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -181,8 +181,8 @@ namespace NLog.Web.Tests
 
             // Act
             var middlewareInstance =
-                new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+                new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
@@ -202,8 +202,8 @@ namespace NLog.Web.Tests
 
             // Act
             var middlewareInstance =
-                new NLogRequestPostedBodyMiddleware(NLogRequestPostedBodyMiddlewareConfiguration.Default);
-            middlewareInstance.InvokeAsync(defaultContext, Next).ConfigureAwait(false).GetAwaiter().GetResult();
+                new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);
