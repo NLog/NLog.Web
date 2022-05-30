@@ -12,10 +12,6 @@ namespace NLog.Web
     ///
     /// POST request body
     ///
-    /// The following are saved in the HttpContext.Items collection
-    ///
-    /// __nlog-aspnet-request-posted-body
-    ///
     /// Usage: app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
     /// Register the NLogRequestPostBodyMiddlewareConfiguration in the IoC so that the config gets passed to the constructor
     /// </summary>

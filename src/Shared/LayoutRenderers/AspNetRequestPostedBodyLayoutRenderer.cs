@@ -23,7 +23,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// The string for the key in HttpContext.Items for the POST request body
         /// </summary>
-        internal static readonly string NLogPostedRequestBodyKey = "__nlog-aspnet-request-posted-body";
+        internal static readonly object NLogPostedRequestBodyKey = new object();
 
         /// <summary>Renders the ASP.NET posted body</summary>
         /// <param name="builder">The <see cref="T:System.Text.StringBuilder" /> to append the rendered data to.</param>
