@@ -21,7 +21,7 @@ namespace NLog.Web.LayoutRenderers
     {
 
         /// <summary>
-        /// The string for the key in HttpContext.Items for the POST request body
+        /// The object for the key in HttpContext.Items for the POST request body
         /// </summary>
         internal static readonly object NLogPostedRequestBodyKey = new object();
 
