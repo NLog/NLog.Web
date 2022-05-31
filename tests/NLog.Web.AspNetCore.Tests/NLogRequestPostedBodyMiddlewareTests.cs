@@ -101,6 +101,21 @@ namespace NLog.Web.Tests
         }
 
         [Fact]
+        public void NullContextTest()
+        {
+            // Arrange
+            HttpContext defaultContext = null;
+
+            // Act
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareConfiguration.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // Assert
+            // Assert that we got to this point without NullReferenceException
+            Assert.True(true);
+        }
+
+        [Fact]
         public void NullRequestTest()
         {
             // Arrange
