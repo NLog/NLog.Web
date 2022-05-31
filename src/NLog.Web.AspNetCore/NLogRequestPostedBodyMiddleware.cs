@@ -19,14 +19,14 @@ namespace NLog.Web
     {
         private readonly RequestDelegate _next;
 
-        private readonly NLogRequestPostedBodyMiddlewareConfiguration _configuration;
+        private readonly NLogRequestPostedBodyMiddlewareOptions _configuration;
 
         /// <summary>
         /// Constructor that takes a configuration
         /// </summary>
         /// <param name="next"></param>
         /// <param name="configuration"></param>
-        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareConfiguration configuration)
+        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions configuration)
         {
             _next = next;
             _configuration = configuration;
@@ -117,7 +117,7 @@ namespace NLog.Web
             using (var streamReader = new StreamReader(
                        stream,
                        Encoding.UTF8,
-                       _configuration.DetectEncodingFromByteOrderMark,
+                       true,
                        1024,
                        leaveOpen: true))
             {
