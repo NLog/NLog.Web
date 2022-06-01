@@ -13,23 +13,23 @@ namespace NLog.Web
     /// POST request body
     ///
     /// Usage: app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
-    /// Register the NLogRequestPostBodyMiddlewareConfiguration in the IoC so that the config gets passed to the constructor
+    /// Register the NLogRequestPostBodyMiddlewareOption in the IoC so that the config gets passed to the constructor
     /// </summary>
     public class NLogRequestPostedBodyMiddleware
     {
         private readonly RequestDelegate _next;
 
-        private readonly NLogRequestPostedBodyMiddlewareOptions _configuration;
+        private readonly NLogRequestPostedBodyMiddlewareOptions _options;
 
         /// <summary>
         /// Constructor that takes a configuration
         /// </summary>
         /// <param name="next"></param>
-        /// <param name="configuration"></param>
-        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions configuration)
+        /// <param name="options"></param>
+        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions options)
         {
             _next = next;
-            _configuration = configuration;
+            _options = options;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace NLog.Web
                 return false;
             }
 
-            return (_configuration.ShouldCapture(context));
+            return (_options.ShouldCapture(context));
         }
 
         /// <summary>

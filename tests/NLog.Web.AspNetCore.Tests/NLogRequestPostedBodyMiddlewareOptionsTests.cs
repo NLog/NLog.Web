@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests
 {
-    public class NLogRequestPostedBodyMiddlewareConfigurationTests
+    public class NLogRequestPostedBodyMiddlewareOptionsTests
     {
         [Fact]
         public void SetMaximumRequestSizeTest()
