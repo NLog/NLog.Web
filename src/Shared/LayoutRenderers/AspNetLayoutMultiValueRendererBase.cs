@@ -52,6 +52,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool ValuesOnly { get; set; }
 
+#region Pairs
         /// <summary>
         /// Serialize multiple key/value pairs
         /// </summary>
@@ -166,6 +167,75 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(value);
             }
         }
+
+
+        #endregion
+
+        #region Singles
+
+        /// <summary>
+        /// Serialize multiple values
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="builder">Add to this builder.</param>
+        /// <param name="logEvent">Log event for rendering separators.</param>
+        protected void SerializeSingles(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
+        {
+            switch (OutputFormat)
+            {
+                case AspNetRequestLayoutOutputFormat.Flat:
+                    SerializeSinglesFlat(values, builder, logEvent);
+                    break;
+                case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
+                    SerializeSinglesJson(values, builder);
+                    break;
+            }
+        }
+
+        private void SerializeSinglesJson(IEnumerable<string> values, StringBuilder builder)
+        {
+            var firstItem = true;
+            foreach (var item in values)
+            {
+                if (firstItem)
+                {
+                    builder.Append('[');
+                }
+                else
+                {
+                    builder.Append(',');
+                }
+                SerializeSingleJson(builder, item);
+                firstItem = false;
+            }
+            if (!firstItem)
+            {
+                builder.Append(']');
+            }
+        }
+
+        private void SerializeSingleJson(StringBuilder builder, string value)
+        {
+            // Quoted value
+            AppendQuoted(builder, value);
+        }
+
+        private void SerializeSinglesFlat(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
+        {
+            var itemSeparator = GetRenderedItemSeparator(logEvent);
+            var firstItem = true;
+            foreach (var value in values)
+            {
+                if (!firstItem)
+                {
+                    builder.Append(itemSeparator);
+                }
+                firstItem = false;
+                builder.Append(value);
+            }
+        }
+        #endregion Singles
 
         /// <summary>
         /// Get the rendered <see cref="ItemSeparator" />
