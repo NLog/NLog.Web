@@ -32,7 +32,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            builder.Append(connection.RemotePort.ToString());
+            builder.Append(connection.RemotePort);
 #else
             var request = httpContext.TryGetRequest();
             if (request == null)

@@ -52,7 +52,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool ValuesOnly { get; set; }
 
-#region Pairs
+        #region Pairs
         /// <summary>
         /// Serialize multiple key/value pairs
         /// </summary>
@@ -170,7 +170,7 @@ namespace NLog.Web.LayoutRenderers
 
 
         #endregion
-
+        
         #region Singles
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializeSingleJson(StringBuilder builder, string value)
+        private static void SerializeSingleJson(StringBuilder builder, string value)
         {
             // Quoted value
             AppendQuoted(builder, value);

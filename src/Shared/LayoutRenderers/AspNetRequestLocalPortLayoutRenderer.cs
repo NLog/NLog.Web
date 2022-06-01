@@ -31,7 +31,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            builder.Append(connection.LocalPort.ToString());
+            builder.Append(connection.LocalPort);
 #else
             var request = httpContext.TryGetRequest();
             if (request == null)
