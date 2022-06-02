@@ -45,7 +45,6 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            this.ValuesOnly = true;
             SerializeSingles(websockets.WebSocketRequestedProtocols, builder, logEvent);
 
 #elif NET46_OR_GREATER
@@ -66,7 +65,6 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            this.ValuesOnly = true;
             SerializeSingles(httpContext.WebSocketRequestedProtocols, builder, logEvent);
 #endif
         }

@@ -19,9 +19,9 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            // Not available on .NET 3.5
-#if ASP_NET_CORE
             // Not available in ASP.NET Core
+#if ASP_NET_CORE
+            // Not available on .NET 3.5
 #elif NET46_OR_GREATER
             var httpContext = HttpContextAccessor.HttpContext;
 
