@@ -170,7 +170,7 @@ namespace NLog.Web.LayoutRenderers
 
 
         #endregion
-
+        
         #region Singles
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private static void SerializeSinglesJson(IEnumerable<string> values, StringBuilder builder)
+        private void SerializeSinglesJson(IEnumerable<string> values, StringBuilder builder)
         {
             var firstItem = true;
             foreach (var item in values)
