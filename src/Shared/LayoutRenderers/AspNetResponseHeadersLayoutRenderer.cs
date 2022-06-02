@@ -69,37 +69,37 @@ namespace NLog.Web.LayoutRenderers
             if (headers?.Count > 0)
             {
                 bool checkForExclude = (HeaderNames == null || HeaderNames.Count == 0) && Exclude?.Count > 0;
-                var headerValues = GetHeaderValues(headers, checkForExclude);
+                var headersDictionary = GetHeaders(headers);
+                var headerValues = GetHeaderValues(headersDictionary, checkForExclude);
                 SerializePairs(headerValues, builder, logEvent);
             }
         }
 
-#if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool checkForExclude)
+#if!ASP_NET_CORE
+        private static Dictionary<string, string> GetHeaders(NameValueCollection headers)
         {
-            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.Cast<string>();
+            return headers.Keys.Cast<string>().ToDictionary(headerKey => headerKey, headerKey => headers[headerKey]);
+        }
+#else
+        private static Dictionary<string, string> GetHeaders(IHeaderDictionary headers)
+        {
+            return headers.Keys.ToDictionary<string, string, string>(headerKey => headerKey, headerKey => headers[headerKey]);
+        }
+#endif
+        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(Dictionary<string,string> headers, bool checkForExclude)
+        {
+            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.ToList();
             foreach (var headerName in headerNames)
             {
                 if (checkForExclude && Exclude.Contains(headerName))
-                    continue;
-
-                var headerValue = headers[headerName];
-                if (headerValue == null)
                 {
                     continue;
                 }
 
-                yield return new KeyValuePair<string, string>(headerName, headerValue);
-            }
-        }
-#else
-        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, bool checkForExclude)
-        {
-            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys;
-            foreach (var headerName in headerNames)
-            {
-                if (checkForExclude && Exclude.Contains(headerName))
+                if (!headers.ContainsKey(headerName))
+                {
                     continue;
+                }
 
                 if (!headers.TryGetValue(headerName, out var headerValue))
                 {
@@ -109,6 +109,5 @@ namespace NLog.Web.LayoutRenderers
                 yield return new KeyValuePair<string, string>(headerName, headerValue);
             }
         }
-#endif
     }
 }
