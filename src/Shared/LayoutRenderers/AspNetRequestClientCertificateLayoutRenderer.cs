@@ -15,7 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// ${aspnet-request-client certificate}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-client certificate")]
+    [LayoutRenderer("aspnet-request-client-certificate")]
     public class AspNetRequestClientCertificateLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
