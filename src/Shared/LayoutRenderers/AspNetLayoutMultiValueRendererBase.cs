@@ -52,7 +52,6 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool ValuesOnly { get; set; }
 
-        #region Pairs
         /// <summary>
         /// Serialize multiple key/value pairs
         /// </summary>
@@ -168,32 +167,27 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-
-        #endregion
-
-        #region Singles
-
         /// <summary>
         /// Serialize multiple values
         /// </summary>
         /// <param name="values">The values.</param>
         /// <param name="builder">Add to this builder.</param>
         /// <param name="logEvent">Log event for rendering separators.</param>
-        protected void SerializeSingles(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
+        protected void SerializeValues(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
         {
             switch (OutputFormat)
             {
                 case AspNetRequestLayoutOutputFormat.Flat:
-                    SerializeSinglesFlat(values, builder, logEvent);
+                    SerializeValuesFlat(values, builder, logEvent);
                     break;
                 case AspNetRequestLayoutOutputFormat.JsonArray:
                 case AspNetRequestLayoutOutputFormat.JsonDictionary:
-                    SerializeSinglesJson(values, builder);
+                    SerializeValuesJson(values, builder);
                     break;
             }
         }
 
-        private static void SerializeSinglesJson(IEnumerable<string> values, StringBuilder builder)
+        private static void SerializeValuesJson(IEnumerable<string> values, StringBuilder builder)
         {
             var firstItem = true;
             foreach (var item in values)
@@ -206,7 +200,7 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append(',');
                 }
-                SerializeSingleJson(builder, item);
+                SerializeValueJson(builder, item);
                 firstItem = false;
             }
             if (!firstItem)
@@ -215,13 +209,13 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private static void SerializeSingleJson(StringBuilder builder, string value)
+        private static void SerializeValueJson(StringBuilder builder, string value)
         {
             // Quoted value
             AppendQuoted(builder, value);
         }
 
-        private void SerializeSinglesFlat(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
+        private void SerializeValuesFlat(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
         {
             var itemSeparator = GetRenderedItemSeparator(logEvent);
             var firstItem = true;
@@ -235,7 +229,6 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(value);
             }
         }
-        #endregion Singles
 
         /// <summary>
         /// Get the rendered <see cref="ItemSeparator" />

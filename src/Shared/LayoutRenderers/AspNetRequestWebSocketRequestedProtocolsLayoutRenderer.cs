@@ -45,7 +45,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            SerializeSingles(websockets.WebSocketRequestedProtocols, builder, logEvent);
+            SerializeValues(websockets.WebSocketRequestedProtocols, builder, logEvent);
 
 #elif NET46_OR_GREATER
             var httpContext = HttpContextAccessor.HttpContext;
@@ -65,7 +65,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            SerializeSingles(httpContext.WebSocketRequestedProtocols, builder, logEvent);
+            SerializeValues(httpContext.WebSocketRequestedProtocols, builder, logEvent);
 #endif
         }
     }
