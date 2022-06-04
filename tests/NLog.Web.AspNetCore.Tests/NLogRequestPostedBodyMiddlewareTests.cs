@@ -30,9 +30,9 @@ namespace NLog.Web.Tests
             byte[] bodyBytes = Encoding.UTF8.GetBytes("This is a test request body");
             defaultContext.Request.Body.Write(bodyBytes,0,bodyBytes.Length);
             defaultContext.Request.ContentLength = bodyBytes.Length;
+            defaultContext.Request.ContentType = "text/plain";
 
             // Act
-
             long streamBeforePosition = defaultContext.Request.Body.Position;
 
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
@@ -56,6 +56,28 @@ namespace NLog.Web.Tests
             DefaultHttpContext defaultContext = new DefaultHttpContext();
             defaultContext.Request.Body = new MemoryStream();
             defaultContext.Request.ContentLength = 0;
+            defaultContext.Request.ContentType = "text/plain";
+
+            // Act
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // Assert
+            Assert.NotNull(defaultContext.Items);
+            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+        }
+
+        [Fact]
+        public void ExcludContentTypeTest()
+        {
+            // Arrange
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+            defaultContext.Request.Body = new MemoryStream();
+            byte[] bodyBytes = Encoding.UTF8.GetBytes("This is a test request body");
+            defaultContext.Request.Body.Write(bodyBytes, 0, bodyBytes.Length);
+            defaultContext.Request.ContentLength = bodyBytes.Length;
+            defaultContext.Request.ContentType = "application/octet";
 
             // Act
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
@@ -122,6 +144,7 @@ namespace NLog.Web.Tests
             defaultContext.Request.Body = new MemoryStream();
             defaultContext.Request.Body.Write(new byte[30 * 1024 + 1],0, 30 * 1024 + 1);
             defaultContext.Request.ContentLength = 30 * 1024 + 1;
+            defaultContext.Request.ContentType = "text/plain";
 
             // Act
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareOptions.Default);
@@ -140,6 +163,7 @@ namespace NLog.Web.Tests
             defaultContext.Request.Body = new MemoryStream();
             defaultContext.Request.Body.Write(new byte[128],0,128);
             defaultContext.Request.ContentLength = null;
+            defaultContext.Request.ContentType = "text/plain";
 
             // Act
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareOptions.Default);
@@ -157,6 +181,8 @@ namespace NLog.Web.Tests
             DefaultHttpContext defaultContext = new DefaultHttpContext();
 
             defaultContext.Request.Body = Substitute.For<Stream>();
+            defaultContext.Request.ContentLength = 1;
+            defaultContext.Request.ContentType = "text/plain";
 
             defaultContext.Request.Body.CanRead.Returns(false);
             defaultContext.Request.Body.CanSeek.Returns(true);
@@ -178,6 +204,8 @@ namespace NLog.Web.Tests
             DefaultHttpContext defaultContext = new DefaultHttpContext();
 
             defaultContext.Request.Body = Substitute.For<Stream>();
+            defaultContext.Request.ContentLength = 1;
+            defaultContext.Request.ContentType = "text/plain";
 
             defaultContext.Request.Body.CanRead.Returns(true);
             defaultContext.Request.Body.CanSeek.Returns(false);

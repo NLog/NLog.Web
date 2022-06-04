@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
 using NLog.Common;
+using NLog.Web.Internal;
 using NLog.Web.LayoutRenderers;
 
 namespace NLog.Web
@@ -12,6 +14,31 @@ namespace NLog.Web
     /// </summary>
     public class NLogRequestPostedBodyModule : IHttpModule
     {
+        /// <summary>
+        /// The maximum request posted body size that will be captured. Defaults to 30KB.
+        /// </summary>
+        public int MaxContentLength { get; set; } = 30 * 1024;
+
+        /// <summary>
+        /// Prefix and suffix values to be accepted as ContentTypes. Ex. key-prefix = "application/" and value-suffix = "json"
+        /// </summary>
+        public IList<KeyValuePair<string, string>> AllowContentTypes { get; set; }
+
+        /// <summary>
+        /// Initializes new instance of the <see cref="NLogRequestPostedBodyModule"/> class
+        /// </summary>
+        public NLogRequestPostedBodyModule()
+        {
+            AllowContentTypes = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("application/", "json"),
+                new KeyValuePair<string, string>("text/", ""),
+                new KeyValuePair<string, string>("", "charset"),
+                new KeyValuePair<string, string>("application/", "xml"),
+                new KeyValuePair<string, string>("application/", "html")
+            };
+        }
+
         void IHttpModule.Init(HttpApplication context)
         {
             context.BeginRequest += (sender, args) => OnBeginRequest((sender as HttpApplication)?.Context);
@@ -36,7 +63,6 @@ namespace NLog.Web
             if (context == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext is null");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
@@ -44,7 +70,6 @@ namespace NLog.Web
             if (context.Request == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request stream is null");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
@@ -52,7 +77,6 @@ namespace NLog.Web
             if (stream == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is null");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
@@ -60,15 +84,19 @@ namespace NLog.Web
             if (!stream.CanRead)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is non-readable");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
-            // If we cannot seek the stream we cannot capture the body
-            if (!stream.CanSeek)
+            var contentLength = context.Request.ContentLength;
+            if (contentLength <= 0 || contentLength > MaxContentLength)
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is non-seekable");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.ContentLength={0}", contentLength);
+                return false;
+            }
+
+            if (!context.HasAllowedContentType(AllowContentTypes))
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.ContentType={0}", context?.Request?.ContentType);
                 return false;
             }
 
@@ -84,8 +112,12 @@ namespace NLog.Web
         {
             string responseText = null;
 
-            if (stream.Length == 0)
+            // If we cannot seek the stream we cannot capture the body
+            if (!stream.CanSeek)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpApplication.HttpContext.Request.Body stream is non-seekable");
                 return responseText;
+            }
 
             // Save away the original stream position
             var originalPosition = stream.Position;

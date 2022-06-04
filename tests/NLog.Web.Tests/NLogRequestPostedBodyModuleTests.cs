@@ -34,6 +34,7 @@ namespace NLog.Web.Tests
             var expectedMessage = "Expected message";
             MyWorkerRequest myRequest = new MyWorkerRequest(expectedMessage);
             HttpContext httpContext = new HttpContext(myRequest);
+            httpContext.Request.ContentType = ";charset=utf8";
 
             // Act
             var httpModule = new NLogRequestPostedBodyModule();
@@ -45,6 +46,24 @@ namespace NLog.Web.Tests
             Assert.NotNull(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
             Assert.True(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
             Assert.Equal(expectedMessage, httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
+        }
+
+        [Fact]
+        public void HttpRequestBodyExcludeTest()
+        {
+            // Arrange
+            var expectedMessage = "Expected message";
+            MyWorkerRequest myRequest = new MyWorkerRequest(expectedMessage);
+            HttpContext httpContext = new HttpContext(myRequest);
+            httpContext.Request.ContentType = "application/octet";
+
+            // Act
+            var httpModule = new NLogRequestPostedBodyModule();
+            httpModule.OnBeginRequest(httpContext);
+
+            // Assert
+            Assert.NotNull(httpContext.Items);
+            Assert.Empty(httpContext.Items);
         }
 
         public class MyWorkerRequest : SimpleWorkerRequest
