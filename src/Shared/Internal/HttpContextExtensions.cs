@@ -98,7 +98,6 @@ namespace NLog.Web.Internal
         }
 #endif
 
-
 #if !ASP_NET_CORE
         internal static HttpSessionStateBase TryGetSession(this HttpContextBase context)
         {
