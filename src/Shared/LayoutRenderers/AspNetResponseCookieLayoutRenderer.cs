@@ -73,7 +73,6 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var cookies = GetCookies(httpResponse);
-
             if (cookies?.Count > 0)
             {
                 bool checkForExclude = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
@@ -144,13 +143,20 @@ namespace NLog.Web.LayoutRenderers
         /// <returns></returns>
         protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
-            var queryResults = response.Headers.Where(row => row.Key == "Set-Cookie").ToList();
-            var cookieList = new List<SetCookieHeaderValue>();
-            foreach (var row in queryResults)
+            var queryResults = response.Headers.Where(row => row.Key.Equals("Set-Cookie",StringComparison.InvariantCultureIgnoreCase)).ToList();
+            var cookieResults = new List<SetCookieHeaderValue>();
+#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
+            foreach (KeyValuePair<string, StringValues> row in queryResults)
             {
-                cookieList.Add(new SetCookieHeaderValue(new StringSegment(row.Key), new StringSegment(row.Value)));
+                string[] cookieList = row.Value.ToString().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var cookie in cookieList)
+                {
+                    SetCookieHeaderValue.TryParse(new StringSegment(cookie), out SetCookieHeaderValue parsed);
+                    cookieResults.Add(parsed);
+                }
             }
-            return cookieList;
+#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
+            return cookieResults;
         }
 
 
