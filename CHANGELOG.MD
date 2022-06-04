@@ -66,6 +66,13 @@ See also [List of major changes in NLog 5](https://nlog-project.org/2021/08/25/n
   - [#700](https://github.com/NLog/NLog.Web/pull/700) Added W3CExtendedLogLayout for writing W3C Extended Logs (#700) (@snakefoot)
   - [#697](https://github.com/NLog/NLog.Web/pull/697) Replaced SingleAsArray with OutputFormat = JsonArray + JsonDictionary (#697) (@snakefoot)
 
+### v4.15 (2022/06/04)
+- **NLog.Web.AspNetCore**
+  - Bump NLog.Extensions.Logging from 1.7.4 to 1.7.5
+
+- **NLog.Web**
+  - Bump NLog from 4.7.11 to 4.7.15
+
 ### v4.14 (2021/08/28)
 - **NLog.Web.AspNetCore**
   - [#677](https://github.com/NLog/NLog.Web/pull/677) Bump NLog.Extensions.Logging from 1.7.3 to 1.7.4 (#677) (@dependabot[bot])
