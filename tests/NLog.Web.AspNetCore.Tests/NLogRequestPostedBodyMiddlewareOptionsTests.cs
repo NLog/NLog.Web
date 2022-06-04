@@ -12,9 +12,9 @@ namespace NLog.Web.Tests
         {
             var config = new NLogRequestPostedBodyMiddlewareOptions();
             var size = new Random().Next();
-            config.MaximumRequestSize = size;
+            config.MaxContentLength = size;
 
-            Assert.Equal(size, config.MaximumRequestSize);
+            Assert.Equal(size, config.MaxContentLength);
         }
 
         [Fact]
@@ -34,7 +34,8 @@ namespace NLog.Web.Tests
 
             HttpRequest request = Substitute.For<HttpRequest>();
 
-            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaximumRequestSize - 1);
+            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxContentLength - 1);
+            request.ContentType.Returns(";charset=utf8");
 
             httpContext.Request.Returns(request);
 
@@ -66,7 +67,7 @@ namespace NLog.Web.Tests
 
             HttpRequest request = Substitute.For<HttpRequest>();
 
-            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaximumRequestSize + 1);
+            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxContentLength + 1);
 
             httpContext.Request.Returns(request);
 

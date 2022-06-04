@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using NLog.Common;
+using NLog.Web.Internal;
 
 namespace NLog.Web
 {
@@ -19,16 +22,29 @@ namespace NLog.Web
         public NLogRequestPostedBodyMiddlewareOptions()
         {
             ShouldCapture = DefaultCapture;
+            AllowContentTypes = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("application/", "json"),
+                new KeyValuePair<string, string>("text/", ""),
+                new KeyValuePair<string, string>("", "charset"),
+                new KeyValuePair<string, string>("application/", "xml"),
+                new KeyValuePair<string, string>("application/", "html")
+            };
         }
 
         /// <summary>
-        /// The maximum request size that will be captured
-        /// Defaults to 30KB.  This checks against the ContentLength.
-        /// HttpRequest.EnableBuffer() writes the request to TEMP files on disk if the request ContentLength is > 30KB
-        /// but uses memory otherwise if &lt;= 30KB, so we should protect against "very large"
-        /// request post body payloads.
+        /// The maximum request posted body size that will be captured. Defaults to 30KB.
         /// </summary>
-        public int MaximumRequestSize { get; set; } = 30 * 1024;
+        /// <remarks>
+        /// HttpRequest.EnableBuffer() writes the request to TEMP files on disk if the request ContentLength is > 30KB
+        /// but uses memory otherwise if &lt;= 30KB, so we should protect against "very large" request post body payloads.
+        /// </remarks>
+        public int MaxContentLength { get; set; } = 30 * 1024;
+
+        /// <summary>
+        /// Prefix and suffix values to be accepted as ContentTypes. Ex. key-prefix = "application/" and value-suffix = "json"
+        /// </summary>
+        public IList<KeyValuePair<string,string>> AllowContentTypes { get; set; }
 
         /// <summary>
         /// If this returns true, the post request body will be captured
@@ -40,12 +56,24 @@ namespace NLog.Web
         public Predicate<HttpContext> ShouldCapture { get; set; }
 
         /// <summary>
-        /// The default predicate for ShouldCapture
-        /// Returns true if content length &lt;= 30KB
+        /// The default predicate for ShouldCapture. Returns true if content length &lt;= 30KB
         /// </summary>
         private bool DefaultCapture(HttpContext context)
         {
-            return context?.Request?.ContentLength != null && context?.Request?.ContentLength <= MaximumRequestSize;
+            var contentLength = context?.Request?.ContentLength ?? 0;
+            if (contentLength <= 0 || contentLength > MaxContentLength)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentLength={0}", contentLength);
+                return false;
+            }
+
+            if (!context.HasAllowedContentType(AllowContentTypes))
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentType={0}", context?.Request?.ContentType);
+                return false;
+            }
+
+            return true;
         }
     }
 }

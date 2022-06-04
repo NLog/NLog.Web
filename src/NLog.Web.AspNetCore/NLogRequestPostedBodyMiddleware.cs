@@ -13,23 +13,30 @@ namespace NLog.Web
     /// POST request body
     ///
     /// Usage: app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
-    /// Register the NLogRequestPostBodyMiddlewareOption in the IoC so that the config gets passed to the constructor
+    /// 
+    /// Inject the NLogRequestPostBodyMiddlewareOption in the IoC if wanting to override default values for constructor
     /// </summary>
     public class NLogRequestPostedBodyMiddleware
     {
         private readonly RequestDelegate _next;
-
         private readonly NLogRequestPostedBodyMiddlewareOptions _options;
 
         /// <summary>
-        /// Constructor that takes a configuration
+        /// Initializes new instance of the <see cref="NLogRequestPostedBodyMiddleware"/> class
         /// </summary>
-        /// <param name="next"></param>
-        /// <param name="options"></param>
-        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions options)
+        /// <remarks>
+        /// Use the following in Startup.cs:
+        /// <code>
+        /// public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /// {
+        ///    app.UseMiddleware&lt;NLog.Web.NLogRequestPostedBodyMiddleware&gt;();
+        /// }
+        /// </code>
+        /// </remarks>
+        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions options = default)
         {
             _next = next;
-            _options = options;
+            _options = options ?? NLogRequestPostedBodyMiddlewareOptions.Default;
         }
 
         /// <summary>
@@ -62,14 +69,12 @@ namespace NLog.Web
             if (context == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext is null");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
             if (context.Request == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request is null");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
@@ -77,7 +82,6 @@ namespace NLog.Web
             if (context.Request.Body == null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is null");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
@@ -85,7 +89,6 @@ namespace NLog.Web
             if (!context.Request.Body.CanRead)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-readable");
-                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 return false;
             }
 
@@ -101,10 +104,17 @@ namespace NLog.Web
         /// <returns>The contents of the Stream read fully from start to end as a String</returns>
         private async Task<string> GetString(Stream stream)
         {
+            string responseText = null;
+
+            // If we cannot seek the stream we cannot capture the body
+            if (!stream.CanSeek)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is non-seekable");
+                return responseText;
+            }
+
             // Save away the original stream position
             var originalPosition = stream.Position;
-
-            string responseText = null;
 
             try
             {
