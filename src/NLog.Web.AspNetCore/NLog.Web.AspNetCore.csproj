@@ -75,6 +75,7 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.1.21" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
@@ -100,7 +101,10 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <Compile Include="..\Shared\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="readme.txt">
+    <Compile Remove="..\Shared\LayoutRenderers\AspNetRequestWebSocketNegotiatedProtocolLayoutRenderer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+	  <Content Include="readme.txt">
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
