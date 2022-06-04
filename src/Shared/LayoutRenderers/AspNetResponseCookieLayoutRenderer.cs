@@ -73,7 +73,11 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var cookies = GetCookies(httpResponse);
-            if (cookies?.Count > 0)
+#if ASP_NET_CORE
+            if (cookies.Any())
+#else
+            if(cookies.Count > 0)
+#endif
             {
                 bool checkForExclude = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
                 var cookieValues = GetCookieValues(cookies, checkForExclude);
@@ -141,22 +145,18 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        protected IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
-            var queryResults = response.Headers.Where(row => row.Key.Equals("Set-Cookie",StringComparison.InvariantCultureIgnoreCase)).ToList();
-            var cookieResults = new List<SetCookieHeaderValue>();
-#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
+            var queryResults = response.Headers.Where(row => row.Key == HeaderNames.SetCookie).ToList();
             foreach (KeyValuePair<string, StringValues> row in queryResults)
             {
                 string[] cookieList = row.Value.ToString().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var cookie in cookieList)
                 {
                     SetCookieHeaderValue.TryParse(new StringSegment(cookie), out SetCookieHeaderValue parsed);
-                    cookieResults.Add(parsed);
+                    yield return parsed;
                 }
             }
-#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
-            return cookieResults;
         }
 
 
@@ -166,19 +166,19 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        protected IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
             return response.GetTypedHeaders().SetCookie;
         }
 #endif
 
 #if ASP_NET_CORE
-        private List<string> GetCookieNames(IList<SetCookieHeaderValue> cookies)
+        private List<string> GetCookieNames(IEnumerable<SetCookieHeaderValue> cookies)
         {
             return CookieNames?.Count > 0 ? CookieNames : cookies.Select(row => row.Name.ToString()).ToList();
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IList<SetCookieHeaderValue> cookies, bool checkForExclude)
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IEnumerable<SetCookieHeaderValue> cookies, bool checkForExclude)
         {
             var cookieNames = GetCookieNames(cookies);
             foreach (var cookieName in cookieNames)
