@@ -44,7 +44,6 @@ namespace NLog.Web
                 // This is required, otherwise reading the request will destructively read the request
                 context.Request.EnableBuffering();
 
-                // Save the POST request body in HttpContext.Items with a key of '__nlog-aspnet-request-posted-body'
                 var requestBody = await GetString(context.Request.Body).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(requestBody))
@@ -90,7 +89,7 @@ namespace NLog.Web
                 return false;
             }
 
-            return (_options.ShouldCapture(context));
+            return _options.ShouldCapture(context);
         }
 
         /// <summary>
@@ -105,29 +104,34 @@ namespace NLog.Web
             // Save away the original stream position
             var originalPosition = stream.Position;
 
-            // This is required to reset the stream position to the beginning in order to properly read all of the stream.
-            stream.Position = 0;
-
             string responseText = null;
 
-            // The last argument, leaveOpen, is set to true, so that the stream is not pre-maturely closed
-            // therefore preventing the next reader from reading the stream.
-            // The middle three arguments are from the configuration instance
-            // These default to UTF-8, true, and 1024.
-            using (var streamReader = new StreamReader(
-                       stream,
-                       Encoding.UTF8,
-                       true,
-                       1024,
-                       leaveOpen: true))
+            try
             {
-                // This is the most straight forward logic to read the entire body
-                responseText = await streamReader.ReadToEndAsync().ConfigureAwait(false);
-            }
+                // This is required to reset the stream position to the beginning in order to properly read all of the stream.
+                stream.Position = 0;
 
-            // This is required to reset the stream position to the original, in order to
-            // properly let the next reader process the stream from the original point
-            stream.Position = originalPosition;
+                // The last argument, leaveOpen, is set to true, so that the stream is not pre-maturely closed
+                // therefore preventing the next reader from reading the stream.
+                // The middle three arguments are from the configuration instance
+                // These default to UTF-8, true, and 1024.
+                using (var streamReader = new StreamReader(
+                           stream,
+                           Encoding.UTF8,
+                           true,
+                           1024,
+                           leaveOpen: true))
+                {
+                    // This is the most straight forward logic to read the entire body
+                    responseText = await streamReader.ReadToEndAsync().ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                // This is required to reset the stream position to the original, in order to
+                // properly let the next reader process the stream from the original point
+                stream.Position = originalPosition;
+            }
 
             // Return the string of the body
             return responseText;

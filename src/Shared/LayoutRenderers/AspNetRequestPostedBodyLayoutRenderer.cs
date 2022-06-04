@@ -19,7 +19,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-posted-body")]
     public class AspNetRequestPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
-
         /// <summary>
         /// The object for the key in HttpContext.Items for the POST request body
         /// </summary>
