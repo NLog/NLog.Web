@@ -104,6 +104,7 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, bool checkForExclude)
         {
+            var response = new List<KeyValuePair<string, string>>();
             var cookieNames = GetCookieNames(cookies);
             foreach (var cookieName in cookieNames)
             {
@@ -115,26 +116,31 @@ namespace NLog.Web.LayoutRenderers
                 {
                     continue;
                 }
+                response.AddRange(GetCookieValue(httpCookie,cookieName));
+            }
+            return response;
+        }
 
-                if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValue(HttpCookie httpCookie, string cookieName)
+        {
+            if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
+            {
+                // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+                var isFirst = true;
+                foreach (var multiValueKey in httpCookie.Values.AllKeys)
                 {
-                    // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
-                    var isFirst = true;
-                    foreach (var multiValueKey in httpCookie.Values.AllKeys)
+                    var cookieKey = multiValueKey;
+                    if (isFirst)
                     {
-                        var cookieKey = multiValueKey;
-                        if (isFirst)
-                        {
-                            cookieKey = cookieName;
-                            isFirst = false;
-                        }
-                        yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
+                        cookieKey = cookieName;
+                        isFirst = false;
                     }
+                    yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
                 }
-                else
-                {
-                    yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
-                }
+            }
+            else
+            {
+                yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
             }
         }
 
@@ -144,7 +150,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        protected static IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
             var queryResults = response.Headers[HeaderNames.SetCookie];
             if (queryResults.Count > 0 && SetCookieHeaderValue.TryParseList(queryResults, out var result))
