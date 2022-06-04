@@ -138,29 +138,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-#elif ASP_NET_CORE2
-
-        /// <summary>
-        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
-        /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        protected IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
-        {
-            var queryResults = response.Headers.Where(row => row.Key == HeaderNames.SetCookie).ToList();
-            foreach (KeyValuePair<string, StringValues> row in queryResults)
-            {
-                string[] cookieList = row.Value.ToString().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var cookie in cookieList)
-                {
-                    SetCookieHeaderValue.TryParse(new StringSegment(cookie), out SetCookieHeaderValue parsed);
-                    yield return parsed;
-                }
-            }
-        }
-
-
-#elif ASP_NET_CORE3
+#else
         /// <summary>
         /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
         /// </summary>
@@ -170,9 +148,7 @@ namespace NLog.Web.LayoutRenderers
         {
             return response.GetTypedHeaders().SetCookie;
         }
-#endif
 
-#if ASP_NET_CORE
         private List<string> GetCookieNames(IEnumerable<SetCookieHeaderValue> cookies)
         {
             return CookieNames?.Count > 0 ? CookieNames : cookies.Select(row => row.Name.ToString()).ToList();
