@@ -58,7 +58,6 @@ namespace NLog.Web.LayoutRenderers
             Exclude = new HashSet<string>(new[] { "AUTH", "SESS_ID" }, StringComparer.OrdinalIgnoreCase);
         }
 
-#if !ASP_NET_CORE
         /// <summary>
         /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
         /// </summary>
@@ -72,7 +71,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var cookies = httpResponse.Cookies;
+            var cookies = GetCookies(httpResponse);
 
             if (cookies?.Count > 0)
             {
@@ -80,6 +79,23 @@ namespace NLog.Web.LayoutRenderers
                 var cookieValues = GetCookieValues(cookies, checkForExclude);
                 SerializePairs(cookieValues, builder, logEvent);
             }
+        }
+
+#if !ASP_NET_CORE
+
+        /// <summary>
+        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        protected Cookies GetCookies(HttpResponseBase response)
+        {
+            return response.Cookies;
+        }
+
+        private List<string> GetCookieNames(HttpCookieCollection cookies)
+        {
+            return CookieNames?.Count > 0 ? CookieNames : cookies.Keys.Cast<string>().ToList();
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, bool checkForExclude)
@@ -118,49 +134,21 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private List<string> GetCookieNames(HttpCookieCollection cookies)
-        {
-            return CookieNames?.Count > 0 ? CookieNames : cookies.Keys.Cast<string>().ToList();
-        }
+
 #else
         /// <summary>
-        /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
+        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
         /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        /// <param name="response"></param>
+        /// <returns></returns>
+        protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
-            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
-            if (httpResponse == null)
-            {
-                return;
-            }
-
-            IList<SetCookieHeaderValue> cookies = httpResponse.GetTypedHeaders().SetCookie;
-
-            if (cookies?.Count > 0)
-            {
-                bool checkForExclude = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
-                var cookieValues = GetCookieValues(cookies, checkForExclude);
-                SerializePairs(cookieValues, builder, logEvent);
-            }
+            return response.GetTypedHeaders().SetCookie;
         }
 
         private List<string> GetCookieNames(IList<SetCookieHeaderValue> cookies)
         {
-            if (CookieNames?.Count > 0)
-            {
-                return CookieNames;
-            }
-
-            var response = new List<string>();
-
-            foreach (var cookie in cookies)
-            {
-                response.Add(cookie.Name.ToString());
-            }
-
-            return response;
+            return CookieNames?.Count > 0 ? CookieNames : cookies.Select(row => row.Name.ToString()).ToList();
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IList<SetCookieHeaderValue> cookies, bool checkForExclude)
