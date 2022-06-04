@@ -5,10 +5,8 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class
-        AspNetRequestIsWebSocketLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestIsWebSocketLayoutRenderer>
+    public class AspNetRequestIsWebSocketLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestIsWebSocketLayoutRenderer>
     {
-
 #if !ASP_NET_CORE && NET46_OR_GREATER
         [Fact]
         public void TrueCase()
@@ -19,7 +17,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Act
             string result = renderer.Render(new LogEventInfo());
             // Assert
-            Assert.Equal(bool.TrueString, result);
+            Assert.Equal("1", result);
         }
 
         [Fact]
@@ -32,7 +30,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Act
             string result = renderer.Render(new LogEventInfo());
             // Assert
-            Assert.Equal(bool.FalseString, result);
+            Assert.Equal("0", result);
         }
 
 #endif
@@ -48,7 +46,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Act
             string result = renderer.Render(new LogEventInfo());
             // Assert
-            Assert.Equal(bool.TrueString, result);
+            Assert.Equal("1", result);
         }
 
         [Fact]
@@ -61,7 +59,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Act
             string result = renderer.Render(new LogEventInfo());
             // Assert
-            Assert.Equal(bool.FalseString, result);
+            Assert.Equal("0", result);
         }
 
         [Fact]
@@ -74,7 +72,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Act
             string result = renderer.Render(new LogEventInfo());
             // Assert
-            Assert.Equal(string.Empty, result);
+            Assert.Equal("0", result);
         }
 #endif
 
@@ -88,7 +86,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal(bool.FalseString,result);
+            Assert.Equal("0" ,result);
         }
 #endif
     }

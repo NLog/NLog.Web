@@ -22,19 +22,10 @@ namespace NLog.Web.LayoutRenderers
             // Not available on .NET 3.5
 #if ASP_NET_CORE
             var websockets = HttpContextAccessor.HttpContext?.WebSockets;
-            if (websockets == null)
-            {
-                return;
-            }
-
-            builder.Append(websockets.IsWebSocketRequest);
+            builder.Append(websockets?.IsWebSocketRequest == true ? '1' : '0');
 #elif NET46_OR_GREATER
             var httpContext = HttpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                return;
-            }
-            builder.Append(httpContext.IsWebSocketRequest);
+            builder.Append(httpContext?.IsWebSocketRequest == true ? '1' : '0');
 #endif
         }
     }
