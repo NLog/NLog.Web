@@ -88,7 +88,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
 
         /// <summary>
-        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
+        /// Method to get cookies for .NET Framework
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
@@ -138,41 +138,21 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-#elif ASP_NET_CORE2
-
+#else
         /// <summary>
-        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
+        /// Method to get cookies for all ASP.NET Core versions
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
-            var queryResults = response.Headers.Where(row => row.Key == HeaderNames.SetCookie).ToList();
-            foreach (KeyValuePair<string, StringValues> row in queryResults)
-            {
-                string[] cookieList = row.Value.ToString().Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var cookie in cookieList)
-                {
-                    SetCookieHeaderValue.TryParse(new StringSegment(cookie), out SetCookieHeaderValue parsed);
-                    yield return parsed;
-                }
-            }
+            var queryResults = response.Headers[HeaderNames.SetCookie];
+            if (queryResults.Count > 0 && SetCookieHeaderValue.TryParseList(queryResults, out var result))
+                return result;
+            else
+                return Array.Empty<SetCookieHeaderValue>();
         }
 
-
-#elif ASP_NET_CORE3
-        /// <summary>
-        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
-        /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        protected static IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
-        {
-            return response.GetTypedHeaders().SetCookie;
-        }
-#endif
-
-#if ASP_NET_CORE
         private List<string> GetCookieNames(IEnumerable<SetCookieHeaderValue> cookies)
         {
             return CookieNames?.Count > 0 ? CookieNames : cookies.Select(row => row.Name.ToString()).ToList();
