@@ -4,6 +4,13 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### v4.15 (2022/06/04)
+- **NLog.Web.AspNetCore**
+- Bump NLog.Extensions.Logging from 1.7.4 to 1.7.5
+
+- **NLog.Web**
+- Bump NLog from 4.7.11 to 4.7.15
+
 ### v4.14 (2021/08/28)
 - **NLog.Web.AspNetCore**
 - [#677](https://github.com/NLog/NLog.Web/pull/677) Bump NLog.Extensions.Logging from 1.7.3 to 1.7.4 (#677) (@dependabot[bot])
