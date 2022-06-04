@@ -116,25 +116,31 @@ namespace NLog.Web.LayoutRenderers
                     continue;
                 }
 
-                if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
+                return GetCookieValue(httpCookie, cookieName);
+            }
+            return new List<KeyValuePair<string, string>>();
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValue(HttpCookie httpCookie, string cookieName)
+        {
+            if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
+            {
+                // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+                var isFirst = true;
+                foreach (var multiValueKey in httpCookie.Values.AllKeys)
                 {
-                    // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
-                    var isFirst = true;
-                    foreach (var multiValueKey in httpCookie.Values.AllKeys)
+                    var cookieKey = multiValueKey;
+                    if (isFirst)
                     {
-                        var cookieKey = multiValueKey;
-                        if (isFirst)
-                        {
-                            cookieKey = cookieName;
-                            isFirst = false;
-                        }
-                        yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
+                        cookieKey = cookieName;
+                        isFirst = false;
                     }
+                    yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
                 }
-                else
-                {
-                    yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
-                }
+            }
+            else
+            {
+                yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
             }
         }
 
