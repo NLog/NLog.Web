@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -11,9 +12,9 @@ using System.Collections.Specialized;
 using System.Web;
 using Cookies = System.Web.HttpCookieCollection;
 #else
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -134,8 +135,26 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
+#elif ASP_NET_CORE2
 
-#else
+        /// <summary>
+        /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        protected IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        {
+            var queryResults = response.Headers.Where(row => row.Key == "Set-Cookie").ToList();
+            var cookieList = new List<SetCookieHeaderValue>();
+            foreach (var row in queryResults)
+            {
+                cookieList.Add(new SetCookieHeaderValue(new StringSegment(row.Key), new StringSegment(row.Value)));
+            }
+            return cookieList;
+        }
+
+
+#elif ASP_NET_CORE3
         /// <summary>
         /// Method to wrap getting cookies from the HTTP Response for both Framework and Core
         /// </summary>
@@ -145,7 +164,9 @@ namespace NLog.Web.LayoutRenderers
         {
             return response.GetTypedHeaders().SetCookie;
         }
+#endif
 
+#if ASP_NET_CORE
         private List<string> GetCookieNames(IList<SetCookieHeaderValue> cookies)
         {
             return CookieNames?.Count > 0 ? CookieNames : cookies.Select(row => row.Name.ToString()).ToList();
