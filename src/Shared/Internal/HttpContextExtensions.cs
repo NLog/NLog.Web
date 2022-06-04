@@ -5,11 +5,6 @@ using System.Web;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-
-#if! ASP_NET_CORE2
-using Microsoft.AspNetCore.Http.Headers;
-#endif
-
 #endif
 using NLog.Common;
 
