@@ -166,7 +166,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        protected static IEnumerable<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
             return response.GetTypedHeaders().SetCookie;
         }
