@@ -168,16 +168,13 @@ namespace NLog.Web.LayoutRenderers
                 if (checkForExclude && Exclude.Contains(cookieName))
                     continue;
 
-                var httpCookies = cookies.Where(cookie => cookie.Name.ToString() == cookieName).ToList();
-                if (!httpCookies.Any())
+                var httpCookie = cookies.SingleOrDefault(cookie => cookie.Name.ToString() == cookieName);
+                if (httpCookie == null)
                 {
                     continue;
                 }
 
-                foreach (var cookie in cookies)
-                {
-                    yield return new KeyValuePair<string, string>(cookieName, cookie.Value.ToString());
-                }
+                yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value.ToString());
             }
         }
 #endif
