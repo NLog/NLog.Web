@@ -168,6 +168,69 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
+        /// Serialize multiple values
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="builder">Add to this builder.</param>
+        /// <param name="logEvent">Log event for rendering separators.</param>
+        protected void SerializeValues(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
+        {
+            switch (OutputFormat)
+            {
+                case AspNetRequestLayoutOutputFormat.Flat:
+                    SerializeValuesFlat(values, builder, logEvent);
+                    break;
+                case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
+                    SerializeValuesJson(values, builder);
+                    break;
+            }
+        }
+
+        private static void SerializeValuesJson(IEnumerable<string> values, StringBuilder builder)
+        {
+            var firstItem = true;
+            foreach (var item in values)
+            {
+                if (firstItem)
+                {
+                    builder.Append('[');
+                }
+                else
+                {
+                    builder.Append(',');
+                }
+                SerializeValueJson(builder, item);
+                firstItem = false;
+            }
+            if (!firstItem)
+            {
+                builder.Append(']');
+            }
+        }
+
+        private static void SerializeValueJson(StringBuilder builder, string value)
+        {
+            // Quoted value
+            AppendQuoted(builder, value);
+        }
+
+        private void SerializeValuesFlat(IEnumerable<string> values, StringBuilder builder, LogEventInfo logEvent)
+        {
+            var itemSeparator = GetRenderedItemSeparator(logEvent);
+            var firstItem = true;
+            foreach (var value in values)
+            {
+                if (!firstItem)
+                {
+                    builder.Append(itemSeparator);
+                }
+                firstItem = false;
+                builder.Append(value);
+            }
+        }
+
+        /// <summary>
         /// Get the rendered <see cref="ItemSeparator" />
         /// </summary>
         /// <param name="logEvent"></param>
