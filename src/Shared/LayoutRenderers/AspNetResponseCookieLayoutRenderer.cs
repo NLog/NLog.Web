@@ -116,31 +116,25 @@ namespace NLog.Web.LayoutRenderers
                     continue;
                 }
 
-                return GetCookieValue(httpCookie, cookieName);
-            }
-            return new List<KeyValuePair<string, string>>();
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValue(HttpCookie httpCookie, string cookieName)
-        {
-            if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
-            {
-                // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
-                var isFirst = true;
-                foreach (var multiValueKey in httpCookie.Values.AllKeys)
+                if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
                 {
-                    var cookieKey = multiValueKey;
-                    if (isFirst)
+                    // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+                    var isFirst = true;
+                    foreach (var multiValueKey in httpCookie.Values.AllKeys)
                     {
-                        cookieKey = cookieName;
-                        isFirst = false;
+                        var cookieKey = multiValueKey;
+                        if (isFirst)
+                        {
+                            cookieKey = cookieName;
+                            isFirst = false;
+                        }
+                        yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
                     }
-                    yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
                 }
-            }
-            else
-            {
-                yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
+                else
+                {
+                    yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
+                }
             }
         }
 
