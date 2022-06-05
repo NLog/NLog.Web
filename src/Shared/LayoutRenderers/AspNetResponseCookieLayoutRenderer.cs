@@ -71,11 +71,7 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var cookies = GetCookies(httpResponse);
-#if ASP_NET_CORE
             if (cookies.Count > 0)
-#else
-            if(cookies.Count > 0)
-#endif
             {
                 bool checkForExclude = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
                 var cookieValues = GetCookieValues(cookies, checkForExclude);
