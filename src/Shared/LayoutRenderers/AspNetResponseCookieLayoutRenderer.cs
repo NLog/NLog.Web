@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Enums;
 using NLog.Web.Internal;
@@ -74,7 +72,7 @@ namespace NLog.Web.LayoutRenderers
 
             var cookies = GetCookies(httpResponse);
 #if ASP_NET_CORE
-            if (cookies.Any())
+            if (cookies.Count > 0)
 #else
             if(cookies.Count > 0)
 #endif
