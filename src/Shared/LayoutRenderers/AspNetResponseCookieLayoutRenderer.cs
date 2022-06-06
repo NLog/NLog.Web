@@ -6,9 +6,7 @@ using NLog.LayoutRenderers;
 using NLog.Web.Enums;
 using NLog.Web.Internal;
 #if !ASP_NET_CORE
-using System.Collections.Specialized;
 using System.Web;
-using Cookies = System.Web.HttpCookieCollection;
 #else
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
@@ -73,8 +71,7 @@ namespace NLog.Web.LayoutRenderers
             var cookies = GetCookies(httpResponse);
             if (cookies.Count > 0)
             {
-                bool checkForExclude = (CookieNames == null || CookieNames.Count == 0) && Exclude?.Count > 0;
-                var cookieValues = GetCookieValues(cookies, checkForExclude);
+                var cookieValues = GetCookieValues(cookies);
                 SerializePairs(cookieValues, builder, logEvent);
             }
         }
@@ -86,58 +83,16 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        private Cookies GetCookies(HttpResponseBase response)
+        private HttpCookieCollection GetCookies(HttpResponseBase response)
         {
             return response.Cookies;
         }
 
-        private List<string> GetCookieNames(HttpCookieCollection cookies)
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies)
         {
-            return CookieNames?.Count > 0 ? CookieNames : cookies.Keys.Cast<string>().ToList();
+            var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
+            return HttpCookieCollectionValues.GetCookieValues(cookies, CookieNames, Exclude, expandMultiValue);
         }
-
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, bool checkForExclude)
-        {
-            var response = new List<KeyValuePair<string, string>>();
-            var cookieNames = GetCookieNames(cookies);
-            foreach (var cookieName in cookieNames)
-            {
-                if (checkForExclude && Exclude.Contains(cookieName))
-                    continue;
-
-                var httpCookie = cookies[cookieName];
-                if (httpCookie == null)
-                {
-                    continue;
-                }
-                response.AddRange(GetCookieValue(httpCookie,cookieName));
-            }
-            return response;
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValue(HttpCookie httpCookie, string cookieName)
-        {
-            if (OutputFormat != AspNetRequestLayoutOutputFormat.Flat)
-            {
-                // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
-                var isFirst = true;
-                foreach (var multiValueKey in httpCookie.Values.AllKeys)
-                {
-                    var cookieKey = multiValueKey;
-                    if (isFirst)
-                    {
-                        cookieKey = cookieName;
-                        isFirst = false;
-                    }
-                    yield return new KeyValuePair<string, string>(cookieKey, httpCookie.Values[multiValueKey]);
-                }
-            }
-            else
-            {
-                yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value);
-            }
-        }
-
 #else
         /// <summary>
         /// Method to get cookies for all ASP.NET Core versions
@@ -153,26 +108,45 @@ namespace NLog.Web.LayoutRenderers
                 return Array.Empty<SetCookieHeaderValue>();
         }
 
-        private List<string> GetCookieNames(IEnumerable<SetCookieHeaderValue> cookies)
+        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IList<SetCookieHeaderValue> cookies)
         {
-            return CookieNames?.Count > 0 ? CookieNames : cookies.Select(row => row.Name.ToString()).ToList();
+            if (CookieNames?.Count > 0)
+            {
+                return GetCookieNameValues(cookies, CookieNames);
+            }
+            else
+            {
+                return GetCookieAllValues(cookies, Exclude);
+            }
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IEnumerable<SetCookieHeaderValue> cookies, bool checkForExclude)
+        private static IEnumerable<KeyValuePair<string, string>> GetCookieNameValues(IList<SetCookieHeaderValue> cookies, List<string> cookieNames)
         {
-            var cookieNames = GetCookieNames(cookies);
-            foreach (var cookieName in cookieNames)
+            foreach (var needle in cookieNames)
             {
-                if (checkForExclude && Exclude.Contains(cookieName))
-                    continue;
-
-                var httpCookie = cookies.SingleOrDefault(cookie => cookie.Name.ToString() == cookieName);
-                if (httpCookie == null)
+                for (int i = 0; i < cookies.Count; ++i)
                 {
-                    continue;
+                    var cookie = cookies[i];
+                    var cookieName = cookie.Name.ToString();
+                    if (string.Equals(needle, cookieName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        yield return new KeyValuePair<string, string>(cookieName, cookie.Value.ToString());
+                    }
                 }
+            }
+        }
 
-                yield return new KeyValuePair<string, string>(cookieName, httpCookie.Value.ToString());
+        private static IEnumerable<KeyValuePair<string, string>> GetCookieAllValues(IList<SetCookieHeaderValue> cookies, ICollection<string> excludeNames)
+        {
+            bool checkForExclude = excludeNames?.Count > 0;
+            for (int i = 0; i < cookies.Count; ++i)
+            {
+                var cookie = cookies[i];
+                var cookieName = cookie.Name.ToString();
+                if (checkForExclude && excludeNames.Contains(cookieName))
+                    continue;
+
+                yield return new KeyValuePair<string, string>(cookieName, cookie.Value.ToString());
             }
         }
 #endif

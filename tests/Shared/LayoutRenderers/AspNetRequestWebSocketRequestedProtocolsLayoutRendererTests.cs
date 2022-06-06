@@ -35,7 +35,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             httpContext.WebSocketRequestedProtocols.Returns(
                 new List<string>()
                 {
@@ -100,7 +100,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Json;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
             httpContext.WebSockets.WebSocketRequestedProtocols.Returns(
                 new List<string>()
                 {
