@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if ASP_NET_CORE || NET46_OR_GREATER
+
+using System;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -60,10 +62,14 @@ namespace NLog.Web.LayoutRenderers
                 }
 
                 var claimsIdentity = claimsPrincipel.Identity as ClaimsIdentity;    // Prioritize primary identity
-                var claim = claimsIdentity?.FindFirst(ClaimType) ?? claimsPrincipel.FindFirst(ClaimType);
+                var claim = claimsIdentity?.FindFirst(ClaimType)
+#if ASP_NET_CORE
+                    ?? claimsPrincipel.FindFirst(ClaimType)
+#endif
+                    ;
                 if (claim != null)
                 {
-                    builder.Append(claim.Value);
+                    builder.Append(claim?.Value);
                 }
             }
             catch (ObjectDisposedException ex)
@@ -73,3 +79,5 @@ namespace NLog.Web.LayoutRenderers
         }
     }
 }
+
+#endif
