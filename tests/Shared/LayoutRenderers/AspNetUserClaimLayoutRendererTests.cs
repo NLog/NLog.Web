@@ -1,6 +1,10 @@
-﻿using System.Security.Principal;
+﻿#if ASP_NET_CORE || NET46_OR_GREATER
+
+using System.Security.Principal;
+#if ASP_NET_CORE
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+#endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
@@ -64,3 +68,5 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
     }
 }
+
+#endif
