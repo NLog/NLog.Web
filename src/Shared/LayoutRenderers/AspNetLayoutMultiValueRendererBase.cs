@@ -278,7 +278,7 @@ namespace NLog.Web.LayoutRenderers
             if (!string.IsNullOrEmpty(value))
             {
                 AppendQuoted(builder, name);
-                builder.Append(":");
+                builder.Append(':');
                 AppendQuoted(builder, value);
             }
         }

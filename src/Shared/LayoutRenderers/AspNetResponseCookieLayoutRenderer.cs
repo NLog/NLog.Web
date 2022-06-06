@@ -305,7 +305,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializeAllPropertiesJson(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder)
+        private static void SerializeAllPropertiesJson(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder)
         {
             var firstItem = true;
 
@@ -320,25 +320,25 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(',');
                 }
 
-                builder.Append("{");
+                builder.Append('{');
 
                 AppendJsonProperty(builder, "Name", cookie.Name.ToString());
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "Value", cookie.Value.ToString());
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "Domain", cookie.Domain.ToString());
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "Path", cookie.Path.ToString());
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "Expires", cookie.Expires?.ToUniversalTime().ToString("u"));
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "Secure", cookie.Secure.ToString());
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "HttpOnly", cookie.HttpOnly.ToString());
-                builder.Append(",");
+                builder.Append(',');
                 AppendJsonProperty(builder, "SameSite", cookie.SameSite.ToString());
 
-                builder.Append("}");
+                builder.Append('}');
 
                 firstItem = false;
             }
@@ -346,7 +346,7 @@ namespace NLog.Web.LayoutRenderers
 #pragma warning disable S1155 // "Any()" should be used to test for emptiness
             if (verboseCookieValues.Count() > 0)
             {
-                builder.Append("]");
+                builder.Append(']');
             }
 #pragma warning restore S1155 // "Any()" should be used to test for emptiness
         }
