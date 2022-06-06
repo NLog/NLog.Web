@@ -130,43 +130,52 @@ namespace NLog.Web.Internal
 
         private static IEnumerable<HttpCookie> GetCookieVerboseNameValues(HttpCookieCollection cookies, List<string> cookieNames, bool expandMultiValue)
         {
+            var result = new List<HttpCookie>();
             foreach (var cookieName in cookieNames)
             {
                 var httpCookie = cookies[cookieName];
-                if (httpCookie != null)
+                if (httpCookie == null)
                 {
-                    if (expandMultiValue)
-                    {
-                        foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
-                            yield return cookie;
-                        continue;
-                    }
-                    yield return httpCookie;
+                    continue;
+                }
+
+                if (expandMultiValue)
+                {
+                    result.AddRange(GetCookieMultiVerboseValues(httpCookie));
+                }
+                else
+                {
+                    result.Add(httpCookie);
                 }
             }
+            return result;
         }
 
         private static IEnumerable<HttpCookie> GetCookieVerboseAllValues(HttpCookieCollection cookies, HashSet<string> excludeNames, bool expandMultiValue)
         {
             bool checkForExclude = excludeNames?.Count > 0;
-
+            var result = new List<HttpCookie>();
             foreach (string cookieName in cookies.Keys)
             {
                 if (checkForExclude && excludeNames.Contains(cookieName))
                     continue;
 
                 var httpCookie = cookies[cookieName];
-                if (httpCookie != null)
+                if (httpCookie == null)
                 {
-                    if (expandMultiValue)
-                    {
-                        foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
-                            yield return cookie;
-                        continue;
-                    }
-                    yield return httpCookie;
+                    continue;
+                }
+
+                if(expandMultiValue)
+                {
+                    result.AddRange(GetCookieMultiVerboseValues(httpCookie));
+                }
+                else
+                {
+                    result.Add(httpCookie);
                 }
             }
+            return result;
         }
     }
 }
