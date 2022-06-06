@@ -142,13 +142,13 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append("{");
 
-                AppendJsonProperty(builder, "Name", cookie.Name.ToString());
+                AppendJsonProperty(builder, "Name", cookie.Name);
                 builder.Append(",");
-                AppendJsonProperty(builder, "Value", cookie.Value.ToString());
+                AppendJsonProperty(builder, "Value", cookie.Value);
                 builder.Append(",");
-                AppendJsonProperty(builder, "Domain", cookie.Domain.ToString());
+                AppendJsonProperty(builder, "Domain", cookie.Domain);
                 builder.Append(",");
-                AppendJsonProperty(builder, "Path", cookie.Path.ToString());
+                AppendJsonProperty(builder, "Path", cookie.Path);
                 builder.Append(",");
                 AppendJsonProperty(builder, "Expires", cookie.Expires.ToUniversalTime().ToString("u"));
                 builder.Append(",");
