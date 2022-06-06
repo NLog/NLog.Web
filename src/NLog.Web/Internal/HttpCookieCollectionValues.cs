@@ -85,5 +85,82 @@ namespace NLog.Web.Internal
                 yield return new KeyValuePair<string, string>(cookieKey, httpCookiValues[multiValueKey]);
             }
         }
+
+        internal static IEnumerable<HttpCookie> GetVerboseCookieValues(HttpCookieCollection cookies, List<string> cookieNames, HashSet<string> excludeNames, bool expandMultiValue)
+        {
+            if (cookieNames?.Count > 0)
+            {
+                return GetCookieVerboseNameValues(cookies, cookieNames, expandMultiValue);
+            }
+            else
+            {
+                return GetCookieVerboseAllValues(cookies, excludeNames, expandMultiValue);
+            }
+        }
+
+        private static IEnumerable<HttpCookie> GetCookieVerboseNameValues(HttpCookieCollection cookies, List<string> cookieNames, bool expandMultiValue)
+        {
+            foreach (var cookieName in cookieNames)
+            {
+                var httpCookie = cookies[cookieName];
+                if (httpCookie != null)
+                {
+                    if (expandMultiValue)
+                    {
+                        var values = httpCookie.Values;
+                        if (values?.Count > 1)
+                        {
+                            foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
+                                yield return new HttpCookie(cookieValue.Key, cookieValue.Value)
+                                {
+                                    Domain = httpCookie.Domain,
+                                    Path = httpCookie.Path,
+                                    Expires = httpCookie.Expires,
+                                    Secure = httpCookie.Secure,
+                                    HttpOnly = httpCookie.HttpOnly
+                                };
+                            continue;
+                        }
+                    }
+
+                    yield return httpCookie;
+                }
+            }
+        }
+
+        private static IEnumerable<HttpCookie> GetCookieVerboseAllValues(HttpCookieCollection cookies, HashSet<string> excludeNames, bool expandMultiValue)
+        {
+            bool checkForExclude = excludeNames?.Count > 0;
+
+            foreach (string cookieName in cookies.Keys)
+            {
+                if (checkForExclude && excludeNames.Contains(cookieName))
+                    continue;
+
+                var httpCookie = cookies[cookieName];
+                if (httpCookie != null)
+                {
+                    if (expandMultiValue)
+                    {
+                        var values = httpCookie.Values;
+                        if (values?.Count > 1)
+                        {
+                            foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
+                                yield return new HttpCookie(cookieValue.Key, cookieValue.Value)
+                                {
+                                    Domain = httpCookie.Domain,
+                                    Path = httpCookie.Path,
+                                    Expires = httpCookie.Expires,
+                                    Secure = httpCookie.Secure,
+                                    HttpOnly = httpCookie.HttpOnly
+                                };
+                            continue;
+                        }
+                    }
+
+                    yield return httpCookie;
+                }
+            }
+        }
     }
 }

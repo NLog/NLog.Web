@@ -13,7 +13,14 @@ namespace NLog.Web.LayoutRenderers
     public abstract class AspNetLayoutMultiValueRendererBase : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Separator between item. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
+        /// Separator between objects, like cookies. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
+        /// </summary>
+        /// <remarks>Render with <see cref="GetRenderedObjectSeparator" /></remarks>
+        public string ObjectSeparator { get => _objectSeparatorLayout?.OriginalText; set => _objectSeparatorLayout = new SimpleLayout(value ?? ""); }
+        private SimpleLayout _objectSeparatorLayout = new SimpleLayout(";");
+
+        /// <summary>
+        /// Separator between key/value pair, and the next pair. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
         /// <remarks>Render with <see cref="GetRenderedItemSeparator" /></remarks>
         public string ItemSeparator { get => _itemSeparatorLayout?.OriginalText; set => _itemSeparatorLayout = new SimpleLayout(value ?? ""); }
@@ -231,6 +238,16 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
+        /// Get the rendered <see cref="ObjectSeparator" />
+        /// </summary>
+        /// <param name="logEvent"></param>
+        /// <returns></returns>
+        protected string GetRenderedObjectSeparator(LogEventInfo logEvent)
+        {
+            return logEvent != null ? _objectSeparatorLayout.Render(logEvent) : ObjectSeparator;
+        }
+
+        /// <summary>
         /// Get the rendered <see cref="ItemSeparator" />
         /// </summary>
         /// <param name="logEvent"></param>
@@ -251,10 +268,21 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Append the value quoted, escape quotes when needed
+        /// Append the quoted name and value separated by a colon
         /// </summary>
         /// <param name="builder"></param>
+        /// <param name="name"></param>
         /// <param name="value"></param>
+        protected static void AppendJsonProperty(StringBuilder builder, string name, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                AppendQuoted(builder, name);
+                builder.Append(":");
+                AppendQuoted(builder, value);
+            }
+        }
+
         private static void AppendQuoted(StringBuilder builder, string value)
         {
             builder.Append('"');
