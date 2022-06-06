@@ -86,6 +86,29 @@ namespace NLog.Web.Internal
             }
         }
 
+        private static IEnumerable<HttpCookie> GetCookieMultiVerboseValues(HttpCookie cookie)
+        {
+            // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+            var isFirst = true;
+            foreach (var multiValueKey in cookie.Values.AllKeys)
+            {
+                var cookieKey = multiValueKey;
+                if (isFirst)
+                {
+                    cookieKey = cookie.Name;
+                    isFirst = false;
+                }
+                yield return new HttpCookie(cookieKey, cookie.Values[multiValueKey])
+                {
+                    Domain = cookie.Domain,
+                    Path = cookie.Path,
+                    Expires = cookie.Expires,
+                    Secure = cookie.Secure,
+                    HttpOnly = cookie.HttpOnly
+                };
+            }
+        }
+
         internal static IEnumerable<HttpCookie> GetVerboseCookieValues(HttpCookieCollection cookies, List<string> cookieNames, HashSet<string> excludeNames, bool expandMultiValue)
         {
             if (cookieNames?.Count > 0)
@@ -110,15 +133,8 @@ namespace NLog.Web.Internal
                         var values = httpCookie.Values;
                         if (values?.Count > 1)
                         {
-                            foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
-                                yield return new HttpCookie(cookieValue.Key, cookieValue.Value)
-                                {
-                                    Domain = httpCookie.Domain,
-                                    Path = httpCookie.Path,
-                                    Expires = httpCookie.Expires,
-                                    Secure = httpCookie.Secure,
-                                    HttpOnly = httpCookie.HttpOnly
-                                };
+                            foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
+                                yield return cookie;
                             continue;
                         }
                     }
@@ -145,15 +161,8 @@ namespace NLog.Web.Internal
                         var values = httpCookie.Values;
                         if (values?.Count > 1)
                         {
-                            foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
-                                yield return new HttpCookie(cookieValue.Key, cookieValue.Value)
-                                {
-                                    Domain = httpCookie.Domain,
-                                    Path = httpCookie.Path,
-                                    Expires = httpCookie.Expires,
-                                    Secure = httpCookie.Secure,
-                                    HttpOnly = httpCookie.HttpOnly
-                                };
+                            foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
+                                yield return cookie;
                             continue;
                         }
                     }
