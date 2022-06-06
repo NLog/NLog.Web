@@ -109,38 +109,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting_separators_layouts()
         {
 #if ASP_NET_CORE
-            var expectedResult =
-@"Name>key
-Value>TEST
-Domain>www.nlog.com
-Path>/nlog.web
-Expires>2022-02-04 13:14:15Z
-Secure>False
-HttpOnly>True
-SameSite>Strict;Name>Key1
-Value>TEST1
-Domain>www.nlog.com
-Path>/nlog.web2
-Expires>2022-02-04 16:17:18Z
-Secure>True
-HttpOnly>False
-SameSite>Lax";
+            var expectedResult =$"Name>key{Environment.NewLine}Value>TEST{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web{Environment.NewLine}Expires>2022-02-04 13:14:15Z{Environment.NewLine}Secure>False{Environment.NewLine}HttpOnly>True{Environment.NewLine}SameSite>Strict;Name>Key1{Environment.NewLine}Value>TEST1{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web2{Environment.NewLine}Expires>2022-02-04 16:17:18Z{Environment.NewLine}Secure>True{Environment.NewLine}HttpOnly>False{Environment.NewLine}SameSite>Lax";
 
 #else
-            var expectedResult =
-@"Name>key
-Value>TEST
-Domain>www.nlog.com
-Path>/nlog.web
-Expires>2022-02-04 13:14:15Z
-Secure>False
-HttpOnly>True;Name>Key1
-Value>TEST1
-Domain>www.nlog.com
-Path>/nlog.web2
-Expires>2022-02-04 16:17:18Z
-Secure>True
-HttpOnly>False";
+            var expectedResult =$"Name>key{Environment.NewLine}Value>TEST{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web{Environment.NewLine}Expires>2022-02-04 13:14:15Z{Environment.NewLine}Secure>False{Environment.NewLine}HttpOnly>True;Name>Key1{Environment.NewLine}Value>TEST1{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web2{Environment.NewLine}Expires>2022-02-04 16:17:18Z{Environment.NewLine}Secure>True{Environment.NewLine}HttpOnly>False";
 #endif
             var renderer = CreateRenderer();
             renderer.ValueSeparator = "${event-properties:valueSeparator1}";
