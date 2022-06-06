@@ -161,12 +161,10 @@ namespace NLog.Web.LayoutRenderers
                 firstItem = false;
             }
 
-#pragma warning disable S1155 // "Any()" should be used to test for emptiness
-            if (verboseCookieValues.Count() > 0)
+            if (!firstItem)
             {
                 builder.Append("]");
             }
-#pragma warning restore S1155 // "Any()" should be used to test for emptiness
         }
 
         private void SerializeAllPropertiesFlat(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
@@ -343,12 +341,10 @@ namespace NLog.Web.LayoutRenderers
                 firstItem = false;
             }
 
-#pragma warning disable S1155 // "Any()" should be used to test for emptiness
-            if (verboseCookieValues.Count() > 0)
+            if (!firstItem)
             {
                 builder.Append(']');
             }
-#pragma warning restore S1155 // "Any()" should be used to test for emptiness
         }
 
         private void SerializeAllPropertiesFlat(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
