@@ -86,7 +86,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected Cookies GetCookies(HttpResponseBase response)
+        private Cookies GetCookies(HttpResponseBase response)
         {
             return response.Cookies;
         }
@@ -144,7 +144,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        protected static IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
+        private static IList<SetCookieHeaderValue> GetCookies(HttpResponse response)
         {
             var queryResults = response.Headers[HeaderNames.SetCookie];
             if (queryResults.Count > 0 && SetCookieHeaderValue.TryParseList(queryResults, out var result))
