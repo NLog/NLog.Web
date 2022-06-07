@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IO;
 using NLog.Common;
 using NLog.Web.LayoutRenderers;
 
@@ -13,13 +14,19 @@ namespace NLog.Web
     /// POST request body
     ///
     /// Usage: app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
-    /// 
+    ///
     /// Inject the NLogRequestPostBodyMiddlewareOption in the IoC if wanting to override default values for constructor
     /// </summary>
     public class NLogRequestPostedBodyMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly NLogRequestPostedBodyMiddlewareOptions _options;
+
+        // Using this instead of new MemoryStream() is important to the performance.
+        // According to the articles, this should be used as a static and not as an instance.
+        // This will manage a pool of MemoryStream instead of creating a new MemoryStream every response.
+        // Otherwise we will end up doing new MemoryStream 1000s of time a minute
+        private static readonly RecyclableMemoryStreamManager MemoryStreamManager = new RecyclableMemoryStreamManager();
 
         /// <summary>
         /// Initializes new instance of the <see cref="NLogRequestPostedBodyMiddleware"/> class
@@ -59,8 +66,38 @@ namespace NLog.Web
                 }
             }
 
-            // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-            await _next(context).ConfigureAwait(false);
+            if (ShouldCaptureResponseBody(context))
+            {
+                using (var memoryStream = MemoryStreamManager.GetStream())
+                {
+                    // Save away the true response stream
+                    var originalStream = context.Response.Body;
+
+                    // Make the Http Context Response Body refer to the Memory Stream
+                    context.Response.Body = memoryStream;
+
+                    // The Http Context Response then writes to the Memory Stream
+                    await _next(context).ConfigureAwait(false);
+
+                    var responseBody = await GetString(memoryStream).ConfigureAwait(false);
+
+                    // Copy the contents of the memory stream back to the true response stream
+                    await memoryStream.CopyToAsync(originalStream).ConfigureAwait(false);
+
+                    // This next line enables NLog to log the response
+                    if (!string.IsNullOrEmpty(responseBody) && _options.ShouldRetainResponse(context))
+                    {
+                        context.Items[AspNetResponseBodyLayoutRenderer.NLogResponseBodyKey] = responseBody;
+                    }
+                }
+            }
+            else
+            {
+                if (context != null)
+                {
+                    await _next(context).ConfigureAwait(false);
+                }
+            }
         }
 
         private bool ShouldCaptureRequestBody(HttpContext context)
@@ -92,7 +129,54 @@ namespace NLog.Web
                 return false;
             }
 
-            return _options.ShouldCapture(context);
+            // Use the ShouldCaptureRequest predicate in the configuration instance that takes the HttpContext as an argument
+            if (!_options.ShouldCaptureRequest(context))
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: _configuration.ShouldCaptureRequest(HttpContext) predicate returned false");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ShouldCaptureResponseBody(HttpContext context)
+        {
+            // Perform null checking
+            if (context == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext is null");
+                return false;
+            }
+
+            // Perform null checking
+            if (context.Response == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Response is null");
+                return false;
+            }
+
+            // Perform null checking
+            if (context.Response.Body == null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Response.Body stream is null");
+                return false;
+            }
+
+            // If we cannot write the response stream we cannot capture the body
+            if (!context.Response.Body.CanWrite)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Response.Body stream is non-writeable");
+                return false;
+            }
+
+            // Use the ShouldCaptureResponse predicate in the configuration instance that takes the HttpContext as an argument
+            if (!_options.ShouldCaptureResponse(context))
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: _configuration.ShouldCaptureResponse(HttpContext) predicate returned false");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -109,7 +193,7 @@ namespace NLog.Web
             // If we cannot seek the stream we cannot capture the body
             if (!stream.CanSeek)
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is non-seekable");
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext Body stream is non-seekable");
                 return responseText;
             }
 
@@ -123,8 +207,6 @@ namespace NLog.Web
 
                 // The last argument, leaveOpen, is set to true, so that the stream is not pre-maturely closed
                 // therefore preventing the next reader from reading the stream.
-                // The middle three arguments are from the configuration instance
-                // These default to UTF-8, true, and 1024.
                 using (var streamReader = new StreamReader(
                            stream,
                            Encoding.UTF8,
