@@ -140,38 +140,36 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(',');
                 }
 
-                builder.Append("{");
+                builder.Append('{');
 
-                AppendJsonProperty(builder, "Name", cookie.Name);
-                builder.Append(",");
-                AppendJsonProperty(builder, "Value", cookie.Value);
-                builder.Append(",");
-                AppendJsonProperty(builder, "Domain", cookie.Domain);
-                builder.Append(",");
-                AppendJsonProperty(builder, "Path", cookie.Path);
-                builder.Append(",");
-                AppendJsonProperty(builder, "Expires", cookie.Expires.ToUniversalTime().ToString("u"));
-                builder.Append(",");
-                AppendJsonProperty(builder, "Secure", cookie.Secure.ToString());
-                builder.Append(",");
-                AppendJsonProperty(builder, "HttpOnly", cookie.HttpOnly.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name);
+                builder.Append(',');
+                AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value);
+                builder.Append(',');
+                AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain);
+                builder.Append(',');
+                AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path);
+                builder.Append(',');
+                AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"));
+                builder.Append(',');
+                AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString());
+                builder.Append(',');
+                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString());
 
-                builder.Append("}");
+                builder.Append('}');
 
                 firstItem = false;
             }
 
             if (!firstItem)
             {
-                builder.Append("]");
+                builder.Append(']');
             }
         }
 
         private void SerializeAllPropertiesFlat(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
         {
             var objectSeparator = GetRenderedObjectSeparator(logEvent);
-            var itemSeparator = GetRenderedItemSeparator(logEvent);
-            var valueSeparator = GetRenderedValueSeparator(logEvent);
 
             var firstItem = true;
             foreach (var cookie in verboseCookieValues)
@@ -180,14 +178,16 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append(objectSeparator);
                 }
+
                 firstItem = false;
-                builder.Append($"Name{valueSeparator}{cookie.Name}{itemSeparator}");
-                builder.Append($"Value{valueSeparator}{cookie.Value}{itemSeparator}");
-                builder.Append($"Domain{valueSeparator}{cookie.Domain}{itemSeparator}");
-                builder.Append($"Path{valueSeparator}{cookie.Path}{itemSeparator}");
-                builder.Append($"Expires{valueSeparator}{cookie.Expires.ToUniversalTime():u}{itemSeparator}");
-                builder.Append($"Secure{valueSeparator}{cookie.Secure}{itemSeparator}");
-                builder.Append($"HttpOnly{valueSeparator}{cookie.HttpOnly}");
+
+                AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name,   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value,  logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain, logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path,   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires.ToUniversalTime().ToString("u"), logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), logEvent, skipItemSeparator: true);
             }
         }
 

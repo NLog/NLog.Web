@@ -273,7 +273,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="builder"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        protected static void AppendJsonProperty(StringBuilder builder, string name, string value)
+        protected static StringBuilder AppendJsonProperty(StringBuilder builder, string name, string value)
         {
             if (!string.IsNullOrEmpty(value))
             {
@@ -281,6 +281,36 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(':');
                 AppendQuoted(builder, value);
             }
+            return builder;
+        }
+
+        /// <summary>
+        /// Append the quoted name and value separated by a value separator
+        /// and ended by item separator
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="logEvent"></param>
+        /// <param name="skipItemSeparator"></param>
+        protected StringBuilder AppendFlatProperty(
+            StringBuilder builder,
+            string name,
+            string value,
+            LogEventInfo logEvent,
+            bool skipItemSeparator = false)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                builder.Append(name);
+                builder.Append(GetRenderedValueSeparator(logEvent));
+                builder.Append(value);
+                if (!skipItemSeparator)
+                {
+                    builder.Append(GetRenderedItemSeparator(logEvent));
+                }
+            }
+            return builder;
         }
 
         private static void AppendQuoted(StringBuilder builder, string value)
