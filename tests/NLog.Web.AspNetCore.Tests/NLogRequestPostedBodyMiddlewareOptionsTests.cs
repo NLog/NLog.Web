@@ -12,9 +12,9 @@ namespace NLog.Web.Tests
         {
             var config = new NLogRequestPostedBodyMiddlewareOptions();
             var size = new Random().Next();
-            config.MaxRequestContentLength = size;
+            config.MaxContentLength = size;
 
-            Assert.Equal(size, config.MaxRequestContentLength);
+            Assert.Equal(size, config.MaxContentLength);
         }
 
         [Fact]
@@ -34,12 +34,12 @@ namespace NLog.Web.Tests
 
             HttpRequest request = Substitute.For<HttpRequest>();
 
-            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxRequestContentLength - 1);
+            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxContentLength - 1);
             request.ContentType.Returns(";charset=utf8");
 
             httpContext.Request.Returns(request);
 
-            Assert.True(config.ShouldCaptureRequest(httpContext));
+            Assert.True(config.ShouldCapture(httpContext));
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace NLog.Web.Tests
 
             httpContext.Request.Returns(request);
 
-            Assert.False(config.ShouldCaptureRequest(httpContext));
+            Assert.False(config.ShouldCapture(httpContext));
         }
 
         [Fact]
@@ -67,11 +67,11 @@ namespace NLog.Web.Tests
 
             HttpRequest request = Substitute.For<HttpRequest>();
 
-            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxRequestContentLength + 1);
+            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxContentLength + 1);
 
             httpContext.Request.Returns(request);
 
-            Assert.False(config.ShouldCaptureRequest(httpContext));
+            Assert.False(config.ShouldCapture(httpContext));
         }
     }
 }

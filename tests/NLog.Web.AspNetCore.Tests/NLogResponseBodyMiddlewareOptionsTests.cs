@@ -10,17 +10,17 @@ namespace NLog.Web.Tests
         [Fact]
         public void SetMaximumRequestSizeTest()
         {
-            var config = new NLogRequestPostedBodyMiddlewareOptions();
+            var config = new NLogResponseBodyMiddlewareOptions();
             var size = new Random().Next();
-            config.MaxResponseContentLength = size;
+            config.MaxContentLength = size;
 
-            Assert.Equal(size, config.MaxResponseContentLength);
+            Assert.Equal(size, config.MaxContentLength);
         }
 
         [Fact]
         public void GetDefault()
         {
-            var config = NLogRequestPostedBodyMiddlewareOptions.Default;
+            var config = NLogResponseBodyMiddlewareOptions.Default;
 
             Assert.NotNull(config);
         }
@@ -28,25 +28,25 @@ namespace NLog.Web.Tests
         [Fact]
         public void DefaultCaptureTrue()
         {
-            var config = NLogRequestPostedBodyMiddlewareOptions.Default;
+            var config = NLogResponseBodyMiddlewareOptions.Default;
 
             HttpContext httpContext = Substitute.For<HttpContext>();
 
             HttpResponse response = Substitute.For<HttpResponse>();
 
-            response.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxResponseContentLength - 1);
+            response.ContentLength.Returns(NLogResponseBodyMiddlewareOptions.Default.MaxContentLength - 1);
 
             response.ContentType.Returns("application/json");
 
             httpContext.Response.Returns(response);
 
-            Assert.True(config.ShouldRetainResponse(httpContext));
+            Assert.True(config.ShouldRetain(httpContext));
         }
 
         [Fact]
         public void DefaultCaptureFalseNullContentLength()
         {
-            var config = NLogRequestPostedBodyMiddlewareOptions.Default;
+            var config = NLogResponseBodyMiddlewareOptions.Default;
 
             HttpContext httpContext = Substitute.For<HttpContext>();
 
@@ -56,23 +56,23 @@ namespace NLog.Web.Tests
 
             httpContext.Response.Returns(response);
 
-            Assert.False(config.ShouldRetainResponse(httpContext));
+            Assert.False(config.ShouldRetain(httpContext));
         }
 
         [Fact]
         public void DefaultCaptureExcessiveContentLength()
         {
-            var config = NLogRequestPostedBodyMiddlewareOptions.Default;
+            var config = NLogResponseBodyMiddlewareOptions.Default;
 
             HttpContext httpContext = Substitute.For<HttpContext>();
 
             HttpResponse response = Substitute.For<HttpResponse>();
 
-            response.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxResponseContentLength + 1);
+            response.ContentLength.Returns(NLogResponseBodyMiddlewareOptions.Default.MaxContentLength + 1);
 
             httpContext.Response.Returns(response);
 
-            Assert.False(config.ShouldRetainResponse(httpContext));
+            Assert.False(config.ShouldRetain(httpContext));
         }
     }
 }

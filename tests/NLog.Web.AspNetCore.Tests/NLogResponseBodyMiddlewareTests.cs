@@ -42,7 +42,7 @@ namespace NLog.Web.Tests
             defaultContext.Response.ContentType = "text/plain";
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
+            var middlewareInstance = new NLogResponseBodyMiddleware(Next, NLogResponseBodyMiddlewareOptions.Default);
             middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
@@ -60,7 +60,7 @@ namespace NLog.Web.Tests
             HttpContext defaultContext = null;
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
+            var middlewareInstance = new NLogResponseBodyMiddleware(Next, NLogResponseBodyMiddlewareOptions.Default);
             middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
@@ -76,7 +76,7 @@ namespace NLog.Web.Tests
             defaultContext.Response.Body = new MemoryStream();
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NextNone, NLogRequestPostedBodyMiddlewareOptions.Default);
+            var middlewareInstance = new NLogResponseBodyMiddleware(NextNone, NLogResponseBodyMiddlewareOptions.Default);
             middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
@@ -91,7 +91,7 @@ namespace NLog.Web.Tests
             HttpContext defaultContext = Substitute.For<HttpContext>();
             defaultContext.Response.Body.Returns((Stream) null);
 
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(NextNone, NLogRequestPostedBodyMiddlewareOptions.Default);
+            var middlewareInstance = new NLogResponseBodyMiddleware(NextNone, NLogResponseBodyMiddlewareOptions.Default);
             middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Assert
