@@ -5,16 +5,16 @@ using Xunit;
 
 namespace NLog.Web.Tests
 {
-    public class NLogRequestPostedBodyMiddlewareOptionsTests
+    public class NLogResponseBodyMiddlewareOptionsTests
     {
         [Fact]
         public void SetMaximumRequestSizeTest()
         {
             var config = new NLogRequestPostedBodyMiddlewareOptions();
             var size = new Random().Next();
-            config.MaxRequestContentLength = size;
+            config.MaxResponseContentLength = size;
 
-            Assert.Equal(size, config.MaxRequestContentLength);
+            Assert.Equal(size, config.MaxResponseContentLength);
         }
 
         [Fact]
@@ -32,14 +32,15 @@ namespace NLog.Web.Tests
 
             HttpContext httpContext = Substitute.For<HttpContext>();
 
-            HttpRequest request = Substitute.For<HttpRequest>();
+            HttpResponse response = Substitute.For<HttpResponse>();
 
-            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxRequestContentLength - 1);
-            request.ContentType.Returns(";charset=utf8");
+            response.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxResponseContentLength - 1);
 
-            httpContext.Request.Returns(request);
+            response.ContentType.Returns("application/json");
 
-            Assert.True(config.ShouldCaptureRequest(httpContext));
+            httpContext.Response.Returns(response);
+
+            Assert.True(config.ShouldRetainResponse(httpContext));
         }
 
         [Fact]
@@ -49,13 +50,13 @@ namespace NLog.Web.Tests
 
             HttpContext httpContext = Substitute.For<HttpContext>();
 
-            HttpRequest request = Substitute.For<HttpRequest>();
+            HttpResponse response = Substitute.For<HttpResponse>();
 
-            request.ContentLength.Returns((long?)null);
+            response.ContentLength.Returns((long?)null);
 
-            httpContext.Request.Returns(request);
+            httpContext.Response.Returns(response);
 
-            Assert.False(config.ShouldCaptureRequest(httpContext));
+            Assert.False(config.ShouldRetainResponse(httpContext));
         }
 
         [Fact]
@@ -65,13 +66,13 @@ namespace NLog.Web.Tests
 
             HttpContext httpContext = Substitute.For<HttpContext>();
 
-            HttpRequest request = Substitute.For<HttpRequest>();
+            HttpResponse response = Substitute.For<HttpResponse>();
 
-            request.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxRequestContentLength + 1);
+            response.ContentLength.Returns(NLogRequestPostedBodyMiddlewareOptions.Default.MaxResponseContentLength + 1);
 
-            httpContext.Request.Returns(request);
+            httpContext.Response.Returns(response);
 
-            Assert.False(config.ShouldCaptureRequest(httpContext));
+            Assert.False(config.ShouldRetainResponse(httpContext));
         }
     }
 }

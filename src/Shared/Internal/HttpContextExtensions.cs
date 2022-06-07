@@ -138,11 +138,37 @@ namespace NLog.Web.Internal
         }
 #endif
 
-        internal static bool HasAllowedContentType(this HttpContext context, IList<KeyValuePair<string, string>> allowContentTypes)
+        internal static bool HasAllowedRequestContentType(this HttpContext context, IList<KeyValuePair<string, string>> allowContentTypes)
         {
             if (allowContentTypes?.Count > 0)
             {
                 var contentType = context?.Request?.ContentType;
+                if (!string.IsNullOrEmpty(contentType))
+                {
+                    for (int i = 0; i < allowContentTypes.Count; ++i)
+                    {
+                        var allowed = allowContentTypes[i];
+                        if (contentType.StartsWith(allowed.Key, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (contentType.IndexOf(allowed.Value, StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        internal static bool HasAllowedResponseContentType(this HttpContext context, IList<KeyValuePair<string, string>> allowContentTypes)
+        {
+            if (allowContentTypes?.Count > 0)
+            {
+                var contentType = context?.Response?.ContentType;
                 if (!string.IsNullOrEmpty(contentType))
                 {
                     for (int i = 0; i < allowContentTypes.Count; ++i)

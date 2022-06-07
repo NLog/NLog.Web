@@ -21,6 +21,14 @@ namespace NLog.Web
 
         /// <summary>
         /// Prefix and suffix values to be accepted as ContentTypes. Ex. key-prefix = "application/" and value-suffix = "json"
+        ///
+        /// The defaults are:
+        ///
+        /// text/*
+        /// */charset
+        /// application/json
+        /// application/xml
+        /// application/html
         /// </summary>
         public IList<KeyValuePair<string, string>> AllowContentTypes { get; set; }
 
@@ -94,7 +102,7 @@ namespace NLog.Web
                 return false;
             }
 
-            if (!context.HasAllowedContentType(AllowContentTypes))
+            if (!context.HasAllowedRequestContentType(AllowContentTypes))
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.ContentType={0}", context?.Request?.ContentType);
                 return false;
