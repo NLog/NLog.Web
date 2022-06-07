@@ -140,54 +140,37 @@ namespace NLog.Web.Internal
 
         internal static bool HasAllowedRequestContentType(this HttpContext context, IList<KeyValuePair<string, string>> allowContentTypes)
         {
-            if (allowContentTypes?.Count > 0)
-            {
-                var contentType = context?.Request?.ContentType;
-                if (!string.IsNullOrEmpty(contentType))
-                {
-                    for (int i = 0; i < allowContentTypes.Count; ++i)
-                    {
-                        var allowed = allowContentTypes[i];
-                        if (contentType.StartsWith(allowed.Key, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (contentType.IndexOf(allowed.Value, StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-
-                return false;
-            }
-
-            return true;
+            return HasAllowedContentType(context?.Request?.ContentType, allowContentTypes);
         }
 
         internal static bool HasAllowedResponseContentType(this HttpContext context, IList<KeyValuePair<string, string>> allowContentTypes)
         {
-            if (allowContentTypes?.Count > 0)
-            {
-                var contentType = context?.Response?.ContentType;
-                if (!string.IsNullOrEmpty(contentType))
-                {
-                    for (int i = 0; i < allowContentTypes.Count; ++i)
-                    {
-                        var allowed = allowContentTypes[i];
-                        if (contentType.StartsWith(allowed.Key, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (contentType.IndexOf(allowed.Value, StringComparison.OrdinalIgnoreCase) >= 0)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
+            return HasAllowedContentType(context?.Response?.ContentType, allowContentTypes);
+        }
 
+        internal static bool HasAllowedContentType(string contentType, IList<KeyValuePair<string, string>> allowContentTypes)
+        {
+            if (allowContentTypes       == null ||
+                allowContentTypes.Count == 0)
+            {
+                return true;
+            }
+
+            if(string.IsNullOrEmpty(contentType))
+            {
                 return false;
             }
 
-            return true;
+            foreach(var allowContentType in allowContentTypes)
+            {
+                if (contentType.StartsWith(allowContentType.Key,   StringComparison.OrdinalIgnoreCase) &&
+                    contentType.IndexOf(   allowContentType.Value, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
