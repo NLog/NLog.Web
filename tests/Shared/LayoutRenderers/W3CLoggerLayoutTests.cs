@@ -49,7 +49,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedBody, body);
         }
 
-        /*
         [Fact]
         public void W3CLoggerLayoutWithContextTest()
         {
@@ -76,7 +75,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedHeader, header);
             Assert.Equal(expectedBody, body);
         }
-        */
+
         private static
 #if ASP_NET_CORE
             HttpContext
