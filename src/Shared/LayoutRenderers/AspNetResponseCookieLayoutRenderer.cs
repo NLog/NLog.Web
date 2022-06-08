@@ -94,15 +94,19 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="builder"></param>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        private static StringBuilder AppendJsonProperty(StringBuilder builder, string name, string value)
+        /// <param name="skipPropertySeparator"></param>
+        private static void AppendJsonProperty(StringBuilder builder, string name, string value, bool skipPropertySeparator = false)
         {
             if (!string.IsNullOrEmpty(value))
             {
                 AppendQuoted(builder, name);
                 builder.Append(':');
                 AppendQuoted(builder, value);
+                if (!skipPropertySeparator)
+                {
+                    builder.Append(',');
+                }
             }
-            return builder;
         }
 
         /// <summary>
@@ -114,7 +118,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="value"></param>
         /// <param name="logEvent"></param>
         /// <param name="skipItemSeparator"></param>
-        private StringBuilder AppendFlatProperty(
+        private void AppendFlatProperty(
             StringBuilder builder,
             string name,
             string value,
@@ -131,7 +135,6 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(GetRenderedItemSeparator(logEvent));
                 }
             }
-            return builder;
         }
 
 #if !ASP_NET_CORE
@@ -189,18 +192,12 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append('{');
 
                 AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name);
-                builder.Append(',');
                 AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value);
-                builder.Append(',');
                 AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain);
-                builder.Append(',');
                 AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path);
-                builder.Append(',');
                 AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"));
-                builder.Append(',');
                 AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString());
-                builder.Append(',');
-                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString());
+                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(),skipPropertySeparator: true);
 
                 builder.Append('}');
 
@@ -367,20 +364,13 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append('{');
 
                 AppendJsonProperty(builder, "Name", cookie.Name.ToString());
-                builder.Append(',');
                 AppendJsonProperty(builder, "Value", cookie.Value.ToString());
-                builder.Append(',');
                 AppendJsonProperty(builder, "Domain", cookie.Domain.ToString());
-                builder.Append(',');
                 AppendJsonProperty(builder, "Path", cookie.Path.ToString());
-                builder.Append(',');
                 AppendJsonProperty(builder, "Expires", cookie.Expires?.ToUniversalTime().ToString("u"));
-                builder.Append(',');
                 AppendJsonProperty(builder, "Secure", cookie.Secure.ToString());
-                builder.Append(',');
                 AppendJsonProperty(builder, "HttpOnly", cookie.HttpOnly.ToString());
-                builder.Append(',');
-                AppendJsonProperty(builder, "SameSite", cookie.SameSite.ToString());
+                AppendJsonProperty(builder, "SameSite", cookie.SameSite.ToString(), skipPropertySeparator: true);
 
                 builder.Append('}');
 
