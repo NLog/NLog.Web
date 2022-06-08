@@ -46,6 +46,14 @@ namespace NLog.Web.Internal
             }
         }
 #else
+        internal static WebSocketManager TryGetWebSocket(this HttpContext context)
+        {
+            var websocket = context?.WebSockets;
+            if (websocket == null)
+                InternalLogger.Debug("HttpContext WebSocket Lookup returned null");
+            return websocket;
+        }
+
         internal static ConnectionInfo TryGetConnection(this HttpContext context)
         {
             var connection = context?.Connection;
