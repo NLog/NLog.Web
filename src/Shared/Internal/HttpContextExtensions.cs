@@ -46,6 +46,14 @@ namespace NLog.Web.Internal
             }
         }
 #else
+        internal static ConnectionInfo TryGetConnection(this HttpContext context)
+        {
+            var connection = context?.Connection;
+            if (connection == null)
+                InternalLogger.Debug("HttpContext Connection Lookup returned null");
+            return connection;
+        }
+
         internal static HttpRequest TryGetRequest(this HttpContext context)
         {
             var request = context?.Request;
