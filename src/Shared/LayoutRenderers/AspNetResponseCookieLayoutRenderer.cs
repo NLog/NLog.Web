@@ -88,6 +88,52 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
+        /// <summary>
+        /// Append the quoted name and value separated by a colon
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        private static StringBuilder AppendJsonProperty(StringBuilder builder, string name, string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                AppendQuoted(builder, name);
+                builder.Append(':');
+                AppendQuoted(builder, value);
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Append the quoted name and value separated by a value separator
+        /// and ended by item separator
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="logEvent"></param>
+        /// <param name="skipItemSeparator"></param>
+        private StringBuilder AppendFlatProperty(
+            StringBuilder builder,
+            string name,
+            string value,
+            LogEventInfo logEvent,
+            bool skipItemSeparator = false)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                builder.Append(name);
+                builder.Append(GetRenderedValueSeparator(logEvent));
+                builder.Append(value);
+                if (!skipItemSeparator)
+                {
+                    builder.Append(GetRenderedItemSeparator(logEvent));
+                }
+            }
+            return builder;
+        }
+
 #if !ASP_NET_CORE
 
         /// <summary>
@@ -350,8 +396,6 @@ namespace NLog.Web.LayoutRenderers
         private void SerializeAllPropertiesFlat(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
         {
             var objectSeparator = GetRenderedObjectSeparator(logEvent);
-            var itemSeparator = GetRenderedItemSeparator(logEvent);
-            var valueSeparator = GetRenderedValueSeparator(logEvent);
 
             var firstItem = true;
             foreach (var cookie in verboseCookieValues)
@@ -360,15 +404,17 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append(objectSeparator);
                 }
+
                 firstItem = false;
-                builder.Append($"Name{valueSeparator}{cookie.Name}{itemSeparator}");
-                builder.Append($"Value{valueSeparator}{cookie.Value}{itemSeparator}");
-                builder.Append($"Domain{valueSeparator}{cookie.Domain}{itemSeparator}");
-                builder.Append($"Path{valueSeparator}{cookie.Path}{itemSeparator}");
-                builder.Append($"Expires{valueSeparator}{cookie.Expires?.ToUniversalTime():u}{itemSeparator}");
-                builder.Append($"Secure{valueSeparator}{cookie.Secure}{itemSeparator}");
-                builder.Append($"HttpOnly{valueSeparator}{cookie.HttpOnly}{itemSeparator}");
-                builder.Append($"SameSite{valueSeparator}{cookie.SameSite}");
+
+                AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name.ToString(),     logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value.ToString(),    logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString(),   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path.ToString(),     logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"), logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), logEvent);
+                AppendFlatProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), logEvent, skipItemSeparator: true);
             }
         }
 #endif

@@ -138,7 +138,7 @@ namespace NLog.Web.Internal
                     continue;
                 }
 
-                if (expandMultiValue)
+                if (expandMultiValue && httpCookie.Values.Count > 1)
                 {
                     foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
                         yield return cookie;
@@ -164,7 +164,7 @@ namespace NLog.Web.Internal
                     continue;
                 }
 
-                if(expandMultiValue)
+                if(expandMultiValue && httpCookie.Values.Count > 1)
                 {
                     foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
                         yield return cookie;
