@@ -128,6 +128,25 @@ namespace NLog.Web
         }
 
         /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, NLogAspNetCoreOptions options, Func<IServiceProvider, LogFactory> factoryBuilder)
+        {
+            AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
+            {
+                config = SetupNLogConfigSettings(serviceProvider, config);
+                // Delay initialization of targets until we have loaded config-settings
+                var logFactory = factoryBuilder(serviceProvider);
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, env, opt, logFactory);
+                return provider;
+            });
+            return builder;
+        }
+
+        /// <summary>
         /// Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
         /// </summary>
         /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
