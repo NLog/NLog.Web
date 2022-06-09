@@ -23,8 +23,9 @@ namespace NLog.Web.LayoutRenderers
     /// <code lang="NLog Layout Renderer">
     /// ${aspnet-response-cookie:OutputFormat=Flat}
     /// ${aspnet-response-cookie:OutputFormat=JsonArray}
-    /// ${aspnet-response-cookie:OutputFormat=JsonArray:CookieNames=username}
-    /// ${aspnet-response-cookie:OutputFormat=JsonArray:Exclude=access_token}
+    /// ${aspnet-response-cookie:OutputFormat=JsonDictionary}
+    /// ${aspnet-response-cookie:OutputFormat=JsonDictionary:CookieNames=username}
+    /// ${aspnet-response-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-response-cookie")]
@@ -169,6 +170,7 @@ namespace NLog.Web.LayoutRenderers
                     SerializeAllPropertiesFlat(verboseCookieValues, builder, logEvent);
                     break;
                 case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
                     SerializeAllPropertiesJson(verboseCookieValues, builder);
                     break;
             }
@@ -182,7 +184,14 @@ namespace NLog.Web.LayoutRenderers
             {
                 if (firstItem)
                 {
-                    builder.Append('[');
+                    if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                    {
+                        builder.Append('{');
+                    }
+                    else
+                    {
+                        builder.Append('[');
+                    }
                 }
                 else
                 {
@@ -206,7 +215,14 @@ namespace NLog.Web.LayoutRenderers
 
             if (!firstItem)
             {
-                builder.Append(']');
+                if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                {
+                    builder.Append('}');
+                }
+                else
+                {
+                    builder.Append(']');
+                }
             }
         }
 
@@ -341,12 +357,13 @@ namespace NLog.Web.LayoutRenderers
                     SerializeAllPropertiesFlat(verboseCookieValues, builder, logEvent);
                     break;
                 case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
                     SerializeAllPropertiesJson(verboseCookieValues, builder);
                     break;
             }
         }
 
-        private static void SerializeAllPropertiesJson(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder)
+        private void SerializeAllPropertiesJson(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder)
         {
             var firstItem = true;
 
@@ -354,7 +371,14 @@ namespace NLog.Web.LayoutRenderers
             {
                 if (firstItem)
                 {
-                    builder.Append('[');
+                    if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                    {
+                        builder.Append('{');
+                    }
+                    else
+                    {
+                        builder.Append('[');
+                    }
                 }
                 else
                 {
@@ -363,14 +387,14 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append('{');
 
-                AppendJsonProperty(builder, "Name", cookie.Name.ToString());
-                AppendJsonProperty(builder, "Value", cookie.Value.ToString());
-                AppendJsonProperty(builder, "Domain", cookie.Domain.ToString());
-                AppendJsonProperty(builder, "Path", cookie.Path.ToString());
-                AppendJsonProperty(builder, "Expires", cookie.Expires?.ToUniversalTime().ToString("u"));
-                AppendJsonProperty(builder, "Secure", cookie.Secure.ToString());
-                AppendJsonProperty(builder, "HttpOnly", cookie.HttpOnly.ToString());
-                AppendJsonProperty(builder, "SameSite", cookie.SameSite.ToString(), skipPropertySeparator: true);
+                AppendJsonProperty(builder, nameof(cookie.Name),     cookie.Name.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Value),    cookie.Value.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Path),     cookie.Path.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"));
+                AppendJsonProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString());
+                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString());
+                AppendJsonProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), skipPropertySeparator: true);
 
                 builder.Append('}');
 
@@ -379,7 +403,14 @@ namespace NLog.Web.LayoutRenderers
 
             if (!firstItem)
             {
-                builder.Append(']');
+                if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                {
+                    builder.Append('}');
+                }
+                else
+                {
+                    builder.Append(']');
+                }
             }
         }
 

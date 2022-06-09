@@ -74,6 +74,18 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void KeyNotFoundRendersEmptyString_JsonDictionary_Formatting()
+        {
+            var renderer = CreateRenderer();
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
+            renderer.CookieNames = new List<string> { "notfound" };
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
         public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting()
         {
 #if ASP_NET_CORE
@@ -153,6 +165,22 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             var renderer = CreateRenderer(addSecondCookie: false);
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void KeyFoundRendersValue_Single_Cookie_JsonDictionary_Formatting()
+        {
+#if ASP_NET_CORE
+            var expectedResult = "{{\"Name\":\"key\",\"Value\":\"TEST\",\"Domain\":\"www.nlog.com\",\"Path\":\"/nlog.web\",\"Expires\":\"2022-02-04 13:14:15Z\",\"Secure\":\"False\",\"HttpOnly\":\"True\",\"SameSite\":\"Strict\"}}";
+#else
+            var expectedResult = "{{\"Name\":\"key\",\"Value\":\"TEST\",\"Domain\":\"www.nlog.com\",\"Path\":\"/nlog.web\",\"Expires\":\"2022-02-04 13:14:15Z\",\"Secure\":\"False\",\"HttpOnly\":\"True\"}}";
+#endif
+            var renderer = CreateRenderer(addSecondCookie: false);
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
 
             string result = renderer.Render(new LogEventInfo());
 
