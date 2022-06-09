@@ -21,7 +21,7 @@ using System.IO;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUrlLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestUrlLayoutRenderer>
+    public class AspNetRequestUrlRendererTests : LayoutRenderersTestBase<AspNetRequestUrlLayoutRenderer>
     {
         [Fact]
         public void UrlPresentRenderNonEmpty_Default()

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestRouteParametersLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestRouteParametersLayoutRenderer>
+    public class AspNetRequestRouteParametersRendererTests : LayoutRenderersTestBase<AspNetRequestRouteParametersLayoutRenderer>
     {
         [Fact]
         public void NullRouteParametersRenderersEmptyString()

@@ -9,31 +9,31 @@ using System.Web.SessionState;
 #else
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Http.Features;
 #endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 
-
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetMvcControllerLayoutRendererTests : LayoutRenderersTestBase<AspNetMvcControllerLayoutRenderer>
+    public class AspNetRequestHttpMethodRendererTests : LayoutRenderersTestBase<AspNetRequestHttpMethodLayoutRenderer>
     {
         [Fact]
-        public void NullRoutesRenderersEmptyString()
+        public void HttpMethod_Set_Renderer()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 
-            AddRoutingFeature(httpContext);
-
+#if ASP_NET_CORE
+            httpContext.Request.Method.Returns("POST");
+#else
+            httpContext.Request.HttpMethod.Returns("POST");
+#endif
             // Act
-            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+            string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Empty(result);
+            Assert.Equal("POST", result);
         }
     }
 }

@@ -9,33 +9,31 @@ using System.Web.SessionState;
 #else
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 
+
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUserAgentLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestUserAgentLayoutRenderer>
+    public class AspNetMvcControllerRendererTests : LayoutRenderersTestBase<AspNetMvcControllerLayoutRenderer>
     {
         [Fact]
-        public void NotNullUserAgentRendersEmptyString()
+        public void NullRoutesRenderersEmptyString()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 
+            AddRoutingFeature(httpContext);
 
-#if !ASP_NET_CORE
-             httpContext.Request.UserAgent.Returns("TEST");
-#else
-            var headers = new HeaderDict {{"User-Agent", new StringValues("TEST")}};
-            httpContext.Request.Headers.Returns((callinfo) => headers);
-#endif
             // Act
-            string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal("TEST", result);
+            Assert.Empty(result);
         }
     }
 }

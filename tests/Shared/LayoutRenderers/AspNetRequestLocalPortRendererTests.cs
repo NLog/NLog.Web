@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestLocalPortLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestLocalPortLayoutRenderer>
+    public class AspNetRequestLocalPortRendererTests : LayoutRenderersTestBase<AspNetRequestLocalPortLayoutRenderer>
     {
 #if ASP_NET_CORE
         [Fact]

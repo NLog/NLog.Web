@@ -13,7 +13,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetTraceIdentifierLayoutRendererTests : LayoutRenderersTestBase<AspNetTraceIdentifierLayoutRenderer>
+    public class AspNetTraceIdentifierRendererTests : LayoutRenderersTestBase<AspNetTraceIdentifierLayoutRenderer>
     {
         [Fact]
         public void EmptyGuidRendersEmptyString()
@@ -55,7 +55,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             SetTraceIdentifier(httpContext, expectedResult);
 
             System.Diagnostics.Activity.Current = new System.Diagnostics.Activity("MyOperation").Start();
-
+            
             // Act
             string result = renderer.Render(new LogEventInfo());
 
