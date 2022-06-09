@@ -8,7 +8,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestClientCertificateRendererTests : LayoutRenderersTestBase<AspNetRequestClientCertificateLayoutRenderer>
+    public class AspNetRequestClientCertificateLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestClientCertificateLayoutRenderer>
     {
 #if ASP_NET_CORE
         [Fact]

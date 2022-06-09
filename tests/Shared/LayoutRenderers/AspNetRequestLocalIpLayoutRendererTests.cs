@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestLocalIpRendererTests : LayoutRenderersTestBase<AspNetRequestLocalIpLayoutRenderer>
+    public class AspNetRequestLocalIpLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestLocalIpLayoutRenderer>
     {
         [Fact]
         public void SuccessTest()

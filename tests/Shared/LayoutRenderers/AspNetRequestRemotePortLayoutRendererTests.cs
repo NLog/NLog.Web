@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestRemotePortRendererTests : LayoutRenderersTestBase<AspNetRequestRemotePortLayoutRenderer>
+    public class AspNetRequestRemotePortLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestRemotePortLayoutRenderer>
     {
         [Fact]
         public void SuccessTest()

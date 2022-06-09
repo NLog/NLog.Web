@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetResponseStatusCodeRendererTests : LayoutRenderersTestBase<AspNetResponseStatusCodeLayoutRenderer>
+    public class AspNetResponseStatusCodeLayoutRendererTests : LayoutRenderersTestBase<AspNetResponseStatusCodeLayoutRenderer>
     {
         [Fact]
         public void StatusCode_Set_Renderer()
