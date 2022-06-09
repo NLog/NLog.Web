@@ -20,11 +20,11 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <example>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-mvc-action}    
+    /// ${aspnet-mvc-action}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-mvc-action")]
-    public class AspNetMvcActionRenderer : AspNetMvcLayoutRendererBase
+    public class AspNetMvcActionLayoutRenderer : AspNetMvcLayoutRendererBase
     {
         /// <summary>
         /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.

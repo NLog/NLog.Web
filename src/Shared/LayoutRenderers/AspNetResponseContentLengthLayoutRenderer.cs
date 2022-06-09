@@ -1,36 +1,39 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET request contentlength of the posted body
+    /// ASP.NET Response ContentLength
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-contentlength}
+    /// ${aspnet-response-contentlength}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-contentlength")]
-    public class AspNetRequestContentLength : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-response-contentlength")]
+    public class AspNetResponseContentLengthLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the ASP.NET posted body
+        /// ASP.NET Http Response Status Code
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (httpRequest == null)
+            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
+            if (httpResponse == null)
             {
                 return;
             }
 
-            long? contentLength = httpRequest.ContentLength;
+#if ASP_NET_CORE
+            var contentLength = httpResponse.ContentLength;
+#else
+            var contentLength = httpResponse.OutputStream?.Length;
+#endif
             if (contentLength > 0L)
             {
-                builder.Append(contentLength.Value);
+                builder.Append(contentLength);
             }
         }
     }

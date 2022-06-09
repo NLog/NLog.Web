@@ -16,7 +16,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUserAgentTests : LayoutRenderersTestBase<AspNetRequestUserAgent>
+    public class AspNetRequestUserAgentTests : LayoutRenderersTestBase<AspNetRequestUserAgentLayoutRenderer>
     {
         [Fact]
         public void NotNullUserAgentRendersEmptyString()

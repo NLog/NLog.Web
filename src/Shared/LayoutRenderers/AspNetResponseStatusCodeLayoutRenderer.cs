@@ -1,17 +1,21 @@
 ﻿using System.Text;
+using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Response ContentLength
+    /// ASP.NET Response Status Code.
     /// </summary>
-    /// <remarks>
-    /// ${aspnet-response-contentlength}
-    /// </remarks>
-    [LayoutRenderer("aspnet-response-contentlength")]
-    public class AspNetResponseContentLength : AspNetLayoutRendererBase
+    /// <example>
+    /// <para>Example usage of ${aspnet-response-statuscode}:</para>
+    /// <code lang="NLog Layout Renderer">
+    /// ${aspnet-response-statuscode} - Produces - 200.
+    /// </code>
+    /// </example>
+    [LayoutRenderer("aspnet-response-statuscode")]
+    public class AspNetResponseStatusCodeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// ASP.NET Http Response Status Code
@@ -26,14 +30,11 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-#if ASP_NET_CORE
-            var contentLength = httpResponse.ContentLength;
-#else
-            var contentLength = httpResponse.OutputStream?.Length;
-#endif
-            if (contentLength > 0L)
+            int statusCode = httpResponse.StatusCode;
+
+            if (statusCode >= 100 && statusCode <= 599)
             {
-                builder.Append(contentLength);
+                builder.Append(statusCode);
             }
         }
     }

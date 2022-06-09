@@ -29,7 +29,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-url")]
-    public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestUrlLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// To specify whether to include / exclude the Query string. Default is false.
@@ -63,8 +63,8 @@ namespace NLog.Web.LayoutRenderers
         /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
         /// </summary>
         public bool UseRawTarget { get; set; }
-        
-#endif        
+
+#endif
 
         /// <summary>
         /// Renders the Request URL from the HttpRequest

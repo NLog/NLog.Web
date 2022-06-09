@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-
-#if !ASP_NET_CORE
-using System.Web;
-using System.Collections.Specialized;
-#endif
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request Referrer URL String
+    /// ASP.NET request contentlength of the posted body
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-referrer}
+    /// ${aspnet-request-contentlength}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-referrer")]
-    public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-contentlength")]
+    public class AspNetRequestContentLengthLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the Referrer URL from the HttpRequest <see cref="StringBuilder" />.
+        /// Renders the ASP.NET posted body
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -33,16 +27,11 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var referrer = string.Empty;
-#if !ASP_NET_CORE
-            referrer = httpRequest.UrlReferrer?.ToString();
-#else
-            if (httpRequest.Headers.TryGetValue("Referer", out var referrerValue))
+            long? contentLength = httpRequest.ContentLength;
+            if (contentLength > 0L)
             {
-                referrer = referrerValue.ToString();
+                builder.Append(contentLength.Value);
             }
-#endif
-            builder.Append(referrer);
         }
     }
 }
