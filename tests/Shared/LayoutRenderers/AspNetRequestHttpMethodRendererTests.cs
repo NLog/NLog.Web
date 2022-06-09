@@ -16,7 +16,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestHttpMethodRendererTests : LayoutRenderersTestBase<AspNetRequestHttpMethodLayoutRenderer>
+    public class AspNetRequestHttpMethodRendererTests : LayoutRenderersTestBase<AspNetRequestHttpMethodRenderer>
     {
         [Fact]
         public void HttpMethod_Set_Renderer()

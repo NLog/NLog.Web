@@ -22,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-routeparameters")]
-    public class AspNetRequestRouteParametersLayoutRenderer : AspNetLayoutMultiValueRendererBase
+    public class AspNetRequestRouteParametersRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// List Route Parameter' Key to be rendered from Request.
@@ -68,7 +68,7 @@ namespace NLog.Web.LayoutRenderers
         {
             foreach (string key in routeParameterKeys)
             {
-                // This platform specific code is to prevent an unncessary .ToString call otherwise.
+                // This platform specific code is to prevent an unncessary .ToString call otherwise. 
                 if (!routeParameters.TryGetValue(key, out object objValue))
                 {
                     continue;

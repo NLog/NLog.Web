@@ -19,7 +19,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetMvcControllerRendererTests : LayoutRenderersTestBase<AspNetMvcControllerLayoutRenderer>
+    public class AspNetMvcControllerRendererTests : LayoutRenderersTestBase<AspNetMvcControllerRenderer>
     {
         [Fact]
         public void NullRoutesRenderersEmptyString()
@@ -28,7 +28,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
             AddRoutingFeature(httpContext);
-
+            
             // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 

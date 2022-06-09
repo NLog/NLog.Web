@@ -6,22 +6,21 @@ using NLog.Web.Internal;
 
 #if !ASP_NET_CORE
 using System.Web;
-using System.Collections.Specialized;
 #endif
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request Referrer URL String
+    /// ASP.NET Http Request Method (POST / GET)
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-referrer}
+    /// ${aspnet-request-method}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-referrer")]
-    public class AspNetRequestReferrerLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-method")]
+    public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Renders the Referrer URL from the HttpRequest <see cref="StringBuilder" />.
+        /// ASP.NET Http Request Method
         /// </summary>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
@@ -33,16 +32,13 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var referrer = string.Empty;
+            string httpMethod;
 #if !ASP_NET_CORE
-            referrer = httpRequest.UrlReferrer?.ToString();
+            httpMethod = httpRequest.HttpMethod;
 #else
-            if (httpRequest.Headers.TryGetValue("Referer", out var referrerValue))
-            {
-                referrer = referrerValue.ToString();
-            }
+            httpMethod = httpRequest.Method;
 #endif
-            builder.Append(referrer);
+            builder.Append(httpMethod);
         }
     }
 }

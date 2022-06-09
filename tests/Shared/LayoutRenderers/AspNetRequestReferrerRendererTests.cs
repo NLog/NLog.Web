@@ -14,7 +14,7 @@ using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestReferrerRendererTests : LayoutRenderersTestBase<AspNetRequestReferrerLayoutRenderer>
+    public class AspNetRequestReferrerRendererTests : LayoutRenderersTestBase<AspNetRequestReferrerRenderer>
     {
         [Fact]
         public void ReferrerPresentRenderNonEmptyString()
