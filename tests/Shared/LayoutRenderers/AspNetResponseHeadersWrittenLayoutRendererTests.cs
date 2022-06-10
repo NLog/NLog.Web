@@ -33,6 +33,19 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal("0", result);
         }
 
+        [Fact]
+        public void NullCase()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            httpContext.Response.ReturnsNull();
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+            // Assert
+            Assert.Equal("0", result);
+        }
+
 #endif
 
 
@@ -72,7 +85,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Act
             string result = renderer.Render(new LogEventInfo());
             // Assert
-            Assert.Equal("", result);
+            Assert.Equal("0", result);
         }
 #endif
 
