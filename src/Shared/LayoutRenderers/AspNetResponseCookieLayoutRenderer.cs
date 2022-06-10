@@ -108,50 +108,42 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Append the quoted name and value separated by a colon
         /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <param name="skipPropertySeparator"></param>
-        private static void AppendJsonProperty(StringBuilder builder, string name, string value, bool skipPropertySeparator = false)
+        private static bool AppendJsonProperty(StringBuilder builder, string name, string value, bool includePropertySeparator)
         {
             if (!string.IsNullOrEmpty(value))
             {
-                AppendQuoted(builder, name);
-                builder.Append(':');
-                AppendQuoted(builder, value);
-                if (!skipPropertySeparator)
+                if (includePropertySeparator)
                 {
                     builder.Append(',');
                 }
+                AppendQuoted(builder, name);
+                builder.Append(':');
+                AppendQuoted(builder, value);
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// Append the quoted name and value separated by a value separator
         /// and ended by item separator
         /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <param name="logEvent"></param>
-        /// <param name="skipItemSeparator"></param>
-        private void AppendFlatProperty(
+        private static bool AppendFlatProperty(
             StringBuilder builder,
             string name,
             string value,
-            LogEventInfo logEvent,
-            bool skipItemSeparator = false)
+            string valueSeparator,
+            string itemSeparator)
         {
             if (!string.IsNullOrEmpty(value))
             {
+                builder.Append(itemSeparator);
                 builder.Append(name);
-                builder.Append(GetRenderedValueSeparator(logEvent));
+                builder.Append(valueSeparator);
                 builder.Append(value);
-                if (!skipItemSeparator)
-                {
-                    builder.Append(GetRenderedItemSeparator(logEvent));
-                }
+                return true;
             }
+            return false;
         }
 
 #if !ASP_NET_CORE
@@ -195,6 +187,7 @@ namespace NLog.Web.LayoutRenderers
         private void SerializeAllPropertiesJson(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder)
         {
             var firstItem = true;
+            var includeSeparator = false;
 
             foreach (var cookie in verboseCookieValues)
             {
@@ -216,13 +209,13 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append('{');
 
-                AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name);
-                AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value);
-                AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain);
-                AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path);
-                AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"));
-                AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString());
-                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(),skipPropertySeparator: true);
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name, false);
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value, includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain, includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path, includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), includeSeparator) || includeSeparator;
 
                 builder.Append('}');
 
@@ -244,25 +237,27 @@ namespace NLog.Web.LayoutRenderers
 
         private void SerializeAllPropertiesFlat(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
         {
+            var propertySeparator = GetRenderedItemSeparator(logEvent);
+            var valueSeparator = GetRenderedValueSeparator(logEvent);
             var objectSeparator = GetRenderedObjectSeparator(logEvent);
 
-            var firstItem = true;
+            var firstObject = true;
+            var includeSeparator = false;
             foreach (var cookie in verboseCookieValues)
             {
-                if (!firstItem)
+                if (!firstObject)
                 {
                     builder.Append(objectSeparator);
                 }
+                firstObject = false;
 
-                firstItem = false;
-
-                AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name,   logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value,  logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain, logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path,   logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires.ToUniversalTime().ToString("u"), logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   logEvent);
-                AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), logEvent, skipItemSeparator: true);
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name,   valueSeparator, "");
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value,  valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain, valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path,   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires.ToUniversalTime().ToString("u"), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
             }
         }
 
@@ -382,6 +377,7 @@ namespace NLog.Web.LayoutRenderers
         private void SerializeAllPropertiesJson(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder)
         {
             var firstItem = true;
+            var includeSeparator = false;
 
             foreach (var cookie in verboseCookieValues)
             {
@@ -403,14 +399,14 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append('{');
 
-                AppendJsonProperty(builder, nameof(cookie.Name),     cookie.Name.ToString());
-                AppendJsonProperty(builder, nameof(cookie.Value),    cookie.Value.ToString());
-                AppendJsonProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString());
-                AppendJsonProperty(builder, nameof(cookie.Path),     cookie.Path.ToString());
-                AppendJsonProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"));
-                AppendJsonProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString());
-                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString());
-                AppendJsonProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), skipPropertySeparator: true);
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Name),    cookie.Name.ToString(), false);
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Value),   cookie.Value.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Domain),  cookie.Domain.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Path),    cookie.Path.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires?.ToUniversalTime().ToString("u"), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Secure),  cookie.Secure.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator = AppendJsonProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), includeSeparator) || includeSeparator;
 
                 builder.Append('}');
 
@@ -432,26 +428,28 @@ namespace NLog.Web.LayoutRenderers
 
         private void SerializeAllPropertiesFlat(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
         {
+            var propertySeparator = GetRenderedItemSeparator(logEvent);
+            var valueSeparator = GetRenderedValueSeparator(logEvent);
             var objectSeparator = GetRenderedObjectSeparator(logEvent);
 
-            var firstItem = true;
+            var firstObject = true;
+            var includeSeparator = false;
             foreach (var cookie in verboseCookieValues)
             {
-                if (!firstItem)
+                if (!firstObject)
                 {
                     builder.Append(objectSeparator);
                 }
+                firstObject = false;
 
-                firstItem = false;
-
-                AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name.ToString(),     logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value.ToString(),    logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString(),   logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path.ToString(),     logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"), logEvent);
-                AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   logEvent);
-                AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), logEvent);
-                AppendFlatProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), logEvent, skipItemSeparator: true);
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name.ToString(), valueSeparator, "");
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString(),  valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path.ToString(),    valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator = AppendFlatProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
             }
         }
 #endif
