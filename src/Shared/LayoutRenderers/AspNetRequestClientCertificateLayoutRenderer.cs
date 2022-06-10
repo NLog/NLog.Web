@@ -13,11 +13,17 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Client Certificate of the Connection
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-client certificate}
+    /// ${aspnet-request-client-certificate}
+    /// ${aspnet-request-client-certificate:Verbose=True}
     /// </remarks>
     [LayoutRenderer("aspnet-request-client-certificate")]
     public class AspNetRequestClientCertificateLayoutRenderer : AspNetLayoutRendererBase
     {
+        /// <summary>
+        /// This is passed to the X509Certificate2.ToString(bool) method
+        /// </summary>
+        public bool Verbose { get; set; }
+
         /// <summary>
         /// Render Remote Port
         /// </summary>
@@ -30,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-            builder.Append(connection.ClientCertificate);
+            builder.Append(connection.ClientCertificate?.ToString(Verbose));
 #else
             var certificate = httpContext.Request.ClientCertificate;
             if (certificate == null)
@@ -39,7 +45,7 @@ namespace NLog.Web.LayoutRenderers
             }
             // Convert to an X509Certificate2, which does have the proper overridden ToString() method.
             // HttpClientCertificate class only use object.ToString() which is useless.
-            builder.Append(new X509Certificate2(certificate.Certificate));
+            builder.Append(new X509Certificate2(certificate.Certificate)?.ToString(Verbose));
 #endif
         }
     }
