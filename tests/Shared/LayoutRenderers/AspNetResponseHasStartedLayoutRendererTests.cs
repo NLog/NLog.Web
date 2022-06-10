@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetResponseHeadersWrittenLayoutRendererTests : LayoutRenderersTestBase<AspNetResponseHeadersWrittenLayoutRenderer>
+    public class AspNetResponseHasStartedLayoutRendererTests : LayoutRenderersTestBase<AspNetResponseHasStartedLayoutRenderer>
     {
 #if !ASP_NET_CORE && NET46_OR_GREATER
         [Fact]

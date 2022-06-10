@@ -5,13 +5,13 @@ using System.Text;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET response headers already sent
+    /// ASP.NET response headers already sent, in other words the response has started
     /// </summary>
     /// <remarks>
-    /// ${aspnet-response-headers-written}
+    /// ${aspnet-response-has-started}
     /// </remarks>
-    [LayoutRenderer("aspnet-response-headers-written")]
-    public class AspNetResponseHeadersWrittenLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-response-has-started")]
+    public class AspNetResponseHasStartedLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Renders the ASP.NET HttpResponse HasStarted property in ASP.NET Core and the HttpResponse HeadersWritten in .NET Framework
