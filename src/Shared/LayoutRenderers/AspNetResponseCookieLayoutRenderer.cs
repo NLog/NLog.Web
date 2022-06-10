@@ -38,6 +38,11 @@ namespace NLog.Web.LayoutRenderers
         public List<string> CookieNames { get; set; }
 
         /// <summary>
+        /// Render all of the cookie properties, such as Daom and Path, not merely Name and Value
+        /// </summary>
+        public bool Verbose { get; set; }
+
+        /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
@@ -71,8 +76,65 @@ namespace NLog.Web.LayoutRenderers
             var cookies = GetCookies(httpResponse);
             if (cookies.Count > 0)
             {
-                var cookieValues = GetCookieValues(cookies);
-                SerializePairs(cookieValues, builder, logEvent);
+                if (!Verbose)
+                {
+                    var cookieValues = GetCookieValues(cookies);
+                    SerializePairs(cookieValues, builder, logEvent);
+                }
+                else
+                {
+                    var verboseCookieValues = GetVerboseCookieValues(cookies);
+                    SerializeAllProperties(verboseCookieValues, builder, logEvent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Append the quoted name and value separated by a colon
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="skipPropertySeparator"></param>
+        private static void AppendJsonProperty(StringBuilder builder, string name, string value, bool skipPropertySeparator = false)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                AppendQuoted(builder, name);
+                builder.Append(':');
+                AppendQuoted(builder, value);
+                if (!skipPropertySeparator)
+                {
+                    builder.Append(',');
+                }
+            }
+        }
+
+        /// <summary>
+        /// Append the quoted name and value separated by a value separator
+        /// and ended by item separator
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="logEvent"></param>
+        /// <param name="skipItemSeparator"></param>
+        private void AppendFlatProperty(
+            StringBuilder builder,
+            string name,
+            string value,
+            LogEventInfo logEvent,
+            bool skipItemSeparator = false)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                builder.Append(name);
+                builder.Append(GetRenderedValueSeparator(logEvent));
+                builder.Append(value);
+                if (!skipItemSeparator)
+                {
+                    builder.Append(GetRenderedItemSeparator(logEvent));
+                }
             }
         }
 
@@ -93,6 +155,101 @@ namespace NLog.Web.LayoutRenderers
             var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
             return HttpCookieCollectionValues.GetCookieValues(cookies, CookieNames, Exclude, expandMultiValue);
         }
+
+        private IEnumerable<HttpCookie> GetVerboseCookieValues(HttpCookieCollection cookies)
+        {
+            var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
+            return HttpCookieCollectionValues.GetVerboseCookieValues(cookies, CookieNames, Exclude, expandMultiValue);
+        }
+
+        private void SerializeAllProperties(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
+        {
+            switch (OutputFormat)
+            {
+                case AspNetRequestLayoutOutputFormat.Flat:
+                    SerializeAllPropertiesFlat(verboseCookieValues, builder, logEvent);
+                    break;
+                case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
+                    SerializeAllPropertiesJson(verboseCookieValues, builder);
+                    break;
+            }
+        }
+
+        private void SerializeAllPropertiesJson(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder)
+        {
+            var firstItem = true;
+
+            foreach (var cookie in verboseCookieValues)
+            {
+                if (firstItem)
+                {
+                    if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                    {
+                        builder.Append('{');
+                    }
+                    else
+                    {
+                        builder.Append('[');
+                    }
+                }
+                else
+                {
+                    builder.Append(',');
+                }
+
+                builder.Append('{');
+
+                AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name);
+                AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value);
+                AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain);
+                AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path);
+                AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"));
+                AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString());
+                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(),skipPropertySeparator: true);
+
+                builder.Append('}');
+
+                firstItem = false;
+            }
+
+            if (!firstItem)
+            {
+                if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                {
+                    builder.Append('}');
+                }
+                else
+                {
+                    builder.Append(']');
+                }
+            }
+        }
+
+        private void SerializeAllPropertiesFlat(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
+        {
+            var objectSeparator = GetRenderedObjectSeparator(logEvent);
+
+            var firstItem = true;
+            foreach (var cookie in verboseCookieValues)
+            {
+                if (!firstItem)
+                {
+                    builder.Append(objectSeparator);
+                }
+
+                firstItem = false;
+
+                AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name,   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value,  logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain, logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path,   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires.ToUniversalTime().ToString("u"), logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), logEvent, skipItemSeparator: true);
+            }
+        }
+
 #else
         /// <summary>
         /// Method to get cookies for all ASP.NET Core versions
@@ -117,6 +274,18 @@ namespace NLog.Web.LayoutRenderers
             else
             {
                 return GetCookieAllValues(cookies, Exclude);
+            }
+        }
+
+        private IEnumerable<SetCookieHeaderValue> GetVerboseCookieValues(IList<SetCookieHeaderValue> cookies)
+        {
+            if (CookieNames?.Count > 0)
+            {
+                return GetCookieVerboseValues(cookies, CookieNames);
+            }
+            else
+            {
+                return GetCookieVerboseAllValues(cookies, Exclude);
             }
         }
 
@@ -147,6 +316,126 @@ namespace NLog.Web.LayoutRenderers
                     continue;
 
                 yield return new KeyValuePair<string, string>(cookieName, cookie.Value.ToString());
+            }
+        }
+
+        private static IEnumerable<SetCookieHeaderValue> GetCookieVerboseValues(IList<SetCookieHeaderValue> cookies, List<string> cookieNames)
+        {
+            foreach (var needle in cookieNames)
+            {
+                for (int i = 0; i < cookies.Count; ++i)
+                {
+                    var cookie = cookies[i];
+                    var cookieName = cookie.Name.ToString();
+                    if (string.Equals(needle, cookieName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        yield return cookie;
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<SetCookieHeaderValue> GetCookieVerboseAllValues(IList<SetCookieHeaderValue> cookies, ICollection<string> excludeNames)
+        {
+            bool checkForExclude = excludeNames?.Count > 0;
+            for (int i = 0; i < cookies.Count; ++i)
+            {
+                var cookie = cookies[i];
+                var cookieName = cookie.Name.ToString();
+                if (checkForExclude && excludeNames.Contains(cookieName))
+                    continue;
+
+                yield return cookie;
+            }
+        }
+
+        private void SerializeAllProperties(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
+        {
+            switch (OutputFormat)
+            {
+                case AspNetRequestLayoutOutputFormat.Flat:
+                    SerializeAllPropertiesFlat(verboseCookieValues, builder, logEvent);
+                    break;
+                case AspNetRequestLayoutOutputFormat.JsonArray:
+                case AspNetRequestLayoutOutputFormat.JsonDictionary:
+                    SerializeAllPropertiesJson(verboseCookieValues, builder);
+                    break;
+            }
+        }
+
+        private void SerializeAllPropertiesJson(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder)
+        {
+            var firstItem = true;
+
+            foreach (var cookie in verboseCookieValues)
+            {
+                if (firstItem)
+                {
+                    if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                    {
+                        builder.Append('{');
+                    }
+                    else
+                    {
+                        builder.Append('[');
+                    }
+                }
+                else
+                {
+                    builder.Append(',');
+                }
+
+                builder.Append('{');
+
+                AppendJsonProperty(builder, nameof(cookie.Name),     cookie.Name.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Value),    cookie.Value.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Path),     cookie.Path.ToString());
+                AppendJsonProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"));
+                AppendJsonProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString());
+                AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString());
+                AppendJsonProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), skipPropertySeparator: true);
+
+                builder.Append('}');
+
+                firstItem = false;
+            }
+
+            if (!firstItem)
+            {
+                if (OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
+                {
+                    builder.Append('}');
+                }
+                else
+                {
+                    builder.Append(']');
+                }
+            }
+        }
+
+        private void SerializeAllPropertiesFlat(IEnumerable<SetCookieHeaderValue> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
+        {
+            var objectSeparator = GetRenderedObjectSeparator(logEvent);
+
+            var firstItem = true;
+            foreach (var cookie in verboseCookieValues)
+            {
+                if (!firstItem)
+                {
+                    builder.Append(objectSeparator);
+                }
+
+                firstItem = false;
+
+                AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name.ToString(),     logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value.ToString(),    logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString(),   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path.ToString(),     logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"), logEvent);
+                AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   logEvent);
+                AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), logEvent);
+                AppendFlatProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), logEvent, skipItemSeparator: true);
             }
         }
 #endif
