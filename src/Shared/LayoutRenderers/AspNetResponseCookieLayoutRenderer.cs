@@ -5,6 +5,7 @@ using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Web.Enums;
 using NLog.Web.Internal;
+using NLog.Layouts;
 #if !ASP_NET_CORE
 using System.Web;
 #else
@@ -31,6 +32,13 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-response-cookie")]
     public class AspNetResponseCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
+        /// <summary>
+        /// Separator between objects, like cookies. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
+        /// </summary>
+        /// <remarks>Render with <see cref="GetRenderedObjectSeparator" /></remarks>
+        public string ObjectSeparator { get => _objectSeparatorLayout?.OriginalText; set => _objectSeparatorLayout = new SimpleLayout(value ?? ""); }
+        private SimpleLayout _objectSeparatorLayout = new SimpleLayout(";");
+
         /// <summary>
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
@@ -87,6 +95,14 @@ namespace NLog.Web.LayoutRenderers
                     SerializeAllProperties(verboseCookieValues, builder, logEvent);
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the rendered <see cref="ObjectSeparator" />
+        /// </summary>
+        private string GetRenderedObjectSeparator(LogEventInfo logEvent)
+        {
+            return logEvent != null ? _objectSeparatorLayout.Render(logEvent) : ObjectSeparator;
         }
 
         /// <summary>
