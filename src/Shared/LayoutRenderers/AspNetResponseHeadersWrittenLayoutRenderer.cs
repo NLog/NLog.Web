@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var response = HttpContextAccessor.HttpContext?.TryGetResponse();
+            var response = HttpContextAccessor.HttpContext.TryGetResponse();
 #if ASP_NET_CORE
             builder.Append(response?.HasStarted == true ? '1' : '0');
 #elif NET46
