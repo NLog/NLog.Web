@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Web;
 #else
 using System.Text;
+#if ASP_NET_CORE3
+using Microsoft.AspNetCore.Connections.Features;
+#endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 #endif
@@ -61,6 +64,36 @@ namespace NLog.Web.Internal
                 InternalLogger.Debug("HttpContext Response Lookup returned null");
             return response;
         }
+
+#if ASP_NET_CORE3
+        internal static ITlsHandshakeFeature TryGetTlsHandshake(this HttpContext context)
+        {
+            try
+            {
+                var tlsHandshake = context?.Features.Get<ITlsHandshakeFeature>();
+                if (tlsHandshake != null)
+                {
+                    return tlsHandshake;
+                }
+                else
+                {
+                    InternalLogger.Debug("HttpContext ITlsHandshakeFeature Feature not available");
+                    return null;
+                }
+            }
+            catch (ObjectDisposedException ex)
+            {
+                InternalLogger.Debug(ex, "HttpContext ITlsHandshakeFeature Disposed.");
+                return null; // System.ObjectDisposedException: IFeatureCollection has been disposed.
+            }
+            catch (InvalidOperationException ex)
+            {
+                InternalLogger.Debug(ex, "HttpContext ITlsHandshakeFeature Lookup failed.");
+                return null; // System.InvalidOperationException: ITlsHandshakeFeature has not been configured for this application or request.
+            }
+        }
+#endif
+
 #endif
 
 #if ASP_NET_CORE2
