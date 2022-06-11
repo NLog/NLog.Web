@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -21,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
         {
             // Not available on .NET 3.5
 #if ASP_NET_CORE
-            var websockets = HttpContextAccessor.HttpContext?.WebSockets;
+            var websockets = HttpContextAccessor.HttpContext.TryGetWebSocket();
             builder.Append(websockets?.IsWebSocketRequest == true ? '1' : '0');
 #elif NET46_OR_GREATER
             var httpContext = HttpContextAccessor.HttpContext;

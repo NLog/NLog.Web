@@ -26,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
             var httpContext = HttpContextAccessor.HttpContext;
 
 #if ASP_NET_CORE
-            var connection = httpContext.Connection;
+            var connection = httpContext.TryGetConnection();
             if (connection == null)
             {
                 return;
