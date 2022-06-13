@@ -39,7 +39,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.CipherAlgorithm;
+            renderer.Property = TlsHandshakeProperty.CipherAlgorithm;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -53,7 +53,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.CipherStrength;
+            renderer.Property = TlsHandshakeProperty.CipherStrength;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -66,7 +66,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.HashAlgorithm;
+            renderer.Property = TlsHandshakeProperty.HashAlgorithm;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -79,7 +79,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.HashStrength;
+            renderer.Property = TlsHandshakeProperty.HashStrength;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -92,7 +92,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.KeyExchangeAlgorithm;
+            renderer.Property = TlsHandshakeProperty.KeyExchangeAlgorithm;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -105,7 +105,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.KeyExchangeStrength;
+            renderer.Property = TlsHandshakeProperty.KeyExchangeStrength;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -118,7 +118,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.AspNetTlsHandshakeField = AspNetTlsHandshakeField.Protocol;
+            renderer.Property = TlsHandshakeProperty.Protocol;
             SetupFeature(httpContext);
             // Act
             var result = renderer.Render(new LogEventInfo());

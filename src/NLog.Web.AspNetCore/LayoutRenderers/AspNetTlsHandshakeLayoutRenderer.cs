@@ -5,41 +5,6 @@ using System.Text;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Specifies which of the 7 properties of ITlsHandshakeFeature to emit
-    /// </summary>
-    public enum AspNetTlsHandshakeField
-    {
-        /// <summary>
-        /// Gets the CipherAlgorithmType.
-        /// </summary>
-        CipherAlgorithm,
-        /// <summary>
-        /// Gets the cipher strength
-        /// </summary>
-        CipherStrength,
-        /// <summary>
-        /// Gets the HashAlgorithmType.
-        /// </summary>
-        HashAlgorithm,
-        /// <summary>
-        /// Gets the hash strength.
-        /// </summary>
-        HashStrength,
-        /// <summary>
-        /// Gets the KeyExchangeAlgorithm.
-        /// </summary>
-        KeyExchangeAlgorithm,
-        /// <summary>
-        /// Gets the key exchange algorithm strength.
-        /// </summary>
-        KeyExchangeStrength,
-        /// <summary>
-        /// Gets the key exchange algorithm strength.
-        /// </summary>
-        Protocol
-    }
-
-    /// <summary>
     /// ASP.NET TSL Handshake
     /// </summary>
     /// <remarks>
@@ -50,8 +15,9 @@ namespace NLog.Web.LayoutRenderers
     {
         /// <summary>
         /// Specifies which of the 7 properties of ITlsHandshakeFeature to emit
+        /// Defaults to the protocol
         /// </summary>
-        public AspNetTlsHandshakeField AspNetTlsHandshakeField { get; set; }
+        public TlsHandshakeProperty Property { get; set; } = TlsHandshakeProperty.Protocol;
 
         /// <summary>
         /// Render TLS Handshake Cipher Algorithm
@@ -67,27 +33,27 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            switch (AspNetTlsHandshakeField)
+            switch (Property)
             {
-                case AspNetTlsHandshakeField.CipherAlgorithm:
+                case TlsHandshakeProperty.CipherAlgorithm:
                     builder.Append(tlsHandshake.CipherAlgorithm);
                     break;
-                case AspNetTlsHandshakeField.CipherStrength:
+                case TlsHandshakeProperty.CipherStrength:
                     builder.Append(tlsHandshake.CipherStrength);
                     break;
-                case AspNetTlsHandshakeField.HashAlgorithm:
+                case TlsHandshakeProperty.HashAlgorithm:
                     builder.Append(tlsHandshake.HashAlgorithm);
                     break;
-                case AspNetTlsHandshakeField.HashStrength:
+                case TlsHandshakeProperty.HashStrength:
                     builder.Append(tlsHandshake.HashStrength);
                     break;
-                case AspNetTlsHandshakeField.KeyExchangeAlgorithm:
+                case TlsHandshakeProperty.KeyExchangeAlgorithm:
                     builder.Append(tlsHandshake.KeyExchangeAlgorithm);
                     break;
-                case AspNetTlsHandshakeField.KeyExchangeStrength:
+                case TlsHandshakeProperty.KeyExchangeStrength:
                     builder.Append(tlsHandshake.KeyExchangeStrength);
                     break;
-                case AspNetTlsHandshakeField.Protocol:
+                case TlsHandshakeProperty.Protocol:
                     builder.Append(tlsHandshake.Protocol);
                     break;
             }
