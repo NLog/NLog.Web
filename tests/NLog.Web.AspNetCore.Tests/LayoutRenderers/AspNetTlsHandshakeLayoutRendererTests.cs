@@ -12,7 +12,7 @@ namespace NLog.Web.Tests.LayoutRenderers
     {
 #if ASP_NET_CORE3
 
-        public void SetupFeature(HttpContext httpContext)
+        private static void SetupFeature(HttpContext httpContext)
         {
             var tlsHandshakeFeature = Substitute.For<ITlsHandshakeFeature>();
 
