@@ -29,6 +29,8 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var httpContextEmpty = SetupHttpAccessorWithHttpContext(null);
 
+            NLog.Time.TimeSource.Current = new Time.AccurateUtcTimeSource();
+
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
                 var layout = new NLog.Web.Layouts.W3CExtendedLogLayout();
@@ -55,6 +57,8 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void W3CLoggerLayoutWithContextTest()
         {
             var httpContextMock = SetupHttpAccessorWithHttpContext("nlog-project.org:80", "http", "/Test.asp", "?t=1");
+
+            NLog.Time.TimeSource.Current = new Time.AccurateUtcTimeSource();
 
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
