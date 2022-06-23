@@ -6,21 +6,23 @@ using Microsoft.AspNetCore.Http;
 using NLog.Web.DependencyInjection;
 #else
 using System.Web;
-#endif
 using NLog.Web.LayoutRenderers;
+#endif
 using NSubstitute;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class W3CLoggerLayoutTests : TestBase
+    public class W3CLoggerLayoutTests : TestBase, IDisposable
     {
-#if !ASP_NET_CORE
-        ~W3CLoggerLayoutTests()
+        // teardown
+        public void Dispose()
         {
+#if !ASP_NET_CORE
+            HttpContext.Current = null;
             AspNetLayoutRendererBase.DefaultHttpContextAccessor = new DefaultHttpContextAccessor();
-        }
 #endif
+        }
 
         [Fact]
         public void W3CLoggerLayoutNoContextTest()

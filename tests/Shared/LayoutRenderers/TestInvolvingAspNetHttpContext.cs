@@ -2,6 +2,7 @@ using System;
 using System.IO;
 #if !ASP_NET_CORE
 using System.Web;
+using NLog.Web.LayoutRenderers;
 #else
 using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,7 @@ using NLog.Config;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public abstract class TestInvolvingAspNetHttpContext : TestBase
+    public abstract class TestInvolvingAspNetHttpContext : TestBase, IDisposable
     {
         private static readonly Uri DefaultTestUri = new Uri("https://nlog-project.org/documentation/");
 
@@ -23,6 +24,15 @@ namespace NLog.Web.Tests.LayoutRenderers
             HttpContext = SetUpFakeHttpContext();
 #if !ASP_NET_CORE
             HttpContext.Current = HttpContext;
+#endif
+        }
+
+        // teardown
+        public void Dispose()
+        {
+#if !ASP_NET_CORE
+            HttpContext.Current = null;
+            AspNetLayoutRendererBase.DefaultHttpContextAccessor = new DefaultHttpContextAccessor();
 #endif
         }
 
