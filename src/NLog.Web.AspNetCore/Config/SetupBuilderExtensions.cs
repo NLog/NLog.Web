@@ -20,7 +20,17 @@ namespace NLog.Web
         /// </summary>
         public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
+            return setupBuilder.LoadConfigurationFromJson("appsettings.json", basePath, environment, nlogConfigSection, optional, reloadOnChange);
+        }
+
+        /// <summary>
+        /// Loads NLog LoggingConfiguration from the NLog-section from json file with a custom name, respecting environment
+        /// </summary>
+        public static ISetupBuilder LoadConfigurationFromJson(this ISetupBuilder setupBuilder, string fileName, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
+        {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
+
+            string noextension = Path.GetFileNameWithoutExtension(fileName);
 
             var currentBasePath = basePath;
             if (currentBasePath is null)
@@ -38,8 +48,8 @@ namespace NLog.Web
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .AddEnvironmentVariables(prefix: "DOTNET_")
                 // App Configuration
-                .AddJsonFile("appsettings.json", optional, reloadOnChange)
-                .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: reloadOnChange)
+                .AddJsonFile($"{noextension}.json", optional, reloadOnChange)
+                .AddJsonFile($"{noextension}.{environment}.json", optional: true, reloadOnChange: reloadOnChange)
                 .AddEnvironmentVariables();
 
             var config = builder.Build();

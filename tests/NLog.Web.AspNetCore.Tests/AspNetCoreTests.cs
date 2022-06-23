@@ -122,6 +122,57 @@ namespace NLog.Web.Tests
         }
 
         [Fact]
+        public void LoadConfigurationFromCustomJsonShouldLogTest()
+        {
+            string filename = "nlog-config.json";
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var appSettings = System.IO.Path.Combine(tempPath, filename);
+
+            try
+            {
+                // Arrange
+                System.IO.Directory.CreateDirectory(tempPath);
+                System.IO.File.AppendAllText(appSettings, @"{
+                  ""basepath"": """ + tempPath + @""",
+                  ""NLog"": {
+                    ""throwConfigExceptions"": true,
+                    ""targets"": {
+                        ""logfile"": {
+                            ""type"": ""File"",
+                            ""fileName"": ""${configsetting:basepath}/hello.txt"",
+                            ""layout"": ""${message}""
+                        }
+                    },
+                    ""rules"": [
+                      {
+                        ""logger"": ""*"",
+                        ""minLevel"": ""Debug"",
+                        ""writeTo"": ""logfile""
+                      }
+                    ]
+                  }
+                }");
+
+                // Act
+                var logFactory = new LogFactory();
+                var logger = logFactory.Setup().LoadConfigurationFromJson(filename, basePath: tempPath).GetCurrentClassLogger();
+                logger.Info("Hello World");
+
+                // Assert
+                logFactory.Dispose();
+                var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
+                Assert.Contains("Hello World", fileOutput);
+            }
+            finally
+            {
+                if (System.IO.Directory.Exists(tempPath))
+                {
+                    System.IO.Directory.Delete(tempPath, true);
+                }
+            }
+        }
+
+        [Fact]
         public void LoadConfigurationFromAppSettingsShouldLogTest2()
         {
             var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
