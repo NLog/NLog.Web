@@ -51,7 +51,7 @@ namespace NLog.Web
                 .AddJsonFile($"{noextension}.json", optional, reloadOnChange)
                 .AddJsonFile($"{noextension}.{environment}.json", optional: true, reloadOnChange: reloadOnChange)
                 .AddEnvironmentVariables();
-
+            
             var config = builder.Build();
             if (!string.IsNullOrEmpty(nlogConfigSection) && config.GetSection(nlogConfigSection)?.GetChildren().Any() == true)
             {
@@ -78,6 +78,20 @@ namespace NLog.Web
                 return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
             }
         }
+
+        /// <summary>
+        /// Load configuration using your own builder pipeline
+        /// </summary>
+        public static ISetupBuilder LoadConfigurationUsingConfigBuilder(this ISetupBuilder setupBuilder, Func<IConfigurationBuilder> builderFunc, string nlogConfigSection = "NLog")
+        {
+            if (builderFunc == null)
+                throw new ArgumentException("Please define builder function.", nameof(builderFunc));
+
+            IConfigurationBuilder builder = builderFunc();
+            var config = builder.Build();
+            return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb()).LoadConfigurationFromSection(config, nlogConfigSection);
+        }
+
 
         private static string GetAspNetCoreEnvironment(string variableName)
         {

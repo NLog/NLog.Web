@@ -80,27 +80,7 @@ namespace NLog.Web.Tests
             try
             {
                 // Arrange
-                System.IO.Directory.CreateDirectory(tempPath);
-                System.IO.File.AppendAllText(appSettings, @"{
-                  ""basepath"": """ + tempPath + @""",
-                  ""NLog"": {
-                    ""throwConfigExceptions"": true,
-                    ""targets"": {
-                        ""logfile"": {
-                            ""type"": ""File"",
-                            ""fileName"": ""${configsetting:basepath}/hello.txt"",
-                            ""layout"": ""${message}""
-                        }
-                    },
-                    ""rules"": [
-                      {
-                        ""logger"": ""*"",
-                        ""minLevel"": ""Debug"",
-                        ""writeTo"": ""logfile""
-                      }
-                    ]
-                  }
-                }");
+                CreateJsonConfigFile(tempPath, appSettings);
 
                 // Act
                 var logFactory = new LogFactory();
@@ -131,31 +111,49 @@ namespace NLog.Web.Tests
             try
             {
                 // Arrange
-                System.IO.Directory.CreateDirectory(tempPath);
-                System.IO.File.AppendAllText(appSettings, @"{
-                  ""basepath"": """ + tempPath + @""",
-                  ""NLog"": {
-                    ""throwConfigExceptions"": true,
-                    ""targets"": {
-                        ""logfile"": {
-                            ""type"": ""File"",
-                            ""fileName"": ""${configsetting:basepath}/hello.txt"",
-                            ""layout"": ""${message}""
-                        }
-                    },
-                    ""rules"": [
-                      {
-                        ""logger"": ""*"",
-                        ""minLevel"": ""Debug"",
-                        ""writeTo"": ""logfile""
-                      }
-                    ]
-                  }
-                }");
+                CreateJsonConfigFile(tempPath, appSettings);
 
                 // Act
                 var logFactory = new LogFactory();
                 var logger = logFactory.Setup().LoadConfigurationFromJson(filename, basePath: tempPath).GetCurrentClassLogger();
+                logger.Info("Hello World");
+
+                // Assert
+                logFactory.Dispose();
+                var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(tempPath, "hello.txt"));
+                Assert.Contains("Hello World", fileOutput);
+            }
+            finally
+            {
+                if (System.IO.Directory.Exists(tempPath))
+                {
+                    System.IO.Directory.Delete(tempPath, true);
+                }
+            }
+        }
+
+        [Fact]
+        public void LoadConfigurationWithCustomPipelineShouldLogTest()
+        {
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var appSettings = System.IO.Path.Combine(tempPath, "appsettings.json");
+
+            try
+            {
+                // Arrange
+                CreateJsonConfigFile(tempPath, appSettings);
+
+                // Act
+                var logFactory = new LogFactory();
+                var logger = logFactory.Setup().LoadConfigurationUsingConfigBuilder(() => {
+                    return new ConfigurationBuilder()
+                        .SetBasePath(tempPath)
+                        .AddEnvironmentVariables(prefix: "ASPNETCORE_")
+                        .AddEnvironmentVariables(prefix: "DOTNET_")
+                        .AddJsonFile("appsettings.json", false, false)
+                        .AddEnvironmentVariables();
+                }).GetCurrentClassLogger();
+
                 logger.Info("Hello World");
 
                 // Assert
@@ -343,6 +341,31 @@ namespace NLog.Web.Tests
         private static ILoggerFactory GetLoggerFactory(IWebHost webhost)
         {
             return webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
+        }
+
+        private static void CreateJsonConfigFile(string path, string fileName)
+        {
+            System.IO.Directory.CreateDirectory(path);
+            System.IO.File.AppendAllText(fileName, @"{
+                  ""basepath"": """ + path + @""",
+                  ""NLog"": {
+                    ""throwConfigExceptions"": true,
+                    ""targets"": {
+                        ""logfile"": {
+                            ""type"": ""File"",
+                            ""fileName"": ""${configsetting:basepath}/hello.txt"",
+                            ""layout"": ""${message}""
+                        }
+                    },
+                    ""rules"": [
+                      {
+                        ""logger"": ""*"",
+                        ""minLevel"": ""Debug"",
+                        ""writeTo"": ""logfile""
+                      }
+                    ]
+                  }
+                }");
         }
     }
 }
