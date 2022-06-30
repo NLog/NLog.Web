@@ -16,80 +16,66 @@ namespace NLog.Web
     {
 #if !ASP_NET_CORE2
         /// <summary>
-        /// Loads NLog LoggingConfiguration from appsettings.json from the NLog-section
+        /// Loads NLog LoggingConfiguration from the NLog-section from json file, respecting environment
         /// </summary>
-        public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
-        {
-            return setupBuilder.LoadConfigurationFromJson("appsettings.json", basePath, environment, nlogConfigSection, optional, reloadOnChange);
-        }
-
-        /// <summary>
-        /// Loads NLog LoggingConfiguration from the NLog-section from json file with a custom name, respecting environment
-        /// </summary>
-        public static ISetupBuilder LoadConfigurationFromJson(this ISetupBuilder setupBuilder, string fileName, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
+        public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string fileName = "appsettings.json", string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
 
             string noextension = Path.GetFileNameWithoutExtension(fileName);
 
-            var currentBasePath = basePath;
-            if (currentBasePath is null)
+            basePath ??= AppContext.BaseDirectory;
+            if (string.IsNullOrEmpty(basePath))
             {
-                currentBasePath = AppContext.BaseDirectory;
-                if (string.IsNullOrEmpty(currentBasePath))
-                {
-                    currentBasePath = Directory.GetCurrentDirectory();
-                }
+                basePath = Directory.GetCurrentDirectory();
             }
 
-            var builder = new ConfigurationBuilder()
-                // Host Configuration
-                .SetBasePath(currentBasePath)
-                .AddEnvironmentVariables(prefix: "ASPNETCORE_")
-                .AddEnvironmentVariables(prefix: "DOTNET_")
-                // App Configuration
-                .AddJsonFile($"{noextension}.json", optional, reloadOnChange)
-                .AddJsonFile($"{noextension}.{environment}.json", optional: true, reloadOnChange: reloadOnChange)
-                .AddEnvironmentVariables();
-            
-            var config = builder.Build();
-            if (!string.IsNullOrEmpty(nlogConfigSection) && config.GetSection(nlogConfigSection)?.GetChildren().Any() == true)
+            return setupBuilder.LoadConfigurationUsingConfigBuilder(() =>
             {
-                return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb()).LoadConfigurationFromSection(config, nlogConfigSection);
-            }
-            else
-            {
-                setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config));
-
-                if (!string.IsNullOrEmpty(basePath))
-                {
-                    if (!string.IsNullOrEmpty(environment))
-                    {
-                        setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, $"nlog.{environment}.config"), optional: true);
-                    }
-
-                    setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, "nlog.config"), optional: true);
-                }
-                else if (!string.IsNullOrEmpty(environment))
-                {
-                    setupBuilder.LoadConfigurationFromFile($"nlog.{environment}.config", optional: true);
-                }
-
-                return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
-            }
+                return new ConfigurationBuilder()
+                    // Host Configuration
+                    .SetBasePath(basePath)
+                    .AddEnvironmentVariables(prefix: "ASPNETCORE_")
+                    .AddEnvironmentVariables(prefix: "DOTNET_")
+                    // App Configuration
+                    .AddJsonFile($"{noextension}.json", optional, reloadOnChange)
+                    .AddJsonFile($"{noextension}.{environment}.json", optional: true, reloadOnChange: reloadOnChange)
+                    .AddEnvironmentVariables();
+            }, nlogConfigSection, basePath, environment);
         }
 
         /// <summary>
         /// Load configuration using your own builder pipeline
         /// </summary>
-        public static ISetupBuilder LoadConfigurationUsingConfigBuilder(this ISetupBuilder setupBuilder, Func<IConfigurationBuilder> builderFunc, string nlogConfigSection = "NLog")
+        public static ISetupBuilder LoadConfigurationUsingConfigBuilder(this ISetupBuilder setupBuilder, Func<IConfigurationBuilder> builderFunc, string nlogConfigSection = "NLog", string basePath = null, string environment = null)
         {
             if (builderFunc == null)
                 throw new ArgumentException("Please define builder function.", nameof(builderFunc));
 
             IConfigurationBuilder builder = builderFunc();
             var config = builder.Build();
-            return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb()).LoadConfigurationFromSection(config, nlogConfigSection);
+            if (!string.IsNullOrEmpty(nlogConfigSection) && config.GetSection(nlogConfigSection)?.GetChildren().Any() == true)
+            {
+                return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb()).LoadConfigurationFromSection(config, nlogConfigSection);
+            }
+
+            //if no config section found load ${configsetting} from json and the rest from nlog.config
+            setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config));
+            if (!string.IsNullOrEmpty(basePath))
+            {
+                if (!string.IsNullOrEmpty(environment))
+                {
+                    setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, $"nlog.{environment}.config"), optional: true);
+                }
+
+                setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, "nlog.config"), optional: true);
+            }
+            else if (!string.IsNullOrEmpty(environment))
+            {
+                setupBuilder.LoadConfigurationFromFile($"nlog.{environment}.config", optional: true);
+            }
+
+            return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
         }
 
 

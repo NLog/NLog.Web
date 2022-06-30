@@ -115,7 +115,7 @@ namespace NLog.Web.Tests
 
                 // Act
                 var logFactory = new LogFactory();
-                var logger = logFactory.Setup().LoadConfigurationFromJson(filename, basePath: tempPath).GetCurrentClassLogger();
+                var logger = logFactory.Setup().LoadConfigurationFromAppSettings(filename, basePath: tempPath).GetCurrentClassLogger();
                 logger.Info("Hello World");
 
                 // Assert
