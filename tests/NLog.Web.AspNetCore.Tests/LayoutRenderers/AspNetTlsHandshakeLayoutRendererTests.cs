@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Connections.Features;
+﻿#if ASP_NET_CORE3
+using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using NLog.Web.Enums;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using System.Security.Authentication;
@@ -10,8 +12,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetTlsHandshakeLayoutRendererTests : LayoutRenderersTestBase<AspNetTlsHandshakeLayoutRenderer>
     {
-#if ASP_NET_CORE3
-
         private static void SetupFeature(HttpContext httpContext)
         {
             var tlsHandshakeFeature = Substitute.For<ITlsHandshakeFeature>();
@@ -138,6 +138,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Equal("None", result);
         }
-#endif
     }
 }
+#endif

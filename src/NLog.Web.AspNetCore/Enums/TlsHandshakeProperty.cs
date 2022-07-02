@@ -1,4 +1,4 @@
-﻿namespace NLog.Web.LayoutRenderers
+﻿namespace NLog.Web.Enums
 {
     /// <summary>
     /// Specifies which of the 7 properties of ITlsHandshakeFeature to emit
@@ -30,7 +30,7 @@
         /// </summary>
         KeyExchangeStrength,
         /// <summary>
-        /// Gets the key exchange algorithm strength.
+        /// Gets the SslProtocols.
         /// </summary>
         Protocol
     }

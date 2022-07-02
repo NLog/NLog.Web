@@ -65,35 +65,13 @@ namespace NLog.Web.Internal
             return response;
         }
 
-#if ASP_NET_CORE3
-        internal static ITlsHandshakeFeature TryGetTlsHandshake(this HttpContext context)
+        internal static IFeatureCollection TryGetFeatureCollection(this HttpContext context)
         {
-            try
-            {
-                var tlsHandshake = context?.Features.Get<ITlsHandshakeFeature>();
-                if (tlsHandshake != null)
-                {
-                    return tlsHandshake;
-                }
-                else
-                {
-                    InternalLogger.Debug("HttpContext ITlsHandshakeFeature Feature not available");
-                    return null;
-                }
-            }
-            catch (ObjectDisposedException ex)
-            {
-                InternalLogger.Debug(ex, "HttpContext ITlsHandshakeFeature Disposed.");
-                return null; // System.ObjectDisposedException: IFeatureCollection has been disposed.
-            }
-            catch (InvalidOperationException ex)
-            {
-                InternalLogger.Debug(ex, "HttpContext ITlsHandshakeFeature Lookup failed.");
-                return null; // System.InvalidOperationException: ITlsHandshakeFeature has not been configured for this application or request.
-            }
+            var features = context?.Features;
+            if (features == null)
+                InternalLogger.Debug("HttpContext Features Lookup returned null");
+            return features;
         }
-#endif
-
 #endif
 
 #if ASP_NET_CORE2
