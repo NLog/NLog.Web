@@ -3,11 +3,12 @@ using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+using NLog.Common;
 #if !ASP_NET_CORE
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.AspNetCore.Http.Features;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -58,13 +59,11 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Cookie { get; set; }
 
-#if !ASP_NET_CORE
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public string ServerVariable { get; set; }
-#endif
 
         /// <summary>
         /// Gets or sets the Headers item to be rendered.
@@ -98,13 +97,26 @@ namespace NLog.Web.LayoutRenderers
             {
                 value = LookupCookieValue(Cookie, httpRequest);
             }
-#if !ASP_NET_CORE
+
             else if (ServerVariable != null)
             {
+#if !ASP_NET_CORE
                 value = httpRequest.ServerVariables?.Count > 0 ?
                     httpRequest.ServerVariables[ServerVariable] : null;
-            }
+#elif ASP_NET_CORE3
+                var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
+                if(features == null)
+                {
+                    return;
+                }
+                var serverVariables = features.Get<IServerVariablesFeature>();
+                if (serverVariables != null)
+                {
+                    value = serverVariables[ServerVariable];
+                }
 #endif
+            }
+
             else if (Header != null)
             {
                 value = LookupHeaderValue(Header, httpRequest);
