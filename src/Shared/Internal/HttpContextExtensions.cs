@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Web;
 #else
 using System.Text;
+#if ASP_NET_CORE3
+using Microsoft.AspNetCore.Connections.Features;
+#endif
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 #endif
@@ -76,6 +79,14 @@ namespace NLog.Web.Internal
             if (response == null)
                 InternalLogger.Debug("HttpContext Response Lookup returned null");
             return response;
+        }
+
+        internal static IFeatureCollection TryGetFeatureCollection(this HttpContext context)
+        {
+            var features = context?.Features;
+            if (features == null)
+                InternalLogger.Debug("HttpContext Features Lookup returned null");
+            return features;
         }
 #endif
 
