@@ -49,20 +49,6 @@ namespace NLog.Web.Tests.LayoutRenderers
         public class ServerVariablesTests
         {
             [Fact]
-            public void NullKeyRendersEmptyString()
-            {
-                var httpContext = Substitute.For<HttpContextBase>();
-
-                var renderer = new AspNetRequestServerVariableLayoutRenderer();
-                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.ServerVariable = null;
-
-                string result = renderer.Render(new LogEventInfo());
-
-                Assert.Empty(result);
-            }
-
-            [Fact]
             public void KeyNotFoundRendersEmptyString()
             {
                 var httpContext = Substitute.For<HttpContextBase>();
