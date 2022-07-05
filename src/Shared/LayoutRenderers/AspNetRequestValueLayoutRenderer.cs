@@ -97,24 +97,15 @@ namespace NLog.Web.LayoutRenderers
             {
                 value = LookupCookieValue(Cookie, httpRequest);
             }
-#if !ASP_NET_CORE || ASP_NET_CORE3
+#if !ASP_NET_CORE
             else if (ServerVariable != null)
             {
-    #if !ASP_NET_CORE
-                value = httpRequest.ServerVariables?.Count > 0 ?
-                    httpRequest.ServerVariables[ServerVariable] : null;
-    #elif ASP_NET_CORE3
-                var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-                if(features == null)
-                {
-                    return;
-                }
-                var serverVariables = features.Get<IServerVariablesFeature>();
-                if (serverVariables != null)
-                {
-                    value = serverVariables[ServerVariable];
-                }
-    #endif
+                value = LookupServerVariableValue(ServerVariable, httpRequest);
+            }
+#elif ASP_NET_CORE3
+            else if (ServerVariable != null)
+            {
+                value = LookupServerVariableValue(ServerVariable, HttpContextAccessor.HttpContext);
             }
 #endif
             else if (Header != null)
@@ -158,6 +149,12 @@ namespace NLog.Web.LayoutRenderers
         private static string LookupItemValue(string key, HttpRequestBase httpRequest)
         {
             return httpRequest[key];
+        }
+
+        private static string LookupServerVariableValue(string key, HttpRequestBase httpRequest)
+        {
+            var collection = httpRequest.ServerVariables;
+            return collection?.Count > 0 ? collection[key] : null;
         }
 #else
         private static string LookupQueryString(string key, HttpRequest httpRequest)
@@ -216,6 +213,13 @@ namespace NLog.Web.LayoutRenderers
             }
 
             return null;
+        }
+#endif
+
+#if ASP_NET_CORE3
+        private static string LookupServerVariableValue(string key, HttpContext httpContext)
+        {
+            return httpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
         }
 #endif
     }
