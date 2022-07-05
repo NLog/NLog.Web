@@ -6,6 +6,7 @@ using NLog.Config;
 #if !ASP_NET_CORE
 using System.Web;
 #else
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 #endif
 
@@ -37,33 +38,24 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc />
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (httpRequest == null)
-            {
-                return;
-            }
-
             if (Item != null)
             {
-                string value = null;
-#if !ASP_NET_CORE
-                value = httpRequest.ServerVariables?.Count > 0 ?
-                    httpRequest.ServerVariables[Item] : null;
-#elif ASP_NET_CORE3
-                var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-                if(features == null)
-                {
-                    return;
-                }
-                var serverVariables = features.Get<IServerVariablesFeature>();
-                if (serverVariables != null)
-                {
-                    value = serverVariables[Item];
-                }
-#endif
-                builder.Append(value);
+                builder.Append(LookupItemValue(Item, HttpContextAccessor.HttpContext));
             }
         }
+
+#if !ASP_NET_CORE
+        private static string LookupItemValue(string key, HttpContextBase httpContext)
+        {
+            return httpContext?.TryGetRequest()?.ServerVariables?[key];
+        }
+
+#else
+        private static string LookupItemValue(string key, HttpContext httpContext)
+        {
+            return httpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
+        }
+#endif
     }
 }
 #endif
