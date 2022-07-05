@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// <example>
     /// <para>Example usage of ${aspnet-request-servervariable}:</para>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-servervariable:ServerVariable=v}
+    /// ${aspnet-request-servervariable:Item=v}
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-request-servervariable")]
@@ -32,7 +32,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         [RequiredParameter]
         [DefaultParameter]
-        public string ServerVariable { get; set; }
+        public string Item { get; set; }
 
 /// <summary>
 /// Renders the specified ASP.NET Request variable and appends it to the specified <see cref="StringBuilder" />.
@@ -47,12 +47,12 @@ protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
                 return;
             }
 
-            if (ServerVariable != null)
+            if (Item != null)
             {
                 string value = null;
 #if !ASP_NET_CORE
                 value = httpRequest.ServerVariables?.Count > 0 ?
-                    httpRequest.ServerVariables[ServerVariable] : null;
+                    httpRequest.ServerVariables[Item] : null;
 #elif ASP_NET_CORE3
                 var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
                 if(features == null)
@@ -62,7 +62,7 @@ protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
                 var serverVariables = features.Get<IServerVariablesFeature>();
                 if (serverVariables != null)
                 {
-                    value = serverVariables[ServerVariable];
+                    value = serverVariables[Item];
                 }
 #endif
                 builder.Append(value);

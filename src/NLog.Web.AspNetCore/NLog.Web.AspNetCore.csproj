@@ -92,9 +92,11 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="Microsoft.AspNetCore.Connections.Abstractions" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="Microsoft.AspNetCore.Connections.Abstractions" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
