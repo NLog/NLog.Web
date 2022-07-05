@@ -1,6 +1,8 @@
+#if !ASP_NET_CORE || ASP_NET_CORE3
 using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
+using NLog.Config;
 #if !ASP_NET_CORE
 using System.Web;
 #else
@@ -24,19 +26,20 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-servervariable")]
     public class AspNetRequestServerVariableLayoutRenderer : AspNetLayoutRendererBase
     {
-#if !ASP_NET_CORE || ASP_NET_CORE3
+
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
+        [RequiredParameter]
+        [DefaultParameter]
         public string ServerVariable { get; set; }
-#endif
 
-        /// <summary>
-        /// Renders the specified ASP.NET Request variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+/// <summary>
+/// Renders the specified ASP.NET Request variable and appends it to the specified <see cref="StringBuilder" />.
+/// </summary>
+/// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
+/// <param name="logEvent">Logging event.</param>
+protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
             if (httpRequest == null)
@@ -44,14 +47,13 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-#if !ASP_NET_CORE || ASP_NET_CORE3
             if (ServerVariable != null)
             {
                 string value = null;
-    #if !ASP_NET_CORE
+#if !ASP_NET_CORE
                 value = httpRequest.ServerVariables?.Count > 0 ?
                     httpRequest.ServerVariables[ServerVariable] : null;
-    #elif ASP_NET_CORE3
+#elif ASP_NET_CORE3
                 var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
                 if(features == null)
                 {
@@ -62,10 +64,10 @@ namespace NLog.Web.LayoutRenderers
                 {
                     value = serverVariables[ServerVariable];
                 }
-    #endif
+#endif
                 builder.Append(value);
             }
-#endif
         }
     }
 }
+#endif

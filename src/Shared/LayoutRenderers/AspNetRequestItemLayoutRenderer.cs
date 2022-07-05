@@ -1,5 +1,6 @@
 using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Config;
 #if !ASP_NET_CORE
 using System.Web;
 #else
@@ -9,23 +10,25 @@ using Microsoft.AspNetCore.Http;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request Item.
+    /// ASP.NET HttpContext Item.
     /// </summary>
     /// <remarks>
     /// Use this layout renderer to insert the value of the specified Item of the HttpContext
     /// </remarks>
     /// <example>
-    /// <para>Example usage of ${aspnet-request-item}:</para>
+    /// <para>Example usage of ${aspnet-httpcontext-item}:</para>
     /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-item:Item=v}
+    /// ${aspnet-httpcontext-item:Item=v}
     /// </code>
     /// </example>
-    [LayoutRenderer("aspnet-request-item")]
+    [LayoutRenderer("aspnet-httpcontext-item")]
     public class AspNetRequestItemLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the item name. The Item collection variables having the specified name are rendered.
         /// </summary>
+        [RequiredParameter]
+        [DefaultParameter]
         public string Item { get; set; }
 
         /// <summary>

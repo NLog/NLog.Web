@@ -22,15 +22,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetRequestServerVariableLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetRequestServerVariableLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
 
 #if !ASP_NET_CORE
         [Fact]
@@ -106,25 +97,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 #if ASP_NET_CORE3
         public class ServerVariablesTests
         {
-            [Fact]
-            public void NullKeyRendersEmptyString()
-            {
-                var httpContext = Substitute.For<HttpContextBase>();
-
-                var serverVariablesFeature = Substitute.For<IServerVariablesFeature>();
-                var featureCollection = new FeatureCollection();
-                featureCollection.Set<IServerVariablesFeature>(serverVariablesFeature);
-                httpContext.Features.Returns(featureCollection);
-
-                var renderer = new AspNetRequestServerVariableLayoutRenderer();
-                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.ServerVariable = null;
-
-                string result = renderer.Render(new LogEventInfo());
-
-                Assert.Empty(result);
-            }
-
             [Fact]
             public void KeyNotFoundRendersEmptyString()
             {

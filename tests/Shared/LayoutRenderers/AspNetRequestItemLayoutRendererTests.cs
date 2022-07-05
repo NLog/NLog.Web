@@ -22,15 +22,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetRequestItemLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-        [Fact]
-        public void NullHttpContextRendersEmptyString()
-        {
-            var renderer = new AspNetRequestItemLayoutRenderer();
-
-            string result = renderer.Render(new LogEventInfo());
-
-            Assert.Empty(result);
-        }
 
 #if !ASP_NET_CORE
         [Fact]
@@ -56,20 +47,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         public class ItemTests
         {
-            [Fact]
-            public void NullKeyRendersEmptyString()
-            {
-                var httpContext = Substitute.For<HttpContextBase>();
-
-                var renderer = new AspNetRequestItemLayoutRenderer();
-                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.Item = null;
-
-                string result = renderer.Render(new LogEventInfo());
-
-                Assert.Empty(result);
-            }
-
             [Fact]
             public void KeyNotFoundRendersEmptyString()
             {
