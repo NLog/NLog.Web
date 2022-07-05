@@ -9,20 +9,7 @@ using Microsoft.AspNetCore.Http;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request TraceIdentifier
-    ///
-    /// Uses different trace identifiers depending upon the platform
-    ///
-    /// ASP.NET 3.5.0 - 4.6.0
-    ///   Uses HttpWorkerRequest.RequestTraceIdentifier.ToString()
-    ///   RequestTraceIdentifier is a Guid, hence the ToString() usage.
-    ///
-    /// ASP.NET Core for .NET 4.6.1 or .NET Standard 2.0
-    ///   Uses HttpContext.TraceIdentifier
-    ///
-    /// ASP.NET Core for .NET Core 3.1, .NET 5.0, or .NET 6.0
-    ///   Uses System.Diagnostics.Activity.Current?.Id, but if that is null uses HttpContext.TraceIdentifier
-    ///   To ALWAYS use the HttpContext.TraceIdentifier, set IgnoreActivityId=true
+    /// ASP.NET Request TraceIdentifier.
     /// </summary>
     /// <remarks>
     /// ${aspnet-traceidentifier}
