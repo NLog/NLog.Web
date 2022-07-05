@@ -36,7 +36,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetRequestServerVariableLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.ServerVariable = "key";
+            renderer.Item = "key";
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -55,7 +55,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
                 var renderer = new AspNetRequestServerVariableLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.ServerVariable = "key";
+                renderer.Item = "key";
 
                 string result = renderer.Render(new LogEventInfo());
 
@@ -71,7 +71,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
                 var renderer = new AspNetRequestServerVariableLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.ServerVariable = "key";
+                renderer.Item = "key";
 
                 string result = renderer.Render(new LogEventInfo());
 
@@ -95,7 +95,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
                 var renderer = new AspNetRequestServerVariableLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.ServerVariable = "key";
+                renderer.Item = "key";
 
                 string result = renderer.Render(new LogEventInfo());
 
@@ -116,7 +116,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
                 var renderer = new AspNetRequestServerVariableLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.ServerVariable = "key";
+                renderer.Item = "key";
 
                 string result = renderer.Render(new LogEventInfo());
 
