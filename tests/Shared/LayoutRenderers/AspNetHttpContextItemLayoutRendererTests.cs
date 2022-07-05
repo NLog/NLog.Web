@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestItemLayoutRendererTests : TestInvolvingAspNetHttpContext
+    public class AspNetHttpContextItemLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
 
 #if !ASP_NET_CORE
@@ -34,7 +34,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Request.Returns(x => { throw new HttpException(); });
 
-            var renderer = new AspNetRequestValueLayoutRenderer();
+            var renderer = new AspNetHttpContextItemLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.Item = "key";
 
@@ -52,7 +52,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             {
                 var httpContext = Substitute.For<HttpContextBase>();
 
-                var renderer = new AspNetRequestItemLayoutRenderer();
+                var renderer = new AspNetHttpContextItemLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
                 renderer.Item = "key";
 
@@ -72,7 +72,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 httpContext.Items.Returns(new Dictionary<object, object>() { { "key", expectedResult } });
 #endif
 
-                var renderer = new AspNetRequestItemLayoutRenderer();
+                var renderer = new AspNetHttpContextItemLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
                 renderer.Item = "key";
 

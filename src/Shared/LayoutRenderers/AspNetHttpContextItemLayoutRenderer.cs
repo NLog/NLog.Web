@@ -22,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-httpcontext-item")]
-    public class AspNetRequestItemLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetHttpContextItemLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the item name. The Item collection variables having the specified name are rendered.
