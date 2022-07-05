@@ -22,17 +22,10 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetHttpContextItemLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
-
-#if !ASP_NET_CORE
         [Fact]
-        public void NullRequestRendersEmptyStringWithoutLoggingError()
+        public void KeyNotFoundRendersEmptyString()
         {
-            var internalLog = new StringWriter();
-            InternalLogger.LogWriter = internalLog;
-            InternalLogger.LogLevel = LogLevel.Error;
-
             var httpContext = Substitute.For<HttpContextBase>();
-            httpContext.Request.Returns(x => { throw new HttpException(); });
 
             var renderer = new AspNetHttpContextItemLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
@@ -41,45 +34,26 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Empty(result);
-            Assert.True(string.IsNullOrEmpty(internalLog.ToString()));
         }
-#endif
 
-        public class ItemTests
+        [Fact]
+        public void KeyFoundRendersValue()
         {
-            [Fact]
-            public void KeyNotFoundRendersEmptyString()
-            {
-                var httpContext = Substitute.For<HttpContextBase>();
-
-                var renderer = new AspNetHttpContextItemLayoutRenderer();
-                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.Item = "key";
-
-                string result = renderer.Render(new LogEventInfo());
-
-                Assert.Empty(result);
-            }
-
-            [Fact]
-            public void KeyFoundRendersValue()
-            {
-                var expectedResult = "value";
-                var httpContext = Substitute.For<HttpContextBase>();
+            var expectedResult = "value";
+            var httpContext = Substitute.For<HttpContextBase>();
 #if !ASP_NET_CORE
-                httpContext.Request["key"].Returns(expectedResult);
+            httpContext.Request["key"].Returns(expectedResult);
 #else
-                httpContext.Items.Returns(new Dictionary<object, object>() { { "key", expectedResult } });
+            httpContext.Items.Returns(new Dictionary<object, object>() { { "key", expectedResult } });
 #endif
 
-                var renderer = new AspNetHttpContextItemLayoutRenderer();
-                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-                renderer.Item = "key";
+            var renderer = new AspNetHttpContextItemLayoutRenderer();
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+            renderer.Item = "key";
 
-                string result = renderer.Render(new LogEventInfo());
+            string result = renderer.Render(new LogEventInfo());
 
-                Assert.Equal(expectedResult, result);
-            }
+            Assert.Equal(expectedResult, result);
         }
     }
 }
