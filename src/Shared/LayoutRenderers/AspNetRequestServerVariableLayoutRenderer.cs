@@ -50,7 +50,7 @@ namespace NLog.Web.LayoutRenderers
             return httpContext?.TryGetRequest()?.ServerVariables?[key];
         }
 
-#else
+#elif ASP_NET_CORE3
         private static string LookupItemValue(string key, HttpContext httpContext)
         {
             return httpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
