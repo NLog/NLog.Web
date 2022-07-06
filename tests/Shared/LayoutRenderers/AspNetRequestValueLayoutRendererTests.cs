@@ -6,6 +6,7 @@ using System.Web.Routing;
 using System.Web.SessionState;
 #else
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Primitives;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
@@ -15,6 +16,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
 using System.Collections.Generic;
+
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -304,6 +306,70 @@ namespace NLog.Web.Tests.LayoutRenderers
                 var expectedResult = "value";
                 var httpContext = Substitute.For<HttpContextBase>();
                 httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "key", expectedResult } });
+
+                var renderer = new AspNetRequestValueLayoutRenderer();
+                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+                renderer.ServerVariable = "key";
+
+                string result = renderer.Render(new LogEventInfo());
+
+                Assert.Equal(expectedResult, result);
+            }
+        }
+#endif
+
+#if ASP_NET_CORE3
+        public class ServerVariablesTests
+        {
+            [Fact]
+            public void NullKeyRendersEmptyString()
+            {
+                var httpContext = Substitute.For<HttpContextBase>();
+
+                var serverVariablesFeature = Substitute.For<IServerVariablesFeature>();
+                var featureCollection = new FeatureCollection();
+                featureCollection.Set<IServerVariablesFeature>(serverVariablesFeature);
+                httpContext.Features.Returns(featureCollection);
+
+                var renderer = new AspNetRequestValueLayoutRenderer();
+                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+                renderer.ServerVariable = null;
+
+                string result = renderer.Render(new LogEventInfo());
+
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public void KeyNotFoundRendersEmptyString()
+            {
+                var httpContext = Substitute.For<HttpContextBase>();
+
+                var serverVariablesFeature = Substitute.For<IServerVariablesFeature>();
+                var featureCollection = new FeatureCollection();
+                featureCollection.Set<IServerVariablesFeature>(serverVariablesFeature);
+                httpContext.Features.Returns(featureCollection);
+
+                var renderer = new AspNetRequestValueLayoutRenderer();
+                renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+                renderer.ServerVariable = "key";
+
+                string result = renderer.Render(new LogEventInfo());
+
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public void KeyFoundRendersValue()
+            {
+                var expectedResult = "value";
+                var httpContext = Substitute.For<HttpContextBase>();
+
+                var serverVariablesFeature = Substitute.For<IServerVariablesFeature>();
+                serverVariablesFeature["key"].Returns(expectedResult);
+                var featureCollection = new FeatureCollection();
+                featureCollection.Set<IServerVariablesFeature>(serverVariablesFeature);
+                httpContext.Request.HttpContext.Features.Returns(featureCollection);
 
                 var renderer = new AspNetRequestValueLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
