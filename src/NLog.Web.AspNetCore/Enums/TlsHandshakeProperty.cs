@@ -1,4 +1,6 @@
-﻿namespace NLog.Web.Enums
+﻿#if ASP_NET_CORE3
+
+namespace NLog.Web.Enums
 {
     /// <summary>
     /// Specifies which of the 7 properties of ITlsHandshakeFeature to emit
@@ -35,3 +37,5 @@
         Protocol
     }
 }
+
+#endif
