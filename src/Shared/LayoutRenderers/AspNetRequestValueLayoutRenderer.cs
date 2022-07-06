@@ -97,15 +97,10 @@ namespace NLog.Web.LayoutRenderers
             {
                 value = LookupCookieValue(Cookie, httpRequest);
             }
-#if !ASP_NET_CORE
+#if !ASP_NET_CORE || ASP_NET_CORE3
             else if (ServerVariable != null)
             {
                 value = LookupServerVariableValue(ServerVariable, httpRequest);
-            }
-#elif ASP_NET_CORE3
-            else if (ServerVariable != null)
-            {
-                value = LookupServerVariableValue(ServerVariable, HttpContextAccessor.HttpContext);
             }
 #endif
             else if (Header != null)
@@ -217,9 +212,9 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
 #if ASP_NET_CORE3
-        private static string LookupServerVariableValue(string key, HttpContext httpContext)
+        private static string LookupServerVariableValue(string key, HttpRequest httpRequest)
         {
-            return httpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
+            return httpRequest?.HttpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
         }
 #endif
     }

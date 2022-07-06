@@ -369,7 +369,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 serverVariablesFeature["key"].Returns(expectedResult);
                 var featureCollection = new FeatureCollection();
                 featureCollection.Set<IServerVariablesFeature>(serverVariablesFeature);
-                httpContext.Features.Returns(featureCollection);
+                httpContext.Request.HttpContext.Features.Returns(featureCollection);
 
                 var renderer = new AspNetRequestValueLayoutRenderer();
                 renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
