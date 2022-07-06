@@ -36,12 +36,18 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Gets or sets the variable name.
+        /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         [RequiredParameter]
         [DefaultParameter]
-        public string Variable { get; set; }
+        public string Item { get; set; }
+
+        /// <summary>
+        /// Gets or sets the variable name.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
         /// Format string for conversion from object to string.
@@ -62,7 +68,8 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (Variable == null)
+            var item = Item;
+            if (item == null)
             {
                 return;
             }
@@ -74,7 +81,7 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var formatProvider = GetFormatProvider(logEvent, Culture);
-            builder.AppendFormattedValue(application[Variable], Format, formatProvider, ValueFormatter);
+            builder.AppendFormattedValue(application[item], Format, formatProvider, ValueFormatter);
         }
     }
 }
