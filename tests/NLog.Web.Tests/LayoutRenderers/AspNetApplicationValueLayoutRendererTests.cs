@@ -27,23 +27,6 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void NullVariableRendersEmptyString()
-        {
-            var httpContext = Substitute.For<HttpContextBase>();
-
-            var renderer = new AspNetApplicationValueLayoutRenderer();
-            renderer.Variable = string.Empty;
-            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-
-            string result = renderer.Render(new LogEventInfo());
-            Assert.Empty(result);
-
-            renderer.Variable = null;
-            result = renderer.Render(new LogEventInfo());
-            Assert.Empty(result);
-        }
-
-        [Fact]
         public void VariableNotFoundRendersEmptyString()
         {
             var httpContext = Substitute.For<HttpContextBase>();
