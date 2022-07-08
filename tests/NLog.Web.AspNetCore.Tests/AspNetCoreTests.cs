@@ -222,7 +222,7 @@ namespace NLog.Web.Tests
             Assert.Null(webhost.Services.GetService<IHttpContextAccessor>());
         }
 
-
+        /*
         [Fact]
         public void UseNLog_LoadConfigurationFromSection()
         {
@@ -247,6 +247,7 @@ namespace NLog.Web.Tests
             Assert.Single(logged);
             Assert.Equal("logger1|error1|Memory", logged[0]);
         }
+        */
 
         [Fact]
         public void UseNLog_ReplaceLoggerFactory_FromConfiguration()
