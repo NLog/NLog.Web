@@ -288,7 +288,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         /// </summary>
         /// <param name="addSecondHeader">Add second header</param>
         /// <returns>Created headers layout renderer</returns>
-        private AspNetRequestTrailersLayoutRenderer CreateRenderer(bool addSecondHeader = true)
+        private static AspNetRequestTrailersLayoutRenderer CreateRenderer(bool addSecondHeader = true)
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 
