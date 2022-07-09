@@ -115,6 +115,8 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
+        private IHttpContextAccessor ContextAccessor { get; set; } = new HttpContextAccessor();
+
         /// <summary>
         /// Initializes the target by hooking up the NLogHttpModule BeginRequest and EndRequest events.
         /// </summary>
@@ -128,15 +130,6 @@ namespace NLog.Web.Targets.Wrappers
 
             NLogBufferingMiddleware.BeginRequest += OnBeginRequest;
             NLogBufferingMiddleware.EndRequest   += OnEndRequest;
-
-            var context = new HttpContextAccessor().HttpContext;
-
-            if (context != null)
-            {
-                // we are in the context already, it's too late for OnBeginRequest to be called, so let's
-                // just call it ourselves
-                OnBeginRequest(context);
-            }
         }
 
         /// <summary>
@@ -155,8 +148,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="logEvent">The log event.</param>
         protected override void Write(AsyncLogEventInfo logEvent)
         {
-            // HttpContext is null here, will need a fix
-            var buffer = GetRequestBuffer(new HttpContextAccessor().HttpContext);
+            var buffer = GetRequestBuffer(ContextAccessor.HttpContext);
             if (buffer != null)
             {
                 WrappedTarget.PrecalculateVolatileLayouts(logEvent.LogEvent);
@@ -181,25 +173,16 @@ namespace NLog.Web.Targets.Wrappers
             return context.Items[dataSlot] as NLog.Web.Internal.LogEventInfoBuffer;
         }
 
+
+
         private void OnBeginRequest(object sender, EventArgs args)
         {
             InternalLogger.Trace("Setting up ASP.NET request buffer.");
             HttpContext context = (args as HttpContextEventArgs)?.HttpContext;
             if (context != null)
             {
-                context.Items[dataSlot] = new NLog.Web.Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-            }
-            else
-            {
-                InternalLogger.Error("Unable to setup ASP.NET request buffer, HttpContext is null");
-            }
-        }
-
-        private void OnBeginRequest(HttpContext context)
-        {
-            InternalLogger.Trace("Setting up ASP.NET request buffer.");
-            if (context != null)
-            {
+                // Save the context for the Write method
+                ContextAccessor.HttpContext = context;
                 context.Items[dataSlot] = new NLog.Web.Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
             }
             else

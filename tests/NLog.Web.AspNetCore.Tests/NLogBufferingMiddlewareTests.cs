@@ -75,9 +75,6 @@ namespace NLog.Web.Tests
 
             Assert.NotNull(nlogEventBuffer);
 
-            //The AspNetCoreBufferingTargetWrapper.Write() method is having a null HttpContext, will need a fix.
-            //Assert.Equal(10, nlogEventBuffer.Count);
-
             var secondFactory = RegisterAspNetCoreBufferingTargetWrapper("second");
 
             Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("second"));
