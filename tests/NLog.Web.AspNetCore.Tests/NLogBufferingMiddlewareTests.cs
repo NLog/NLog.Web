@@ -61,8 +61,6 @@ namespace NLog.Web.Tests
 
             Assert.NotEmpty(context.Items);
 
-            Assert.Equal(1, context.Items.Count);
-
             var eventBufferKeyPair = context.Items.First();
 
             Assert.NotNull(eventBufferKeyPair.Key);
@@ -83,8 +81,6 @@ namespace NLog.Web.Tests
 
             Assert.NotEmpty(context.Items);
 
-            Assert.Equal(2, context.Items.Count);
-
             var thirdFactory = RegisterAspNetCoreBufferingTargetWrapper("third");
 
             Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("third"));
@@ -93,7 +89,46 @@ namespace NLog.Web.Tests
 
             Assert.NotEmpty(context.Items);
 
-            Assert.Equal(3, context.Items.Count);
+            LogManager.Shutdown();
+        }
+
+        [Fact]
+        public async Task BufferingMiddlewareInvokeNullContextTest()
+        {
+            var logFactory = RegisterAspNetCoreBufferingTargetWrapper("first");
+
+            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("first"));
+
+            // This should not cause exception even if null
+            DefaultHttpContext context = null;
+
+            RequestDelegate next = (HttpContext hc) =>
+            {
+                ILogger logger = logFactory.GetCurrentClassLogger();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    logger.Debug("This is a unit test logging.");
+                }
+
+                return Task.CompletedTask;
+            };
+
+            NLogBufferingMiddleware middleware = new NLogBufferingMiddleware(next);
+
+            await middleware.Invoke(context).ConfigureAwait(false);
+
+            var secondFactory = RegisterAspNetCoreBufferingTargetWrapper("second");
+
+            Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("second"));
+
+            await middleware.Invoke(context).ConfigureAwait(false);
+
+            var thirdFactory = RegisterAspNetCoreBufferingTargetWrapper("third");
+
+            Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("third"));
+
+            await middleware.Invoke(context).ConfigureAwait(false);
 
             LogManager.Shutdown();
         }
