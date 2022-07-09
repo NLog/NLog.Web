@@ -47,6 +47,7 @@ namespace NLog.Web.Targets.Wrappers
     public class AspNetCoreBufferingTargetWrapper : WrapperTargetBase
     {
         private readonly object dataSlot = new object();
+
         private int growLimit;
 
         /// <summary>
@@ -73,8 +74,8 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="bufferSize">Size of the buffer.</param>
         public AspNetCoreBufferingTargetWrapper(Target wrappedTarget, int bufferSize)
         {
-            WrappedTarget = wrappedTarget;
-            BufferSize = bufferSize;
+            WrappedTarget      = wrappedTarget;
+            BufferSize         = bufferSize;
             GrowBufferAsNeeded = true;
         }
 
@@ -172,8 +173,6 @@ namespace NLog.Web.Targets.Wrappers
 
             return context.Items[dataSlot] as NLog.Web.Internal.LogEventInfoBuffer;
         }
-
-
 
         private void OnBeginRequest(object sender, EventArgs args)
         {
