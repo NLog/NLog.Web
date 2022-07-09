@@ -269,26 +269,6 @@ namespace NLog.Web.Tests
             Assert.Equal(typeof(NLogLoggerProvider), loggerProvider.GetType());
         }
 
-        [Fact]
-        public void RegisterNLogWebTest()
-        {
-            // Act
-            var logFactory = new NLog.LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
-                @"<nlog throwConfigExceptions='true'>
-                    <targets>
-                        <target type='AspNetCoreBufferingWrapper' name='hello'>
-                            <target type='Memory' name='hello_wrapped' />
-                        </target>
-                    </targets>
-                    <rules>
-                        <logger name='*' writeTo='hello' />
-                    </rules>
-                </nlog>").LogFactory;
-
-            // Assert
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("hello"));
-        }
-
         private static IWebHostBuilder CreateWebHostBuilder()
         {
             var builder =

@@ -155,6 +155,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="logEvent">The log event.</param>
         protected override void Write(AsyncLogEventInfo logEvent)
         {
+            // HttpContext is null here, will need a fix
             var buffer = GetRequestBuffer(new HttpContextAccessor().HttpContext);
             if (buffer != null)
             {
