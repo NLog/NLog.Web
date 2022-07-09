@@ -19,7 +19,7 @@ namespace NLog.Web.Tests
     /// </summary>
     public class NLogBufferingMiddlewareTests
     {
-        private LogFactory RegisterAspNetCoreBufferingTargetWrapper(string targetName)
+        private static LogFactory RegisterAspNetCoreBufferingTargetWrapper(string targetName)
         {
            return new NLog.LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 $@"<nlog throwConfigExceptions='true'>
@@ -65,7 +65,7 @@ namespace NLog.Web.Tests
 
             var eventBufferKeyPair = context.Items.First();
 
-            Assert.NotNull(eventBufferKeyPair);
+            Assert.NotNull(eventBufferKeyPair.Key);
 
             var eventBuffer = eventBufferKeyPair.Value;
 
