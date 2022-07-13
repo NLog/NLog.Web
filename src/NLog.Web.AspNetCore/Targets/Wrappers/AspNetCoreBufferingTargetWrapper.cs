@@ -126,11 +126,11 @@ namespace NLog.Web.Targets.Wrappers
             base.InitializeTarget();
 
             // Prevent double subscribe
-            NLogBufferingMiddleware.BeginRequest -= OnBeginRequest;
-            NLogBufferingMiddleware.EndRequest   -= OnEndRequest;
+            NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
+            NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
 
-            NLogBufferingMiddleware.BeginRequest += OnBeginRequest;
-            NLogBufferingMiddleware.EndRequest   += OnEndRequest;
+            NLogBufferingTargetWrapperMiddleware.BeginRequest += OnBeginRequest;
+            NLogBufferingTargetWrapperMiddleware.EndRequest   += OnEndRequest;
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         protected override void CloseTarget()
         {
-            NLogBufferingMiddleware.BeginRequest -= OnBeginRequest;
-            NLogBufferingMiddleware.EndRequest   -= OnEndRequest;
+            NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
+            NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
             base.CloseTarget();
         }
 

@@ -12,7 +12,7 @@ namespace NLog.Web
     ///
     /// Usage: app.UseMiddleware&lt;NLogBufferingMiddleware&gt;(); where app is an IApplicationBuilder
     /// </summary>
-    public class NLogBufferingMiddleware
+    public class NLogBufferingTargetWrapperMiddleware
     {
         /// <summary>
         /// Event to be raised at the end of each HTTP Request.
@@ -38,7 +38,7 @@ namespace NLog.Web
         /// }
         /// </code>
         /// </remarks>
-        public NLogBufferingMiddleware(RequestDelegate next)
+        public NLogBufferingTargetWrapperMiddleware(RequestDelegate next)
         {
             _next = next;
         }
