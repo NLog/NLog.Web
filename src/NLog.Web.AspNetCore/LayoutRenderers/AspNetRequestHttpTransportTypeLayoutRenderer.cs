@@ -17,22 +17,10 @@ namespace NLog.Web.LayoutRenderers
     /// LongPolling
     ///
     /// </summary>
-    [LayoutRenderer("aspnet-connection-http-transport-type")]
-    public class AspNetConnectionHttpTransportTypeLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-http-transport-type")]
+    public class AspNetRequestHttpTransportTypeLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Specifies transports that the client can use to send HTTP requests.
-        ///
-        /// This enumeration supports a bitwise combination of its member values.
-        ///
-        /// None
-        /// WebSockets
-        /// ServerSentEvents
-        /// LongPolling
-        ///
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

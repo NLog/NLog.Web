@@ -26,34 +26,18 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-response-https-compression")]
     public class AspNetResponseHttpsCompressionLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the Response HTTPS Compression Mode
-        ///
-        /// Compress - Opts into compression over HTTPS. Enabling compression on HTTPS requests for
-        /// remotely manipulable content may expose security problems.
-        ///
-        /// DoNotCompress - Opts out of compression over HTTPS. Enabling compression on HTTPS requests for
-        /// remotely manipulable content may expose security problems.
-        ///
-        /// Default - No value has been specified, use the configured defaults.
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
-        /// <exception cref="NotImplementedException"></exception>
+        ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
 
+            var mode = HttpsCompressionMode.Default;
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if(features == null)
+            var compression = features?.Get<IHttpsCompressionFeature>();
+            if (compression != null)
             {
-                return;
+                mode = compression.Mode;
             }
-            var compression = features.Get<IHttpsCompressionFeature>();
-            if (compression == null)
-            {
-                return;
-            }
-            builder.Append(compression.Mode);
+            builder.Append(mode);
 
         }
     }

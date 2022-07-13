@@ -25,21 +25,19 @@ namespace NLog.Web.LayoutRenderers
         [DefaultParameter]
         public TrackingConsentProperty Property { get; set; } = TrackingConsentProperty.CanTrack;
 
-        /// <summary>
-        /// Render Tracking Consent Information
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
             if(features == null)
             {
+                builder.Append('0');
                 return;
             }
             var trackingConsent = features.Get<ITrackingConsentFeature>();
             if (trackingConsent == null)
             {
+                builder.Append('0');
                 return;
             }
             switch (Property)

@@ -10,17 +10,12 @@ namespace NLog.Web.LayoutRenderers
     /// Indicates if the server can upgrade this request to an opaque, bidirectional stream.
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-two-way-capable}
+    /// ${aspnet-request-is-upgradable}
     /// </remarks>
     [LayoutRenderer("aspnet-request-two-way-capable")]
-    public class AspNetRequestTwoWayCapableLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestIsUpgradableLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Render the indicator that the server can upgrade this request to an opaque, bidirectional stream.
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
-        /// <exception cref="NotImplementedException"></exception>
+        ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

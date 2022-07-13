@@ -32,16 +32,10 @@ namespace NLog.Web.LayoutRenderers
 
         /// <summary>
         /// Tls Token Binding Format Enumeration, Hex or Base64
-        /// Defaults to Hex
         /// </summary>
-        [DefaultParameter]
-        public ByteArrayFormatProperty Format { get; set; } = ByteArrayFormatProperty.Hex;
+        public ByteArrayFormatProperty Format { get; set; }
 
-        /// <summary>
-        /// Renders the ASP.NET TLS Token Binding
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetConnectionInherentKeepAliveLayoutRendererTests : LayoutRenderersTestBase<AspNetConnectionInherentKeepAliveLayoutRenderer>
+    public class AspNetConnectionInherentKeepAliveLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestInherentKeepAliveLayoutRenderer>
     {
         [Fact]
         public void SuccessTrueTest()

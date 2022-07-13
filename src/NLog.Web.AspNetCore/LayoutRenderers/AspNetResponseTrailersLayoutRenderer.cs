@@ -35,14 +35,9 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public ISet<string> Exclude { get; set; } =
-            new HashSet<string>(new[] { "ALL_HTTP", "ALL_RAW", "AUTH_PASSWORD" }, StringComparer.OrdinalIgnoreCase);
+        public ISet<string> Exclude { get; set; } = new HashSet<string>();
 
-        /// <summary>
-        /// Renders the ASP.NET Trailers appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
 

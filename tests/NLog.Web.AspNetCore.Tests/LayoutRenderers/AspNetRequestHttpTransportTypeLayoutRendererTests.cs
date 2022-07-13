@@ -8,7 +8,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetConnectionHttpTransportTypeLayoutRendererTests : LayoutRenderersTestBase<AspNetConnectionHttpTransportTypeLayoutRenderer>
+    public class AspNetConnectionHttpTransportTypeLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestHttpTransportTypeLayoutRenderer>
     {
         [Fact]
         public void SuccessNoneTest()
