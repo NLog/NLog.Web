@@ -12,7 +12,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// ${aspnet-request-is-upgradable}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-two-way-capable")]
+    [LayoutRenderer("aspnet-request-is-upgradable")]
     public class AspNetRequestIsUpgradableLayoutRenderer : AspNetLayoutRendererBase
     {
         ///<inheritdoc/>
