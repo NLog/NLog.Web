@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using System;
 using System.Text;
 
 namespace NLog.Web.LayoutRenderers
@@ -21,16 +20,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if(features == null)
-            {
-                return;
-            }
-            var upgradeFeature = features.Get<IHttpUpgradeFeature>();
-            if (upgradeFeature == null)
-            {
-                return;
-            }
-            builder.Append(upgradeFeature.IsUpgradableRequest ? '1': '0');
+            var upgradeFeature = features?.Get<IHttpUpgradeFeature>();
+            builder.Append(upgradeFeature?.IsUpgradableRequest == true ? '1': '0');
         }
     }
 }
