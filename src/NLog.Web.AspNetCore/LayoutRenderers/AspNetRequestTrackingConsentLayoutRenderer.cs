@@ -29,12 +29,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if(features == null)
-            {
-                builder.Append('0');
-                return;
-            }
-            var trackingConsent = features.Get<ITrackingConsentFeature>();
+            var trackingConsent = features?.Get<ITrackingConsentFeature>();
             switch (Property)
             {
                 case TrackingConsentProperty.CanTrack:
