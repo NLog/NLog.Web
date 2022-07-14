@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetTrackingConsentLayoutRendererTests : LayoutRenderersTestBase<AspNetTrackingConsentLayoutRenderer>
+    public class AspNetRequestTrackingConsentLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestTrackingConsentLayoutRenderer>
     {
         [Fact]
         public void SuccessCanTrackTest()
@@ -96,7 +96,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Equal("0", result);
+            Assert.Equal("1", result);
         }
 
         protected override void NullRendersEmptyString()

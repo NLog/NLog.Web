@@ -7,7 +7,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetTlsTokenBindingLayoutRendererTests : LayoutRenderersTestBase<AspNetTlsTokenBindingLayoutRenderer>
+    public class AspNetRequestTlsTokenBindingLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestTlsTokenBindingLayoutRenderer>
     {
         [Fact]
         public void SuccessReferrerHexTest()

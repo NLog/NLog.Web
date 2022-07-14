@@ -11,12 +11,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Tracking Consent
     /// </summary>
     /// <remarks>
-    /// ${aspnet-tracking-consent:Property=CanTrack}
-    /// ${aspnet-tracking-consent:Property=HasConsent}
-    /// ${aspnet-tracking-consent:Property=IsConsentNeeded}
+    /// ${aspnet-request-tracking-consent:Property=CanTrack}
+    /// ${aspnet-request-tracking-consent:Property=HasConsent}
+    /// ${aspnet-request-tracking-consent:Property=IsConsentNeeded}
     /// </remarks>
-    [LayoutRenderer("aspnet-tracking-consent")]
-    public class AspNetTrackingConsentLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-tracking-consent")]
+    public class AspNetRequestTrackingConsentLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Specifies which of the 3 properties of ITrackingConsentFeature to emit
@@ -35,21 +35,16 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
             var trackingConsent = features.Get<ITrackingConsentFeature>();
-            if (trackingConsent == null)
-            {
-                builder.Append('0');
-                return;
-            }
             switch (Property)
             {
                 case TrackingConsentProperty.CanTrack:
-                    builder.Append(trackingConsent.CanTrack ? '1': '0');
+                    builder.Append(trackingConsent?.CanTrack == false ? '0' : '1');
                     break;
                 case TrackingConsentProperty.HasConsent:
-                    builder.Append(trackingConsent.HasConsent ? '1': '0');
+                    builder.Append(trackingConsent?.HasConsent == true ? '1' : '0');
                     break;
                 case TrackingConsentProperty.IsConsentNeeded:
-                    builder.Append(trackingConsent.IsConsentNeeded ? '1' : '0');
+                    builder.Append(trackingConsent?.IsConsentNeeded == true ? '1' : '0');
                     break;
             }
         }

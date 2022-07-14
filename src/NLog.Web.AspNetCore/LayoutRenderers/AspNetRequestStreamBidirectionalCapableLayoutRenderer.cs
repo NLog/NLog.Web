@@ -10,10 +10,10 @@ namespace NLog.Web.LayoutRenderers
     /// Indicates if the server can upgrade this request to an opaque, bidirectional stream.
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-is-upgradable}
+    /// ${aspnet-request-stream-bidirectional-capable}
     /// </remarks>
-    [LayoutRenderer("aspnet-request-is-upgradable")]
-    public class AspNetRequestIsUpgradableLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-stream-bidirectional-capable")]
+    public class AspNetRequestStreamBidirectionalCapableLayoutRenderer : AspNetLayoutRendererBase
     {
         ///<inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)

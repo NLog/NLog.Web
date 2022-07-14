@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestTwoWayCapableLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestIsUpgradableLayoutRenderer>
+    public class AspNetRequestStreamBidirectionalCapableLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestStreamBidirectionalCapableLayoutRenderer>
     {
         [Fact]
         public void SuccessTrueTest()
