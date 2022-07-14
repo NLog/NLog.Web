@@ -17,7 +17,7 @@ namespace NLog.Web.Tests
     /// <summary>
     /// The unit tests must be executed serially
     /// </summary>
-    public class NLogBufferingMiddlewareTests
+    public class NLogBufferingTargetWrapperMiddlewareTests
     {
         private static LogFactory RegisterAspNetCoreBufferingTargetWrapper(string targetName)
         {
@@ -55,7 +55,7 @@ namespace NLog.Web.Tests
                 return Task.CompletedTask;
             };
 
-            NLogBufferingMiddleware middleware = new NLogBufferingMiddleware(next);
+            NLogBufferingTargetWrapperMiddleware middleware = new NLogBufferingTargetWrapperMiddleware(next);
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
@@ -114,7 +114,7 @@ namespace NLog.Web.Tests
                 return Task.CompletedTask;
             };
 
-            NLogBufferingMiddleware middleware = new NLogBufferingMiddleware(next);
+            NLogBufferingTargetWrapperMiddleware middleware = new NLogBufferingTargetWrapperMiddleware(next);
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
