@@ -23,16 +23,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if (features == null)
-            {
-                return;
-            }
-            var keepAliveFeature = features.Get<IConnectionInherentKeepAliveFeature>();
-            if (keepAliveFeature == null)
-            {
-                return;
-            }
-            builder.Append(keepAliveFeature.HasInherentKeepAlive ? '1' : '0');
+            var value = features?.Get<IConnectionInherentKeepAliveFeature>()?.HasInherentKeepAlive ?? false;
+            builder.Append(value ? '1' : '0');
         }
     }
 }

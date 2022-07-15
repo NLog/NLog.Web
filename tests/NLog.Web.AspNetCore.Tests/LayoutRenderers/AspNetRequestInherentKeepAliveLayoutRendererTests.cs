@@ -60,7 +60,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Equal(string.Empty, result);
+            Assert.Equal("0", result);
         }
 
         protected override void NullRendersEmptyString()
