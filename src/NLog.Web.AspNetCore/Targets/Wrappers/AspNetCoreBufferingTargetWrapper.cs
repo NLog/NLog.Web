@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using Microsoft.AspNetCore.Http;
-using NLog.Common;
+﻿using Microsoft.AspNetCore.Http;
 using NLog.Targets;
-using NLog.Targets.Wrappers;
-using NLog.Web.Internal;
+using System;
 
 namespace NLog.Web.Targets.Wrappers
 {
@@ -44,17 +40,13 @@ namespace NLog.Web.Targets.Wrappers
     /// </p>
     /// </example>
     [Target("AspNetCoreBufferingWrapper", IsWrapper = true)]
-    public class AspNetCoreBufferingTargetWrapper : WrapperTargetBase
+    public class AspNetCoreBufferingTargetWrapper : AspNetBufferingTargetWrapperBase
     {
-        private readonly object dataSlot = new object();
-
-        private int growLimit;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetCoreBufferingTargetWrapper" /> class.
         /// </summary>
-        public AspNetCoreBufferingTargetWrapper()
-            : this(null)
+        public AspNetCoreBufferingTargetWrapper() :
+            base()
         {
         }
 
@@ -62,8 +54,8 @@ namespace NLog.Web.Targets.Wrappers
         /// Initializes a new instance of the <see cref="AspNetCoreBufferingTargetWrapper" /> class.
         /// </summary>
         /// <param name="wrappedTarget">The wrapped target.</param>
-        public AspNetCoreBufferingTargetWrapper(Target wrappedTarget)
-            : this(wrappedTarget, 100)
+        public AspNetCoreBufferingTargetWrapper(Target wrappedTarget) :
+            base(wrappedTarget)
         {
         }
 
@@ -72,59 +64,16 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <param name="wrappedTarget">The wrapped target.</param>
         /// <param name="bufferSize">Size of the buffer.</param>
-        public AspNetCoreBufferingTargetWrapper(Target wrappedTarget, int bufferSize)
+        public AspNetCoreBufferingTargetWrapper(Target wrappedTarget, int bufferSize) :
+            base(wrappedTarget, bufferSize)
         {
-            WrappedTarget      = wrappedTarget;
-            BufferSize         = bufferSize;
-            GrowBufferAsNeeded = true;
         }
 
         /// <summary>
-        /// Gets or sets the number of log events to be buffered.
+        /// Register the target with the NLogBufferingMiddleware
         /// </summary>
-        /// <docgen category='Buffering Options' order='100' />
-        [DefaultValue(100)]
-        public int BufferSize { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether buffer should grow as needed.
-        /// </summary>
-        /// <value>A value of <c>true</c> if buffer should grow as needed; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Value of <c>true</c> causes the buffer to expand until <see cref="BufferGrowLimit"/> is hit,
-        /// <c>false</c> causes the buffer to never expand and lose the earliest entries in case of overflow.
-        /// </remarks>
-        /// <docgen category='Buffering Options' order='100' />
-        [DefaultValue(false)]
-        public bool GrowBufferAsNeeded { get; set; }
-
-        /// <summary>
-        /// Gets or sets the maximum number of log events that the buffer can keep.
-        /// </summary>
-        /// <docgen category='Buffering Options' order='100' />
-        public int BufferGrowLimit
+        protected override void RegisterTarget()
         {
-            get
-            {
-                return growLimit;
-            }
-
-            set
-            {
-                growLimit = value;
-                GrowBufferAsNeeded = (value >= BufferSize);
-            }
-        }
-
-        private IHttpContextAccessor ContextAccessor { get; set; } = new HttpContextAccessor();
-
-        /// <summary>
-        /// Initializes the target by hooking up the NLogHttpModule BeginRequest and EndRequest events.
-        /// </summary>
-        protected override void InitializeTarget()
-        {
-            base.InitializeTarget();
-
             // Prevent double subscribe
             NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
             NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
@@ -134,83 +83,31 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// Closes the target by flushing pending events in the buffer (if any).
+        /// This is not required in the ASP.NET Core case
         /// </summary>
-        protected override void CloseTarget()
+        protected override void HandleRequestAlreadyBegun()
         {
-            NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
-            NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
-            base.CloseTarget();
+            // No Op
         }
 
         /// <summary>
-        /// Adds the specified log event to the buffer.
+        /// Unregister the target from the NLogBufferingMiddleware
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        protected override void Write(AsyncLogEventInfo logEvent)
+        protected override void UnRegisterTarget()
         {
-            var buffer = GetRequestBuffer(ContextAccessor.HttpContext);
-            if (buffer != null)
-            {
-                WrappedTarget.PrecalculateVolatileLayouts(logEvent.LogEvent);
-
-                buffer.Append(logEvent);
-                InternalLogger.Trace("Appending log event {0} to ASP.NET request buffer.", logEvent.LogEvent.SequenceID);
-            }
-            else
-            {
-                InternalLogger.Trace("ASP.NET request buffer does not exist. Passing to wrapped target.");
-                WrappedTarget.WriteAsyncLogEvent(logEvent);
-            }
+            NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
+            NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
         }
 
-        private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer(HttpContext context)
+        /// <summary>
+        /// Returns the HttpContext from the EventArgs
+        /// </summary>
+        /// <param name="httpContextEventArgs"></param>
+        /// <returns></returns>
+        protected override HttpContext SaveHttpContext(HttpContextEventArgs httpContextEventArgs)
         {
-            if (context == null)
-            {
-                return null;
-            }
-
-            return context.Items[dataSlot] as NLog.Web.Internal.LogEventInfoBuffer;
-        }
-
-        private void OnBeginRequest(object sender, EventArgs args)
-        {
-            InternalLogger.Trace("Setting up ASP.NET request buffer.");
-            HttpContext context = (args as HttpContextEventArgs)?.HttpContext;
-            if (context != null)
-            {
-                // Save the context for the Write method
-                ContextAccessor.HttpContext = context;
-                context.Items[dataSlot] = new NLog.Web.Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-            }
-            else
-            {
-                InternalLogger.Error("Unable to setup ASP.NET request buffer, HttpContext is null");
-            }
-        }
-
-        private void OnEndRequest(object sender, EventArgs args)
-        {
-            HttpContext context = (args as HttpContextEventArgs)?.HttpContext;
-            if (context != null)
-            {
-                var buffer = GetRequestBuffer(context);
-                if (buffer != null)
-                {
-                    InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
-                    AsyncLogEventInfo[] events = buffer.GetEventsAndClear();
-                    WrappedTarget.WriteAsyncLogEvents(events);
-                }
-                else
-                {
-                    InternalLogger.Error("Unable to log buffered ASP.NET events, HttpContext.Items[] request buffer is null");
-                }
-            }
-            else
-            {
-                InternalLogger.Error("Unable to log buffered ASP.NET events, HttpContext is null");
-            }
+            ContextAccessor.HttpContext = httpContextEventArgs?.HttpContext;
+            return ContextAccessor.HttpContext;
         }
     }
 }

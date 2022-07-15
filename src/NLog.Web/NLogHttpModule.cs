@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog.Web.Targets.Wrappers;
+using System;
 using System.Web;
 
 namespace NLog.Web
@@ -9,25 +10,25 @@ namespace NLog.Web
     public class NLogHttpModule : IHttpModule
     {
         /// <summary>
-        /// Event to be raised at the end of each HTTP Request.
-        /// </summary>
-        public static event EventHandler EndRequest;
-
-        /// <summary>
         /// Event to be raised at the beginning of each HTTP Request.
         /// </summary>
-        public static event EventHandler BeginRequest;
+        public static event EventHandler<HttpContextEventArgs> BeginRequest;
+
+        /// <summary>
+        /// Event to be raised at the end of each HTTP Request.
+        /// </summary>
+        public static event EventHandler<HttpContextEventArgs> EndRequest;
 
         /// <summary>
         /// Initializes the HttpModule.
         /// </summary>
-        /// <param name="application">
+        /// <param name="context">
         /// ASP.NET application.
         /// </param>
-        public void Init(HttpApplication application)
+        public void Init(HttpApplication context)
         {
-            application.BeginRequest += BeginRequestHandler;
-            application.EndRequest += EndRequestHandler;
+            context.BeginRequest += BeginRequestHandler;
+            context.EndRequest += EndRequestHandler;
         }
 
         /// <summary>
@@ -35,22 +36,17 @@ namespace NLog.Web
         /// </summary>
         public void Dispose()
         {
+            // No Op
         }
 
         private void BeginRequestHandler(object sender, EventArgs args)
         {
-            if (BeginRequest != null)
-            {
-                BeginRequest(sender, args);
-            }
+            BeginRequest?.Invoke(null, new HttpContextEventArgs((sender as HttpApplication)?.Context));
         }
 
         private void EndRequestHandler(object sender, EventArgs args)
         {
-            if (EndRequest != null)
-            {
-                EndRequest(sender, args);
-            }
+            EndRequest?.Invoke(null, new HttpContextEventArgs((sender as HttpApplication)?.Context));
         }
     }
 }
