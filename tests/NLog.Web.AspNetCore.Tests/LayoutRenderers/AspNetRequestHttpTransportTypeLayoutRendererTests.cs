@@ -99,7 +99,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Equal(string.Empty, result);
+            Assert.Equal(HttpTransportType.None.ToString(), result);
         }
 
         protected override void NullRendersEmptyString()
