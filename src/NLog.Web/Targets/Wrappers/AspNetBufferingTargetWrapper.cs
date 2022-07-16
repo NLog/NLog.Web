@@ -85,19 +85,6 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// Register the target with the NLogHttpModule
-        /// </summary>
-        protected override void RegisterTarget()
-        {
-            // Prevent double subscribe
-            NLogHttpModule.BeginRequest -= OnBeginRequest;
-            NLogHttpModule.EndRequest   -= OnEndRequest;
-
-            NLogHttpModule.BeginRequest += OnBeginRequest;
-            NLogHttpModule.EndRequest   += OnEndRequest;
-        }
-
-        /// <summary>
         /// If the request is already in progress, register for this
         /// </summary>
         protected override void HandleRequestAlreadyBegun()
@@ -108,15 +95,6 @@ namespace NLog.Web.Targets.Wrappers
                 // just call it ourselves
                 OnBeginRequest(null, null);
             }
-        }
-
-        /// <summary>
-        /// Un-register the target from the NLogHttpModule
-        /// </summary>
-        protected override void UnRegisterTarget()
-        {
-            NLogHttpModule.BeginRequest -= OnBeginRequest;
-            NLogHttpModule.EndRequest   -= OnEndRequest;
         }
 
         /// <summary>

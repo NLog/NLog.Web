@@ -5,20 +5,10 @@ using System.Web;
 namespace NLog.Web
 {
     /// <summary>
-    /// ASP.NET HttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
+    /// ASP.NET IHttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
     /// </summary>
-    public class NLogHttpModule : IHttpModule
+    public class NLogHttpModule : AspNetBufferingTargetWrapperEventBase, IHttpModule
     {
-        /// <summary>
-        /// Event to be raised at the beginning of each HTTP Request.
-        /// </summary>
-        public static event EventHandler<HttpContextEventArgs> BeginRequest;
-
-        /// <summary>
-        /// Event to be raised at the end of each HTTP Request.
-        /// </summary>
-        public static event EventHandler<HttpContextEventArgs> EndRequest;
-
         /// <summary>
         /// Initializes the HttpModule.
         /// </summary>
@@ -28,7 +18,7 @@ namespace NLog.Web
         public void Init(HttpApplication context)
         {
             context.BeginRequest += BeginRequestHandler;
-            context.EndRequest += EndRequestHandler;
+            context.EndRequest   += EndRequestHandler;
         }
 
         /// <summary>
@@ -36,17 +26,23 @@ namespace NLog.Web
         /// </summary>
         public void Dispose()
         {
-            // No Op
+            // Method intentionally left empty.
         }
 
         private void BeginRequestHandler(object sender, EventArgs args)
         {
-            BeginRequest?.Invoke(null, new HttpContextEventArgs((sender as HttpApplication)?.Context));
+
+            InvokeBeginRequestHandler(GetHttpContextEventArgs(sender as HttpApplication));
         }
 
         private void EndRequestHandler(object sender, EventArgs args)
         {
-            EndRequest?.Invoke(null, new HttpContextEventArgs((sender as HttpApplication)?.Context));
+            InvokeEndRequestHandler(GetHttpContextEventArgs(sender as HttpApplication));
+        }
+
+        private static HttpContextEventArgs GetHttpContextEventArgs(HttpApplication app)
+        {
+            return new HttpContextEventArgs(app?.Context);
         }
     }
 }

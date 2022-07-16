@@ -115,12 +115,23 @@ namespace NLog.Web.Targets.Wrappers
         /// <summary>
         /// If the request has already begun, register for the current request
         /// </summary>
-        protected abstract void HandleRequestAlreadyBegun();
+        protected virtual void HandleRequestAlreadyBegun()
+        {
+
+        }
 
         /// <summary>
         /// Registers the target
         /// </summary>
-        protected abstract void RegisterTarget();
+        protected void RegisterTarget()
+        {
+            // Prevent double subscribe
+            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
+            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
+
+            AspNetBufferingTargetWrapperEventBase.BeginRequest += OnBeginRequest;
+            AspNetBufferingTargetWrapperEventBase.EndRequest   += OnEndRequest;
+        }
 
         /// <summary>
         /// Closes the target by flushing pending events in the buffer (if any).
@@ -135,7 +146,11 @@ namespace NLog.Web.Targets.Wrappers
         /// <summary>
         /// Registers the target
         /// </summary>
-        protected abstract void UnRegisterTarget();
+        protected void UnRegisterTarget()
+        {
+            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
+            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
+        }
 
         /// <summary>
         /// Save the current HttpContext

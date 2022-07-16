@@ -12,18 +12,8 @@ namespace NLog.Web
     ///
     /// Usage: app.UseMiddleware&lt;NLogBufferingMiddleware&gt;(); where app is an IApplicationBuilder
     /// </summary>
-    public class NLogBufferingTargetWrapperMiddleware
+    public class NLogBufferingTargetWrapperMiddleware : AspNetBufferingTargetWrapperEventBase
     {
-        /// <summary>
-        /// Event to be raised at the beginning of each HTTP Request.
-        /// </summary>
-        public static event EventHandler<HttpContextEventArgs> BeginRequest;
-
-        /// <summary>
-        /// Event to be raised at the end of each HTTP Request.
-        /// </summary>
-        public static event EventHandler<HttpContextEventArgs> EndRequest;
-
         private readonly RequestDelegate _next;
 
         /// <summary>
@@ -52,13 +42,13 @@ namespace NLog.Web
         {
             try
             {
-                BeginRequest?.Invoke(null, new HttpContextEventArgs(context));
+                InvokeBeginRequestHandler(new HttpContextEventArgs(context));
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 await _next(context).ConfigureAwait(false);
             }
             finally
             {
-                EndRequest?.Invoke(null, new HttpContextEventArgs(context));
+                InvokeEndRequestHandler(new HttpContextEventArgs(context));
             }
         }
     }

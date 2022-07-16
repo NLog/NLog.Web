@@ -23,7 +23,7 @@ namespace NLog.Web.Targets.Wrappers
     /// <code>
     /// public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     /// {
-    ///    app.UseMiddleware&lt;NLog.Web.NLogBufferingMiddleware&gt;();
+    ///    app.UseMiddleware&lt;NLog.Web.NLogBufferingTargetWrapperMiddleware&gt;();
     /// }
     /// </code>
     /// </remarks>
@@ -67,36 +67,6 @@ namespace NLog.Web.Targets.Wrappers
         public AspNetCoreBufferingTargetWrapper(Target wrappedTarget, int bufferSize) :
             base(wrappedTarget, bufferSize)
         {
-        }
-
-        /// <summary>
-        /// Register the target with the NLogBufferingMiddleware
-        /// </summary>
-        protected override void RegisterTarget()
-        {
-            // Prevent double subscribe
-            NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
-            NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
-
-            NLogBufferingTargetWrapperMiddleware.BeginRequest += OnBeginRequest;
-            NLogBufferingTargetWrapperMiddleware.EndRequest   += OnEndRequest;
-        }
-
-        /// <summary>
-        /// This is not required in the ASP.NET Core case
-        /// </summary>
-        protected override void HandleRequestAlreadyBegun()
-        {
-            // No Op
-        }
-
-        /// <summary>
-        /// Unregister the target from the NLogBufferingMiddleware
-        /// </summary>
-        protected override void UnRegisterTarget()
-        {
-            NLogBufferingTargetWrapperMiddleware.BeginRequest -= OnBeginRequest;
-            NLogBufferingTargetWrapperMiddleware.EndRequest   -= OnEndRequest;
         }
 
         /// <summary>
