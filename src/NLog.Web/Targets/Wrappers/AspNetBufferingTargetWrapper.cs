@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using NLog.Targets;
 
 namespace NLog.Web.Targets.Wrappers
@@ -61,7 +60,6 @@ namespace NLog.Web.Targets.Wrappers
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
         /// </summary>
         public AspNetBufferingTargetWrapper()
-            : base()
         {
         }
 
@@ -91,23 +89,11 @@ namespace NLog.Web.Targets.Wrappers
         {
             if (HttpContext.Current != null)
             {
-                // we are in the context already, it's too late for OnBeginRequest to be called, so let's
-                // just call it ourselves
-                OnBeginRequest(null, null);
+                // we are in the context already,
+                // it's too late for OnBeginRequest to be called,
+                // so let's just call it ourselves
+                OnBeginRequest(null, new HttpContextEventArgs(HttpContext.Current));
             }
-        }
-
-        /// <summary>
-        /// Sets the IHttpContextAccessor.HttpContext
-        /// </summary>
-        /// <param name="httpContextEventArgs"></param>
-        protected override HttpContextBase SaveHttpContext(HttpContextEventArgs httpContextEventArgs)
-        {
-            if (httpContextEventArgs?.HttpContext == null)
-            {
-                return null;
-            }
-            return new HttpContextWrapper(httpContextEventArgs?.HttpContext);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using NLog.Targets;
-using System;
+﻿using NLog.Targets;
 
 namespace NLog.Web.Targets.Wrappers
 {
@@ -45,8 +43,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetCoreBufferingTargetWrapper" /> class.
         /// </summary>
-        public AspNetCoreBufferingTargetWrapper() :
-            base()
+        public AspNetCoreBufferingTargetWrapper()
         {
         }
 
@@ -74,10 +71,9 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <param name="httpContextEventArgs"></param>
         /// <returns></returns>
-        protected override HttpContext SaveHttpContext(HttpContextEventArgs httpContextEventArgs)
+        protected override void SaveHttpContext(HttpContextEventArgs httpContextEventArgs)
         {
             ContextAccessor.HttpContext = httpContextEventArgs?.HttpContext;
-            return ContextAccessor.HttpContext;
         }
     }
 }

@@ -94,11 +94,11 @@ namespace NLog.Web.Targets.Wrappers
         /// <summary>
         /// Accessor for the current HTTP Context
         /// </summary>
-        protected IHttpContextAccessor ContextAccessor { get; set; } =
+        protected IHttpContextAccessor ContextAccessor { get; set; } = new
 #if ASP_NET_CORE
-        new HttpContextAccessor();
+        HttpContextAccessor();
 #else
-        new DefaultHttpContextAccessor();
+        DefaultHttpContextAccessor();
 #endif
         /// <summary>
         /// Initializes the target by hooking up the IHttpModule/IMiddleware BeginRequest and EndRequest events.
@@ -107,7 +107,12 @@ namespace NLog.Web.Targets.Wrappers
         {
             base.InitializeTarget();
 
-            RegisterTarget();
+            // Prevent double subscribe
+            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
+            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
+
+            AspNetBufferingTargetWrapperEventBase.BeginRequest += OnBeginRequest;
+            AspNetBufferingTargetWrapperEventBase.EndRequest   += OnEndRequest;
 
             HandleRequestAlreadyBegun();
         }
@@ -117,20 +122,7 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         protected virtual void HandleRequestAlreadyBegun()
         {
-
-        }
-
-        /// <summary>
-        /// Registers the target
-        /// </summary>
-        protected void RegisterTarget()
-        {
-            // Prevent double subscribe
-            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
-            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
-
-            AspNetBufferingTargetWrapperEventBase.BeginRequest += OnBeginRequest;
-            AspNetBufferingTargetWrapperEventBase.EndRequest   += OnEndRequest;
+            // Method intentionally left empty.
         }
 
         /// <summary>
@@ -138,30 +130,19 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         protected override void CloseTarget()
         {
-            UnRegisterTarget();
+            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
+            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
 
             base.CloseTarget();
         }
 
         /// <summary>
-        /// Registers the target
-        /// </summary>
-        protected void UnRegisterTarget()
-        {
-            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
-            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
-        }
-
-        /// <summary>
         /// Save the current HttpContext
         /// </summary>
-        protected abstract
-#if ASP_NET_CORE
-            HttpContext
-#else
-            HttpContextBase
-#endif
-            SaveHttpContext(HttpContextEventArgs httpContextEventArgs);
+        protected virtual void SaveHttpContext(HttpContextEventArgs httpContextEventArgs)
+        {
+            // Method intentionally left empty.
+        }
 
         /// <summary>
         /// Adds the specified log event to the buffer.
@@ -206,7 +187,8 @@ namespace NLog.Web.Targets.Wrappers
         protected void OnBeginRequest(object sender, HttpContextEventArgs args)
         {
             InternalLogger.Trace("Setting up ASP.NET request buffer.");
-            var context = SaveHttpContext(args);
+            SaveHttpContext(args);
+            var context = this.ContextAccessor.HttpContext;
             if (context != null)
             {
                 context.Items[DataSlot] = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
@@ -224,7 +206,8 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="args"></param>
         protected void OnEndRequest(object sender, HttpContextEventArgs args)
         {
-            var context = SaveHttpContext(args);
+            SaveHttpContext(args);
+            var context = this.ContextAccessor.HttpContext;
             if (context != null)
             {
                 var buffer = GetRequestBuffer(context);
