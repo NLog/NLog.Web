@@ -101,7 +101,7 @@ namespace NLog.Web.Targets.Wrappers
         new DefaultHttpContextAccessor();
 #endif
         /// <summary>
-        /// Initializes the target by hooking up the NLogHttpModule BeginRequest and EndRequest events.
+        /// Initializes the target by hooking up the IHttpModule/IMiddleware BeginRequest and EndRequest events.
         /// </summary>
         protected override void InitializeTarget()
         {
@@ -113,7 +113,7 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// If the request has already begun, register for the current request
+        /// Additional logic if necessary, if the target is created during an http request
         /// </summary>
         protected virtual void HandleRequestAlreadyBegun()
         {
