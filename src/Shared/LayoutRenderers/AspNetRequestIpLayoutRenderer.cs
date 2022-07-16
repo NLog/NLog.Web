@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text;
-
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
@@ -18,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request IP address of the remote client
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-ip}
+    /// <code>${aspnet-request-ip}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-ip")]
     public class AspNetRequestIpLayoutRenderer : AspNetLayoutRendererBase
@@ -35,9 +34,7 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public bool CheckForwardedForHeader { get; set; }
 
-        /// <summary>
-        /// Render IP
-        /// </summary>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpContext = HttpContextAccessor.HttpContext;

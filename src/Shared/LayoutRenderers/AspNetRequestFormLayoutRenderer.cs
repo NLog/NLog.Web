@@ -13,16 +13,15 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Form Data
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-form}:</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a comma.
     /// ${aspnet-request-form:Include=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
     /// ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
     /// ${aspnet-request-form:Include=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude" /> takes precedence over <see cref="Include" />).
     /// ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-form")]
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
@@ -55,11 +54,7 @@ namespace NLog.Web.LayoutRenderers
             Exclude = new HashSet<string>(new[] { "Password", "Pwd" }, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Renders the Form Collection from the HttpRequest and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

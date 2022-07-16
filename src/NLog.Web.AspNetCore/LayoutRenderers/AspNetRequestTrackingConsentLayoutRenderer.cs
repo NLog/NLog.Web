@@ -11,21 +11,22 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Tracking Consent
     /// </summary>
     /// <remarks>
+    /// <code>
     /// ${aspnet-request-tracking-consent:Property=CanTrack}
     /// ${aspnet-request-tracking-consent:Property=HasConsent}
     /// ${aspnet-request-tracking-consent:Property=IsConsentNeeded}
+    /// </code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-tracking-consent")]
     public class AspNetRequestTrackingConsentLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Specifies which of the 3 properties of ITrackingConsentFeature to emit
-        /// Defaults to CanTrack
+        /// Gets or sets what property to emit from ITrackingConsentFeature. Default = CanTrack
         /// </summary>
         [DefaultParameter]
         public TrackingConsentProperty Property { get; set; } = TrackingConsentProperty.CanTrack;
 
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

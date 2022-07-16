@@ -11,16 +11,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User Identity Authenticated? (0 = not authenticated, 1 = authenticated)
     /// </summary>
     /// <remarks>
-    /// ${aspnet-user-isAuthenticated}
+    /// <code>${aspnet-user-isAuthenticated}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-user-isAuthenticated")]
     public class AspNetUserIsAuthenticatedLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Render 0 or 1
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             try

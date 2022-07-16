@@ -17,8 +17,10 @@ namespace NLog.Web.LayoutRenderers
     /// See https://datatracker.ietf.org/doc/draft-popov-token-binding/ for more information.
     /// </summary>
     /// <remarks>
+    /// <code>
     /// ${aspnet-request-tls-token-binding:Property=Provider:Format=Base64}
-    /// ${aspnet-request-tls-token-binding:Property=Referrer:Format=Hex} for hexadecimal separated by the dash character
+    /// ${aspnet-request-tls-token-binding:Property=Referrer:Format=Hex}
+    /// </code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-tls-token-binding")]
     public class AspNetRequestTlsTokenBindingLayoutRenderer : AspNetLayoutRendererBase
@@ -34,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public ByteArrayFormatProperty Format { get; set; }
 
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

@@ -17,10 +17,13 @@ namespace NLog.Web.LayoutRenderers
     /// LongPolling
     ///
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-http-transport-type}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-http-transport-type")]
     public class AspNetRequestHttpTransportTypeLayoutRenderer : AspNetLayoutRendererBase
     {
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

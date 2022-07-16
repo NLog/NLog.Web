@@ -12,6 +12,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET TLS Handshake
     /// </summary>
     /// <remarks>
+    /// <code>
     /// ${aspnet-request-tls-handshake:Property=CipherAlgorithm}
     /// ${aspnet-request-tls-handshake:Property=CipherStrength}
     /// ${aspnet-request-tls-handshake:Property=HashAlgorithm}
@@ -19,6 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-tls-handshake:Property=KeyExchangeAlgorithm}
     /// ${aspnet-request-tls-handshake:Property=KeyExchangeStrength}
     /// ${aspnet-request-tls-handshake:Property=Protocol}
+    /// </code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-tls-handshake")]
     public class AspNetRequestTlsHandshakeLayoutRenderer : AspNetLayoutRendererBase
@@ -30,11 +32,7 @@ namespace NLog.Web.LayoutRenderers
         [DefaultParameter]
         public TlsHandshakeProperty Property { get; set; } = TlsHandshakeProperty.Protocol;
 
-        /// <summary>
-        /// Render TLS Handshake Information
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

@@ -15,16 +15,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request Referrer URL String
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-referrer}
+    /// <code>${aspnet-request-referrer}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-referrer")]
     public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the Referrer URL from the HttpRequest <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

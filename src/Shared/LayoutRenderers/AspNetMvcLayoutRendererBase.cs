@@ -6,22 +6,17 @@ using System.Web.Routing;
 using System.Web;
 #else
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
-
 #endif
-
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// Base Class for ASP.NET MVC Renderer.
     /// </summary>
+    [Obsolete("Inherit from AspNetLayoutRendererBase instead. Marked obsolete with NLog.Web v5.1")]
     public abstract class AspNetMvcLayoutRendererBase : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;

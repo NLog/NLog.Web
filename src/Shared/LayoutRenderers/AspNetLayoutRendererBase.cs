@@ -70,10 +70,11 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Implemented by subclasses to render request information and append it to the specified <see cref="StringBuilder" />.
-        /// 
-        /// Won't be called if <see cref="HttpContextAccessor" /> of <see cref="IHttpContextAccessor.HttpContext" /> is <c>null</c>.
+        /// Renders the value of layout renderer in the context of the specified log event into <see cref="StringBuilder" />.
         /// </summary>
+        /// <remarks>
+        /// Won't be called if <see cref="HttpContextAccessor" /> of <see cref="IHttpContextAccessor.HttpContext" /> is <c>null</c>.
+        /// </remarks>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
         protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);

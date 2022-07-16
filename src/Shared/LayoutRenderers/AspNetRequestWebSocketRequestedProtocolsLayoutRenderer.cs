@@ -8,23 +8,15 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Web Socket Requested Protocols
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-web-socket-requested-protocols}
-    /// </remarks>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-web-socket-requested-protocols}</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <code>
     /// ${aspnet-request-web-socket-requested-protocols:OutputFormat=Flat}
     /// ${aspnet-request-web-socket-requested-protocols:OutputFormat=JsonArray}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-web-socket-requested-protocols")]
     public class AspNetRequestWebSocketRequestedProtocolsLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET Core HttpContext.WebSocketManager.WebSocketRequestedProtocols variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             // Not available on .NET 3.5
@@ -38,7 +30,6 @@ namespace NLog.Web.LayoutRenderers
             if (websockets.WebSocketRequestedProtocols == null)
             {
                 return;
-
             }
 
             if (websockets.WebSocketRequestedProtocols.Count == 0)
@@ -58,7 +49,6 @@ namespace NLog.Web.LayoutRenderers
             if (httpContext.WebSocketRequestedProtocols == null)
             {
                 return;
-
             }
 
             if (httpContext.WebSocketRequestedProtocols.Count == 0)

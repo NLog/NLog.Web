@@ -13,11 +13,17 @@ using Microsoft.AspNetCore.Http;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Session Item.
+    /// ASP.NET Session Dictionary Item Value
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified variable stored
-    /// in the ASP.NET Session dictionary.
+    /// <code>
+    /// ${aspnet-session-item:myKey} - produces "123"
+    /// ${aspnet-session-item:anotherKey} - produces "01/01/2006 00:00:00"
+    /// ${aspnet-session-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
+    /// ${aspnet-session-item:myKey:padding=5} - produces "  123"
+    /// ${aspnet-session-item:myKey:padding=-5} - produces "123  "
+    /// ${aspnet-session-item:stringKey:upperCase=true} - produces "AAA BBB"
+    /// </code>
     /// </remarks>
     /// <example>
     /// <para>You can set the value of an ASP.NET Session variable by using the following code:</para>
@@ -27,15 +33,6 @@ namespace NLog.Web.LayoutRenderers
     /// HttpContext.Current.Session["stringKey"] = "aaa BBB";
     /// HttpContext.Current.Session["anotherKey"] = DateTime.Now;
     /// ]]>
-    /// </code>
-    /// <para>Example usage of ${aspnet-session-item}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-session-item:myKey} - produces "123"
-    /// ${aspnet-session-item:anotherKey} - produces "01/01/2006 00:00:00"
-    /// ${aspnet-session-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
-    /// ${aspnet-session-item:myKey:padding=5} - produces "  123"
-    /// ${aspnet-session-item:myKey:padding=-5} - produces "123  "
-    /// ${aspnet-session-item:stringKey:upperCase=true} - produces "AAA BBB"
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-session-item")]
@@ -85,11 +82,7 @@ namespace NLog.Web.LayoutRenderers
         public SessionValueType ValueType { get; set; } = SessionValueType.String;
 #endif
 
-        /// <summary>
-        /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var item = Item;
