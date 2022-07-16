@@ -1,30 +1,27 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NLog.Web.Targets.Wrappers;
 
 namespace NLog.Web
 {
     /// <summary>
-    /// This class is to intercept the HTTP pipeline and to allow additional logging of the following
+    /// This class is to intercept the HTTP pipeline and to allow the AspNetCoreBufferingTargetWrapper to function properly
     ///
-    /// POST request body
-    ///
-    /// Usage: app.UseMiddleware&lt;NLogBufferingMiddleware&gt;(); where app is an IApplicationBuilder
+    /// Usage: app.UseMiddleware&lt;NLogBufferingTargetWrapperMiddleware&gt;(); where app is an IApplicationBuilder
     /// </summary>
     public class NLogBufferingTargetWrapperMiddleware : AspNetBufferingTargetWrapperEventBase
     {
         private readonly RequestDelegate _next;
 
         /// <summary>
-        /// Initializes new instance of the <see cref="NLogRequestPostedBodyMiddleware"/> class
+        /// Initializes new instance of the <see cref="NLogBufferingTargetWrapperMiddleware"/> class
         /// </summary>
         /// <remarks>
         /// Use the following in Startup.cs:
         /// <code>
         /// public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         /// {
-        ///    app.UseMiddleware&lt;NLog.Web.NLogRequestPostedBodyMiddleware&gt;();
+        ///    app.UseMiddleware&lt;NLog.Web.NLogBufferingTargetWrapperMiddleware&gt;();
         /// }
         /// </code>
         /// </remarks>
