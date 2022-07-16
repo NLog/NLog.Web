@@ -8,16 +8,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET response headers already sent, in other words the response has started
     /// </summary>
     /// <remarks>
-    /// ${aspnet-response-has-started}
+    /// <code>${aspnet-response-has-started}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-response-has-started")]
     public class AspNetResponseHasStartedLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the ASP.NET HttpResponse HasStarted property in ASP.NET Core and the HttpResponse HeadersWritten in .NET Framework
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var response = HttpContextAccessor.HttpContext.TryGetResponse();

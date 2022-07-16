@@ -8,16 +8,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Response ContentLength
     /// </summary>
     /// <remarks>
-    /// ${aspnet-response-contentlength}
+    /// <code>${aspnet-response-contentlength}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-response-contentlength")]
     public class AspNetResponseContentLength : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// ASP.NET Http Response Status Code
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
@@ -29,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
 #if ASP_NET_CORE
             var contentLength = httpResponse.ContentLength;
 #else
-            var contentLength = httpResponse.OutputStream?.Length;
+            var contentLength = httpResponse.OutputStream?.Length ?? 0L;
 #endif
             if (contentLength > 0L)
             {

@@ -21,12 +21,12 @@ namespace NLog.Web.LayoutRenderers
     /// Default - No value has been specified, use the configured defaults.
     /// </summary>
     /// <remarks>
-    /// ${aspnet-response-https-compression}
+    /// <code>${aspnet-response-https-compression}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-response-https-compression")]
     public class AspNetResponseHttpsCompressionLayoutRenderer : AspNetLayoutRendererBase
     {
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
 

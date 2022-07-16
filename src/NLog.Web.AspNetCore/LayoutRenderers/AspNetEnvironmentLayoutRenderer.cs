@@ -24,11 +24,7 @@ namespace NLog.Web.LayoutRenderers
 
         private IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
 
-        /// <summary>
-        /// Append to target
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             builder.Append(HostEnvironment?.EnvironmentName);

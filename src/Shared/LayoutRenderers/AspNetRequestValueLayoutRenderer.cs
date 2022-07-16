@@ -12,15 +12,10 @@ using Microsoft.AspNetCore.Http.Features;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Request variable.
+    /// ASP.NET Request Context variable.
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified parameter of the
-    /// ASP.NET Request object.
-    /// </remarks>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request}:</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <code>
     /// ${aspnet-request:item=v}
     /// ${aspnet-request:querystring=v}
     /// ${aspnet-request:form=v}
@@ -28,7 +23,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request:header=h}
     /// ${aspnet-request:serverVariable=v}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request")]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
@@ -71,11 +66,7 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Header { get; set; }
 
-        /// <summary>
-        /// Renders the specified ASP.NET Request variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
@@ -114,7 +105,6 @@ namespace NLog.Web.LayoutRenderers
 
             builder.Append(value);
         }
-
 
 #if !ASP_NET_CORE
         private static string LookupQueryString(string key, HttpRequestBase httpRequest)

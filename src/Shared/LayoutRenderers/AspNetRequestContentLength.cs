@@ -9,16 +9,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET request contentlength of the posted body
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-contentlength}
+    /// <code>${aspnet-request-contentlength}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-contentlength")]
     public class AspNetRequestContentLength : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the ASP.NET posted body
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

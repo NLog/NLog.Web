@@ -38,11 +38,7 @@ namespace NLog.Web.LayoutRenderers
         private static string _webRootPath;
 #endif
 
-        /// <summary>
-        /// Append to target
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             builder.Append(WebRootPath);

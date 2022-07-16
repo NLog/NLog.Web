@@ -16,14 +16,8 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Server Variable.
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified Server Variable
+    /// <code>${aspnet-request-servervariable:Item=KeyName}</code>
     /// </remarks>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-servervariable}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-servervariable:Item=v}
-    /// </code>
-    /// </example>
     [LayoutRenderer("aspnet-request-servervariable")]
     public class AspNetRequestServerVariableLayoutRenderer : AspNetLayoutRendererBase
     {

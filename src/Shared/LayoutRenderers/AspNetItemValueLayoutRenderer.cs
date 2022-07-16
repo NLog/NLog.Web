@@ -9,10 +9,17 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET HttpContext Item Value.
+    /// ASP.NET HttpContext Items Dictionary Value.
     /// </summary>
     /// <remarks>
-    /// ${aspnet-httpcontext-item}
+    /// <code>
+    /// ${aspnet-httpcontext-item:myKey} - produces "123"
+    /// ${aspnet-httpcontext-item:anotherKey} - produces "01/01/2006 00:00:00"
+    /// ${aspnet-httpcontext-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
+    /// ${aspnet-httpcontext-item:myKey:padding=5} - produces "  123"
+    /// ${aspnet-httpcontext-item:myKey:padding=-5} - produces "123  "
+    /// ${aspnet-httpcontext-item:stringKey:upperCase=true} - produces "AAA BBB"
+    /// </code>
     /// </remarks>
     /// <example>
     /// <para>You can set the value of an ASP.NET Item variable by using the following code:</para>
@@ -22,15 +29,6 @@ namespace NLog.Web.LayoutRenderers
     /// HttpContext.Current.Items["stringKey"] = "aaa BBB";
     /// HttpContext.Current.Items["anotherKey"] = DateTime.Now;
     /// ]]>
-    /// </code>
-    /// <para>Example usage of ${aspnet-httpcontext-item}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-httpcontext-item:myKey} - produces "123"
-    /// ${aspnet-httpcontext-item:anotherKey} - produces "01/01/2006 00:00:00"
-    /// ${aspnet-httpcontext-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
-    /// ${aspnet-httpcontext-item:myKey:padding=5} - produces "  123"
-    /// ${aspnet-httpcontext-item:myKey:padding=-5} - produces "123  "
-    /// ${aspnet-httpcontext-item:stringKey:upperCase=true} - produces "AAA BBB"
     /// </code>
     /// </example>
     [LayoutRenderer("aspnet-httpcontext-item")]

@@ -16,10 +16,13 @@ namespace NLog.Web.LayoutRenderers
     /// This feature allows applications to add keep-alive functionality, but limit it only to
     /// transports that don't have some kind of inherent keep-alive.
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-inherent-keep-alive}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-inherent-keep-alive")]
     public class AspNetRequestInherentKeepAliveLayoutRenderer : AspNetLayoutRendererBase
     {
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

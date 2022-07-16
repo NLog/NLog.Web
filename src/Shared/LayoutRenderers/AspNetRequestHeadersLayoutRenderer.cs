@@ -15,16 +15,15 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Headers
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-headers}</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-headers:OutputFormat=Flat}
     /// ${aspnet-request-headers:OutputFormat=JsonArray}
     /// ${aspnet-request-headers:OutputFormat=JsonDictionary}
     /// ${aspnet-request-headers:OutputFormat=JsonDictionary:HeaderNames=username}
     /// ${aspnet-request-headers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-headers")]
     public class AspNetRequestHeadersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
@@ -52,11 +51,7 @@ namespace NLog.Web.LayoutRenderers
             Exclude = new HashSet<string>(new[] { "ALL_HTTP", "ALL_RAW", "AUTH_PASSWORD" }, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Renders the ASP.NET Headers appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

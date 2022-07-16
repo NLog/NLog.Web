@@ -14,16 +14,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Http Request Method (POST / GET)
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-method}
+    /// <code>${aspnet-request-method}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-method")]
     public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// ASP.NET Http Request Method
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

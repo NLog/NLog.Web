@@ -11,12 +11,12 @@ namespace NLog.Web.LayoutRenderers
     /// 0 if Incapable
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-bidirectional-stream}
+    /// <code>${aspnet-request-bidirectional-stream}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-bidirectional-stream")]
     public class AspNetRequestBidirectionalStreamLayoutRenderer : AspNetLayoutRendererBase
     {
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

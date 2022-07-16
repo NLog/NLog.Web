@@ -8,20 +8,13 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Response Status Code.
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-response-statuscode}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-response-statuscode} - Produces - 200.
-    /// </code>
-    /// </example>
+    /// <remarks>
+    /// <code>${aspnet-response-statuscode}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-response-statuscode")]
     public class AspNetResponseStatusCodeRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// ASP.NET Http Response Status Code
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();

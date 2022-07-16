@@ -13,8 +13,10 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Client Certificate of the Connection
     /// </summary>
     /// <remarks>
+    /// <code>
     /// ${aspnet-request-client-certificate}
     /// ${aspnet-request-client-certificate:Verbose=True}
+    /// </code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-client-certificate")]
     public class AspNetRequestClientCertificateLayoutRenderer : AspNetLayoutRendererBase
@@ -24,9 +26,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool Verbose { get; set; }
 
-        /// <summary>
-        /// Render Remote Port
-        /// </summary>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpContext = HttpContextAccessor.HttpContext;

@@ -16,16 +16,15 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Cookie
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-cookie}</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-cookie:OutputFormat=Flat}
     /// ${aspnet-request-cookie:OutputFormat=JsonArray}
     /// ${aspnet-request-cookie:OutputFormat=JsonDictionary}
     /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:CookieNames=username}
     /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-cookie")]
     public class AspNetRequestCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
@@ -53,11 +52,7 @@ namespace NLog.Web.LayoutRenderers
             Exclude = new HashSet<string>(new[] { "AUTH", "SESS_ID" }, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Renders the ASP.NET Cookie appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

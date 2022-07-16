@@ -13,16 +13,15 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Trailers
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-trailers}</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-trailers:OutputFormat=Flat}
     /// ${aspnet-request-trailers:OutputFormat=JsonArray}
     /// ${aspnet-request-trailers:OutputFormat=JsonDictionary}
     /// ${aspnet-request-trailers:OutputFormat=JsonDictionary:TrailerNames=username}
     /// ${aspnet-request-trailers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-trailers")]
     public class AspNetRequestTrailersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
@@ -38,7 +37,7 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public ISet<string> Exclude { get; set; } = new HashSet<string>();
 
-        ///<inheritdoc/>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();

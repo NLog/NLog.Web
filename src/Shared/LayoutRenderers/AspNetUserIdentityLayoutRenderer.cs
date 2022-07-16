@@ -14,16 +14,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User Identity Name
     /// </summary>
     /// <remarks>
-    /// ${aspnet-user-identity}
+    /// <code>${aspnet-user-identity}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-user-identity")]
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET User.Identity.Name variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             try

@@ -14,7 +14,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User ClaimType Value Lookup.
     /// </summary>
     /// <remarks>
-    /// ${aspnet-user-claim}
+    /// <code>${aspnet-user-claim}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-user-claim")]
     public class AspNetUserClaimLayoutRenderer : AspNetLayoutRendererBase
@@ -45,11 +45,7 @@ namespace NLog.Web.LayoutRenderers
             base.InitializeLayoutRenderer();
         }
 
-        /// <summary>
-        /// Renders the specified ASP.NET User.Identity.AuthenticationType variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             try
