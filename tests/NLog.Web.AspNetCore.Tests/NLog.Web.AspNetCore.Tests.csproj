@@ -12,7 +12,7 @@
     <RootNamespace>NLog.Web.Tests</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'net461' ">
-    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.1.*</RuntimeFrameworkVersion>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0' or '$(TargetFramework)' == 'net6.0' ">
@@ -26,8 +26,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'net461' ">
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
