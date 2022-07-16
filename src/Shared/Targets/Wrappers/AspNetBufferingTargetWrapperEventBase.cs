@@ -10,18 +10,18 @@ namespace NLog.Web.Targets.Wrappers
         /// <summary>
         /// Event to be raised at the beginning of each HTTP Request.
         /// </summary>
-        public static event EventHandler<HttpContextEventArgs> BeginRequest;
+        internal static event EventHandler<HttpContextEventArgs> BeginRequest;
 
         /// <summary>
         /// Event to be raised at the end of each HTTP Request.
         /// </summary>
-        public static event EventHandler<HttpContextEventArgs> EndRequest;
+        internal static event EventHandler<HttpContextEventArgs> EndRequest;
 
         /// <summary>
         /// Invoke the begin request event handler
         /// </summary>
         /// <param name="eventArgs"></param>
-        public void InvokeBeginRequestHandler(HttpContextEventArgs eventArgs)
+        protected void InvokeBeginRequestHandler(HttpContextEventArgs eventArgs)
         {
             BeginRequest?.Invoke(null, eventArgs);
         }
@@ -30,7 +30,7 @@ namespace NLog.Web.Targets.Wrappers
         /// Invoke the end request event handler
         /// </summary>
         /// <param name="eventArgs"></param>
-        public void InvokeEndRequestHandler(HttpContextEventArgs eventArgs)
+        protected void InvokeEndRequestHandler(HttpContextEventArgs eventArgs)
         {
             EndRequest?.Invoke(null, eventArgs);
         }
