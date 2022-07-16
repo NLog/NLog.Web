@@ -12,16 +12,16 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET TLS Handshake
     /// </summary>
     /// <remarks>
-    /// ${aspnet-tls-handshake:Property=CipherAlgorithm}
-    /// ${aspnet-tls-handshake:Property=CipherStrength}
-    /// ${aspnet-tls-handshake:Property=HashAlgorithm}
-    /// ${aspnet-tls-handshake:Property=HashStrength}
-    /// ${aspnet-tls-handshake:Property=KeyExchangeAlgorithm}
-    /// ${aspnet-tls-handshake:Property=KeyExchangeStrength}
-    /// ${aspnet-tls-handshake:Property=Protocol}
+    /// ${aspnet-request-tls-handshake:Property=CipherAlgorithm}
+    /// ${aspnet-request-tls-handshake:Property=CipherStrength}
+    /// ${aspnet-request-tls-handshake:Property=HashAlgorithm}
+    /// ${aspnet-request-tls-handshake:Property=HashStrength}
+    /// ${aspnet-request-tls-handshake:Property=KeyExchangeAlgorithm}
+    /// ${aspnet-request-tls-handshake:Property=KeyExchangeStrength}
+    /// ${aspnet-request-tls-handshake:Property=Protocol}
     /// </remarks>
-    [LayoutRenderer("aspnet-tls-handshake")]
-    public class AspNetTlsHandshakeLayoutRenderer : AspNetLayoutRendererBase
+    [LayoutRenderer("aspnet-request-tls-handshake")]
+    public class AspNetRequestTlsHandshakeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Specifies which of the 7 properties of ITlsHandshakeFeature to emit
