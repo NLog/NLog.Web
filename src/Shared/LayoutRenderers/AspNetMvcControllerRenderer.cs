@@ -17,6 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-mvc-controller}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-MVC-Controller-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-mvc-controller")]
     public class AspNetMvcControllerRenderer : AspNetLayoutRendererBase
     {

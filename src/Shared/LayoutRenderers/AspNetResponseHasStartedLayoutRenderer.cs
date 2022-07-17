@@ -10,6 +10,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-response-has-started}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-HasStarted-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-has-started")]
     public class AspNetResponseHasStartedLayoutRenderer : AspNetLayoutRendererBase
     {

@@ -23,6 +23,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-response-https-compression}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-HTTPS-Compression-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-https-compression")]
     public class AspNetResponseHttpsCompressionLayoutRenderer : AspNetLayoutRendererBase
     {

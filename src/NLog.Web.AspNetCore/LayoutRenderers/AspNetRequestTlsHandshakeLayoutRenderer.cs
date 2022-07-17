@@ -22,6 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-tls-handshake:Property=Protocol}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-TLS-Handshake-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-tls-handshake")]
     public class AspNetRequestTlsHandshakeLayoutRenderer : AspNetLayoutRendererBase
     {

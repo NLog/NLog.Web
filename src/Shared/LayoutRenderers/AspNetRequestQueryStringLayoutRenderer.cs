@@ -21,6 +21,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-querystring:OutputFormat=JsonDictionary}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-QueryString-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-querystring")]
     public class AspNetQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

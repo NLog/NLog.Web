@@ -15,6 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-sessionid}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetSessionId-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-sessionid")]
     public class AspNetSessionIdLayoutRenderer : AspNetLayoutRendererBase
     {

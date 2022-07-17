@@ -27,7 +27,6 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
 #endif
     [LayoutRenderer("iis-site-name")]
-    // ReSharper disable once InconsistentNaming
     [ThreadAgnostic]
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {

@@ -17,6 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-referrer}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Referrer-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-referrer")]
     public class AspNetRequestReferrerRenderer : AspNetLayoutRendererBase
     {

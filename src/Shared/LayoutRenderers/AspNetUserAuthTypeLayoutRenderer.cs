@@ -16,6 +16,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-user-authtype}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetUserAuthType-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-user-authtype")]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {

@@ -11,6 +11,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-response-statuscode}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetResponse-StatusCode-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-statuscode")]
     public class AspNetResponseStatusCodeRenderer : AspNetLayoutRendererBase
     {

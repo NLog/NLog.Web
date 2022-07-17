@@ -15,6 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-local-port}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Local-Port-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-local-port")]
     public class AspNetRequestLocalPortLayoutRenderer : AspNetLayoutRendererBase
     {

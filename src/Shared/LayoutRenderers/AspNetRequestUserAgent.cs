@@ -11,6 +11,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-useragent}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-UserAgent-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-useragent")]
     public class AspNetRequestUserAgent : AspNetLayoutRendererBase
     {

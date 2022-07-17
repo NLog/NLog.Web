@@ -15,6 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-local-ip}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Local-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-local-ip")]
     public class AspNetRequestLocalIpLayoutRenderer : AspNetLayoutRendererBase
     {

@@ -16,6 +16,10 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Rendering development environment. <see cref="IHostingEnvironment" />
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-environment}</code>
+    /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Environment-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-environment")]
     [ThreadAgnostic]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer

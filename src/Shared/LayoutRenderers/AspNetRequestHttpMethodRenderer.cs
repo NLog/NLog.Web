@@ -16,6 +16,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-method}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Method-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-method")]
     public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
     {

@@ -22,6 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-tls-token-binding:Property=Referrer:Format=Hex}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-TLS-Token-Bindng-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-tls-token-binding")]
     public class AspNetRequestTlsTokenBindingLayoutRenderer : AspNetLayoutRendererBase
     {

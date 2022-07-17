@@ -13,6 +13,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-bidirectional-stream}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Bidirectional-Stream-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-bidirectional-stream")]
     public class AspNetRequestBidirectionalStreamLayoutRenderer : AspNetLayoutRendererBase
     {
