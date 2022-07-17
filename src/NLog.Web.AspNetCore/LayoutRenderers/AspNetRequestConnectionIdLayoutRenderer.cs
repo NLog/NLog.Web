@@ -8,16 +8,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET request connection id
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-connection-id}
+    /// <code>${aspnet-request-connection-id}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-connection-id")]
     public class AspNetRequestConnectionIdLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the ASP.NET connection ID
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var connection = HttpContextAccessor.HttpContext.TryGetConnection();

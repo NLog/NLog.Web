@@ -7,11 +7,17 @@ using NLog.LayoutRenderers;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Application variable.
+    /// ASP.NET HttpContext Application Dictionary Variable.
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified variable stored 
-    /// in the ASP.NET Application dictionary.
+    /// <code>
+    /// ${aspnet-application:variable=myvariable} - produces "123"
+    /// ${aspnet-application:variable=anothervariable} - produces "01/01/2006 00:00:00"
+    /// ${aspnet-application:variable=anothervariable:culture=pl-PL} - produces "2006-01-01 00:00:00"
+    /// ${aspnet-application:variable=myvariable:padding=5} - produces "  123"
+    /// ${aspnet-application:variable=myvariable:padding=-5} - produces "123  "
+    /// ${aspnet-application:variable=stringvariable:upperCase=true} - produces "AAA BBB"
+    /// </code>
     /// </remarks>
     /// <example>
     /// <para>You can set the value of an ASP.NET Application variable by using the following code:</para>
@@ -22,26 +28,23 @@ namespace NLog.Web.LayoutRenderers
     /// HttpContext.Current.Application["anothervariable"] = DateTime.Now;
     /// ]]>
     /// </code>
-    /// <para>Example usage of ${aspnet-application}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-application:variable=myvariable} - produces "123"
-    /// ${aspnet-application:variable=anothervariable} - produces "01/01/2006 00:00:00"
-    /// ${aspnet-application:variable=anothervariable:culture=pl-PL} - produces "2006-01-01 00:00:00"
-    /// ${aspnet-application:variable=myvariable:padding=5} - produces "  123"
-    /// ${aspnet-application:variable=myvariable:padding=-5} - produces "123  "
-    /// ${aspnet-application:variable=stringvariable:upperCase=true} - produces "AAA BBB"
-    /// </code>
     /// </example>
     [LayoutRenderer("aspnet-application")]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Gets or sets the variable name.
+        /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         [RequiredParameter]
         [DefaultParameter]
-        public string Variable { get; set; }
+        public string Item { get; set; }
+
+        /// <summary>
+        /// Gets or sets the variable name.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
         /// Format string for conversion from object to string.
@@ -55,14 +58,11 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
-        /// <summary>
-        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder"/> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (Variable == null)
+            var item = Item;
+            if (item == null)
             {
                 return;
             }
@@ -74,7 +74,7 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var formatProvider = GetFormatProvider(logEvent, Culture);
-            builder.AppendFormattedValue(application[Variable], Format, formatProvider, ValueFormatter);
+            builder.AppendFormattedValue(application[item], Format, formatProvider, ValueFormatter);
         }
     }
 }

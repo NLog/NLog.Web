@@ -17,9 +17,8 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request URL
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-url}:</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-url:IncludeQueryString=true} - produces http://www.exmaple.com/?t=1
     /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.exmaple.com/
     /// ${aspnet-request-url:IncludePort=true} - produces http://www.exmaple.com:80/
@@ -27,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-url:IncludeScheme=false} - produces www.exmaple.com/
     /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-url")]
     public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
     {
@@ -64,13 +63,9 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool UseRawTarget { get; set; }
         
-#endif        
+#endif
 
-        /// <summary>
-        /// Renders the Request URL from the HttpRequest
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

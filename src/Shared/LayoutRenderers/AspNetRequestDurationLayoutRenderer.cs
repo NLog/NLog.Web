@@ -11,7 +11,7 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request Duration
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-duration}
+    /// <code>${aspnet-request-duration}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-duration")]
     public class AspNetRequestDurationLayoutRenderer : AspNetLayoutRendererBase

@@ -117,34 +117,6 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void NullPath()
-        {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
-            {
-                Variable = null,
-                EvaluateAsNestedProperties = true
-            };
-
-            var o = new { b = "c" };
-            //set in "a"
-            ExecTest("a", o, "", appSettingLayoutRenderer);
-        }
-
-        [Fact]
-        public void NullVarname()
-        {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
-            {
-                Variable = null,
-                EvaluateAsNestedProperties = false
-            };
-
-            var o = new { b = "c" };
-            //set in "a"
-            ExecTest("a", o, "", appSettingLayoutRenderer);
-        }
-
-        [Fact]
         public void SessionWithCulture()
         {
             LayoutRenderer.Register<AspNetSessionValueLayoutRenderer>("aspnet-session");

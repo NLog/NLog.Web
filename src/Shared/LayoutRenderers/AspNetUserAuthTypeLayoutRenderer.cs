@@ -14,16 +14,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User Identity AuthenticationType
     /// </summary>
     /// <remarks>
-    /// ${aspnet-user-authtype}
+    /// <code>${aspnet-user-authtype}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-user-authtype")]
     public class AspNetUserAuthTypeLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET User.Identity.AuthenticationType variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             try

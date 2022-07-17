@@ -10,7 +10,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetTlsHandshakeLayoutRendererTests : LayoutRenderersTestBase<AspNetTlsHandshakeLayoutRenderer>
+    public class AspNetRequestTlsHandshakeLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestTlsHandshakeLayoutRenderer>
     {
         private static void SetupFeature(HttpContext httpContext)
         {

@@ -13,14 +13,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Local Port of the Connection
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-local-port}
+    /// <code>${aspnet-request-local-port}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-local-port")]
     public class AspNetRequestLocalPortLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Render Remote Port
-        /// </summary>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpContext = HttpContextAccessor.HttpContext;

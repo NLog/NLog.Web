@@ -10,12 +10,9 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET posted body, e.g. FORM or Ajax POST
     /// </summary>
-    /// <para>Example usage of ${aspnet-request-posted-body}:</para>
-    /// <example>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-request-posted-body} - Produces - {username:xyz,password:xyz}
-    /// </code>
-    /// </example>
+    /// <remarks>
+    /// <code>${aspnet-request-posted-body} - Produces - {username:xyz,password:xyz}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-posted-body")]
     public class AspNetRequestPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
@@ -24,9 +21,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         internal static readonly object NLogPostedRequestBodyKey = new object();
 
-        /// <summary>Renders the ASP.NET posted body</summary>
-        /// <param name="builder">The <see cref="T:System.Text.StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpContext = HttpContextAccessor.HttpContext;

@@ -8,16 +8,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Is Request Web Socket
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-is-web-socket}
+    /// <code>${aspnet-request-is-web-socket}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-is-web-socket")]
     public class AspNetRequestIsWebSocketLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET Core HttpContext.WebSocketManager.IsWebSocketRequest variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             // Not available on .NET 3.5

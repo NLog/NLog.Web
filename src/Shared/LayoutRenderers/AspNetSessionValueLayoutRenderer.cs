@@ -13,44 +13,49 @@ using Microsoft.AspNetCore.Http;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Session variable.
+    /// ASP.NET Session Dictionary Item Value
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to insert the value of the specified variable stored
-    /// in the ASP.NET Session dictionary.
+    /// <code>
+    /// ${aspnet-session-item:myKey} - produces "123"
+    /// ${aspnet-session-item:anotherKey} - produces "01/01/2006 00:00:00"
+    /// ${aspnet-session-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
+    /// ${aspnet-session-item:myKey:padding=5} - produces "  123"
+    /// ${aspnet-session-item:myKey:padding=-5} - produces "123  "
+    /// ${aspnet-session-item:stringKey:upperCase=true} - produces "AAA BBB"
+    /// </code>
     /// </remarks>
     /// <example>
     /// <para>You can set the value of an ASP.NET Session variable by using the following code:</para>
     /// <code lang="C#">
     /// <![CDATA[
-    /// HttpContext.Current.Session["myvariable"] = 123;
-    /// HttpContext.Current.Session["stringvariable"] = "aaa BBB";
-    /// HttpContext.Current.Session["anothervariable"] = DateTime.Now;
+    /// HttpContext.Current.Session["myKey"] = 123;
+    /// HttpContext.Current.Session["stringKey"] = "aaa BBB";
+    /// HttpContext.Current.Session["anotherKey"] = DateTime.Now;
     /// ]]>
     /// </code>
-    /// <para>Example usage of ${aspnet-session}:</para>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-session:variable=myvariable} - produces "123"
-    /// ${aspnet-session:variable=anothervariable} - produces "01/01/2006 00:00:00"
-    /// ${aspnet-session:variable=anothervariable:culture=pl-PL} - produces "2006-01-01 00:00:00"
-    /// ${aspnet-session:variable=myvariable:padding=5} - produces "  123"
-    /// ${aspnet-session:variable=myvariable:padding=-5} - produces "123  "
-    /// ${aspnet-session:variable=stringvariable:upperCase=true} - produces "AAA BBB"
-    /// </code>
     /// </example>
+    [LayoutRenderer("aspnet-session-item")]
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
 #if ASP_NET_CORE
-        private const string NLogRetrievingSessionValue = "NLogRetrievingSessionValue";
+        private static readonly object NLogRetrievingSessionValue = new object();
 #endif
 
         /// <summary>
-        /// Gets or sets the session variable name.
+        /// Gets or sets the session item name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
+        [RequiredParameter]
         [DefaultParameter]
-        public string Variable { get; set; }
+        public string Item { get; set; }
+
+        /// <summary>
+        /// Gets or sets the session item name.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+        public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
         /// Gets or sets whether variables with a dot are evaluated as properties or not
@@ -77,14 +82,11 @@ namespace NLog.Web.LayoutRenderers
         public SessionValueType ValueType { get; set; } = SessionValueType.String;
 #endif
 
-        /// <summary>
-        /// Renders the specified ASP.NET Session value and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (Variable == null)
+            var item = Item;
+            if (item == null)
             {
                 return;
             }
@@ -95,7 +97,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
 #if !ASP_NET_CORE
-            var value = PropertyReader.GetValue(Variable, contextSession, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
+            var value = PropertyReader.GetValue(item, contextSession, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
 #else
             //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
             //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
@@ -104,12 +106,12 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            context.Items[NLogRetrievingSessionValue] = true;
+            context.Items[NLogRetrievingSessionValue] = bool.TrueString;
 
             object value;
             try
             {
-                value = PropertyReader.GetValue(Variable, contextSession, (session, key) => GetSessionValue(session, key), EvaluateAsNestedProperties);
+                value = PropertyReader.GetValue(item, contextSession, (session, key) => GetSessionValue(session, key), EvaluateAsNestedProperties);
             }
             finally
             {

@@ -17,17 +17,21 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetItemValueLayoutRendererTests : LayoutRenderersTestBase<AspNetItemValueLayoutRenderer>
     {
-        [Fact]
-        public void NullVariableRendersEmptyString()
+        protected override void NullRendersEmptyString()
         {
             // Arrange
-            var (renderer, _) = CreateWithHttpContext();
-            renderer.Variable = null;
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.Item = string.Empty;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
+            Assert.Empty(result);
+
+            // Bonus assert
+            renderer.Item = null;
+            result = renderer.Render(new LogEventInfo());
             Assert.Empty(result);
         }
 

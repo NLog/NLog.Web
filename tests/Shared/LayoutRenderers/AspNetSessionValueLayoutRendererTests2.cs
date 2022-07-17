@@ -22,6 +22,24 @@ namespace NLog.Web.Tests.LayoutRenderers
     /// </summary>
     public class AspNetSessionValueLayoutRendererTests2 : LayoutRenderersTestBase<AspNetSessionValueLayoutRenderer>
     {
+        protected override void NullRendersEmptyString()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.Item = string.Empty;
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Empty(result);
+
+            // Bonus assert
+            renderer.Item = null;
+            result = renderer.Render(new LogEventInfo());
+            Assert.Empty(result);
+        }
+
         [Fact]
         public void SingleStringItemRendersCorrectValue()
         {
@@ -64,8 +82,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Empty(result);
         }
-
-
 
         private static (AspNetSessionValueLayoutRenderer, HttpContext) CreateRenderer(bool throwsError = false)
         {

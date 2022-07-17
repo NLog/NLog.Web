@@ -9,16 +9,12 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request DNS name of the remote client
     /// </summary>
     /// <remarks>
-    /// ${aspnet-request-host}
+    /// <code>${aspnet-request-host}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-host")]
     public class AspNetRequestHostLayoutRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var request = HttpContextAccessor.HttpContext.TryGetRequest();

@@ -7,44 +7,32 @@ using System.Web;
 #else
 using Microsoft.AspNetCore.Routing;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
-
 #endif
 
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET MVC Controller Name.
+    /// ASP.NET RouteData MVC Action Name.
     /// </summary>
     /// <remarks>
-    /// Use this layout renderer to render the controller name.
+    /// <code>${aspnet-mvc-action}</code>
     /// </remarks>
-    /// <example>
-    /// <code lang="NLog Layout Renderer">
-    /// ${aspnet-mvc-action}    
-    /// </code>
-    /// </example>
     [LayoutRenderer("aspnet-mvc-action")]
-    public class AspNetMvcActionRenderer : AspNetMvcLayoutRendererBase
+    public class AspNetMvcActionRenderer : AspNetLayoutRendererBase
     {
-        /// <summary>
-        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
-        /// <param name="context">The current http context.</param>
-        protected override void MvcDoAppend(StringBuilder builder, LogEventInfo logEvent, HttpContextBase context)
+        /// <inheritdoc/>
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var key = "action";
+
+            var context = HttpContextAccessor.HttpContext;
 
 #if !ASP_NET_CORE
             var controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
 #else
             var controller = context?.GetRouteData()?.Values?[key]?.ToString();
 #endif
-            if (!string.IsNullOrEmpty(controller))
-            {
-                builder.Append(controller);
-            }
+            builder.Append(controller);
         }
     }
 }

@@ -14,14 +14,13 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Query String
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-querystring}:</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-querystring:OutputFormat=Flat}
     /// ${aspnet-request-querystring:OutputFormat=JsonArray}
     /// ${aspnet-request-querystring:OutputFormat=JsonDictionary}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-querystring")]
     public class AspNetQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
@@ -31,11 +30,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public List<string> QueryStringKeys { get; set; }
 
-        /// <summary>
-        /// Renders the specified ASP.NET Application variable and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();

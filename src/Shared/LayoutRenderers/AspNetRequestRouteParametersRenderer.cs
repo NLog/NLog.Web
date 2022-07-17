@@ -13,14 +13,13 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// ASP.NET Request Route Parameters
     /// </summary>
-    /// <example>
-    /// <para>Example usage of ${aspnet-request-routeparameters}:</para>
-    /// <code lang="NLog Layout Renderer">
+    /// <remarks>
+    /// <code>
     /// ${aspnet-request-routeparameters:OutputFormat=Flat}
     /// ${aspnet-request-routeparameters:OutputFormat=JsonArray}
     /// ${aspnet-request-routeparameters:OutputFormat=JsonDictionary}
     /// </code>
-    /// </example>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-routeparameters")]
     public class AspNetRequestRouteParametersRenderer : AspNetLayoutMultiValueRendererBase
     {
@@ -30,11 +29,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public List<string> RouteParameterKeys { get; set; }
 
-        /// <summary>
-        /// Renders the specified ASP.NET Route Parameters and appends it to the specified <see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="logEvent"></param>
+        /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
