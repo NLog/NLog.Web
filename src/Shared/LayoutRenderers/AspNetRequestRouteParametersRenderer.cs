@@ -20,6 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-routeparameters:OutputFormat=JsonDictionary}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-RouteParameters-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-routeparameters")]
     public class AspNetRequestRouteParametersRenderer : AspNetLayoutMultiValueRendererBase
     {

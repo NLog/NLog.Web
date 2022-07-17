@@ -18,6 +18,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-client-certificate:Verbose=True}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Client-Certificate-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-client-certificate")]
     public class AspNetRequestClientCertificateLayoutRenderer : AspNetLayoutRendererBase
     {

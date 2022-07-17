@@ -24,6 +24,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request:serverVariable=v}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request")]
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {

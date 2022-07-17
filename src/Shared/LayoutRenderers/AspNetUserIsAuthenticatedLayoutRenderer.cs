@@ -13,6 +13,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-user-isAuthenticated}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-User-isAuthenticated-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-user-isAuthenticated")]
     public class AspNetUserIsAuthenticatedLayoutRenderer : AspNetLayoutRendererBase
     {

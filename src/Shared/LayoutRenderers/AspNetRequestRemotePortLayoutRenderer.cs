@@ -15,6 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-remote-port}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Remote-Port-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-remote-port")]
     public class AspNetRequestRemotePortLayoutRenderer : AspNetLayoutRendererBase
     {

@@ -27,6 +27,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-url")]
     public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
     {

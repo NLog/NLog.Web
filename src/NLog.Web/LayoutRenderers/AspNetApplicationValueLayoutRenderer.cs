@@ -7,7 +7,7 @@ using NLog.LayoutRenderers;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET HttpContext Application Dictionary Variable.
+    /// ASP.NET HttpContext Application Dictionary Item Value.
     /// </summary>
     /// <remarks>
     /// <code>
@@ -29,6 +29,7 @@ namespace NLog.Web.LayoutRenderers
     /// ]]>
     /// </code>
     /// </example>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetApplication-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-application")]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {

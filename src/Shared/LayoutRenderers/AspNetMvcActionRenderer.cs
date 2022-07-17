@@ -17,6 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-mvc-action}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-MVC-Action-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-mvc-action")]
     public class AspNetMvcActionRenderer : AspNetLayoutRendererBase
     {

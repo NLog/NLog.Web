@@ -22,6 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Form-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-form")]
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

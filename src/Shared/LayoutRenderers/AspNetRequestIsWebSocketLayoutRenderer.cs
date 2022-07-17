@@ -10,6 +10,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-is-web-socket}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IsWebSocket-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-is-web-socket")]
     public class AspNetRequestIsWebSocketLayoutRenderer : AspNetLayoutRendererBase
     {

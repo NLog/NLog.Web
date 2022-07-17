@@ -24,6 +24,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-response-headers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-Headers-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-headers")]
     public class AspNetResponseHeadersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

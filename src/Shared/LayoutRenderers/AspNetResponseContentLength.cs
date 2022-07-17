@@ -10,6 +10,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-response-contentlength}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-ContentLength-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-contentlength")]
     public class AspNetResponseContentLength : AspNetLayoutRendererBase
     {

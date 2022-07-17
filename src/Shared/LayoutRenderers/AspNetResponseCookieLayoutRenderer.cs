@@ -28,6 +28,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-response-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-Cookie-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-cookie")]
     public class AspNetResponseCookieLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

@@ -20,6 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-http-transport-type}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-HTTP-Transport-Type-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-http-transport-type")]
     public class AspNetRequestHttpTransportTypeLayoutRenderer : AspNetLayoutRendererBase
     {

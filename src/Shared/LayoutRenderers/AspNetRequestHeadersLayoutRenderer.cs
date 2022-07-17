@@ -24,6 +24,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-headers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Headers-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-headers")]
     public class AspNetRequestHeadersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

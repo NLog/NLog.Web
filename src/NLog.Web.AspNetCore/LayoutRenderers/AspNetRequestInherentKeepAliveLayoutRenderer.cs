@@ -19,6 +19,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-inherent-keep-alive}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Inherent-KeepAlive-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-inherent-keep-alive")]
     public class AspNetRequestInherentKeepAliveLayoutRenderer : AspNetLayoutRendererBase
     {
