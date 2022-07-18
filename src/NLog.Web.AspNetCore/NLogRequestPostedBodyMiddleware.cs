@@ -102,7 +102,7 @@ namespace NLog.Web
         /// </summary>
         /// <param name="stream"></param>
         /// <returns>The contents of the Stream read fully from start to end as a String</returns>
-        private async Task<string> GetString(Stream stream)
+        private static async Task<string> GetString(Stream stream)
         {
             string responseText = null;
 

@@ -24,21 +24,21 @@ namespace NLog.Web.Internal
             foreach (var cookieName in cookieNames)
             {
                 var httpCookie = cookies[cookieName];
-                if (httpCookie != null)
-                {
-                    if (expandMultiValue)
-                    {
-                        var values = httpCookie.Values;
-                        if (values?.Count > 1)
-                        {
-                            foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
-                                yield return new KeyValuePair<string, string>(cookieValue.Key, cookieValue.Value);
-                            continue;
-                        }
-                    }
+                if (httpCookie == null)
+                    continue;
 
-                    yield return new KeyValuePair<string, string>(httpCookie.Name, httpCookie.Value);
+                if (expandMultiValue)
+                {
+                    var values = httpCookie.Values;
+                    if (values?.Count > 1)
+                    {
+                        foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
+                            yield return new KeyValuePair<string, string>(cookieValue.Key, cookieValue.Value);
+                        continue;
+                    }
                 }
+
+                yield return new KeyValuePair<string, string>(httpCookie.Name, httpCookie.Value);
             }
         }
 
@@ -52,21 +52,21 @@ namespace NLog.Web.Internal
                     continue;
 
                 var httpCookie = cookies[cookieName];
-                if (httpCookie != null)
-                {
-                    if (expandMultiValue)
-                    {
-                        var values = httpCookie.Values;
-                        if (values?.Count > 1)
-                        {
-                            foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
-                                yield return new KeyValuePair<string, string>(cookieValue.Key, cookieValue.Value);
-                            continue;
-                        }
-                    }
+                if (httpCookie == null)
+                    continue;
 
-                    yield return new KeyValuePair<string, string>(httpCookie.Name, httpCookie.Value);
+                if (expandMultiValue)
+                {
+                    var values = httpCookie.Values;
+                    if (values?.Count > 1)
+                    {
+                        foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
+                            yield return new KeyValuePair<string, string>(cookieValue.Key, cookieValue.Value);
+                        continue;
+                    }
                 }
+
+                yield return new KeyValuePair<string, string>(httpCookie.Name, httpCookie.Value);
             }
         }
 
@@ -86,33 +86,28 @@ namespace NLog.Web.Internal
             }
         }
 
-        private static IEnumerable<HttpCookie> GetCookieMultiVerboseValues(HttpCookie cookie)
+        private static IEnumerable<HttpCookie> GetCookieVerboseMultiValues(HttpCookie cookie)
         {
-            if (cookie.Values.Count > 1)
+            var cookieValues = cookie.Values;
+            // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
+            var isFirst = true;
+            foreach (var multiValueKey in cookieValues.AllKeys)
             {
-                // Split multi-valued cookie, as allowed for in the HttpCookie API for backwards compatibility with classic ASP
-                var isFirst = true;
-                foreach (var multiValueKey in cookie.Values.AllKeys)
+                var cookieKey = multiValueKey;
+                if (isFirst)
                 {
-                    var cookieKey = multiValueKey;
-                    if (isFirst)
-                    {
-                        cookieKey = cookie.Name;
-                        isFirst = false;
-                    }
-                    yield return new HttpCookie(cookieKey, cookie.Values[multiValueKey])
-                    {
-                        Domain = cookie.Domain,
-                        Path = cookie.Path,
-                        Expires = cookie.Expires,
-                        Secure = cookie.Secure,
-                        HttpOnly = cookie.HttpOnly
-                    };
+                    cookieKey = cookie.Name;
+                    isFirst = false;
                 }
-            }
-            else
-            {
-                yield return cookie;
+
+                yield return new HttpCookie(cookieKey, cookieValues[multiValueKey])
+                {
+                    Domain = cookie.Domain,
+                    Path = cookie.Path,
+                    Expires = cookie.Expires,
+                    Secure = cookie.Secure,
+                    HttpOnly = cookie.HttpOnly
+                };
             }
         }
 
@@ -134,13 +129,11 @@ namespace NLog.Web.Internal
             {
                 var httpCookie = cookies[cookieName];
                 if (httpCookie == null)
-                {
                     continue;
-                }
 
                 if (expandMultiValue && httpCookie.Values.Count > 1)
                 {
-                    foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
+                    foreach (var cookie in GetCookieVerboseMultiValues(httpCookie))
                         yield return cookie;
                 }
                 else
@@ -160,13 +153,11 @@ namespace NLog.Web.Internal
 
                 var httpCookie = cookies[cookieName];
                 if (httpCookie == null)
-                {
                     continue;
-                }
 
-                if(expandMultiValue && httpCookie.Values.Count > 1)
+                if (expandMultiValue && httpCookie.Values.Count > 1)
                 {
-                    foreach (var cookie in GetCookieMultiVerboseValues(httpCookie))
+                    foreach (var cookie in GetCookieVerboseMultiValues(httpCookie))
                         yield return cookie;
                 }
                 else
