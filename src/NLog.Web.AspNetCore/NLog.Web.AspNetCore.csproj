@@ -19,12 +19,36 @@ Supported platforms:
     <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
     <PackageId>NLog.Web.AspNetCore</PackageId>
-    <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
+    <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext</PackageTags>
     <PackageReleaseNotes>
+Thank you Burak Akgerman (@bakgerman) for making this huge contribution and restoring ${aspnet-request-posted-body}
+      
 ## Improvements
 
-- [#749] Include ContentRootPath when scanning for NLog.config candidate (#749) (@snakefoot)
-- [#747] NLogRequestLogging - Added DurationThresholdMs + ExcludeRequestPaths (#747) (@snakefoot)
+- [#828] Reverted default value for ShutdownOnDispose to false (#828) (@snakefoot)
+- [#815] Added ${aspnet-request-trailers} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-response-trailers} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-response-https-compression} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-request-tracking-consent} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-request-tls-token-binding} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-request-inherent-keep-alive} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-request-http-transport-type} Layout Renderer (#815) (@bakgerman)
+- [#815] Added ${aspnet-request-bidirectional-stream} Layout Renderer (#815) (@bakgerman)
+- [#811] Added ${aspnet-request-servervariable} Layout Renderer (#811) (@bakgerman)
+- [#802] Added ${aspnet-request-tls-handshake} Layout Renderer (#802) (@bakgerman)
+- [#796] Added ${aspnet-request-connection-id} Layout Renderer (#796) (@bakgerman)
+- [#796] Added ${aspnet-response-has-started} Layout Renderer (#796) (@bakgerman)
+- [#789] Added ${aspnet-response-cookie} Layout Renderer (#789) (@bakgerman)
+- [#785] Added ${aspnet-request-client-certificate} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-request-is-web-socket} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-request-local-ip} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-request-local-port} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-request-remote-port} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-request-web-socket-requested-protocols} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-response-contenttype} Layout Renderer (#785) (@bakgerman)
+- [#785] Added ${aspnet-response-headers} Layout Renderer (#785) (@bakgerman)
+- [#781] NLogRequestPostedBodyMiddleware - Restore support for ${aspnet-request-posted-body} (#781) (@bakgerman)
+- [#783] NLogRequestLoggingMiddleware - Added support for custom ShouldLogRequest-delegate (#783) (@snakefoot)
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
