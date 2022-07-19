@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Web.DependencyInjection;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -17,8 +18,29 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     [LayoutRenderer("aspnet-environment")]
     [ThreadAgnostic]
-    public class AspNetEnvironmentLayoutRenderer : AspNetHostEnvironmentLayoutRendererBase
+    public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
+        /// <summary>
+        /// Context for DI
+        /// </summary>
+        private IHostEnvironment _hostEnvironment;
+
+        /// <summary>
+        /// Provides access to the current IHostEnvironment
+        /// </summary>
+        /// <returns>IHostEnvironment or <c>null</c></returns>
+        [NLogConfigurationIgnoreProperty]
+        public IHostEnvironment HostEnvironment
+        {
+            get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment(ResolveService<IServiceProvider>(), LoggingConfiguration));
+            set => _hostEnvironment = value;
+        }
+
+        internal static IHostEnvironment RetrieveHostEnvironment(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
+        {
+            return ServiceLocator.ResolveService<IHostEnvironment>(serviceProvider, loggingConfiguration);
+        }
+
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
