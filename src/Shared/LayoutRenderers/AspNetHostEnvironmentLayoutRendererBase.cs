@@ -22,12 +22,13 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     public abstract class AspNetHostEnvironmentLayoutRendererBase : LayoutRenderer
     {
+#if ASP_NET_CORE
         /// <summary>
         /// Context for DI
         /// </summary>
         private IHostEnvironment _hostEnvironment;
 
-#if ASP_NET_CORE
+
         /// <summary>
         /// Provides access to the current IHostEnvironment
         /// </summary>
@@ -49,17 +50,13 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
         [NLogConfigurationIgnoreProperty]
-        public IHostEnvironment HostEnvironment
-        {
-            get => _hostEnvironment ?? (_hostEnvironment = new HostEnvironment());
-            set => _hostEnvironment = value;
-        }
+        public IHostEnvironment HostEnvironment { get; set; } = new HostEnvironment();
 #endif
 
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {
-            _hostEnvironment = null;
+            HostEnvironment = null;
             base.CloseLayoutRenderer();
         }
     }
