@@ -3,6 +3,7 @@ using System.Linq;
 using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 #if !ASP_NET_CORE
@@ -38,6 +39,24 @@ namespace NLog.Web.Tests.LayoutRenderers
             string actual = renderer.Render(new LogEventInfo());
 
             Assert.Equal("NLogTestIISName", actual);
+        }
+
+        [Fact]
+        public void NullTest()
+        {
+            var renderer = new IISInstanceNameLayoutRenderer();
+            var hostEnvironment = Substitute.For<IHostEnvironment>();
+
+#if !ASP_NET_CORE
+            hostEnvironment.SiteName.ReturnsNull();
+#else
+            hostEnvironment.ApplicationName.ReturnsNull();
+#endif
+            renderer.HostEnvironment = hostEnvironment;
+
+            string actual = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(string.Empty, actual);
         }
     }
 }
