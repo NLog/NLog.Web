@@ -2,13 +2,11 @@
 using System.Text;
 #if ASP_NET_CORE
 #if ASP_NET_CORE2
-using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
 #if ASP_NET_CORE3
 using Microsoft.Extensions.Hosting;
 #endif
-using NLog.Web.DependencyInjection;
 #else
 using System.Web.Hosting;
 #endif
@@ -28,75 +26,52 @@ namespace NLog.Web.LayoutRenderers
 #endif
     [LayoutRenderer("aspnet-appbasepath")]
     [ThreadAgnostic]
-    public class AspNetAppBasePathLayoutRenderer : LayoutRenderer
+    public class AspNetAppBasePathLayoutRenderer : AspNetHostEnvironmentLayoutRendererBase
     {
+        /// <inheritdoc />
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        {
 #if ASP_NET_CORE
-        private IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
-        private IHostEnvironment _hostEnvironment;
-
-        private string AppBasePath => _appBasePath ?? ResolveAppBasePath(HostEnvironment?.ContentRootPath, out _appBasePath);
-        private string _appBasePath;
+            builder.Append(ResolveAppBasePath(HostEnvironment?.ContentRootPath));
 #else
-        private string AppBasePath => _appBasePath ?? ResolveAppBasePath(HostingEnvironment.MapPath("~"), out _appBasePath);
-        private static string _appBasePath;
+            builder.Append(ResolveAppBasePath(HostingEnvironment.MapPath("~")));
 #endif
-
-        /// <inheritdoc />
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
-        {
-            builder.Append(AppBasePath);
         }
 
-        /// <inheritdoc />
-        protected override void CloseLayoutRenderer()
+        private static string ResolveAppBasePath(string primaryDirectory)
         {
+            if (!string.IsNullOrEmpty(primaryDirectory))
+            {
+                return primaryDirectory;
+            }
 #if ASP_NET_CORE
-            _hostEnvironment = null;
-#endif
-            _appBasePath = null;
-            base.CloseLayoutRenderer();
-        }
-
-        private static string ResolveAppBasePath(string primaryDirectory, out string appBasePath)
-        {
+            try
+            {
+                primaryDirectory = Environment.GetEnvironmentVariable("ASPNETCORE_CONTENTROOT");
+            }
+            catch
+            {
+                // Not supported or access denied
+            }
             if (string.IsNullOrEmpty(primaryDirectory))
             {
-#if ASP_NET_CORE
+                primaryDirectory = AppContext.BaseDirectory;
+            }
+#else
+            primaryDirectory = AppDomain.CurrentDomain.BaseDirectory;
+#endif
+            if (string.IsNullOrEmpty(primaryDirectory))
+            {
                 try
                 {
-                    primaryDirectory = Environment.GetEnvironmentVariable("ASPNETCORE_CONTENTROOT");
+                    primaryDirectory = System.IO.Directory.GetCurrentDirectory();
                 }
                 catch
                 {
                     // Not supported or access denied
                 }
-                if (string.IsNullOrEmpty(primaryDirectory))
-                {
-                    primaryDirectory = AppContext.BaseDirectory;
-                }
-#else
-                primaryDirectory = AppDomain.CurrentDomain.BaseDirectory;
-#endif
-                if (string.IsNullOrEmpty(primaryDirectory))
-                {
-                    try
-                    {
-                        primaryDirectory = System.IO.Directory.GetCurrentDirectory();
-                    }
-                    catch
-                    {
-                        // Not supported or access denied
-                    }
-                }
-
-                appBasePath = null;
-                return primaryDirectory;
             }
-            else
-            {
-                appBasePath = primaryDirectory;
-                return appBasePath;
-            }
+            return primaryDirectory;
         }
     }
 }

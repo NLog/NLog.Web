@@ -7,19 +7,17 @@ using System.Web.Hosting;
 #else
 #if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
 #if ASP_NET_CORE3
 using Microsoft.Extensions.Hosting;
 #endif
-using NLog.Web.DependencyInjection;
 #endif
 
 namespace NLog.Web.LayoutRenderers
 {
 #if ASP_NET_CORE
     /// <summary>
-    /// Rendering site name in IIS. <see cref="IHostingEnvironment" />
+    /// Rendering site name in IIS. <see cref="IHostingEnvironment.ApplicationName" />
     /// </summary>
 #else
     /// <summary>
@@ -29,16 +27,10 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("iis-site-name")]
     // ReSharper disable once InconsistentNaming
     [ThreadAgnostic]
-    public class IISInstanceNameLayoutRenderer : LayoutRenderer
+    public class IISInstanceNameLayoutRenderer : AspNetHostEnvironmentLayoutRendererBase
     {
-#if ASP_NET_CORE
-        private IHostEnvironment _hostEnvironment;
-
-        private IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
-#endif
-
         /// <inheritdoc />
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
 #if ASP_NET_CORE
             builder.Append(HostEnvironment?.ApplicationName);
@@ -46,14 +38,5 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(HostingEnvironment.SiteName);
 #endif
         }
-
-#if ASP_NET_CORE
-        /// <inheritdoc />
-        protected override void CloseLayoutRenderer()
-        {
-            _hostEnvironment = null;
-            base.CloseLayoutRenderer();
-        }
-#endif
     }
 }

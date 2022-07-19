@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
-using NLog.Web.DependencyInjection;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -18,23 +17,12 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     [LayoutRenderer("aspnet-environment")]
     [ThreadAgnostic]
-    public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
+    public class AspNetEnvironmentLayoutRenderer : AspNetHostEnvironmentLayoutRendererBase
     {
-        private IHostEnvironment _hostEnvironment;
-
-        private IHostEnvironment HostEnvironment => _hostEnvironment ?? (_hostEnvironment = ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
-
         /// <inheritdoc />
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             builder.Append(HostEnvironment?.EnvironmentName);
-        }
-
-        /// <inheritdoc />
-        protected override void CloseLayoutRenderer()
-        {
-            _hostEnvironment = null;
-            base.CloseLayoutRenderer();
         }
     }
 }
