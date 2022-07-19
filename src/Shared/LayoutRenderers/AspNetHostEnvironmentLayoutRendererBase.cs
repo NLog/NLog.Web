@@ -2,22 +2,17 @@
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
-
 #if ASP_NET_CORE
-
 #if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
-
 #if ASP_NET_CORE3
 using Microsoft.Extensions.Hosting;
 #endif
-
 using NLog.Web.DependencyInjection;
-
 #else
-using IHostEnvironment = System.Web.Hosting.HostingEnvironment;
+using NLog.Web.Internal;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -56,7 +51,7 @@ namespace NLog.Web.LayoutRenderers
         [NLogConfigurationIgnoreProperty]
         public IHostEnvironment HostEnvironment
         {
-            get => _hostEnvironment ?? (_hostEnvironment = new IHostEnvironment());
+            get => _hostEnvironment ?? (_hostEnvironment = new HostEnvironment());
             set => _hostEnvironment = value;
         }
 #endif
@@ -68,8 +63,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var hostEnvironment = HostEnvironment;
-            if (hostEnvironment == null)
+            if (HostEnvironment == null)
             {
                 return;
             }

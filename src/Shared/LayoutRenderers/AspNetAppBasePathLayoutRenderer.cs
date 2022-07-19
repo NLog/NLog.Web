@@ -8,10 +8,11 @@ using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using Microsoft.Extensions.Hosting;
 #endif
 #else
-using System.Web.Hosting;
+using NLog.Web.Internal;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
+
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -21,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
 #else
     /// <summary>
-    /// Rendering Application BasePath. <see cref="HostingEnvironment.MapPath"/>("~")
+    /// Rendering Application BasePath. <see cref="IHostEnvironment.MapPath"/>("~")
     /// </summary>
 #endif
     [LayoutRenderer("aspnet-appbasepath")]
@@ -34,7 +35,7 @@ namespace NLog.Web.LayoutRenderers
 #if ASP_NET_CORE
             builder.Append(ResolveAppBasePath(HostEnvironment?.ContentRootPath));
 #else
-            builder.Append(ResolveAppBasePath(HostingEnvironment.MapPath("~")));
+            builder.Append(ResolveAppBasePath(HostEnvironment.MapPath("~")));
 #endif
         }
 

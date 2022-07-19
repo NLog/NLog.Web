@@ -4,6 +4,7 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
+using NLog.Web.Internal;
 #else
 #if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
 #if ASP_NET_CORE
             builder.Append(HostEnvironment?.ApplicationName);
 #else
-            builder.Append(HostingEnvironment.SiteName);
+            builder.Append(HostEnvironment.SiteName);
 #endif
         }
     }
