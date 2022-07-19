@@ -30,12 +30,12 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetAppBasePathLayoutRenderer : AspNetHostEnvironmentLayoutRendererBase
     {
         /// <inheritdoc />
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
 #if ASP_NET_CORE
             builder.Append(ResolveAppBasePath(HostEnvironment?.ContentRootPath));
 #else
-            builder.Append(ResolveAppBasePath(HostEnvironment.MapPath("~")));
+            builder.Append(ResolveAppBasePath(HostEnvironment?.MapPath("~")));
 #endif
         }
 

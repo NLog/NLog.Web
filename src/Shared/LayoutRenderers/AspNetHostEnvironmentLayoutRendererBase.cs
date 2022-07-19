@@ -56,30 +56,6 @@ namespace NLog.Web.LayoutRenderers
         }
 #endif
 
-        /// <summary>
-        /// Validates that the HttpContext is available and delegates append to subclasses.<see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
-        {
-            if (HostEnvironment == null)
-            {
-                return;
-            }
-            DoAppend(builder, logEvent);
-        }
-
-        /// <summary>
-        /// Renders the value of layout renderer in the context of the specified log event into <see cref="StringBuilder" />.
-        /// </summary>
-        /// <remarks>
-        /// Won't be called if <see cref="HostEnvironment" /> is <c>null</c>.
-        /// </remarks>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
-        protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
-
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {

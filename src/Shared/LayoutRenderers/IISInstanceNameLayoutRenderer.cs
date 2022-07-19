@@ -31,12 +31,12 @@ namespace NLog.Web.LayoutRenderers
     public class IISInstanceNameLayoutRenderer : AspNetHostEnvironmentLayoutRendererBase
     {
         /// <inheritdoc />
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
 #if ASP_NET_CORE
             builder.Append(HostEnvironment?.ApplicationName);
 #else
-            builder.Append(HostEnvironment.SiteName);
+            builder.Append(HostEnvironment?.SiteName);
 #endif
         }
     }
