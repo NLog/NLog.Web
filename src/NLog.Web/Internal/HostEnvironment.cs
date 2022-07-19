@@ -4,17 +4,7 @@ namespace NLog.Web.Internal
 {
     internal class HostEnvironment : IHostEnvironment
     {
-        public string SiteName
-        {
-            get
-            {
-                return HostingEnvironment.SiteName;
-            }
-            set
-            {
-                // No Op
-            }
-        }
+        public string SiteName => HostingEnvironment.SiteName;
 
         public string MapPath(string virtualPath)
         {

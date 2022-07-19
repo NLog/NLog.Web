@@ -17,6 +17,6 @@ namespace NLog.Web
 
         /// <summary>Gets the name of the site.</summary>
         /// <returns>The name of the site.</returns>
-        string SiteName { get; set; }
+        string SiteName { get; }
     }
 }
