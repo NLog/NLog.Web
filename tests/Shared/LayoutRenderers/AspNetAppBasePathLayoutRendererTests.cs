@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
@@ -21,42 +19,46 @@ using Microsoft.Extensions.Hosting;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class IISInstanceNameLayoutRendererTests
+    public class AspNetAppBasePathLayoutRendererTests 
     {
         [Fact]
         public void SuccessTest()
         {
-            var renderer = new IISInstanceNameLayoutRenderer();
+            var renderer = new AspNetAppBasePathLayoutRenderer();
             var hostEnvironment = Substitute.For<IHostEnvironment>();
 
 #if !ASP_NET_CORE
-            hostEnvironment.SiteName.Returns("NLogTestIISName");
+            hostEnvironment.MapPath("~").Returns("NLogTestContentRootPath");
 #else
-            hostEnvironment.ApplicationName.Returns("NLogTestIISName");
+            hostEnvironment.ContentRootPath.Returns("NLogTestContentRootPath");
 #endif
             renderer.HostEnvironment = hostEnvironment;
 
             string actual = renderer.Render(new LogEventInfo());
 
-            Assert.Equal("NLogTestIISName", actual);
+            Assert.Equal("NLogTestContentRootPath", actual);
         }
 
         [Fact]
         public void NullTest()
         {
-            var renderer = new IISInstanceNameLayoutRenderer();
+            var renderer = new AspNetAppBasePathLayoutRenderer();
             var hostEnvironment = Substitute.For<IHostEnvironment>();
 
 #if !ASP_NET_CORE
-            hostEnvironment.SiteName.ReturnsNull();
+            hostEnvironment.MapPath("~").ReturnsNull();
 #else
-            hostEnvironment.ApplicationName.ReturnsNull();
+            hostEnvironment.ContentRootPath.ReturnsNull();
 #endif
             renderer.HostEnvironment = hostEnvironment;
 
             string actual = renderer.Render(new LogEventInfo());
 
-            Assert.Equal(string.Empty, actual);
+#if !ASP_NET_CORE
+            Assert.Equal(System.IO.Directory.GetCurrentDirectory(), actual);
+#else
+            Assert.Equal(AppContext.BaseDirectory, actual);
+#endif
         }
     }
 }
