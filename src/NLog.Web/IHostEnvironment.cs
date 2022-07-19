@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NLog.Web.Internal
+namespace NLog.Web
 {
     /// <summary>
     /// Interface to allow unit testing of System.Web.Hosting.HostingEnvironment based layout renderers
