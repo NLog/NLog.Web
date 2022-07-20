@@ -44,7 +44,7 @@ Date format: (year/month/day)
   - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-web-socket-requested-protocols} Layout Renderer for NET46 (#784) (@bakgerman)
   - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-response-contenttype} Layout Renderer (#784) (@bakgerman)
   - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-response-headers} Layout Renderer (#784) (@bakgerman)
-  - [#785](https://github.com/NLog/NLog.Web/pull/785) NLogRequestPostedBodyModule - Restore support for ${aspnet-request-posted-body} (#734) (@bakgerman)
+  - [#785](https://github.com/NLog/NLog.Web/pull/785) NLogRequestPostedBodyModule - Restore support for ${aspnet-request-posted-body} (#785) (@bakgerman)
   - [#792](https://github.com/NLog/NLog.Web/pull/792) Added ${aspnet-user-claim} Layout Renderer for NET46 (#792) (@snakefoot)
 
 ### Version 5.0.0 (2022/05/17)
