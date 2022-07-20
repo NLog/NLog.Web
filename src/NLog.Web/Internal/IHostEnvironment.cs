@@ -8,7 +8,7 @@ namespace NLog.Web
     /// <summary>
     /// Interface to allow unit testing of System.Web.Hosting.HostingEnvironment based layout renderers
     /// </summary>
-    public interface IHostEnvironment
+    internal interface IHostEnvironment
     {
         /// <summary>Maps a virtual path to a physical path on the server.</summary>
         /// <param name="virtualPath">The virtual path (absolute or relative).</param>
