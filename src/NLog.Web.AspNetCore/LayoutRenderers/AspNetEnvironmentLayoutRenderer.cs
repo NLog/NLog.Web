@@ -20,17 +20,9 @@ namespace NLog.Web.LayoutRenderers
     [ThreadAgnostic]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
-        /// <summary>
-        /// Context for DI
-        /// </summary>
         private IHostEnvironment _hostEnvironment;
 
-        /// <summary>
-        /// Provides access to the current IHostEnvironment
-        /// </summary>
-        /// <returns>IHostEnvironment or <c>null</c></returns>
-        [NLogConfigurationIgnoreProperty]
-        public IHostEnvironment HostEnvironment
+        internal IHostEnvironment HostEnvironment
         {
             get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _hostEnvironment = value;
@@ -45,6 +37,13 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             builder.Append(HostEnvironment?.EnvironmentName);
+        }
+
+        /// <inheritdoc/>
+        protected override void CloseLayoutRenderer()
+        {
+            HostEnvironment = null;
+            base.CloseLayoutRenderer();
         }
     }
 }
