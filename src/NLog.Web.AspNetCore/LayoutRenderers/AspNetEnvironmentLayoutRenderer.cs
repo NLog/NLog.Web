@@ -22,6 +22,10 @@ namespace NLog.Web.LayoutRenderers
     {
         private IHostEnvironment _hostEnvironment;
 
+        /// <summary>
+        /// Provides access to the current IHostEnvironment
+        /// </summary>
+        /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
             get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment(ResolveService<IServiceProvider>(), LoggingConfiguration));

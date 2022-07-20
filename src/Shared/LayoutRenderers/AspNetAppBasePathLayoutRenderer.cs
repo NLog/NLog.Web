@@ -33,6 +33,10 @@ namespace NLog.Web.LayoutRenderers
 #if ASP_NET_CORE
         private IHostEnvironment _hostEnvironment;
 
+        /// <summary>
+        /// Provides access to the current IHostEnvironment
+        /// </summary>
+        /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
             get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment(ResolveService<IServiceProvider>(), LoggingConfiguration));
@@ -48,7 +52,6 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
-        [NLogConfigurationIgnoreProperty]
         internal IHostEnvironment HostEnvironment { get; set; } = Internal.HostEnvironment.Default;
 #endif
 
