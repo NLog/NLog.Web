@@ -19,9 +19,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void SuccessTest()
         {
             var renderer = new AspNetEnvironmentLayoutRenderer();
-            var hostEnvironment = Substitute.For<IHostEnvironment>();
-
-            hostEnvironment.EnvironmentName.Returns("NLogTestEnvironmentName");
+            var hostEnvironment = new FakeHostEnvironment
+            {
+                EnvironmentName = "NLogTestEnvironmentName"
+            };
 
             renderer.HostEnvironment = hostEnvironment;
 
@@ -34,9 +35,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullTest()
         {
             var renderer = new AspNetEnvironmentLayoutRenderer();
-            var hostEnvironment = Substitute.For<IHostEnvironment>();
-
-            hostEnvironment.EnvironmentName.ReturnsNull();
+            var hostEnvironment = new FakeHostEnvironment
+            {
+                EnvironmentName = null
+            };
 
             renderer.HostEnvironment = hostEnvironment;
 
