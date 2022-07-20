@@ -57,7 +57,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
         [NLogConfigurationIgnoreProperty]
-        public IHostEnvironment HostEnvironment { get; set; } = new HostEnvironment();
+        internal IHostEnvironment HostEnvironment { get; set; } = Internal.HostEnvironment.Default;
 #endif
 
         /// <inheritdoc />

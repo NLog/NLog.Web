@@ -10,5 +10,10 @@ namespace NLog.Web.Internal
         {
             return HostingEnvironment.MapPath(virtualPath);
         }
+
+        /// <summary>
+        /// The default configuration
+        /// </summary>
+        internal static readonly HostEnvironment Default = new HostEnvironment();
     }
 }
