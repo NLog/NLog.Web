@@ -26,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
             switch (Property)
             {
                 case MaxBodyRequestSizeProperty.IsReadOnly:
-                    builder.Append(maxBodyRequestSizeFeature?.IsReadOnly);
+                    builder.Append(maxBodyRequestSizeFeature?.IsReadOnly == true ? '1' : '0');
                     break;
                 case MaxBodyRequestSizeProperty.MaxBodyRequestSize:
                     builder.Append(maxBodyRequestSizeFeature?.MaxRequestBodySize);

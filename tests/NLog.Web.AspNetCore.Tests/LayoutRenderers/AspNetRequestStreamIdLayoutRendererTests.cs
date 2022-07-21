@@ -32,9 +32,6 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            var streamIdFeature = Substitute.For<IStreamIdFeature>();
-            streamIdFeature.StreamId.Returns(257);
-
             httpContext.Features.Returns(new FeatureCollection());
             // Act
             var result = renderer.Render(new LogEventInfo());
