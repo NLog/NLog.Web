@@ -25,12 +25,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void SuccessTest()
         {
             var renderer = new AspNetAppBasePathLayoutRenderer();
-            var hostEnvironment = new FakeHostEnvironment();
 
 #if !ASP_NET_CORE
+            var hostEnvironment = new FakeHostEnvironment();
             hostEnvironment.MappedPath = "NLogTestContentRootPath";
 #else
-            hostEnvironment.ContentRootPath= "NLogTestContentRootPath";
+            var hostEnvironment = Substitute.For<IHostEnvironment>();
+            hostEnvironment.ContentRootPath.Returns("NLogTestContentRootPath");
 #endif
             renderer.HostEnvironment = hostEnvironment;
 
@@ -43,15 +44,15 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullTest()
         {
             var renderer = new AspNetAppBasePathLayoutRenderer();
-            var hostEnvironment = new FakeHostEnvironment();
 
 #if !ASP_NET_CORE
+            var hostEnvironment = new FakeHostEnvironment();
             hostEnvironment.MappedPath = null;
 #else
-            hostEnvironment.ContentRootPath = null;
+            var hostEnvironment = Substitute.For<IHostEnvironment>();
+            hostEnvironment.ContentRootPath.ReturnsNull();
 #endif
             renderer.HostEnvironment = hostEnvironment;
-
             string actual = renderer.Render(new LogEventInfo());
 
 #if !ASP_NET_CORE

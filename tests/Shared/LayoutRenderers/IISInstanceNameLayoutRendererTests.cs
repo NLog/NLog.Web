@@ -24,12 +24,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void SuccessTest()
         {
             var renderer = new IISInstanceNameLayoutRenderer();
-            var hostEnvironment = new FakeHostEnvironment();
 
 #if !ASP_NET_CORE
+            var hostEnvironment = new FakeHostEnvironment();
             hostEnvironment.SiteName = "NLogTestIISName";
 #else
-            hostEnvironment.ApplicationName = "NLogTestIISName";
+            var hostEnvironment = Substitute.For<IHostEnvironment>();
+            hostEnvironment.ApplicationName.Returns("NLogTestIISName");
 #endif
             renderer.HostEnvironment = hostEnvironment;
 
@@ -42,11 +43,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullTest()
         {
             var renderer = new IISInstanceNameLayoutRenderer();
-            var hostEnvironment = new FakeHostEnvironment();
 
 #if !ASP_NET_CORE
+            var hostEnvironment = new FakeHostEnvironment();
             hostEnvironment.SiteName = null;
 #else
+            var hostEnvironment = Substitute.For<IHostEnvironment>();
             hostEnvironment.ApplicationName = null;
 #endif
             renderer.HostEnvironment = hostEnvironment;
