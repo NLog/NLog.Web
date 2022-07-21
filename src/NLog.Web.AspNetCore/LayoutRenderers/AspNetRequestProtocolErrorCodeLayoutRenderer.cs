@@ -17,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
             var protocolErrorCodeFeature = features?.Get<IProtocolErrorCodeFeature>();
-            builder.Append(protocolErrorCodeFeature?.Error);
+            builder.Append(protocolErrorCodeFeature?.Error ?? -1);
         }
     }
 }
