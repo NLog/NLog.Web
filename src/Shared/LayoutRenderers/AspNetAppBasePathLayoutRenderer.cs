@@ -59,10 +59,17 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
 #if ASP_NET_CORE
-            builder.Append(ResolveAppBasePath(HostEnvironment?.ContentRootPath));
+            builder.Append(GetCachedAppBasePath(HostEnvironment?.ContentRootPath));
 #else
-            builder.Append(ResolveAppBasePath(HostEnvironment?.MapPath("~")));
+            builder.Append(GetCachedAppBasePath(HostEnvironment?.MapPath("~")));
 #endif
+        }
+
+        private string _appBasePath;
+
+        private string GetCachedAppBasePath(string primaryDirectory)
+        {
+            return _appBasePath ?? (_appBasePath = ResolveAppBasePath(primaryDirectory));
         }
 
         private static string ResolveAppBasePath(string primaryDirectory)
