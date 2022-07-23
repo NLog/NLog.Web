@@ -24,7 +24,7 @@ namespace NLog.Web.Tests
            return new NLog.LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 $@"<nlog throwConfigExceptions='true'>
                     <targets>
-                        <target type='AspNetCoreBufferingWrapper' name='{targetName}'>
+                        <target type='AspNetBufferingWrapper' name='{targetName}'>
                             <target type='Memory' name='unitTestMemoryTarget' />
                         </target>
                     </targets>
@@ -39,7 +39,7 @@ namespace NLog.Web.Tests
         {
             var logFactory = RegisterAspNetCoreBufferingTargetWrapper("first");
 
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("first"));
+            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first"));
 
             DefaultHttpContext context = new DefaultHttpContext();
 
@@ -75,7 +75,7 @@ namespace NLog.Web.Tests
 
             var secondFactory = RegisterAspNetCoreBufferingTargetWrapper("second");
 
-            Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("second"));
+            Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second"));
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
@@ -83,7 +83,7 @@ namespace NLog.Web.Tests
 
             var thirdFactory = RegisterAspNetCoreBufferingTargetWrapper("third");
 
-            Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("third"));
+            Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third"));
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
@@ -97,7 +97,7 @@ namespace NLog.Web.Tests
         {
             var logFactory = RegisterAspNetCoreBufferingTargetWrapper("first");
 
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("first"));
+            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first"));
 
             // This should not cause exception even if null
             DefaultHttpContext context = null;
@@ -120,13 +120,13 @@ namespace NLog.Web.Tests
 
             var secondFactory = RegisterAspNetCoreBufferingTargetWrapper("second");
 
-            Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("second"));
+            Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second"));
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
             var thirdFactory = RegisterAspNetCoreBufferingTargetWrapper("third");
 
-            Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetCoreBufferingTargetWrapper>("third"));
+            Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third"));
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
