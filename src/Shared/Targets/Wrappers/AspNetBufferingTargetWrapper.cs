@@ -196,38 +196,13 @@ namespace NLog.Web.Targets.Wrappers
             base.CloseTarget();
         }
 
-        private bool _firstWrite = true;
-
-        private readonly object _lock = new object();
-
         /// <summary>
         /// Adds the specified log event to the buffer.
         /// </summary>
         /// <param name="logEvent">The log event.</param>
         protected override void Write(AsyncLogEventInfo logEvent)
         {
-            if (_firstWrite)
-            {
-                lock (_lock)
-                {
-                    if (_firstWrite)
-                    {
-                        _firstWrite = false;
-                        InternalLogger.Trace("Setting up ASP.NET request buffer.");
-                        var context = HttpContextAccessor.HttpContext;
-                        if (context != null)
-                        {
-                            context.Items[DataSlot] =
-                                new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-                        }
-                        else
-                        {
-                            InternalLogger.Error("Unable to setup ASP.NET request buffer, HttpContext is null");
-                        }
-                    }
-                }
-            }
-            var buffer = GetRequestBuffer(HttpContextAccessor.HttpContext);
+            var buffer = GetOrCreateRequestBuffer(HttpContextAccessor.HttpContext);
             if (buffer != null)
             {
                 WrappedTarget?.PrecalculateVolatileLayouts(logEvent.LogEvent);
@@ -246,13 +221,18 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        private Internal.LogEventInfoBuffer GetRequestBuffer(
+        private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(
 #if ASP_NET_CORE
             HttpContext context)
 #else
             HttpContextBase context)
 #endif
         {
+            if (context != null && context.Items[DataSlot] == null)
+            {
+                context.Items[DataSlot] =
+                    new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+            }
             return context?.Items?[DataSlot] as Internal.LogEventInfoBuffer;
         }
 
@@ -266,7 +246,7 @@ namespace NLog.Web.Targets.Wrappers
             var context = HttpContextAccessor.HttpContext;
             if (context != null)
             {
-                var buffer = GetRequestBuffer(context);
+                var buffer = GetOrCreateRequestBuffer(context);
                 if (buffer != null)
                 {
                     InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
