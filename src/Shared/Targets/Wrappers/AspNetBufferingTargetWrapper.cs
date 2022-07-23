@@ -209,12 +209,37 @@ namespace NLog.Web.Targets.Wrappers
 #endif
         }
 
+        private bool _firstWrite = true;
+
+        private readonly object _lock = new object();
+
         /// <summary>
         /// Adds the specified log event to the buffer.
         /// </summary>
         /// <param name="logEvent">The log event.</param>
         protected override void Write(AsyncLogEventInfo logEvent)
         {
+            if (_firstWrite)
+            {
+                lock (_lock)
+                {
+                    if (_firstWrite)
+                    {
+                        _firstWrite = false;
+                        InternalLogger.Trace("Setting up ASP.NET request buffer.");
+                        var context = this.ContextAccessor.HttpContext;
+                        if (context != null)
+                        {
+                            context.Items[DataSlot] =
+                                new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                        }
+                        else
+                        {
+                            InternalLogger.Error("Unable to setup ASP.NET request buffer, HttpContext is null");
+                        }
+                    }
+                }
+            }
             var buffer = GetRequestBuffer(ContextAccessor.HttpContext);
             if (buffer != null)
             {
@@ -251,17 +276,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="args"></param>
         protected void OnBeginRequest(object sender, HttpContextEventArgs args)
         {
-            InternalLogger.Trace("Setting up ASP.NET request buffer.");
             SaveHttpContext(args);
-            var context = this.ContextAccessor.HttpContext;
-            if (context != null)
-            {
-                context.Items[DataSlot] = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-            }
-            else
-            {
-                InternalLogger.Error("Unable to setup ASP.NET request buffer, HttpContext is null");
-            }
         }
 
         /// <summary>
