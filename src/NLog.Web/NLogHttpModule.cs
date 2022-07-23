@@ -17,7 +17,6 @@ namespace NLog.Web
         /// </param>
         public void Init(HttpApplication context)
         {
-            context.BeginRequest += BeginRequestHandler;
             context.EndRequest   += EndRequestHandler;
         }
 
@@ -29,20 +28,10 @@ namespace NLog.Web
             // Method intentionally left empty.
         }
 
-        private void BeginRequestHandler(object sender, EventArgs args)
-        {
-
-            InvokeBeginRequestHandler(GetHttpContextEventArgs(sender as HttpApplication));
-        }
 
         private void EndRequestHandler(object sender, EventArgs args)
         {
-            InvokeEndRequestHandler(GetHttpContextEventArgs(sender as HttpApplication));
-        }
-
-        private static HttpContextEventArgs GetHttpContextEventArgs(HttpApplication app)
-        {
-            return new HttpContextEventArgs(app?.Context);
+            InvokeEndRequestHandler();
         }
     }
 }

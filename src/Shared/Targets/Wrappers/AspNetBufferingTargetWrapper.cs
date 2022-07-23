@@ -1,10 +1,13 @@
-﻿using NLog.Common;
+﻿using System;
+using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
 using System.ComponentModel;
+using NLog.Config;
 #if !ASP_NET_CORE
 using System.Web;
 #else
+using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 #endif
 
@@ -147,45 +150,41 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// Accessor for the current HTTP Context
+        /// Context for DI
         /// </summary>
-        protected IHttpContextAccessor ContextAccessor { get; set; } = new
-#if ASP_NET_CORE
-        HttpContextAccessor();
+        private IHttpContextAccessor _httpContextAccessor;
+
+        /// <summary>
+        /// Provides access to the current request HttpContext.
+        /// </summary>
+        /// <returns>HttpContextAccessor or <c>null</c></returns>
+        [NLogConfigurationIgnoreProperty]
+        public IHttpContextAccessor HttpContextAccessor
+        {
+            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
+            set => _httpContextAccessor = value;
+        }
+
+#if !ASP_NET_CORE
+        internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration) => DefaultHttpContextAccessor;
 #else
-        DefaultHttpContextAccessor();
+
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
+        {
+            return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
+        }
 #endif
+
         /// <summary>
         /// Initializes the target by hooking up the IHttpModule/IMiddleware BeginRequest and EndRequest events.
         /// </summary>
         protected override void InitializeTarget()
         {
             base.InitializeTarget();
-
             // Prevent double subscribe
-            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
             AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
-
-            AspNetBufferingTargetWrapperEventBase.BeginRequest += OnBeginRequest;
             AspNetBufferingTargetWrapperEventBase.EndRequest   += OnEndRequest;
-
-            HandleRequestAlreadyBegun();
-        }
-
-        /// <summary>
-        /// Additional logic if necessary, if the target is created during an http request
-        /// </summary>
-        protected virtual void HandleRequestAlreadyBegun()
-        {
-#if !ASP_NET_CORE
-            if (HttpContext.Current != null)
-            {
-                // we are in the context already,
-                // it's too late for OnBeginRequest to be called,
-                // so let's just call it ourselves
-                OnBeginRequest(null, new HttpContextEventArgs(HttpContext.Current));
-            }
-#endif
         }
 
         /// <summary>
@@ -193,20 +192,8 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         protected override void CloseTarget()
         {
-            AspNetBufferingTargetWrapperEventBase.BeginRequest -= OnBeginRequest;
             AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
-
             base.CloseTarget();
-        }
-
-        /// <summary>
-        /// Save the current HttpContext
-        /// </summary>
-        protected virtual void SaveHttpContext(HttpContextEventArgs httpContextEventArgs)
-        {
-#if ASP_NET_CORE
-            ContextAccessor.HttpContext = httpContextEventArgs?.HttpContext;
-#endif
         }
 
         private bool _firstWrite = true;
@@ -227,7 +214,7 @@ namespace NLog.Web.Targets.Wrappers
                     {
                         _firstWrite = false;
                         InternalLogger.Trace("Setting up ASP.NET request buffer.");
-                        var context = this.ContextAccessor.HttpContext;
+                        var context = HttpContextAccessor.HttpContext;
                         if (context != null)
                         {
                             context.Items[DataSlot] =
@@ -240,7 +227,7 @@ namespace NLog.Web.Targets.Wrappers
                     }
                 }
             }
-            var buffer = GetRequestBuffer(ContextAccessor.HttpContext);
+            var buffer = GetRequestBuffer(HttpContextAccessor.HttpContext);
             if (buffer != null)
             {
                 WrappedTarget?.PrecalculateVolatileLayouts(logEvent.LogEvent);
@@ -274,20 +261,9 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        protected void OnBeginRequest(object sender, HttpContextEventArgs args)
+        private void OnEndRequest(object sender, EventArgs args)
         {
-            SaveHttpContext(args);
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        protected void OnEndRequest(object sender, HttpContextEventArgs args)
-        {
-            SaveHttpContext(args);
-            var context = this.ContextAccessor.HttpContext;
+            var context = HttpContextAccessor.HttpContext;
             if (context != null)
             {
                 var buffer = GetRequestBuffer(context);

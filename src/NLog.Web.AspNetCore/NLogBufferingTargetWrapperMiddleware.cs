@@ -39,13 +39,12 @@ namespace NLog.Web
         {
             try
             {
-                InvokeBeginRequestHandler(new HttpContextEventArgs(context));
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 await _next(context).ConfigureAwait(false);
             }
             finally
             {
-                InvokeEndRequestHandler(new HttpContextEventArgs(context));
+                InvokeEndRequestHandler();
             }
         }
     }

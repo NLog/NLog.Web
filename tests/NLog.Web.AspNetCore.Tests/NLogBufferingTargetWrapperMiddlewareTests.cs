@@ -43,6 +43,9 @@ namespace NLog.Web.Tests
 
             DefaultHttpContext context = new DefaultHttpContext();
 
+            var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first");
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
+
             RequestDelegate next = (HttpContext hc) =>
             {
                 ILogger logger = logFactory.GetCurrentClassLogger();
@@ -56,6 +59,8 @@ namespace NLog.Web.Tests
             };
 
             NLogBufferingTargetWrapperMiddleware middleware = new NLogBufferingTargetWrapperMiddleware(next);
+
+
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
@@ -77,6 +82,9 @@ namespace NLog.Web.Tests
 
             Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second"));
 
+            target = secondFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second");
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
+
             await middleware.Invoke(context).ConfigureAwait(false);
 
             Assert.NotEmpty(context.Items);
@@ -84,6 +92,9 @@ namespace NLog.Web.Tests
             var thirdFactory = RegisterAspNetCoreBufferingTargetWrapper("third");
 
             Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third"));
+
+            target = thirdFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third");
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
@@ -98,6 +109,8 @@ namespace NLog.Web.Tests
             var logFactory = RegisterAspNetCoreBufferingTargetWrapper("first");
 
             Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first"));
+            var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first");
+            target.HttpContextAccessor = new FakeHttpContextAccessor(null);
 
             // This should not cause exception even if null
             DefaultHttpContext context = null;
@@ -122,11 +135,17 @@ namespace NLog.Web.Tests
 
             Assert.NotNull(secondFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second"));
 
+            target = secondFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second");
+            target.HttpContextAccessor = new FakeHttpContextAccessor(null);
+
             await middleware.Invoke(context).ConfigureAwait(false);
 
             var thirdFactory = RegisterAspNetCoreBufferingTargetWrapper("third");
 
             Assert.NotNull(thirdFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third"));
+
+            target = thirdFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third");
+            target.HttpContextAccessor = new FakeHttpContextAccessor(null);
 
             await middleware.Invoke(context).ConfigureAwait(false);
 
