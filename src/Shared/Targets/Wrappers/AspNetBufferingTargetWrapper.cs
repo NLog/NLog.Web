@@ -176,6 +176,8 @@ namespace NLog.Web.Targets.Wrappers
         }
 #endif
 
+        private readonly object _lock = new object();
+
         /// <summary>
         ///
         /// </summary>
@@ -188,10 +190,17 @@ namespace NLog.Web.Targets.Wrappers
             HttpContextBase context)
 #endif
         {
+            // Make sure to create the LogEventInfoBuffer only once in multi-threaded situation.
             if (context != null && context.Items[DataSlot] == null)
             {
-                context.Items[DataSlot] =
-                    new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                lock (_lock)
+                {
+                    if (context.Items[DataSlot] == null)
+                    {
+                        context.Items[DataSlot] =
+                            new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                    }
+                }
             }
             return context?.Items?[DataSlot] as Internal.LogEventInfoBuffer;
         }
