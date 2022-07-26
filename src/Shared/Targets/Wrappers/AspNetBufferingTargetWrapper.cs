@@ -177,23 +177,23 @@ namespace NLog.Web.Targets.Wrappers
 #endif
 
         /// <summary>
-        /// Initializes the target by hooking up the IHttpModule/IMiddleware BeginRequest and EndRequest events.
+        ///
         /// </summary>
-        protected override void InitializeTarget()
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(
+#if ASP_NET_CORE
+            HttpContext context)
+#else
+            HttpContextBase context)
+#endif
         {
-            base.InitializeTarget();
-            // Prevent double subscribe
-            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
-            AspNetBufferingTargetWrapperEventBase.EndRequest   += OnEndRequest;
-        }
-
-        /// <summary>
-        /// Closes the target by flushing pending events in the buffer (if any).
-        /// </summary>
-        protected override void CloseTarget()
-        {
-            AspNetBufferingTargetWrapperEventBase.EndRequest   -= OnEndRequest;
-            base.CloseTarget();
+            if (context != null && context.Items[DataSlot] == null)
+            {
+                context.Items[DataSlot] =
+                    new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+            }
+            return context?.Items?[DataSlot] as Internal.LogEventInfoBuffer;
         }
 
         /// <summary>
@@ -217,31 +217,9 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        ///
+        /// Executed by at the end of the HTTP handling by the HttpModule and Middleware
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(
-#if ASP_NET_CORE
-            HttpContext context)
-#else
-            HttpContextBase context)
-#endif
-        {
-            if (context != null && context.Items[DataSlot] == null)
-            {
-                context.Items[DataSlot] =
-                    new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-            }
-            return context?.Items?[DataSlot] as Internal.LogEventInfoBuffer;
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void OnEndRequest(object sender, EventArgs args)
+        internal void FlushBufferedLogEvents()
         {
             var context = HttpContextAccessor.HttpContext;
             if (context != null)

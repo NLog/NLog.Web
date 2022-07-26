@@ -9,7 +9,7 @@ namespace NLog.Web
     ///
     /// Usage: app.UseMiddleware&lt;NLogBufferingTargetWrapperMiddleware&gt;(); where app is an IApplicationBuilder
     /// </summary>
-    public class NLogBufferingTargetWrapperMiddleware : AspNetBufferingTargetWrapperEventBase
+    public class NLogBufferingTargetWrapperMiddleware
     {
         private readonly RequestDelegate _next;
 
@@ -44,7 +44,11 @@ namespace NLog.Web
             }
             finally
             {
-                InvokeEndRequestHandler();
+                var targets = LogManager.Configuration.AllTargets;
+                Parallel.ForEach(targets, target =>
+                {
+                    (target as AspNetBufferingTargetWrapper)?.FlushBufferedLogEvents();
+                });
             }
         }
     }

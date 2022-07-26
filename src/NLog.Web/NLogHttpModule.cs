@@ -1,13 +1,14 @@
 ﻿using NLog.Web.Targets.Wrappers;
 using System;
 using System.Web;
+using NLog.Common;
 
 namespace NLog.Web
 {
     /// <summary>
     /// ASP.NET IHttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
     /// </summary>
-    public class NLogHttpModule : AspNetBufferingTargetWrapperEventBase, IHttpModule
+    public class NLogHttpModule : IHttpModule
     {
         /// <summary>
         /// Initializes the HttpModule.
@@ -17,7 +18,7 @@ namespace NLog.Web
         /// </param>
         public void Init(HttpApplication context)
         {
-            context.EndRequest   += EndRequestHandler;
+            context.EndRequest += EndRequestHandler;
         }
 
         /// <summary>
@@ -28,10 +29,13 @@ namespace NLog.Web
             // Method intentionally left empty.
         }
 
-
         private void EndRequestHandler(object sender, EventArgs args)
         {
-            InvokeEndRequestHandler();
+            var targets = LogManager.Configuration.AllTargets;
+            foreach (var target in targets)
+            {
+                (target as AspNetBufferingTargetWrapper)?.FlushBufferedLogEvents();
+            }
         }
     }
 }

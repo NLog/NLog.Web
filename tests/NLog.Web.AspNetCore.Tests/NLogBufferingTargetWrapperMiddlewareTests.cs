@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using NLog.Fluent;
 using NLog.Web.Internal;
 using NLog.Web.LayoutRenderers;
 using NLog.Web.Targets.Wrappers;
@@ -21,7 +22,7 @@ namespace NLog.Web.Tests
     {
         private static LogFactory RegisterAspNetCoreBufferingTargetWrapper(string targetName)
         {
-           return new NLog.LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
+            LogManager.LogFactory.Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 $@"<nlog throwConfigExceptions='true'>
                     <targets>
                         <target type='AspNetBufferingWrapper' name='{targetName}'>
@@ -31,7 +32,8 @@ namespace NLog.Web.Tests
                     <rules>
                         <logger name='*' minlevel='Debug' writeTo='{targetName}' />
                     </rules>
-                </nlog>").LogFactory;
+                </nlog>");
+            return LogManager.LogFactory;
         }
 
         [Fact]
