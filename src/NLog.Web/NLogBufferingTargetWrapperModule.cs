@@ -8,7 +8,7 @@ namespace NLog.Web
     /// <summary>
     /// ASP.NET IHttpModule that enables AspNetBufferingTargetWrapper proper functioning
     /// </summary>
-    public class NLogHttpModule : IHttpModule
+    public class NLogBufferingTargetWrapperModule : IHttpModule
     {
         /// <summary>
         /// Initializes the HttpModule.
@@ -29,7 +29,7 @@ namespace NLog.Web
             // Method intentionally left empty.
         }
 
-        private void EndRequestHandler(object sender, EventArgs args)
+        internal void EndRequestHandler(object sender, EventArgs args)
         {
             var targets = LogManager.Configuration.AllTargets;
             foreach (var target in targets)
