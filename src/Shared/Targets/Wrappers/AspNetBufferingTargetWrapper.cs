@@ -234,15 +234,12 @@ namespace NLog.Web.Targets.Wrappers
             if (context != null)
             {
                 var buffer = GetOrCreateRequestBuffer(context);
-                if (buffer != null)
+                if (buffer == null)
                 {
-                    InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
-                    WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
+                    return;
                 }
-                else
-                {
-                    InternalLogger.Error("Unable to log buffered ASP.NET events, HttpContext.Items[] request buffer is null");
-                }
+                InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
+                WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
             }
             else
             {
