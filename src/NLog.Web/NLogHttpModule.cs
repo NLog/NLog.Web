@@ -6,7 +6,7 @@ using NLog.Common;
 namespace NLog.Web
 {
     /// <summary>
-    /// ASP.NET IHttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
+    /// ASP.NET IHttpModule that enables AspNetBufferingTargetWrapper proper functioning
     /// </summary>
     public class NLogHttpModule : IHttpModule
     {
