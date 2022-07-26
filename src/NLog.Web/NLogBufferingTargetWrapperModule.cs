@@ -1,7 +1,9 @@
 ﻿using NLog.Web.Targets.Wrappers;
 using System;
 using System.Web;
-using NLog.Common;
+#if NET46_OR_GREATER
+using System.Threading.Tasks;
+#endif
 
 namespace NLog.Web
 {
@@ -18,7 +20,7 @@ namespace NLog.Web
         /// </param>
         public void Init(HttpApplication context)
         {
-            context.EndRequest += EndRequestHandler;
+            context.EndRequest += EndRequestEventHandler;
         }
 
         /// <summary>
@@ -29,13 +31,20 @@ namespace NLog.Web
             // Method intentionally left empty.
         }
 
-        internal void EndRequestHandler(object sender, EventArgs args)
+        internal void EndRequestEventHandler(object sender, EventArgs args)
         {
             var targets = LogManager.Configuration.AllTargets;
+#if NET46_OR_GREATER
+            Parallel.ForEach(targets, target =>
+            {
+                (target as AspNetBufferingTargetWrapper)?.FlushBufferedLogEvents();
+            });
+#else
             foreach (var target in targets)
             {
                 (target as AspNetBufferingTargetWrapper)?.FlushBufferedLogEvents();
             }
+#endif
         }
     }
 }
