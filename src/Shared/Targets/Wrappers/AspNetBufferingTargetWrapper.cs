@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
@@ -72,10 +73,7 @@ namespace NLog.Web.Targets.Wrappers
     [Target("AspNetBufferingWrapper", IsWrapper = true)]
     public class AspNetBufferingTargetWrapper : WrapperTargetBase
     {
-        /// <summary>
-        /// The key into the HttpContext.Items collection
-        /// </summary>
-        protected readonly object DataSlot = new object();
+        private static readonly object HttpContextItemsKey = new object();
 
         /// <summary>
         /// Limits the amount of slots that the buffer should grow
@@ -191,18 +189,55 @@ namespace NLog.Web.Targets.Wrappers
 #endif
         {
             // Make sure to create the LogEventInfoBuffer only once in multi-threaded situation.
-            if (context != null && context.Items[DataSlot] == null)
+
+            if (context != null)
             {
-                lock (_lock)
+                // If the dictionary is missing, create that first
+                if (context.Items[HttpContextItemsKey] == null)
                 {
-                    if (context.Items[DataSlot] == null)
+                    lock (_lock)
                     {
-                        context.Items[DataSlot] =
-                            new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                        if (context.Items[HttpContextItemsKey] == null)
+                        {
+                            context.Items[HttpContextItemsKey] =
+                                new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
+                        }
                     }
                 }
+
+                var dictionary = GetBufferDictionary(context);
+
+                // if the slot for this class instance is missing, create that first
+                if (!dictionary.ContainsKey(this))
+                {
+                    lock (_lock)
+                    {
+                        if (!dictionary.ContainsKey(this))
+                        {
+                            dictionary.Add(this,
+                                new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit));
+                        }
+                    }
+                }
+
+                var bufferDictionary = GetBufferDictionary(context);
+
+                return bufferDictionary[this];
             }
-            return context?.Items?[DataSlot] as Internal.LogEventInfoBuffer;
+
+            return null;
+        }
+
+        internal static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(
+#if ASP_NET_CORE
+        HttpContext context
+#else
+        HttpContextBase context
+#endif
+        )
+        {
+            return context?.Items?[HttpContextItemsKey] as
+                Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
         }
 
         /// <summary>

@@ -76,7 +76,7 @@ namespace NLog.Web.Tests
 
             Assert.NotNull(eventBuffer);
 
-            var nlogEventBuffer = eventBuffer as LogEventInfoBuffer;
+            var nlogEventBuffer = eventBuffer as Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
 
             Assert.NotNull(nlogEventBuffer);
 

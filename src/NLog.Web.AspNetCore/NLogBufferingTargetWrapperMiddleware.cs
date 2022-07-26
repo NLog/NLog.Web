@@ -44,11 +44,12 @@ namespace NLog.Web
             }
             finally
             {
-                var targets = LogManager.Configuration.AllTargets;
-                Parallel.ForEach(targets, target =>
+                var bufferDictionary = AspNetBufferingTargetWrapper.GetBufferDictionary(context);
+                if (bufferDictionary != null)
                 {
-                    (target as AspNetBufferingTargetWrapper)?.FlushBufferedLogEvents();
-                });
+                    Parallel.ForEach(bufferDictionary,
+                        bufferKeyValuePair => { bufferKeyValuePair.Key.FlushBufferedLogEvents(); });
+                }
             }
         }
     }
