@@ -44,12 +44,7 @@ namespace NLog.Web
             }
             finally
             {
-                var bufferDictionary = AspNetBufferingTargetWrapper.GetBufferDictionary(context);
-                if (bufferDictionary != null)
-                {
-                    Parallel.ForEach(bufferDictionary,
-                        bufferKeyValuePair => { bufferKeyValuePair.Key.FlushBufferedLogEvents(); });
-                }
+                AspNetBufferingTargetWrapper.Flush(context);
             }
         }
     }

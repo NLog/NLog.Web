@@ -228,7 +228,7 @@ namespace NLog.Web.Targets.Wrappers
             return null;
         }
 
-        internal static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(
+        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(
 #if ASP_NET_CORE
         HttpContext context
 #else
@@ -260,26 +260,33 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        /// <summary>
-        /// Executed by at the end of the HTTP handling by the HttpModule and Middleware
-        /// </summary>
-        internal void FlushBufferedLogEvents()
+        internal static void Flush(
+#if ASP_NET_CORE
+            HttpContext context
+#else
+            HttpContextBase context
+#endif
+            )
         {
-            var context = HttpContextAccessor.HttpContext;
-            if (context != null)
+            var bufferDictionary = GetBufferDictionary(context);
+            if (bufferDictionary == null)
             {
-                var buffer = GetOrCreateRequestBuffer(context);
-                if (buffer == null)
-                {
-                    return;
-                }
-                InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
-                WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
+                return;
             }
-            else
+            foreach(var bufferKeyValuePair in bufferDictionary)
             {
-                InternalLogger.Error("Unable to log buffered ASP.NET events, HttpContext is null");
+                bufferKeyValuePair.Key.Flush(bufferKeyValuePair.Value);
             }
+        }
+
+        private void Flush(Internal.LogEventInfoBuffer buffer)
+        {
+            if (buffer == null)
+            {
+                return;
+            }
+            InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
+            WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
         }
     }
 }

@@ -33,18 +33,8 @@ namespace NLog.Web
 
         internal void EndRequestEventHandler(object sender, EventArgs args)
         {
-            var bufferDictionary = AspNetBufferingTargetWrapper.GetBufferDictionary(new HttpContextWrapper(HttpContext.Current));
-            if (bufferDictionary != null)
-            {
-#if NET46_OR_GREATER
-                Parallel.ForEach(bufferDictionary, bufferKeyValuePair => { bufferKeyValuePair.Key.FlushBufferedLogEvents(); });
-#else
-                foreach (var bufferKeyValuePair in bufferDictionary)
-                {
-                    bufferKeyValuePair.Key.FlushBufferedLogEvents();
-                }
-#endif
-            }
+
+            AspNetBufferingTargetWrapper.Flush(new HttpContextWrapper((sender as HttpApplication)?.Context));
         }
     }
 }
