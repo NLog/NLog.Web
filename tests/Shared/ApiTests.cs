@@ -241,6 +241,8 @@
                             Assert.Equal(typeAlias + "LayoutRenderer", type.Name, StringComparer.OrdinalIgnoreCase);
                         }
                     }
+
+                    Assert.Equal("NLog.Web.LayoutRenderers", type.Namespace);
                 }
             }
         }
