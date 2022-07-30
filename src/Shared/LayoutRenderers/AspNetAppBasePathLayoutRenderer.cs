@@ -31,6 +31,12 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetAppBasePathLayoutRenderer : LayoutRenderer
     {
 #if ASP_NET_CORE
+        internal static IHostEnvironment RetrieveHostEnvironment(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
+        {
+            return ServiceLocator.ResolveService<IHostEnvironment>(serviceProvider, loggingConfiguration);
+        }
+#endif
+
         private IHostEnvironment _hostEnvironment;
 
         /// <summary>
@@ -39,21 +45,16 @@ namespace NLog.Web.LayoutRenderers
         /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
-            get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment(ResolveService<IServiceProvider>(), LoggingConfiguration));
+            get => _hostEnvironment ?? (_hostEnvironment =
+#if ASP_NET_CORE
+                    RetrieveHostEnvironment(ResolveService<IServiceProvider>(), LoggingConfiguration)
+#else
+
+                    Internal.HostEnvironment.Default
+#endif
+                );
             set => _hostEnvironment = value;
         }
-
-        internal static IHostEnvironment RetrieveHostEnvironment(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
-        {
-            return ServiceLocator.ResolveService<IHostEnvironment>(serviceProvider, loggingConfiguration);
-        }
-#else
-        /// <summary>
-        /// Provides access to the current IHostEnvironment
-        /// </summary>
-        /// <returns>IHostEnvironment or <c>null</c></returns>
-        internal IHostEnvironment HostEnvironment { get; set; } = Internal.HostEnvironment.Default;
-#endif
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
