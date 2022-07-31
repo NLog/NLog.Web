@@ -163,16 +163,16 @@ namespace NLog.Web.Targets.Wrappers
             set => _httpContextAccessor = value;
         }
 
-#if !ASP_NET_CORE
-        internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration) => DefaultHttpContextAccessor;
-#else
-
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
+        internal static IHttpContextAccessor RetrieveHttpContextAccessor(
+            IServiceProvider serviceProvider,
+            LoggingConfiguration loggingConfiguration)
         {
+#if !ASP_NET_CORE
+            return new DefaultHttpContextAccessor();
+#else
             return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
-        }
 #endif
+        }
 
         private readonly object _lock = new object();
 
