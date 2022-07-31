@@ -8,7 +8,11 @@ namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// Represents the identifier for the stream.
+    /// Uses IStreamIdFeature
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-stream-id}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-stream-id")]
     public class AspNetRequestStreamIdLayoutRenderer : AspNetLayoutRendererBase
     {

@@ -11,7 +11,12 @@ namespace NLog.Web.LayoutRenderers
     /// The direction of a connection stream
     /// Gets whether or not the connection stream can be read.
     /// Gets whether or not the connection stream can be written.
+    /// Uses IStreamDirectionFeature
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-stream-direction:Property=CanRead}</code>
+    /// <code>${aspnet-request-stream-direction:Property=CanWrite}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-stream-direction")]
     public class AspNetRequestStreamDirectionLayoutRenderer : AspNetLayoutRendererBase
     {

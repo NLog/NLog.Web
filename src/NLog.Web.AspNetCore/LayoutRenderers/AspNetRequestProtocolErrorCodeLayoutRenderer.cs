@@ -8,7 +8,11 @@ namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// The error code for the protocol being used.  The property returns -1 if the error code hasn't been set.
+    /// Uses IProtocolErrorCodeFeature
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-protocol-error-code}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-protocol-error-code")]
     public class AspNetRequestProtocolErrorCodeLayoutRenderer : AspNetLayoutRendererBase
     {

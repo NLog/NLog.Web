@@ -9,7 +9,12 @@ namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// Gets the transfer format of the protocol.
+    /// Uses ITransferFormatFeature
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-transfer-format:Property=ActiveFormat}</code>
+    /// <code>${aspnet-request-transfer-format:Property=SupportedFormats}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-transfer-format")]
     public class AspNetRequestTransferFormatLayoutRenderer : AspNetLayoutRendererBase
     {

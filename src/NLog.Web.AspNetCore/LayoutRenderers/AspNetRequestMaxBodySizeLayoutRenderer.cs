@@ -9,7 +9,12 @@ namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
     /// The maximum request body size for a single request
+    /// Uses IHttpMaxRequestBodySizeFeature
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-request-max-body-size:Property=IsReadOnly}</code>
+    /// <code>${aspnet-request-max-body-size:Property=MaxBodyRequestSize}</code>
+    /// </remarks>
     [LayoutRenderer("aspnet-request-max-body-size")]
     public class AspNetRequestMaxBodySizeLayoutRenderer : AspNetLayoutRendererBase
     {
