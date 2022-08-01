@@ -76,11 +76,6 @@ namespace NLog.Web.Targets.Wrappers
         private static readonly object HttpContextItemsKey = new object();
 
         /// <summary>
-        /// Limits the amount of slots that the buffer should grow
-        /// </summary>
-        private int _growLimit;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
         /// </summary>
         public AspNetBufferingTargetWrapper()
@@ -130,6 +125,11 @@ namespace NLog.Web.Targets.Wrappers
         public bool GrowBufferAsNeeded { get; set; }
 
         /// <summary>
+        /// Limits the amount of slots that the buffer should grow
+        /// </summary>
+        private int _bufferGrowLimit;
+
+        /// <summary>
         /// Gets or sets the maximum number of log events that the buffer can keep.
         /// </summary>
         /// <docgen category='Buffering Options' order='100' />
@@ -137,12 +137,12 @@ namespace NLog.Web.Targets.Wrappers
         {
             get
             {
-                return _growLimit;
+                return _bufferGrowLimit;
             }
 
             set
             {
-                _growLimit = value;
+                _bufferGrowLimit = value;
                 GrowBufferAsNeeded = (value >= BufferSize);
             }
         }
