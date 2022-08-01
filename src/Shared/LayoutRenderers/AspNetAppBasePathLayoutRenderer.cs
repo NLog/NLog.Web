@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 #if ASP_NET_CORE
-using Microsoft.Extensions.DependencyInjection;
+using NLog.Web.DependencyInjection;
 #if ASP_NET_CORE2
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
@@ -29,13 +29,6 @@ namespace NLog.Web.LayoutRenderers
     [ThreadAgnostic]
     public class AspNetAppBasePathLayoutRenderer : LayoutRenderer
     {
-#if ASP_NET_CORE
-        private IHostEnvironment RetrieveHostEnvironment()
-        {
-            return ResolveService<IServiceProvider>()?.GetService<IHostEnvironment>();
-        }
-#endif
-
         private IHostEnvironment _hostEnvironment;
 
         /// <summary>
@@ -44,15 +37,17 @@ namespace NLog.Web.LayoutRenderers
         /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
-            get => _hostEnvironment ?? (_hostEnvironment =
-#if ASP_NET_CORE
-                    RetrieveHostEnvironment()
-#else
-
-                    Internal.HostEnvironment.Default
-#endif
-                );
+            get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment());
             set => _hostEnvironment = value;
+        }
+
+        private IHostEnvironment RetrieveHostEnvironment()
+        {
+#if ASP_NET_CORE
+            return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
+#else
+            return Internal.HostEnvironment.Default;
+#endif
         }
 
         /// <inheritdoc />

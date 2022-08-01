@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 #if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Web.DependencyInjection;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -34,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
 
         private IHostEnvironment RetrieveHostEnvironment()
         {
-            return ResolveService<IServiceProvider>()?.GetService<IHostEnvironment>();
+            return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
         }
 
         /// <inheritdoc />
