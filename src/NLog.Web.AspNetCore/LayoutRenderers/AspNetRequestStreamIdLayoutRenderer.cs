@@ -7,7 +7,7 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Represents the identifier for the stream.
+    /// Represents the long int identifier for the stream.
     /// Uses IStreamIdFeature
     /// </summary>
     /// <remarks>

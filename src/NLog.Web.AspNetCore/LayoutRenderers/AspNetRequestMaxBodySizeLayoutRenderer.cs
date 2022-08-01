@@ -10,6 +10,14 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// The maximum request body size for a single request
     /// Uses IHttpMaxRequestBodySizeFeature
+    /// 
+    /// CanRead indicates whether MaxRequestBodySize is read-only.
+    /// If true, this could mean that the request body has already been read from or that UpgradeAsync() was called.
+    /// 
+    /// MaxBodyRequestSize is the maximum allowed size of the current request body in bytes.
+    /// When set to null, the maximum request body size is unlimited.
+    /// This cannot be modified after the reading the request body has started.
+    /// This limit does not affect upgraded connections which are always unlimited.
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-request-max-body-size:Property=IsReadOnly}</code>
