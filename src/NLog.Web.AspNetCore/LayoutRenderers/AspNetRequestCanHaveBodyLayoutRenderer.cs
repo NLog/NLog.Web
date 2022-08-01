@@ -11,7 +11,7 @@ namespace NLog.Web.LayoutRenderers
     /// Uses IHttpRequestBodyDetectionFeature
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-request-van-have-body}</code>
+    /// <code>${aspnet-request-can-have-body}</code>
     /// </remarks>
     [LayoutRenderer("aspnet-request-can-have-body")]
     public class AspNetRequestCanHaveBodyLayoutRenderer : AspNetLayoutRendererBase
