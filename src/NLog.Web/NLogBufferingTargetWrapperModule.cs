@@ -34,7 +34,12 @@ namespace NLog.Web
         internal void EndRequestEventHandler(object sender, EventArgs args)
         {
 
-            AspNetBufferingTargetWrapper.Flush(new HttpContextWrapper((sender as HttpApplication)?.Context));
+            Flush((sender as HttpApplication)?.Context);
+        }
+
+        internal void Flush(HttpContext context)
+        {
+            AspNetBufferingTargetWrapper.Flush(new HttpContextWrapper(context));
         }
     }
 }
