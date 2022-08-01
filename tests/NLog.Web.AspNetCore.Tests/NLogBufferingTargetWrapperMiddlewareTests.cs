@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NLog.Fluent;
-using NLog.Web.Internal;
-using NLog.Web.LayoutRenderers;
 using NLog.Web.Targets.Wrappers;
-using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 namespace NLog.Web.Tests
 {
-    /// <summary>
-    /// The unit tests must be executed serially
-    /// </summary>
     public class NLogBufferingTargetWrapperMiddlewareTests
     {
         private static LogFactory RegisterAspNetCoreBufferingTargetWrapper(string targetName)
@@ -25,7 +14,12 @@ namespace NLog.Web.Tests
             LogManager.LogFactory.Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 $@"<nlog throwConfigExceptions='true'>
                     <targets>
-                        <target type='AspNetBufferingWrapper' name='{targetName}'>
+                        <target 
+                            type='AspNetBufferingWrapper' 
+                            name='{targetName}' 
+                            bufferGrowLimit='9' 
+                            bufferSize='7' 
+                            growBufferAsNeeded='true'>
                             <target type='Memory' name='unitTestMemoryTarget' />
                         </target>
                     </targets>
