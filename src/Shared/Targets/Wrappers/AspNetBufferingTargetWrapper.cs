@@ -73,8 +73,6 @@ namespace NLog.Web.Targets.Wrappers
     [Target("AspNetBufferingWrapper", IsWrapper = true)]
     public class AspNetBufferingTargetWrapper : WrapperTargetBase
     {
-        private static readonly object HttpContextItemsKey = new object();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
         /// </summary>
@@ -173,6 +171,8 @@ namespace NLog.Web.Targets.Wrappers
             return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
 #endif
         }
+
+        private static readonly object HttpContextItemsKey = new object();
 
         private readonly object _lock = new object();
 
