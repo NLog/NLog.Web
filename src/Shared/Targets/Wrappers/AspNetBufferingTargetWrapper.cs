@@ -275,7 +275,7 @@ namespace NLog.Web.Targets.Wrappers
             }
             foreach(var bufferKeyValuePair in bufferDictionary)
             {
-                bufferKeyValuePair.Key.Flush(bufferKeyValuePair.Value);
+                bufferKeyValuePair.Key?.Flush(bufferKeyValuePair.Value);
             }
         }
 
