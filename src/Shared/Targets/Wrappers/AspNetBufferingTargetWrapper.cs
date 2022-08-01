@@ -157,7 +157,7 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <returns>HttpContextAccessor or <c>null</c></returns>
         [NLogConfigurationIgnoreProperty]
-        public IHttpContextAccessor HttpContextAccessor
+        internal IHttpContextAccessor HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _httpContextAccessor = value;
