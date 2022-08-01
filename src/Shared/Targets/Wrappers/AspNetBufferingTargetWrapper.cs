@@ -78,7 +78,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <summary>
         /// Limits the amount of slots that the buffer should grow
         /// </summary>
-        protected int GrowLimit;
+        private int _growLimit;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
@@ -137,12 +137,12 @@ namespace NLog.Web.Targets.Wrappers
         {
             get
             {
-                return GrowLimit;
+                return _growLimit;
             }
 
             set
             {
-                GrowLimit = value;
+                _growLimit = value;
                 GrowBufferAsNeeded = (value >= BufferSize);
             }
         }
@@ -163,7 +163,7 @@ namespace NLog.Web.Targets.Wrappers
             set => _httpContextAccessor = value;
         }
 
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(
+        private IHttpContextAccessor RetrieveHttpContextAccessor(
             IServiceProvider serviceProvider,
             LoggingConfiguration loggingConfiguration)
         {
