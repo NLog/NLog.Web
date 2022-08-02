@@ -166,12 +166,21 @@ namespace NLog.Web.Targets.Wrappers
 #endif
         }
 
+        /// <summary>
+        /// The Key for the buffer dictionary in the HttpContext.Items collection
+        /// </summary>
         private static readonly object HttpContextItemsKey = new object();
 
+        /// <summary>
+        /// The lock obtained before the dictionary is created or the slot
+        /// in the dictionary is created.
+        /// </summary>
         private readonly object _lock = new object();
 
         /// <summary>
-        ///
+        /// Obtains a slot in the buffer dictionary for 'this' class instance
+        /// If that does not exist, that is created first
+        /// if the dictionary does not exist, that is created first
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -212,12 +221,22 @@ namespace NLog.Web.Targets.Wrappers
             return bufferDictionary[this];
         }
 
+        /// <summary>
+        /// Return the buffer dictionary from the HttpContext.Items using HttpContextItemsKey
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(HttpContextBase context)
         {
             return context?.Items?[HttpContextItemsKey] as
                 Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
         }
 
+        /// <summary>
+        /// Create the buffer dictionary in the HttpContext.Items using HttpContextItemsKey
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> SetBufferDictionary(HttpContextBase context)
         {
             var bufferDictionary = new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
@@ -227,6 +246,8 @@ namespace NLog.Web.Targets.Wrappers
 
         /// <summary>
         /// Adds the specified log event to the buffer.
+        /// NOTE: if Write is never called, this instance will not be registered in the buffer dictionary in HttpContext.Items.
+        /// That is expected normal behavior.
         /// </summary>
         /// <param name="logEvent">The log event.</param>
         protected override void Write(AsyncLogEventInfo logEvent)
@@ -245,6 +266,11 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
+        /// <summary>
+        /// Called from the HttpModule or Middleware upon the end of the HTTP pipeline
+        /// Flushes all instances of this class registered in the HttpContext
+        /// </summary>
+        /// <param name="context"></param>
         internal static void Flush(HttpContextBase context)
         {
             var bufferDictionary = GetBufferDictionary(context);
@@ -258,6 +284,10 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
+        /// <summary>
+        /// Called by the above static Flush method.
+        /// </summary>
+        /// <param name="buffer"></param>
         private void Flush(Internal.LogEventInfoBuffer buffer)
         {
             if (buffer == null)
