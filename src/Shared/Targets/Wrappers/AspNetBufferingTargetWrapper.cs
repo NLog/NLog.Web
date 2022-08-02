@@ -7,6 +7,7 @@ using NLog.Targets.Wrappers;
 #if !ASP_NET_CORE
 using System.Web;
 #else
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
 using NLog.Web.DependencyInjection;
 #endif
@@ -132,10 +133,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <docgen category='Buffering Options' order='100' />
         public int BufferGrowLimit
         {
-            get
-            {
-                return _bufferGrowLimit;
-            }
+            get => _bufferGrowLimit;
 
             set
             {
@@ -177,12 +175,7 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(
-#if ASP_NET_CORE
-            HttpContext context)
-#else
-            HttpContextBase context)
-#endif
+        private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(HttpContextBase context) 
         {
             // Make sure to create the LogEventInfoBuffer only once in multi-threaded situation.
             if (context == null)
@@ -197,49 +190,35 @@ namespace NLog.Web.Targets.Wrappers
             {
                 lock (_lock)
                 {
-                    bufferDictionary = GetBufferDictionary(context);
-                    if (bufferDictionary == null)
-                    {
-                        bufferDictionary = SetBufferDictionary(context);
-                    }
+                    bufferDictionary = GetBufferDictionary(context) ?? SetBufferDictionary(context);
                 }
             }
 
             // if the slot for this class instance is missing, create that first
-            if (!bufferDictionary.ContainsKey(this))
+            if (bufferDictionary.ContainsKey(this))
             {
-                lock (_lock)
+                return bufferDictionary[this];
+            }
+
+            lock (_lock)
+            {
+                if (!bufferDictionary.ContainsKey(this))
                 {
-                    if (!bufferDictionary.ContainsKey(this))
-                    {
-                        bufferDictionary.Add(this,
-                            new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit));
-                    }
+                    bufferDictionary.Add(this,
+                        new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit));
                 }
             }
 
             return bufferDictionary[this];
         }
 
-        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(
-#if ASP_NET_CORE
-        HttpContext context
-#else
-        HttpContextBase context
-#endif
-        )
+        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(HttpContextBase context)
         {
             return context?.Items?[HttpContextItemsKey] as
                 Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
         }
 
-        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> SetBufferDictionary(
-#if ASP_NET_CORE
-        HttpContext context
-#else
-        HttpContextBase context
-#endif
-)
+        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> SetBufferDictionary(HttpContextBase context)
         {
             var bufferDictionary = new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
             context.Items[HttpContextItemsKey] = bufferDictionary;
@@ -266,13 +245,7 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        internal static void Flush(
-#if ASP_NET_CORE
-            HttpContext context
-#else
-            HttpContextBase context
-#endif
-            )
+        internal static void Flush(HttpContextBase context)
         {
             var bufferDictionary = GetBufferDictionary(context);
             if (bufferDictionary == null)
