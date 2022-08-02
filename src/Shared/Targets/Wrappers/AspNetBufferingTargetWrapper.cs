@@ -4,7 +4,6 @@ using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
 using System.ComponentModel;
-using NLog.Config;
 #if !ASP_NET_CORE
 using System.Web;
 #else
@@ -154,7 +153,6 @@ namespace NLog.Web.Targets.Wrappers
         /// Provides access to the current request HttpContext.
         /// </summary>
         /// <returns>HttpContextAccessor or <c>null</c></returns>
-        [NLogConfigurationIgnoreProperty]
         internal IHttpContextAccessor HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
