@@ -1,9 +1,6 @@
 ﻿using NLog.Web.Targets.Wrappers;
 using System;
 using System.Web;
-#if NET46_OR_GREATER
-using System.Threading.Tasks;
-#endif
 
 namespace NLog.Web
 {
