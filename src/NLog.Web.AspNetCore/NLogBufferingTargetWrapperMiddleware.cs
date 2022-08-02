@@ -5,7 +5,7 @@ using NLog.Web.Targets.Wrappers;
 namespace NLog.Web
 {
     /// <summary>
-    /// This class is to intercept the HTTP pipeline and to allow the AspNetCoreBufferingTargetWrapper to function properly
+    /// This class is to intercept the HTTP pipeline and to allow the AspNetBufferingTargetWrapper to function properly
     ///
     /// Usage: app.UseMiddleware&lt;NLogBufferingTargetWrapperMiddleware&gt;(); where app is an IApplicationBuilder
     /// </summary>
