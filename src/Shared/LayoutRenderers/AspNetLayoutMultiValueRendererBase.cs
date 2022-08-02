@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using NLog.Layouts;
 using NLog.Web.Enums;
 
@@ -51,6 +52,11 @@ namespace NLog.Web.LayoutRenderers
         /// Only render values if true, otherwise render key/value pairs.
         /// </summary>
         public bool ValuesOnly { get; set; }
+
+        /// <summary>
+        /// Convert the key to lowercase if true, otherwise render the raw value of key. Default is false.
+        /// </summary>
+        public bool LowerCaseKeys { get; set; }
 
         /// <summary>
         /// Serialize multiple key/value pairs
@@ -124,7 +130,7 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append('{');
                 }
-                AppendQuoted(builder, key);
+                AppendQuoted(builder, LowerCaseKeys ? key.ToLower() : key);
                 builder.Append(':');
             }
 
@@ -158,8 +164,7 @@ namespace NLog.Web.LayoutRenderers
 
                 if (!ValuesOnly)
                 {
-                    builder.Append(key);
-
+                    builder.Append(LowerCaseKeys ? key.ToLower() : key);
                     builder.Append(valueSeparator);
                 }
 
