@@ -161,10 +161,10 @@ namespace NLog.Web.Targets.Wrappers
 
         private IHttpContextAccessor RetrieveHttpContextAccessor()
         {
-#if !ASP_NET_CORE
-            return new DefaultHttpContextAccessor();
-#else
+#if ASP_NET_CORE
             return ServiceLocator.ResolveService<IHttpContextAccessor>(ResolveService<IServiceProvider>(), LoggingConfiguration);
+#else
+            return new DefaultHttpContextAccessor();
 #endif
         }
 
