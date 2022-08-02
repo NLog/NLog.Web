@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
-using System.ComponentModel;
 #if !ASP_NET_CORE
 using System.Web;
 #else
-using NLog.Web.DependencyInjection;
 using Microsoft.AspNetCore.Http;
+using NLog.Web.DependencyInjection;
 #endif
 
 namespace NLog.Web.Targets.Wrappers
