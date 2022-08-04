@@ -29,19 +29,26 @@ namespace NLog.Web.LayoutRenderers
     [ThreadAgnostic]
     public class AspNetAppBasePathLayoutRenderer : LayoutRenderer
     {
-        private IHostEnvironment _hostEnvironment;
-
         /// <summary>
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
-            get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment());
+            get => _hostEnvironment ?? (_hostEnvironment = ResolveHostEnvironment());
             set => _hostEnvironment = value;
         }
+        private IHostEnvironment _hostEnvironment;
+        private string _contentRootPath;
 
-        private IHostEnvironment RetrieveHostEnvironment()
+        /// <inheritdoc />
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        {
+            var contentRootPath = _contentRootPath ?? (_contentRootPath = ResolveContentRootPath());
+            builder.Append(contentRootPath ?? LookupBaseDirectory());
+        }
+
+        private IHostEnvironment ResolveHostEnvironment()
         {
 #if ASP_NET_CORE
             return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
@@ -50,63 +57,54 @@ namespace NLog.Web.LayoutRenderers
 #endif
         }
 
-        /// <inheritdoc />
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        private string ResolveContentRootPath()
         {
 #if ASP_NET_CORE
-            builder.Append(GetCachedAppBasePath(HostEnvironment?.ContentRootPath));
-#else
-            builder.Append(GetCachedAppBasePath(HostEnvironment?.MapPath("~")));
-#endif
-        }
-
-        private string _appBasePath;
-
-        private string GetCachedAppBasePath(string primaryDirectory)
-        {
-            return _appBasePath ?? (_appBasePath = ResolveAppBasePath(primaryDirectory));
-        }
-
-        private static string ResolveAppBasePath(string primaryDirectory)
-        {
-            if (!string.IsNullOrEmpty(primaryDirectory))
-            {
-                return primaryDirectory;
-            }
-#if ASP_NET_CORE
-            try
-            {
-                primaryDirectory = Environment.GetEnvironmentVariable("ASPNETCORE_CONTENTROOT");
-            }
-            catch
-            {
-                // Not supported or access denied
-            }
-            if (string.IsNullOrEmpty(primaryDirectory))
-            {
-                primaryDirectory = AppContext.BaseDirectory;
-            }
-#else
-            primaryDirectory = AppDomain.CurrentDomain.BaseDirectory;
-#endif
-            if (string.IsNullOrEmpty(primaryDirectory))
+            var contentRootPath = HostEnvironment?.ContentRootPath;
+            if (string.IsNullOrEmpty(contentRootPath))
             {
                 try
                 {
-                    primaryDirectory = System.IO.Directory.GetCurrentDirectory();
+                    contentRootPath = Environment.GetEnvironmentVariable("ASPNETCORE_CONTENTROOT");
                 }
                 catch
                 {
                     // Not supported or access denied
                 }
             }
-            return primaryDirectory;
+#else
+            var contentRootPath = HostEnvironment?.MapPath("~");
+#endif
+            return string.IsNullOrEmpty(contentRootPath) ? null : contentRootPath;
+        }
+
+        private static string LookupBaseDirectory()
+        {
+#if ASP_NET_CORE
+            var baseDirectory = AppContext.BaseDirectory;
+#else
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+#endif
+            if (string.IsNullOrEmpty(baseDirectory))
+            {
+                try
+                {
+                    baseDirectory = System.IO.Directory.GetCurrentDirectory();
+                }
+                catch
+                {
+                    // Not supported or access denied
+                }
+            }
+
+            return baseDirectory; 
         }
 
         /// <inheritdoc/>
         protected override void CloseLayoutRenderer()
         {
-            HostEnvironment = null;
+            _hostEnvironment = null;
+            _contentRootPath = null;
             base.CloseLayoutRenderer();
         }
     }
