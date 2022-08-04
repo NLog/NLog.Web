@@ -81,8 +81,12 @@ namespace NLog.Web.LayoutRenderers
         {
             var firstItem = true;
 
+            int orgLength = 0;
+
             foreach (var item in pairs)
             {
+                orgLength = builder.Length;
+
                 if (firstItem)
                 {
                     if (!ValuesOnly && OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
@@ -99,7 +103,11 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(',');
                 }
 
-                SerializePairJson(builder, item);
+                if (!SerializePairJson(builder, item))
+                {
+                    builder.Length = orgLength;
+                    continue;
+                }
 
                 firstItem = false;
             }
@@ -117,7 +125,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializePairJson(StringBuilder builder, KeyValuePair<string, string> kpv)
+        private bool SerializePairJson(StringBuilder builder, KeyValuePair<string, string> kpv)
         {
             var key = kpv.Key;
             var value = kpv.Value;
@@ -129,7 +137,19 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append('{');
                 }
-                AppendQuoted(builder, LowerCaseKeys ? key.ToLower() : key);
+
+                key = key?.Replace('"', '_').Trim();    // Ensure proper JSON String-Property-Key
+                if (string.IsNullOrEmpty(key))
+                {
+                    if (string.IsNullOrEmpty(value?.Trim()))
+                        return false;
+
+                    key = "_-_";
+                }
+
+                builder.Append('"');
+                AppendPropertyKey(builder, key);
+                builder.Append('"');
                 builder.Append(':');
             }
 
@@ -140,6 +160,8 @@ namespace NLog.Web.LayoutRenderers
             {
                 builder.Append('}');
             }
+
+            return true;
         }
 
         private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder,
@@ -163,11 +185,24 @@ namespace NLog.Web.LayoutRenderers
 
                 if (!ValuesOnly)
                 {
-                    builder.Append(LowerCaseKeys ? key.ToLower() : key);
+                    AppendPropertyKey(builder, key);
                     builder.Append(valueSeparator);
                 }
 
                 builder.Append(value);
+            }
+        }
+
+        private void AppendPropertyKey(StringBuilder builder, string key)
+        {
+            if (LowerCaseKeys)
+            {
+                foreach (var chr in key)
+                    builder.Append(char.ToLowerInvariant(chr));
+            }
+            else
+            {
+                builder.Append(key);
             }
         }
 
@@ -268,7 +303,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else
             {
-                builder.Append(value);
+                builder.Append(value ?? string.Empty);
             }
 
             builder.Append('"');
