@@ -19,7 +19,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetAppBasePathLayoutRendererTests 
+    public class AspNetAppBasePathLayoutRendererTests : TestBase
     {
         [Fact]
         public void SuccessTest()
@@ -60,6 +60,17 @@ namespace NLog.Web.Tests.LayoutRenderers
 #else
             Assert.Equal(AppContext.BaseDirectory, actual);
 #endif
+        }
+
+        [Fact]
+        public void InitCloseTest()
+        {
+            var logFactory = new LogFactory().Setup().RegisterNLogWeb().LoadConfiguration(builder =>
+            {
+                builder.ForTarget().WriteTo(new NLog.Targets.MemoryTarget() { Layout = "${aspnet-appbasepath}" });
+            }).LogFactory;
+            Assert.NotNull(logFactory);
+            logFactory.Shutdown();
         }
     }
 }

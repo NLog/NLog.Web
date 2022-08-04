@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetWebRootPathLayoutRendererTests
+    public class AspNetWebRootPathLayoutRendererTests : TestBase
     {
         [Fact]
         public void SuccessTest()
@@ -56,6 +56,17 @@ namespace NLog.Web.Tests.LayoutRenderers
             string actual = renderer.Render(new LogEventInfo());
 
             Assert.Equal(string.Empty, actual);
+        }
+
+        [Fact]
+        public void InitCloseTest()
+        {
+            var logFactory = new LogFactory().Setup().RegisterNLogWeb().LoadConfiguration(builder =>
+            {
+                builder.ForTarget().WriteTo(new NLog.Targets.MemoryTarget() { Layout = "${aspnet-webrootpath}" });
+            }).LogFactory;
+            Assert.NotNull(logFactory);
+            logFactory.Shutdown();
         }
     }
 }
