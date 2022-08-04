@@ -18,7 +18,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class IISInstanceNameLayoutRendererTests
+    public class IISInstanceNameLayoutRendererTests : TestBase
     {
         [Fact]
         public void SuccessTest()
@@ -56,6 +56,17 @@ namespace NLog.Web.Tests.LayoutRenderers
             string actual = renderer.Render(new LogEventInfo());
 
             Assert.Equal(string.Empty, actual);
+        }
+
+        [Fact]
+        public void InitCloseTest()
+        {
+            var logFactory = new LogFactory().Setup().RegisterNLogWeb().LoadConfiguration(builder =>
+            {
+                builder.ForTarget().WriteTo(new NLog.Targets.MemoryTarget() { Layout = "${iis-site-name}" });
+            }).LogFactory;
+            Assert.NotNull(logFactory);
+            logFactory.Shutdown();
         }
     }
 }
