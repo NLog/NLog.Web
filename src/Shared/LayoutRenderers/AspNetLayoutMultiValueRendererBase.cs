@@ -81,12 +81,8 @@ namespace NLog.Web.LayoutRenderers
         {
             var firstItem = true;
 
-            int orgLength = 0;
-
             foreach (var item in pairs)
             {
-                orgLength = builder.Length;
-
                 if (firstItem)
                 {
                     if (!ValuesOnly && OutputFormat == AspNetRequestLayoutOutputFormat.JsonDictionary)
@@ -103,12 +99,7 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append(',');
                 }
 
-                if (!SerializePairJson(builder, item))
-                {
-                    builder.Length = orgLength;
-                    continue;
-                }
-
+                SerializePairJson(builder, item);
                 firstItem = false;
             }
 
@@ -125,7 +116,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private bool SerializePairJson(StringBuilder builder, KeyValuePair<string, string> kpv)
+        private void SerializePairJson(StringBuilder builder, KeyValuePair<string, string> kpv)
         {
             var key = kpv.Key;
             var value = kpv.Value;
@@ -138,14 +129,7 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append('{');
                 }
 
-                key = key?.Replace('"', '_').Trim();    // Ensure proper JSON String-Property-Key
-                if (string.IsNullOrEmpty(key))
-                {
-                    if (string.IsNullOrEmpty(value?.Trim()))
-                        return false;
-
-                    key = "_-_";
-                }
+                key = key?.Replace('"', '_');    // Ensure valid JSON String-Property-Key
 
                 builder.Append('"');
                 AppendPropertyKey(builder, key);
@@ -160,8 +144,6 @@ namespace NLog.Web.LayoutRenderers
             {
                 builder.Append('}');
             }
-
-            return true;
         }
 
         private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder,
@@ -195,7 +177,7 @@ namespace NLog.Web.LayoutRenderers
 
         private void AppendPropertyKey(StringBuilder builder, string key)
         {
-            if (LowerCaseKeys)
+            if (LowerCaseKeys && !string.IsNullOrEmpty(key))
             {
                 foreach (var chr in key)
                     builder.Append(char.ToLowerInvariant(chr));
