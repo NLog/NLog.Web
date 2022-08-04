@@ -31,19 +31,26 @@ namespace NLog.Web.LayoutRenderers
     [ThreadAgnostic]
     public class IISInstanceNameLayoutRenderer : LayoutRenderer
     {
-        private IHostEnvironment _hostEnvironment;
-
         /// <summary>
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
-            get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment());
+            get => _hostEnvironment ?? (_hostEnvironment = ResolveHostEnvironment());
             set => _hostEnvironment = value;
         }
+        private IHostEnvironment _hostEnvironment;
+        private string _instanceName;
 
-        private IHostEnvironment RetrieveHostEnvironment()
+        /// <inheritdoc />
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        {
+            var instanceName = _instanceName ?? (_instanceName = ResolveInstanceName());
+            builder.Append(instanceName);
+        }
+
+        private IHostEnvironment ResolveHostEnvironment()
         {
 #if ASP_NET_CORE
             return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
@@ -52,20 +59,21 @@ namespace NLog.Web.LayoutRenderers
 #endif
         }
 
-        /// <inheritdoc />
-        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        private string ResolveInstanceName()
         {
 #if ASP_NET_CORE
-            builder.Append(HostEnvironment?.ApplicationName);
+            var instanceName = HostEnvironment?.ApplicationName;
 #else
-            builder.Append(HostEnvironment?.SiteName);
+            var instanceName = HostEnvironment?.SiteName;
 #endif
+            return string.IsNullOrEmpty(instanceName) ? null : instanceName;
         }
 
         /// <inheritdoc/>
         protected override void CloseLayoutRenderer()
         {
-            HostEnvironment = null;
+            _instanceName = null;
+            _hostEnvironment = null;
             base.CloseLayoutRenderer();
         }
     }

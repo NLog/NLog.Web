@@ -10,13 +10,14 @@ using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using NLog.Web.DependencyInjection;
 #else
 using System.Web.Hosting;
+using IWebHostEnvironment = NLog.Web.Internal.IHostEnvironment;
 #endif
 
 namespace NLog.Web.LayoutRenderers
 {
 #if ASP_NET_CORE
     /// <summary>
-    /// Rendering WebRootPath. <see cref="IHostingEnvironment" />
+    /// Rendering WebRootPath. <see cref="IWebHostEnvironment.WebRootPath" />
     /// </summary>
 #else
     /// <summary>
@@ -27,31 +28,49 @@ namespace NLog.Web.LayoutRenderers
     [ThreadAgnostic]
     public class AspNetWebRootPathLayoutRenderer : LayoutRenderer
     {
-#if ASP_NET_CORE
+        /// <summary>
+        /// Provides access to the current IHostEnvironment
+        /// </summary>
+        /// <returns>IHostEnvironment or <c>null</c></returns>
+        internal IWebHostEnvironment WebHostEnvironment
+        {
+            get => _webHostEnvironment ?? (_webHostEnvironment = ResolveHostEnvironment());
+            set => _webHostEnvironment = value;
+        }
         private IWebHostEnvironment _webHostEnvironment;
-
-        private IWebHostEnvironment WebHostEnvironment => _webHostEnvironment ?? (_webHostEnvironment = ServiceLocator.ResolveService<IWebHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration));
-
-        private string WebRootPath => WebHostEnvironment?.WebRootPath;
-#else
-        private string WebRootPath => _webRootPath ?? (_webRootPath = HostingEnvironment.MapPath("/"));
-        private static string _webRootPath;
-#endif
+        private string _webRootPath;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            builder.Append(WebRootPath);
+            var webRootPath = _webRootPath ?? (_webRootPath = ResolveWebRootPath());
+            builder.Append(webRootPath);
         }
 
-        /// <inheritdoc />
-        protected override void CloseLayoutRenderer()
+        private IWebHostEnvironment ResolveHostEnvironment()
         {
 #if ASP_NET_CORE
-            _webHostEnvironment = null;
+            return ServiceLocator.ResolveService<IWebHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
 #else
-            _webRootPath = null;
+            return Internal.HostEnvironment.Default;
 #endif
+        }
+
+        private string ResolveWebRootPath()
+        {
+#if ASP_NET_CORE
+            var webRootPath = WebHostEnvironment?.WebRootPath;
+#else
+            var webRootPath = WebHostEnvironment?.MapPath("/");
+#endif
+            return string.IsNullOrEmpty(webRootPath) ? null : webRootPath;
+        }
+
+        /// <inheritdoc/>
+        protected override void CloseLayoutRenderer()
+        {
+            _webHostEnvironment = null;
+            _webRootPath = null;
             base.CloseLayoutRenderer();
         }
     }

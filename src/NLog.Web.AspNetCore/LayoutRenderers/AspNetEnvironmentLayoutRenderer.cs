@@ -14,7 +14,7 @@ using NLog.Web.DependencyInjection;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Rendering development environment. <see cref="IHostingEnvironment" />
+    /// Rendering development environment. <see cref="IHostingEnvironment.EnvironmentName" />
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-environment}</code>
@@ -24,33 +24,41 @@ namespace NLog.Web.LayoutRenderers
     [ThreadAgnostic]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
-        private IHostEnvironment _hostEnvironment;
-
         /// <summary>
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
         internal IHostEnvironment HostEnvironment
         {
-            get => _hostEnvironment ?? (_hostEnvironment = RetrieveHostEnvironment());
+            get => _hostEnvironment ?? (_hostEnvironment = ResolveHostEnvironment());
             set => _hostEnvironment = value;
         }
-
-        private IHostEnvironment RetrieveHostEnvironment()
-        {
-            return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
-        }
+        private IHostEnvironment _hostEnvironment;
+        private string _environmentName;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            builder.Append(HostEnvironment?.EnvironmentName);
+            var environmentName = _environmentName ?? (_environmentName = ResolveEnvironmentName());
+            builder.Append(environmentName);
+        }
+
+        private IHostEnvironment ResolveHostEnvironment()
+        {
+            return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
+        }
+
+        private string ResolveEnvironmentName()
+        {
+            var environmentName = HostEnvironment?.EnvironmentName;
+            return string.IsNullOrEmpty(environmentName) ? null : environmentName;
         }
 
         /// <inheritdoc/>
         protected override void CloseLayoutRenderer()
         {
-            HostEnvironment = null;
+            _hostEnvironment = null;
+            _environmentName = null;
             base.CloseLayoutRenderer();
         }
     }
