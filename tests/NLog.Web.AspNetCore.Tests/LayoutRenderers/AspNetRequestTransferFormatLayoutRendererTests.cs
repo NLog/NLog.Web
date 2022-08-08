@@ -12,7 +12,7 @@ namespace NLog.Web.Tests.LayoutRenderers
     public class AspNetRequestTransferFormatLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestTransferFormatLayoutRenderer>
     {
         [Fact]
-        public void ActiveFormatSuccessTest()
+        public void ActiveFormatBinarySuccessTest()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -32,7 +32,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void SupportedFormatSuccessTest()
+        public void SupportedFormatBinarySuccessTest()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -49,6 +49,46 @@ namespace NLog.Web.Tests.LayoutRenderers
             var result = renderer.Render(new LogEventInfo());
             // Assert
             Assert.Equal("Binary", result);
+        }
+
+        [Fact]
+        public void ActiveFormatTextSuccessTest()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.Property = TransferFormatProperty.ActiveFormat;
+
+            var transferFormatFeature = Substitute.For<ITransferFormatFeature>();
+            transferFormatFeature.ActiveFormat.Returns(TransferFormat.Text);
+
+            var featureCollection = new FeatureCollection();
+            featureCollection.Set<ITransferFormatFeature>(transferFormatFeature);
+
+            httpContext.Features.Returns(featureCollection);
+            // Act
+            var result = renderer.Render(new LogEventInfo());
+            // Assert
+            Assert.Equal("Text", result);
+        }
+
+        [Fact]
+        public void SupportedFormatTextSuccessTest()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.Property = TransferFormatProperty.SupportedFormats;
+
+            var transferFormatFeature = Substitute.For<ITransferFormatFeature>();
+            transferFormatFeature.SupportedFormats.Returns(TransferFormat.Text);
+
+            var featureCollection = new FeatureCollection();
+            featureCollection.Set<ITransferFormatFeature>(transferFormatFeature);
+
+            httpContext.Features.Returns(featureCollection);
+            // Act
+            var result = renderer.Render(new LogEventInfo());
+            // Assert
+            Assert.Equal("Text", result);
         }
 
         [Fact]

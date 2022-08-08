@@ -30,6 +30,26 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void IsWriteableSuccessTest()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.Property = MaxBodyRequestSizeProperty.IsReadOnly;
+
+            var maxBodySizeFeature = Substitute.For<IHttpMaxRequestBodySizeFeature>();
+            maxBodySizeFeature.IsReadOnly.Returns(false);
+
+            var featureCollection = new FeatureCollection();
+            featureCollection.Set<IHttpMaxRequestBodySizeFeature>(maxBodySizeFeature);
+
+            httpContext.Features.Returns(featureCollection);
+            // Act
+            var result = renderer.Render(new LogEventInfo());
+            // Assert
+            Assert.Equal("0", result);
+        }
+
+        [Fact]
         public void IsReadOnlyNullTest()
         {
             // Arrange
