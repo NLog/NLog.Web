@@ -223,14 +223,14 @@ namespace NLog.Web.Targets.Wrappers
 
             lock (bufferDictionary)
             {
-                if (!bufferDictionary.ContainsKey(this))
+                Internal.LogEventInfoBuffer buffer;
+                if (!bufferDictionary.TryGetValue(this, out buffer))
                 {
                     bufferDictionary.Add(this,
                         new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit));
                 }
+                return bufferDictionary[this];
             }
-
-            return bufferDictionary[this];
         }
 
         /// <summary>
