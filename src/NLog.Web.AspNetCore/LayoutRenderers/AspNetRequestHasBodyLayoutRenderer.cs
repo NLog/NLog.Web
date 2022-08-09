@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.Features;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Used to indicate if the request can have a body.
+    /// Used to indicate if the request has a body.
     /// Uses IHttpRequestBodyDetectionFeature
     ///
     /// This returns true when:
@@ -22,10 +22,10 @@ namespace NLog.Web.LayoutRenderers
     /// - It's an HTTP/2 request that set END_STREAM on the initial headers frame. When false, the request body should never return data.
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-request-can-have-body}</code>
+    /// <code>${aspnet-request-has-body}</code>
     /// </remarks>
-        [LayoutRenderer("aspnet-request-can-have-body")]
-    public class AspNetRequestCanHaveBodyLayoutRenderer : AspNetLayoutRendererBase
+        [LayoutRenderer("aspnet-request-has-body")]
+    public class AspNetRequestHasBodyLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)

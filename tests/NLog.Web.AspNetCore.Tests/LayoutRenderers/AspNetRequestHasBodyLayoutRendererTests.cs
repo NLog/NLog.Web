@@ -1,14 +1,12 @@
 ﻿#if NET5_0_OR_GREATER
-using Microsoft.AspNetCore.Connections.Features;
 using NLog.Web.LayoutRenderers;
 using Microsoft.AspNetCore.Http.Features;
-using NLog.Web.Enums;
 using NSubstitute;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestCanHaveBodyLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestCanHaveBodyLayoutRenderer>
+    public class AspNetRequestHasBodyLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestHasBodyLayoutRenderer>
     {
         [Fact]
         public void TrueTest()
