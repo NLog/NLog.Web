@@ -45,6 +45,7 @@ namespace NLog.Web.Tests
 
             // Act
             var httpModule = new NLogBufferingTargetWrapperModule();
+            httpModule.Initialize(httpContext);
 
             ILogger logger = logFactory.GetCurrentClassLogger();
 

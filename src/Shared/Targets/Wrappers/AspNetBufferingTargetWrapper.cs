@@ -172,6 +172,27 @@ namespace NLog.Web.Targets.Wrappers
         private static readonly object HttpContextItemsKey = new object();
 
         /// <summary>
+        /// Must be called by the HttpModule/Middleware upon starting.
+        /// This creates the dictionary in the HttpContext.Items with the proper key.
+        /// </summary>
+        /// <param name="context"></param>
+        internal static void Initialize(HttpContextBase context)
+        {
+            if (context == null)
+            {
+                return;
+            }
+
+            var bufferDictionary = GetBufferDictionary(context);
+
+            // If the dictionary is missing, create that first
+            if (bufferDictionary == null)
+            {
+                SetBufferDictionary(context);
+            }
+        }
+
+        /// <summary>
         /// The lock obtained before the dictionary is created or the slot
         /// in the dictionary is created.
         /// </summary>
@@ -186,7 +207,7 @@ namespace NLog.Web.Targets.Wrappers
         /// <returns></returns>
         private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(HttpContextBase context) 
         {
-            // Make sure to create the LogEventInfoBuffer only once in multi-threaded situation.
+            // If the context is missing, stop
             if (context == null)
             {
                 return null;
@@ -194,13 +215,10 @@ namespace NLog.Web.Targets.Wrappers
 
             var bufferDictionary = GetBufferDictionary(context);
 
-            // If the dictionary is missing, create that first
+            // If the dictionary is missing, stop
             if (bufferDictionary == null)
             {
-                lock (_lock)
-                {
-                    bufferDictionary = GetBufferDictionary(context) ?? SetBufferDictionary(context);
-                }
+                return null;
             }
 
             // if the slot for this class instance is missing, create that first
@@ -237,11 +255,9 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> SetBufferDictionary(HttpContextBase context)
+        private static void SetBufferDictionary(HttpContextBase context)
         {
-            var bufferDictionary = new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
-            context.Items[HttpContextItemsKey] = bufferDictionary;
-            return bufferDictionary;
+            context.Items[HttpContextItemsKey] = new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
         }
 
         /// <summary>

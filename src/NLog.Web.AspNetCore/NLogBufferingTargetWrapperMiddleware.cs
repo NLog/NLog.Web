@@ -39,6 +39,8 @@ namespace NLog.Web
         {
             try
             {
+                AspNetBufferingTargetWrapper.Initialize(context);
+
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 await _next(context).ConfigureAwait(false);
             }

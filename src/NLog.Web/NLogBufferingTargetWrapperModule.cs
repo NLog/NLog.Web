@@ -17,6 +17,7 @@ namespace NLog.Web
         /// </param>
         public void Init(HttpApplication context)
         {
+            Initialize(context);
             context.EndRequest += EndRequestEventHandler;
         }
 
@@ -26,6 +27,16 @@ namespace NLog.Web
         public void Dispose()
         {
             // Method intentionally left empty.
+        }
+
+        internal void Initialize(HttpApplication application)
+        {
+            Initialize(application.Context);
+        }
+
+        internal void Initialize(HttpContext context)
+        {
+            AspNetBufferingTargetWrapper.Initialize(new HttpContextWrapper(context));
         }
 
         internal void EndRequestEventHandler(object sender, EventArgs args)
