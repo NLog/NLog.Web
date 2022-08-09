@@ -9,6 +9,9 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Represents the long int identifier for the stream.
     /// Uses IStreamIdFeature
+    /// 
+    /// This will inform when the connection is being reused, or when the connection has been closed and reopened,
+    /// based on when the value stays or same, or changes.
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-request-stream-id}</code>
