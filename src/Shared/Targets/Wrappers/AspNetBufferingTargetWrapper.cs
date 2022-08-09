@@ -193,12 +193,6 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// The lock obtained before the dictionary is created or the slot
-        /// in the dictionary is created.
-        /// </summary>
-        private readonly object _lock = new object();
-
-        /// <summary>
         /// Obtains a slot in the buffer dictionary for 'this' class instance
         /// If that does not exist, that is created first
         /// if the dictionary does not exist, that is created first
@@ -227,7 +221,7 @@ namespace NLog.Web.Targets.Wrappers
                 return bufferDictionary[this];
             }
 
-            lock (_lock)
+            lock (bufferDictionary)
             {
                 if (!bufferDictionary.ContainsKey(this))
                 {
