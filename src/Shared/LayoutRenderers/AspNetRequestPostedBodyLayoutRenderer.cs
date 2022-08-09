@@ -25,36 +25,23 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                return;
-            }
-
-            var items = httpContext.Items;
-            if (items == null)
-            {
-                return;
-            }
-
-            if (httpContext.Items.Count == 0)
+            var items = HttpContextAccessor.HttpContext?.Items;
+            if (items == null || items.Count == 0)
             {
                 return;
             }
 
 #if !ASP_NET_CORE
-            if (!items.Contains(NLogPostedRequestBodyKey))
+            if (items.Contains(NLogPostedRequestBodyKey))
             {
-                return;
+                builder.Append(items[NLogPostedRequestBodyKey] as string);
             }
 #else
-            if (!items.ContainsKey(NLogPostedRequestBodyKey))
+            if (items.TryGetValue(NLogPostedRequestBodyKey, out var value))
             {
-                return;
+                builder.Append(value as string);
             }
 #endif
-
-            builder.Append(items[NLogPostedRequestBodyKey] as string);
         }
     }
 }
