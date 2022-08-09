@@ -215,22 +215,12 @@ namespace NLog.Web.Targets.Wrappers
                 return null;
             }
 
-            // if the slot for this class instance is missing, create that first
-            if (bufferDictionary.ContainsKey(this))
+            if (!bufferDictionary.TryGetValue(this, out var buffer))
             {
-                return bufferDictionary[this];
+                buffer = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                bufferDictionary.Add(this, buffer);
             }
-
-            lock (bufferDictionary)
-            {
-                Internal.LogEventInfoBuffer buffer;
-                if (!bufferDictionary.TryGetValue(this, out buffer))
-                {
-                    bufferDictionary.Add(this,
-                        new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit));
-                }
-                return bufferDictionary[this];
-            }
+            return buffer;
         }
 
         /// <summary>
