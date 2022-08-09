@@ -215,12 +215,16 @@ namespace NLog.Web.Targets.Wrappers
                 return null;
             }
 
-            if (!bufferDictionary.TryGetValue(this, out var buffer))
+            lock (bufferDictionary)
             {
-                buffer = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-                bufferDictionary.Add(this, buffer);
+                if (!bufferDictionary.TryGetValue(this, out var buffer))
+                {
+                    buffer = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                    bufferDictionary.Add(this, buffer);
+                }
+
+                return buffer;
             }
-            return buffer;
         }
 
         /// <summary>
