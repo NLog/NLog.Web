@@ -7,6 +7,8 @@ using NLog.Web.Internal;
 using NLog.Common;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
+#else
+using System.Web;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -111,12 +113,7 @@ namespace NLog.Web.LayoutRenderers
             object value;
             try
             {
-#if !ASP_NET_CORE
-                value = PropertyReader.GetValue(item, contextSession, 
-                        (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
-#else
                 value = PropertyReader.GetValue(item, contextSession, GetSessionValue, EvaluateAsNestedProperties);
-#endif
             }
             finally
             {
@@ -141,6 +138,11 @@ namespace NLog.Web.LayoutRenderers
                 default: 
                     return session.GetString(key);
             }
+        }
+#else
+        private object GetSessionValue(HttpSessionStateBase session, string key)
+        {
+            return session.Count == 0 ? null : session[key];
         }
 #endif
     }
