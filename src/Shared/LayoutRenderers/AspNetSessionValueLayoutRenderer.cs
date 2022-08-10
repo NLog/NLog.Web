@@ -1,12 +1,11 @@
-using System;
 using System.Globalization;
 using System.Text;
+using System.Threading;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-#if !ASP_NET_CORE
-using System.Web;
-#else
+using NLog.Common;
+#if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #endif
 
@@ -40,10 +39,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
-#if ASP_NET_CORE
-        private static readonly object NLogRetrievingSessionValue = new object();
-#endif
-
         /// <summary>
         /// Gets or sets the session item name.
         /// </summary>
@@ -78,11 +73,15 @@ namespace NLog.Web.LayoutRenderers
 
 #if ASP_NET_CORE
         /// <summary>
-        /// The hype of the value.
+        /// The type of the value.
         /// </summary>
         public SessionValueType ValueType { get; set; } = SessionValueType.String;
 #endif
 
+#if !NET35
+        // Manage access to the session re-entrancy, at least above .NET 3.5
+        private static readonly AsyncLocal<bool> IsReEntrant = new AsyncLocal<bool>();
+#endif
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
@@ -93,39 +92,45 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-            var contextSession = context.TryGetSession();
+            var contextSession = context?.TryGetSession();
             if (contextSession == null)
-                return;
-
-#if !ASP_NET_CORE
-            var value = PropertyReader.GetValue(item, contextSession, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
-#else
-            //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
-            //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
-            if (context.Items == null || (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue)))
             {
                 return;
             }
-
-            context.Items[NLogRetrievingSessionValue] = bool.TrueString;
-
+#if !NET35
+            // If we are already in this layout render in the same async path, we should stop the recursion
+            if (IsReEntrant.Value)
+            {
+                InternalLogger.Error($"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");
+                return;
+            }
+            // Mark that we have entered the session
+            IsReEntrant.Value = true;
+#endif
+            // Perform the PropertyReader.GetValue() in a try/finally clause since we want to set the IsReEntrant to false even if there is an Exception
             object value;
             try
             {
-                value = PropertyReader.GetValue(item, contextSession, (session, key) => GetSessionValue(session, key), EvaluateAsNestedProperties);
+#if !ASP_NET_CORE
+                value = PropertyReader.GetValue(item, contextSession, 
+                        (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
+#else
+                value = PropertyReader.GetValue(item, contextSession, GetSessionValue, EvaluateAsNestedProperties);
+#endif
             }
             finally
             {
-                context.Items.Remove(NLogRetrievingSessionValue);
-            }
+#if !NET35
+                IsReEntrant.Value = false;
 #endif
+            }
+
             if (value != null)
             {
                 var formatProvider = GetFormatProvider(logEvent, Culture);
                 builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
             }
         }
-
 #if ASP_NET_CORE
         private object GetSessionValue(ISession session, string key)
         {
@@ -133,7 +138,8 @@ namespace NLog.Web.LayoutRenderers
             {
                 case SessionValueType.Int32:
                     return session.GetInt32(key);
-                default: return session.GetString(key);
+                default: 
+                    return session.GetString(key);
             }
         }
 #endif
