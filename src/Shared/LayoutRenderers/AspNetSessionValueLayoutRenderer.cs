@@ -83,6 +83,9 @@ namespace NLog.Web.LayoutRenderers
 #if !NET35
         // Manage access to the session re-entrancy, at least above .NET 3.5
         private static readonly AsyncLocal<bool> IsReEntrant = new AsyncLocal<bool>();
+#else
+        // NET 35 does not have AsyncLocal or even older ThreadLocal
+        private static readonly object IsReEntrant = new object();
 #endif
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -94,13 +97,18 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
+            if (context == null)
+            {
+                return;
+            }
+
             var contextSession = context?.TryGetSession();
             if (contextSession == null)
             {
                 return;
             }
 #if !NET35
-            // If we are already in this layout render in the same async path, we should stop the recursion
+            // If we are already in this layout render in the same path, we should stop the recursion
             if (IsReEntrant.Value)
             {
                 InternalLogger.Error($"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");
@@ -108,6 +116,20 @@ namespace NLog.Web.LayoutRenderers
             }
             // Mark that we have entered the session
             IsReEntrant.Value = true;
+#else
+            if (context.Items == null)
+            {
+                return;
+            }
+
+            // If we are already in this layout render in the same path, we should stop the recursion
+            if (context.Items.Contains(IsReEntrant))
+            {
+                InternalLogger.Error($"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");
+                return;
+            }
+            // Mark that we have entered the session
+            context.Items[IsReEntrant] = bool.TrueString;
 #endif
             // Perform the PropertyReader.GetValue() in a try/finally clause since we want to set the IsReEntrant to false even if there is an Exception
             object value;
@@ -119,6 +141,8 @@ namespace NLog.Web.LayoutRenderers
             {
 #if !NET35
                 IsReEntrant.Value = false;
+#else
+                context.Items.Remove(IsReEntrant);
 #endif
             }
 
