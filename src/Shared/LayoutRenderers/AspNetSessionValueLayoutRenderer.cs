@@ -100,12 +100,15 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
+            // Because session.get / session.getstring are also creating log messages in some cases,
+            //   this could lead to stack overflow issues. 
+            // We remember that we are looking up a session value so we prevent stack overflows
             using (var reEntry = new RendererReEntrantManager(context))
             {
                 if (!reEntry.IsLockAcquired)
                 {
                     InternalLogger.Debug(
-                        $"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException.");
+                        "Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException.");
                     return;
                 }
 
