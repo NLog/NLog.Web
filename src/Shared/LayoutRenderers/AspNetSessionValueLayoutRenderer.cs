@@ -103,7 +103,7 @@ namespace NLog.Web.LayoutRenderers
             // Because session.get / session.getstring are also creating log messages in some cases,
             //   this could lead to stack overflow issues. 
             // We remember that we are looking up a session value so we prevent stack overflows
-            using (var reEntry = new RendererReEntrantManager(context))
+            using (var reEntry = new ReEntrantScopeLock(context))
             {
                 if (!reEntry.IsLockAcquired)
                 {

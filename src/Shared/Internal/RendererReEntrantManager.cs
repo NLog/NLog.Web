@@ -17,9 +17,9 @@ namespace NLog.Web.Internal
     /// Since NET 35 does not support AsyncLocal or even ThreadLocal
     /// a different technique must be used for that platform
     /// </summary>
-    internal readonly struct RendererReEntrantManager : IDisposable
+    internal readonly struct ReEntrantScopeLock : IDisposable
     {
-        internal RendererReEntrantManager(HttpContextBase context)
+        internal ReEntrantScopeLock(HttpContextBase context)
         {
             _httpContext = context;
 
