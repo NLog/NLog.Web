@@ -17,18 +17,38 @@ namespace NLog.Web.Internal
     /// Since NET 35 does not support AsyncLocal or even ThreadLocal
     /// a different technique must be used for that platform
     /// </summary>
-    internal struct RendererReEntrantManager : IDisposable
+    internal readonly struct RendererReEntrantManager : IDisposable
     {
         internal RendererReEntrantManager(HttpContextBase context)
         {
             _httpContext = context;
+
+            // The line below is required, because this is a struct, otherwise we get CS0188 compiler error
+            // which is 'The 'this' object cannot be used before all of its fields have been assigned.'
             _obtainedLock = false;
-            TryGetLock();
+
+            _obtainedLock = TryGetLock();
         }
 
         private readonly HttpContextBase _httpContext;
 
+        // Need to track if we were successful in the lock
+        // If we were not, we should not unlock in the dispose code
+        private readonly bool _obtainedLock;
+
         internal bool IsLockAcquired => _obtainedLock;
+
+        private bool TryGetLock()
+        {
+            // If already locked, return false
+            if (IsLocked())
+            {
+                return false;
+            }
+            // Get the lock
+            Lock();
+            return true;
+        }
 
 #if NET35
         private static readonly object ReEntrantLock = new object();
@@ -65,24 +85,6 @@ namespace NLog.Web.Internal
             ReEntrantLock.Value = false;
         }
 #endif
-
-        // Need to track if we were successful in the lock
-        // If we were not, we should not unlock in the dispose code
-        private bool _obtainedLock;
-
-
-        private void TryGetLock()
-        {
-            // If already locked, return false
-            if (IsLocked())
-            {
-                return;
-            }
-            // Get the lock
-            Lock();
-            // Mark that we locked it, not another instance locked it
-            _obtainedLock = true;
-        }
 
         private void DisposalImpl()
         {
