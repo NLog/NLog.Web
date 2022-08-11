@@ -50,6 +50,15 @@ namespace NLog.Web.Internal
             return true;
         }
 
+        public void Dispose()
+        {
+            // Only unlock if we were the ones who locked it
+            if (_obtainedLock)
+            {
+                Unlock();
+            }
+        }
+
 #if NET35
         private static readonly object ReEntrantLock = new object();
 
@@ -85,19 +94,5 @@ namespace NLog.Web.Internal
             ReEntrantLock.Value = false;
         }
 #endif
-
-        private void DisposalImpl()
-        {
-            // Only unlock if we were the ones who locked it
-            if (_obtainedLock)
-            {
-                Unlock();
-            }
-        }
-
-        public void Dispose()
-        {
-            DisposalImpl();
-        }
     }
 }
