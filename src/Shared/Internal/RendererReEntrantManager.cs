@@ -65,9 +65,9 @@ namespace NLog.Web.Internal
         }
 #endif
 
-        // Need to track if we were successful in the entry
+        // Need to track if we were successful in the lock
         // If we were not, we should not unlock in the dispose code
-        private bool entrySuccess;
+        private bool obtainedLock;
 
 
         internal bool TryGetLock()
@@ -80,7 +80,7 @@ namespace NLog.Web.Internal
             // Get the lock
             Lock();
             // Mark that we locked it, not another instance locked it
-            entrySuccess = true;
+            obtainedLock = true;
             // Return to the caller that we locked it
             return true;
         }
@@ -88,7 +88,7 @@ namespace NLog.Web.Internal
         private void DisposalImpl()
         {
             // Only unlock if we were the ones who locked it
-            if (entrySuccess)
+            if (obtainedLock)
             {
                 Unlock();
             }
