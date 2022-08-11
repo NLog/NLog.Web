@@ -102,7 +102,7 @@ namespace NLog.Web.LayoutRenderers
 
             using (var reEntry = new RendererReEntrantManager(context))
             {
-                if (!reEntry.TryGetLock())
+                if (!reEntry.IsLockAcquired)
                 {
                     InternalLogger.Error(
                         $"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");

@@ -23,9 +23,12 @@ namespace NLog.Web.Internal
         {
             _httpContext = context;
             _obtainedLock = false;
+            TryGetLock();
         }
 
         private readonly HttpContextBase _httpContext;
+
+        internal bool IsLockAcquired => _obtainedLock;
 
 #if NET35
         private static readonly object ReEntrantLock = new object();
@@ -68,19 +71,17 @@ namespace NLog.Web.Internal
         private bool _obtainedLock;
 
 
-        internal bool TryGetLock()
+        private void TryGetLock()
         {
             // If already locked, return false
             if (IsLocked())
             {
-                return false;
+                return;
             }
             // Get the lock
             Lock();
             // Mark that we locked it, not another instance locked it
             _obtainedLock = true;
-            // Return to the caller that we locked it
-            return true;
         }
 
         private void DisposalImpl()
