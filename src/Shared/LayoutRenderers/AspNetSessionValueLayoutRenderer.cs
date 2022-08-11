@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Text;
-using System.Threading;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
@@ -80,13 +79,6 @@ namespace NLog.Web.LayoutRenderers
         public SessionValueType ValueType { get; set; } = SessionValueType.String;
 #endif
 
-#if !NET35
-        // Manage access to the session re-entrancy, at least above .NET 3.5
-        private static readonly AsyncLocal<bool> IsReEntrant = new AsyncLocal<bool>();
-#else
-        // NET 35 does not have AsyncLocal or even older ThreadLocal
-        private static readonly object IsReEntrant = new object();
-#endif
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
@@ -107,51 +99,30 @@ namespace NLog.Web.LayoutRenderers
             {
                 return;
             }
-#if !NET35
-            // If we are already in this layout render in the same path, we should stop the recursion
-            if (IsReEntrant.Value)
-            {
-                InternalLogger.Error($"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");
-                return;
-            }
-            // Mark that we have entered the session
-            IsReEntrant.Value = true;
-#else
-            if (context.Items == null)
-            {
-                return;
-            }
 
-            // If we are already in this layout render in the same path, we should stop the recursion
-            if (context.Items.Contains(IsReEntrant))
-            {
-                InternalLogger.Error($"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");
-                return;
-            }
-            // Mark that we have entered the session
-            context.Items[IsReEntrant] = bool.TrueString;
+            using (var reEntry = new RendererReEntrantManager(
+#if NET35
+                context
 #endif
-            // Perform the PropertyReader.GetValue() in a try/finally clause since we want to set the IsReEntrant to false even if there is an Exception
-            object value;
-            try
+            ))
             {
-                value = PropertyReader.GetValue(item, contextSession, GetSessionValue, EvaluateAsNestedProperties);
-            }
-            finally
-            {
-#if !NET35
-                IsReEntrant.Value = false;
-#else
-                context.Items.Remove(IsReEntrant);
-#endif
-            }
+                if (!reEntry.TryGetLock())
+                {
+                    InternalLogger.Error(
+                        $"Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException. LogEventInfo.Message:{logEvent.Message}");
+                    return;
+                }
 
-            if (value != null)
-            {
-                var formatProvider = GetFormatProvider(logEvent, Culture);
-                builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
+                var value = PropertyReader.GetValue(item, contextSession, GetSessionValue, EvaluateAsNestedProperties);
+
+                if (value != null)
+                {
+                    var formatProvider = GetFormatProvider(logEvent, Culture);
+                    builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
+                }
             }
         }
+
 #if ASP_NET_CORE
         private object GetSessionValue(ISession session, string key)
         {
@@ -169,5 +140,6 @@ namespace NLog.Web.LayoutRenderers
             return session.Count == 0 ? null : session[key];
         }
 #endif
+
     }
 }
