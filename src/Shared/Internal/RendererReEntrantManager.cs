@@ -1,8 +1,11 @@
 using System;
-#if NET35
-using System.Web;
-#else
+#if !NET35
 using System.Threading;
+#endif
+#if ASP_NET_CORE
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+#else
+using System.Web;
 #endif
 
 namespace NLog.Web.Internal
@@ -16,9 +19,6 @@ namespace NLog.Web.Internal
     /// </summary>
     internal struct RendererReEntrantManager : IDisposable
     {
-#if NET35
-        private static readonly object ReEntrantLock = new object();
-
         internal RendererReEntrantManager(HttpContextBase context)
         {
             _httpContext = context;
@@ -26,6 +26,9 @@ namespace NLog.Web.Internal
         }
 
         private readonly HttpContextBase _httpContext;
+
+#if NET35
+        private static readonly object ReEntrantLock = new object();
 
         private bool IsLocked()
         {
@@ -43,11 +46,6 @@ namespace NLog.Web.Internal
         }
 #else
         private static readonly AsyncLocal<bool> ReEntrantLock = new AsyncLocal<bool>();
-
-        internal RendererReEntrantManager()
-        {
-
-        }
 
         private bool IsLocked()
         {

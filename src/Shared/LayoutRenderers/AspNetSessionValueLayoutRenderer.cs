@@ -100,11 +100,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            using (var reEntry = new RendererReEntrantManager(
-#if NET35
-                context
-#endif
-            ))
+            using (var reEntry = new RendererReEntrantManager(context))
             {
                 if (!reEntry.TryGetLock())
                 {
