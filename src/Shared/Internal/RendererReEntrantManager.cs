@@ -26,7 +26,7 @@ namespace NLog.Web.Internal
 
         private readonly HttpContextBase httpContext;
 
-        private bool ReadLock()
+        private bool IsLocked()
         {
             return httpContext?.Items?.Contains(ReEntrantLock) == true;
         }
@@ -49,7 +49,7 @@ namespace NLog.Web.Internal
 
         }
 
-        private bool ReadLock()
+        private bool IsLocked()
         {
             return ReEntrantLock.Value;
         }
@@ -73,7 +73,7 @@ namespace NLog.Web.Internal
         internal bool TryGetLock()
         {
             // If already locked, return false
-            if (ReadLock())
+            if (IsLocked())
             {
                 return false;
             }
