@@ -43,13 +43,13 @@ namespace NLog.Web.Internal
             }
 
             // If already locked, return false
-            if (IsLocked(context))
+            if (context.Items?.Contains(ReEntrantLock) == true)
             {
                 return false;
             }
 
             // Get the lock
-            Lock(context);
+            context.Items[ReEntrantLock] = bool.TrueString;
 
             // Indicate the lock was successfully acquired
             return true;
@@ -60,23 +60,8 @@ namespace NLog.Web.Internal
             // Only unlock if we were the ones who locked it
             if (IsLockAcquired)
             {
-                Unlock(_httpContext);
+                _httpContext.Items?.Remove(ReEntrantLock);
             }
-        }
-
-        private static bool IsLocked(HttpContextBase context)
-        {
-            return context.Items?.Contains(ReEntrantLock) == true;
-        }
-
-        private static void Lock(HttpContextBase context)
-        {
-            context.Items[ReEntrantLock] = bool.TrueString;
-        }
-
-        private static void Unlock(HttpContextBase context)
-        {
-            context.Items?.Remove(ReEntrantLock);
         }
 #else
         private static readonly AsyncLocal<bool> ReEntrantLock = new AsyncLocal<bool>();
@@ -90,13 +75,13 @@ namespace NLog.Web.Internal
             }
 
             // If already locked, return false
-            if (IsLocked())
+            if (ReEntrantLock.Value)
             {
                 return false;
             }
 
             // Get the lock
-            Lock();
+            ReEntrantLock.Value = true;
 
             // Indicate the lock was successfully acquired
             return true;
@@ -107,23 +92,8 @@ namespace NLog.Web.Internal
             // Only unlock if we were the ones who locked it
             if (IsLockAcquired)
             {
-                Unlock();
+                ReEntrantLock.Value = false;
             }
-        }
-
-        private static bool IsLocked()
-        {
-            return ReEntrantLock.Value;
-        }
-
-        private static void Lock()
-        {
-            ReEntrantLock.Value = true;
-        }
-
-        private static void Unlock()
-        {
-            ReEntrantLock.Value = false;
         }
 #endif
     }
