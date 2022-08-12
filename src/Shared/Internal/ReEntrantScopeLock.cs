@@ -22,69 +22,76 @@ namespace NLog.Web.Internal
         internal ReEntrantScopeLock(HttpContextBase context)
         {
             _httpContext = context;
-            _obtainedLock = TryGetLock();
+            IsLockAcquired = TryGetLock(context);
         }
 
         private readonly HttpContextBase _httpContext;
 
         // Need to track if we were successful in the lock
         // If we were not, we should not unlock in the dispose code
-        private readonly bool _obtainedLock;
+        internal bool IsLockAcquired { get; }
 
-        internal bool IsLockAcquired => _obtainedLock;
-
-        private bool TryGetLock()
+        private static bool TryGetLock(HttpContextBase context)
         {
-            // If already locked, return false
-            if (IsLocked())
+            // If context is null leave
+            if (context == null)
             {
                 return false;
             }
+
+            // If already locked, return false
+            if (IsLocked(context))
+            {
+                return false;
+            }
+
             // Get the lock
-            Lock();
+            Lock(context);
+
+            // Indicate the lock was successfully acquired
             return true;
         }
 
         public void Dispose()
         {
             // Only unlock if we were the ones who locked it
-            if (_obtainedLock)
+            if (IsLockAcquired)
             {
-                Unlock();
+                Unlock(_httpContext);
             }
         }
 
 #if NET35
         private static readonly object ReEntrantLock = new object();
 
-        private bool IsLocked()
+        private static bool IsLocked(HttpContextBase context)
         {
-            return _httpContext?.Items?.Contains(ReEntrantLock) == true;
+            return context.Items?.Contains(ReEntrantLock) == true;
         }
 
-        private void Lock()
+        private static void Lock(HttpContextBase context)
         {
-            _httpContext.Items[ReEntrantLock] = bool.TrueString;
+            context.Items[ReEntrantLock] = bool.TrueString;
         }
 
-        private void Unlock()
+        private static void Unlock(HttpContextBase context)
         {
-            _httpContext?.Items?.Remove(ReEntrantLock);
+            context.Items?.Remove(ReEntrantLock);
         }
 #else
         private static readonly AsyncLocal<bool> ReEntrantLock = new AsyncLocal<bool>();
 
-        private bool IsLocked()
+        private static bool IsLocked(HttpContextBase context)
         {
             return ReEntrantLock.Value;
         }
 
-        private void Lock()
+        private static void Lock(HttpContextBase context)
         {
             ReEntrantLock.Value = true;
         }
 
-        private void Unlock()
+        private static void Unlock(HttpContextBase context)
         {
             ReEntrantLock.Value = false;
         }
