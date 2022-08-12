@@ -1,13 +1,15 @@
+using System;
 using System.Globalization;
 using System.Text;
+using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using NLog.Common;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #else
 using System.Web;
+using ISession = System.Web.HttpSessionStateBase;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -76,8 +78,22 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// The type of the value.
         /// </summary>
-        public SessionValueType ValueType { get; set; } = SessionValueType.String;
+        public SessionValueType ValueType
+        {
+            get => _valueType;
+            set
+            {
+                _valueType = value;
+                if (value == SessionValueType.Int32)
+                    _sessionValueLookup = (session, key) => GetSessionIntValue(session, key);
+                else
+                    _sessionValueLookup = (session, key) => GetSessionValue(session, key);
+            }
+        }
+        private SessionValueType _valueType;
 #endif
+
+        private Func<ISession, string, object> _sessionValueLookup = (session, key) => GetSessionValue(session, key);   // Skip delegate allocation for ValueType
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -94,26 +110,28 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var contextSession = context?.TryGetSession();
-            if (contextSession == null)
-            {
-                return;
-            }
-
+#if ASP_NET_CORE
             // Because session.get / session.getstring are also creating log messages in some cases,
-            //   this could lead to stack overflow issues. 
+            //  this could lead to stack overflow issues. 
             // We remember that we are looking up a session value so we prevent stack overflows
-            using (var reEntry = new ReEntrantScopeLock(context))
+            using (var reEntryScopeLock = new ReEntrantScopeLock(true))
             {
-                if (!reEntry.IsLockAcquired)
+                if (!reEntryScopeLock.IsLockAcquired)
                 {
-                    InternalLogger.Debug(
-                        "Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException.");
+                    InternalLogger.Debug("aspnet-session-item - Lookup skipped because reentrant-scope-lock already taken");
+                    return;
+                }
+#else
+            {
+#endif
+
+                var contextSession = context?.TryGetSession();
+                if (contextSession == null)
+                {
                     return;
                 }
 
-                var value = PropertyReader.GetValue(item, contextSession, GetSessionValue, EvaluateAsNestedProperties);
-
+                var value = PropertyReader.GetValue(item, contextSession, _sessionValueLookup, EvaluateAsNestedProperties);
                 if (value != null)
                 {
                     var formatProvider = GetFormatProvider(logEvent, Culture);
@@ -123,18 +141,18 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if ASP_NET_CORE
-        private object GetSessionValue(ISession session, string key)
+        private static object GetSessionIntValue(ISession session, string key)
         {
-            switch (ValueType)
-            {
-                case SessionValueType.Int32:
-                    return session.GetInt32(key);
-                default: 
-                    return session.GetString(key);
-            }
+            var value = session.GetInt32(key);
+            return value.HasValue ? (object)value.Value : null;
+        }
+
+        private static object GetSessionValue(ISession session, string key)
+        {
+            return session.GetString(key);
         }
 #else
-        private object GetSessionValue(HttpSessionStateBase session, string key)
+        private static object GetSessionValue(ISession session, string key)
         {
             return session.Count == 0 ? null : session[key];
         }
