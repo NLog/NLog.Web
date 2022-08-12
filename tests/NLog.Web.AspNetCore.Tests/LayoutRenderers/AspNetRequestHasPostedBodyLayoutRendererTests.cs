@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestHasBodyLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestHasBodyLayoutRenderer>
+    public class AspNetRequestHasPostedBodyLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestHasPostedBodyLayoutRenderer>
     {
         [Fact]
         public void TrueTest()

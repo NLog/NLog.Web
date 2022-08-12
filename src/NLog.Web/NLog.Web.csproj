@@ -24,7 +24,9 @@ Remember to register NLog.Web in NLog.config
     &lt;add assembly="NLog.Web" /&gt;
 &lt;/extensions&gt;
   
-See https://github.com/NLog/NLog.Web/releases
+Full changelog: https://github.com/NLog/NLog.Web/releases
+
+List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-renderers&amp;search=package:nlog.web
     </PackageReleaseNotes>
     <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
