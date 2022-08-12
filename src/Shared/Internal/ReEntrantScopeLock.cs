@@ -22,11 +22,6 @@ namespace NLog.Web.Internal
         internal ReEntrantScopeLock(HttpContextBase context)
         {
             _httpContext = context;
-
-            // The line below is required, because this is a struct, otherwise we get CS0188 compiler error
-            // which is 'The 'this' object cannot be used before all of its fields have been assigned.'
-            _obtainedLock = false;
-
             _obtainedLock = TryGetLock();
         }
 
