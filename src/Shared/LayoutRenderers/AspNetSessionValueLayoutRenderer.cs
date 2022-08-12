@@ -1,13 +1,13 @@
-using System;
 using System.Globalization;
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-#if !ASP_NET_CORE
-using System.Web;
-#else
+using NLog.Common;
+#if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
+#else
+using System.Web;
 #endif
 
 namespace NLog.Web.LayoutRenderers
@@ -40,10 +40,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
-#if ASP_NET_CORE
-        private static readonly object NLogRetrievingSessionValue = new object();
-#endif
-
         /// <summary>
         /// Gets or sets the session item name.
         /// </summary>
@@ -78,7 +74,7 @@ namespace NLog.Web.LayoutRenderers
 
 #if ASP_NET_CORE
         /// <summary>
-        /// The hype of the value.
+        /// The type of the value.
         /// </summary>
         public SessionValueType ValueType { get; set; } = SessionValueType.String;
 #endif
@@ -93,36 +89,36 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var context = HttpContextAccessor.HttpContext;
-            var contextSession = context.TryGetSession();
+            if (context == null)
+            {
+                return;
+            }
+
+            var contextSession = context?.TryGetSession();
             if (contextSession == null)
-                return;
-
-#if !ASP_NET_CORE
-            var value = PropertyReader.GetValue(item, contextSession, (session,key) => session.Count > 0 ? session[key] : null, EvaluateAsNestedProperties);
-#else
-            //because session.get / session.getstring also creating log messages in some cases, this could lead to stackoverflow issues. 
-            //We remember on the context.Items that we are looking up a session value so we prevent stackoverflows
-            if (context.Items == null || (context.Items.Count > 0 && context.Items.ContainsKey(NLogRetrievingSessionValue)))
             {
                 return;
             }
 
-            context.Items[NLogRetrievingSessionValue] = bool.TrueString;
+            // Because session.get / session.getstring are also creating log messages in some cases,
+            //   this could lead to stack overflow issues. 
+            // We remember that we are looking up a session value so we prevent stack overflows
+            using (var reEntry = new ReEntrantScopeLock(context))
+            {
+                if (!reEntry.IsLockAcquired)
+                {
+                    InternalLogger.Debug(
+                        "Reentrant log event detected. Logging when inside the scope of another log event can cause a StackOverflowException.");
+                    return;
+                }
 
-            object value;
-            try
-            {
-                value = PropertyReader.GetValue(item, contextSession, (session, key) => GetSessionValue(session, key), EvaluateAsNestedProperties);
-            }
-            finally
-            {
-                context.Items.Remove(NLogRetrievingSessionValue);
-            }
-#endif
-            if (value != null)
-            {
-                var formatProvider = GetFormatProvider(logEvent, Culture);
-                builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
+                var value = PropertyReader.GetValue(item, contextSession, GetSessionValue, EvaluateAsNestedProperties);
+
+                if (value != null)
+                {
+                    var formatProvider = GetFormatProvider(logEvent, Culture);
+                    builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
+                }
             }
         }
 
@@ -133,9 +129,16 @@ namespace NLog.Web.LayoutRenderers
             {
                 case SessionValueType.Int32:
                     return session.GetInt32(key);
-                default: return session.GetString(key);
+                default: 
+                    return session.GetString(key);
             }
         }
+#else
+        private object GetSessionValue(HttpSessionStateBase session, string key)
+        {
+            return session.Count == 0 ? null : session[key];
+        }
 #endif
+
     }
 }
