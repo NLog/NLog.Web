@@ -31,6 +31,9 @@ namespace NLog.Web.Internal
         // If we were not, we should not unlock in the dispose code
         internal bool IsLockAcquired { get; }
 
+#if NET35
+        private static readonly object ReEntrantLock = new object();
+
         private static bool TryGetLock(HttpContextBase context)
         {
             // If context is null leave
@@ -61,9 +64,6 @@ namespace NLog.Web.Internal
             }
         }
 
-#if NET35
-        private static readonly object ReEntrantLock = new object();
-
         private static bool IsLocked(HttpContextBase context)
         {
             return context.Items?.Contains(ReEntrantLock) == true;
@@ -81,17 +81,47 @@ namespace NLog.Web.Internal
 #else
         private static readonly AsyncLocal<bool> ReEntrantLock = new AsyncLocal<bool>();
 
-        private static bool IsLocked(HttpContextBase context)
+        private static bool TryGetLock(HttpContextBase context)
+        {
+            // If context is null leave
+            if (context == null)
+            {
+                return false;
+            }
+
+            // If already locked, return false
+            if (IsLocked())
+            {
+                return false;
+            }
+
+            // Get the lock
+            Lock();
+
+            // Indicate the lock was successfully acquired
+            return true;
+        }
+
+        public void Dispose()
+        {
+            // Only unlock if we were the ones who locked it
+            if (IsLockAcquired)
+            {
+                Unlock();
+            }
+        }
+
+        private static bool IsLocked()
         {
             return ReEntrantLock.Value;
         }
 
-        private static void Lock(HttpContextBase context)
+        private static void Lock()
         {
             ReEntrantLock.Value = true;
         }
 
-        private static void Unlock(HttpContextBase context)
+        private static void Unlock()
         {
             ReEntrantLock.Value = false;
         }
