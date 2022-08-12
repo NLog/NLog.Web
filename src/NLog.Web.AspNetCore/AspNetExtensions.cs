@@ -390,7 +390,7 @@ namespace NLog.Web
                 TryLoadConfigurationFromContentRootPath(provider.LogFactory, contentRootPath);
             }
 
-            if (provider.Options.ShutdownOnDispose)
+            if (provider.Options.ShutdownOnDispose || !provider.Options.AutoShutdown)
             {
                 provider.LogFactory.AutoShutdown = false;
             }
