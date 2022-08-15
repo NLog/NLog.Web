@@ -67,7 +67,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// To specify whether to exclude / include the scheme. Default is true.
+        /// To specify whether to exclude / include the scheme. Ex. 'http' or 'https'.  Default is true.
         /// </summary>
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeScheme
@@ -86,11 +86,6 @@ namespace NLog.Web.LayoutRenderers
             set => SetPropertiesFlag(AspNetRequestUrlProperty.Path, value);
         }
 
-        /// <summary>
-        /// Helper to set the bit in the flags enum properly
-        /// </summary>
-        /// <param name="bit"></param>
-        /// <param name="flag"></param>
         private void SetPropertiesFlag(AspNetRequestUrlProperty bit, bool flag)
         {
             if (flag)
@@ -103,11 +98,6 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        /// <summary>
-        /// helper to get the bit in the flags enum
-        /// </summary>
-        /// <param name="bit"></param>
-        /// <returns></returns>
         private bool HasPropertiesFlag(AspNetRequestUrlProperty bit)
         {
             return (Properties & bit) == bit;
@@ -146,11 +136,6 @@ namespace NLog.Web.LayoutRenderers
 
         private void RenderUrl(HttpRequestBase httpRequest, StringBuilder builder)
         {
-            if (Properties == AspNetRequestUrlProperty.None)
-            {
-                return;
-            }
-
             var url = httpRequest.Url;
             if (url == null)
             {
@@ -187,11 +172,6 @@ namespace NLog.Web.LayoutRenderers
 #else
         private void RenderUrl(HttpRequest httpRequest, StringBuilder builder)
         {
-            if (Properties == AspNetRequestUrlProperty.None)
-            {
-                return;
-            }
-
             if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
                 !string.IsNullOrWhiteSpace(httpRequest.Scheme))
             {
