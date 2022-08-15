@@ -16,7 +16,7 @@ namespace NLog.Web.Enums
         None = 0,
 
         /// <summary>
-        /// To specify whether to exclude / include the scheme.
+        /// To specify whether to exclude / include the scheme.  Ex. 'http' or 'https'
         /// </summary>
         Scheme = 1,
 
