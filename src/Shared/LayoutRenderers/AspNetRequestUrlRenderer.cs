@@ -42,17 +42,10 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeQueryString 
         {
-            get => (Properties & AspNetRequestUrlProperty.QueryString) == AspNetRequestUrlProperty.QueryString;
+            get => GetFlagEnum(AspNetRequestUrlProperty.QueryString);
             set
             {
-                if (value)
-                {
-                    Properties |= AspNetRequestUrlProperty.QueryString;
-                }
-                else
-                {
-                    Properties &= ~AspNetRequestUrlProperty.QueryString;
-                }
+                SetFlagEnum(AspNetRequestUrlProperty.QueryString, value);
             }
         }
 
@@ -62,17 +55,10 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludePort
         {
-            get => (Properties & AspNetRequestUrlProperty.Port) == AspNetRequestUrlProperty.Port;
+            get => GetFlagEnum(AspNetRequestUrlProperty.Port);
             set
             {
-                if (value)
-                {
-                    Properties |= AspNetRequestUrlProperty.Port;
-                }
-                else
-                {
-                    Properties &= ~AspNetRequestUrlProperty.Port;
-                }
+                SetFlagEnum(AspNetRequestUrlProperty.Port, value);
             }
         }
 
@@ -82,17 +68,10 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeHost
         {
-            get => (Properties & AspNetRequestUrlProperty.Host) == AspNetRequestUrlProperty.Host;
+            get => GetFlagEnum(AspNetRequestUrlProperty.Host);
             set
             {
-                if (value)
-                {
-                    Properties |= AspNetRequestUrlProperty.Host;
-                }
-                else
-                {
-                    Properties &= ~AspNetRequestUrlProperty.Host;
-                }
+                SetFlagEnum(AspNetRequestUrlProperty.Host, value);
             }
         }
 
@@ -102,17 +81,10 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeScheme
         {
-            get => (Properties & AspNetRequestUrlProperty.Scheme) == AspNetRequestUrlProperty.Scheme;
+            get => GetFlagEnum(AspNetRequestUrlProperty.Scheme);
             set
             {
-                if (value)
-                {
-                    Properties |= AspNetRequestUrlProperty.Scheme;
-                }
-                else
-                {
-                    Properties &= ~AspNetRequestUrlProperty.Scheme;
-                }
+                SetFlagEnum(AspNetRequestUrlProperty.Scheme, value);
             }
         }
 
@@ -122,18 +94,38 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludePath
         {
-            get => (Properties & AspNetRequestUrlProperty.Path) == AspNetRequestUrlProperty.Path;
+            get => GetFlagEnum(AspNetRequestUrlProperty.Path);
             set
             {
-                if (value)
-                {
-                    Properties |= AspNetRequestUrlProperty.Path;
-                }
-                else
-                {
-                    Properties &= ~AspNetRequestUrlProperty.Path;
-                }
+                SetFlagEnum(AspNetRequestUrlProperty.Path, value);
             }
+        }
+
+        /// <summary>
+        /// Helper to set the bit in the flags enum properly
+        /// </summary>
+        /// <param name="bit"></param>
+        /// <param name="flag"></param>
+        private void SetFlagEnum(AspNetRequestUrlProperty bit, bool flag)
+        {
+            if (flag)
+            {
+                Properties |= bit;
+            }
+            else
+            {
+                Properties &= ~bit;
+            }
+        }
+
+        /// <summary>
+        /// helper to get the bit in the flags enum
+        /// </summary>
+        /// <param name="bit"></param>
+        /// <returns></returns>
+        private bool GetFlagEnum(AspNetRequestUrlProperty bit)
+        {
+            return (Properties & bit) == bit;
         }
 
 #if ASP_NET_CORE
@@ -180,30 +172,29 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            // We cannot use Enum.HasFlag(Enum) in .NET 35
-            if ((Properties & AspNetRequestUrlProperty.Scheme) == AspNetRequestUrlProperty.Scheme && 
+            if (GetFlagEnum(AspNetRequestUrlProperty.Scheme) && 
                 !string.IsNullOrEmpty(url.Scheme))
             {
                 builder.Append(url.Scheme);
                 builder.Append("://");
             }
-            if ((Properties & AspNetRequestUrlProperty.Host) == AspNetRequestUrlProperty.Host)
+            if (GetFlagEnum(AspNetRequestUrlProperty.Host))
             {
                 builder.Append(url.Host);
             }
-            if ((Properties & AspNetRequestUrlProperty.Port) == AspNetRequestUrlProperty.Port && url.Port > 0)
+            if (GetFlagEnum(AspNetRequestUrlProperty.Port) && url.Port > 0)
             {
                 builder.Append(':');
                 builder.Append(url.Port);
             }
 
-            if ((Properties & AspNetRequestUrlProperty.Path) == AspNetRequestUrlProperty.Path)
+            if (GetFlagEnum(AspNetRequestUrlProperty.Path))
             {
                 var pathAndQuery = (Properties & AspNetRequestUrlProperty.QueryString) == AspNetRequestUrlProperty.QueryString ? 
                     url.PathAndQuery : url.AbsolutePath;
                 builder.Append(pathAndQuery);
             }
-            else if ((Properties & AspNetRequestUrlProperty.QueryString) == AspNetRequestUrlProperty.QueryString)
+            else if (GetFlagEnum(AspNetRequestUrlProperty.QueryString))
             {
                 builder.Append(url.Query);
             }
@@ -216,27 +207,26 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            // We can use Enum.HasFlag(Enum) in .NET 4.0 and higher
-            if ( Properties.HasFlag(AspNetRequestUrlProperty.Scheme) && 
+            if (GetFlagEnum(AspNetRequestUrlProperty.Scheme) && 
                 !string.IsNullOrWhiteSpace(httpRequest.Scheme))
             {
                 builder.Append(httpRequest.Scheme);
                 builder.Append("://");
             }
 
-            if (Properties.HasFlag(AspNetRequestUrlProperty.Host))
+            if (GetFlagEnum(AspNetRequestUrlProperty.Host))
             {
                 builder.Append(httpRequest.Host.Host);
             }
 
-            if (Properties.HasFlag(AspNetRequestUrlProperty.Port) && 
+            if (GetFlagEnum(AspNetRequestUrlProperty.Port) && 
                 httpRequest.Host.Port > 0)
             {
                 builder.Append(':');
                 builder.Append(httpRequest.Host.Port.Value);
             }
 
-            if (Properties.HasFlag(AspNetRequestUrlProperty.Path))
+            if (GetFlagEnum(AspNetRequestUrlProperty.Path))
             {
                 IHttpRequestFeature httpRequestFeature;
                 if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
@@ -247,13 +237,13 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append((httpRequest.PathBase + httpRequest.Path).ToUriComponent());
 
-                    if (Properties.HasFlag(AspNetRequestUrlProperty.QueryString))
+                    if (GetFlagEnum(AspNetRequestUrlProperty.QueryString))
                     {
                         builder.Append(httpRequest.QueryString.Value);
                     }
                 }
             }
-            else if (Properties.HasFlag(AspNetRequestUrlProperty.QueryString))
+            else if (GetFlagEnum(AspNetRequestUrlProperty.QueryString))
             {
                 builder.Append(httpRequest.QueryString.Value);
             }
