@@ -42,11 +42,8 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeQueryString 
         {
-            get => GetFlagEnum(AspNetRequestUrlProperty.QueryString);
-            set
-            {
-                SetFlagEnum(AspNetRequestUrlProperty.QueryString, value);
-            }
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.QueryString);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.QueryString, value);
         }
 
         /// <summary>
@@ -55,11 +52,8 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludePort
         {
-            get => GetFlagEnum(AspNetRequestUrlProperty.Port);
-            set
-            {
-                SetFlagEnum(AspNetRequestUrlProperty.Port, value);
-            }
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Port);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Port, value);
         }
 
         /// <summary>
@@ -68,11 +62,8 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeHost
         {
-            get => GetFlagEnum(AspNetRequestUrlProperty.Host);
-            set
-            {
-                SetFlagEnum(AspNetRequestUrlProperty.Host, value);
-            }
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Host);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Host, value);
         }
 
         /// <summary>
@@ -81,11 +72,8 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeScheme
         {
-            get => GetFlagEnum(AspNetRequestUrlProperty.Scheme);
-            set
-            {
-                SetFlagEnum(AspNetRequestUrlProperty.Scheme, value);
-            }
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Scheme);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Scheme, value);
         }
 
         /// <summary>
@@ -94,11 +82,8 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludePath
         {
-            get => GetFlagEnum(AspNetRequestUrlProperty.Path);
-            set
-            {
-                SetFlagEnum(AspNetRequestUrlProperty.Path, value);
-            }
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Path);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Path, value);
         }
 
         /// <summary>
@@ -106,7 +91,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="bit"></param>
         /// <param name="flag"></param>
-        private void SetFlagEnum(AspNetRequestUrlProperty bit, bool flag)
+        private void SetPropertiesFlag(AspNetRequestUrlProperty bit, bool flag)
         {
             if (flag)
             {
@@ -123,7 +108,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="bit"></param>
         /// <returns></returns>
-        private bool GetFlagEnum(AspNetRequestUrlProperty bit)
+        private bool HasPropertiesFlag(AspNetRequestUrlProperty bit)
         {
             return (Properties & bit) == bit;
         }
@@ -172,29 +157,29 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            if (GetFlagEnum(AspNetRequestUrlProperty.Scheme) && 
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
                 !string.IsNullOrEmpty(url.Scheme))
             {
                 builder.Append(url.Scheme);
                 builder.Append("://");
             }
-            if (GetFlagEnum(AspNetRequestUrlProperty.Host))
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Host))
             {
                 builder.Append(url.Host);
             }
-            if (GetFlagEnum(AspNetRequestUrlProperty.Port) && url.Port > 0)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Port) && url.Port > 0)
             {
                 builder.Append(':');
                 builder.Append(url.Port);
             }
 
-            if (GetFlagEnum(AspNetRequestUrlProperty.Path))
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
-                var pathAndQuery = (Properties & AspNetRequestUrlProperty.QueryString) == AspNetRequestUrlProperty.QueryString ? 
+                var pathAndQuery = HasPropertiesFlag(AspNetRequestUrlProperty.QueryString) ? 
                     url.PathAndQuery : url.AbsolutePath;
                 builder.Append(pathAndQuery);
             }
-            else if (GetFlagEnum(AspNetRequestUrlProperty.QueryString))
+            else if (HasPropertiesFlag(AspNetRequestUrlProperty.QueryString))
             {
                 builder.Append(url.Query);
             }
@@ -207,26 +192,26 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            if (GetFlagEnum(AspNetRequestUrlProperty.Scheme) && 
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
                 !string.IsNullOrWhiteSpace(httpRequest.Scheme))
             {
                 builder.Append(httpRequest.Scheme);
                 builder.Append("://");
             }
 
-            if (GetFlagEnum(AspNetRequestUrlProperty.Host))
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Host))
             {
                 builder.Append(httpRequest.Host.Host);
             }
 
-            if (GetFlagEnum(AspNetRequestUrlProperty.Port) && 
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Port) && 
                 httpRequest.Host.Port > 0)
             {
                 builder.Append(':');
                 builder.Append(httpRequest.Host.Port.Value);
             }
 
-            if (GetFlagEnum(AspNetRequestUrlProperty.Path))
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
                 IHttpRequestFeature httpRequestFeature;
                 if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
@@ -237,13 +222,13 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append((httpRequest.PathBase + httpRequest.Path).ToUriComponent());
 
-                    if (GetFlagEnum(AspNetRequestUrlProperty.QueryString))
+                    if (HasPropertiesFlag(AspNetRequestUrlProperty.QueryString))
                     {
                         builder.Append(httpRequest.QueryString.Value);
                     }
                 }
             }
-            else if (GetFlagEnum(AspNetRequestUrlProperty.QueryString))
+            else if (HasPropertiesFlag(AspNetRequestUrlProperty.QueryString))
             {
                 builder.Append(httpRequest.QueryString.Value);
             }
