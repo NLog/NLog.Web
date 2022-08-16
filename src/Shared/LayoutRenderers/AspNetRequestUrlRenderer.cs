@@ -42,8 +42,8 @@ namespace NLog.Web.LayoutRenderers
         [Obsolete("Please use the Properties flags enumeration instead")]
         public bool IncludeQueryString 
         {
-            get => HasPropertiesFlag(AspNetRequestUrlProperty.QueryString);
-            set => SetPropertiesFlag(AspNetRequestUrlProperty.QueryString, value);
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Query);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Query, value);
         }
 
         /// <summary>
@@ -160,11 +160,11 @@ namespace NLog.Web.LayoutRenderers
 
             if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
-                var pathAndQuery = HasPropertiesFlag(AspNetRequestUrlProperty.QueryString) ? 
+                var pathAndQuery = HasPropertiesFlag(AspNetRequestUrlProperty.Query) ? 
                     url.PathAndQuery : url.AbsolutePath;
                 builder.Append(pathAndQuery);
             }
-            else if (HasPropertiesFlag(AspNetRequestUrlProperty.QueryString))
+            else if (HasPropertiesFlag(AspNetRequestUrlProperty.Query))
             {
                 builder.Append(url.Query);
             }
@@ -202,13 +202,13 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append((httpRequest.PathBase + httpRequest.Path).ToUriComponent());
 
-                    if (HasPropertiesFlag(AspNetRequestUrlProperty.QueryString))
+                    if (HasPropertiesFlag(AspNetRequestUrlProperty.Query))
                     {
                         builder.Append(httpRequest.QueryString.Value);
                     }
                 }
             }
-            else if (HasPropertiesFlag(AspNetRequestUrlProperty.QueryString))
+            else if (HasPropertiesFlag(AspNetRequestUrlProperty.Query))
             {
                 builder.Append(httpRequest.QueryString.Value);
             }

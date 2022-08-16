@@ -38,7 +38,7 @@ namespace NLog.Web.Enums
         /// <summary>
         /// To specify whether to include / exclude the Query string.
         /// </summary>
-        QueryString = 16,
+        Query = 16,
 
         /// <summary>
         /// By default, log the scheme://host/path

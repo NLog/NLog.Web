@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-#if !ASP_NET_CORE
-using System.Web;
-using System.Web.Routing;
-using System.Collections.Specialized;
-using System.Web.SessionState;
-#else
-using Microsoft.Extensions.Primitives;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-#endif
+﻿using NLog.Web.Enums;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
-
 using Xunit;
 
+#if ASP_NET_CORE
 using System.IO;
-using NLog.Web.Enums;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+#else
+using System;
+#endif
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -234,7 +225,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http");
 
-            renderer.Properties |= AspNetRequestUrlProperty.QueryString;
+            renderer.Properties |= AspNetRequestUrlProperty.Query;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
@@ -245,7 +236,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void EnumUrlPresentRenderNonEmpty_IncludeQueryString_IncludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
-            renderer.Properties |= AspNetRequestUrlProperty.QueryString;
+            renderer.Properties |= AspNetRequestUrlProperty.Query;
             renderer.Properties |= AspNetRequestUrlProperty.Port;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
@@ -258,7 +249,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
-            renderer.Properties |= AspNetRequestUrlProperty.QueryString;
+            renderer.Properties |= AspNetRequestUrlProperty.Query;
             renderer.Properties &= ~AspNetRequestUrlProperty.Port;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
@@ -284,7 +275,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
             renderer.Properties &= ~AspNetRequestUrlProperty.Scheme;
-            renderer.Properties |= AspNetRequestUrlProperty.QueryString;
+            renderer.Properties |= AspNetRequestUrlProperty.Query;
             renderer.Properties |= AspNetRequestUrlProperty.Port;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
@@ -336,7 +327,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
 
             renderer.Properties &= ~AspNetRequestUrlProperty.Host;
-            renderer.Properties |= AspNetRequestUrlProperty.QueryString;
+            renderer.Properties |= AspNetRequestUrlProperty.Query;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
@@ -351,7 +342,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             
             renderer.UseRawTarget = true;
 
-            renderer.Properties |= AspNetRequestUrlProperty.QueryString;
+            renderer.Properties |= AspNetRequestUrlProperty.Query;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
