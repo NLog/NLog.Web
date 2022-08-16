@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 using NLog.Common;
+using NLog.Web.Enums;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 #else
-using System.Collections.Specialized;
 using System.Web;
 #endif
 
@@ -19,12 +18,12 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     /// <remarks>
     /// <code>
-    /// ${aspnet-request-url:IncludeQueryString=true} - produces http://www.exmaple.com/?t=1
-    /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.exmaple.com/
-    /// ${aspnet-request-url:IncludePort=true} - produces http://www.exmaple.com:80/
-    /// ${aspnet-request-url:IncludePort=false} - produces http://www.exmaple.com/
-    /// ${aspnet-request-url:IncludeScheme=false} - produces www.exmaple.com/
-    /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.exmaple.com:80/?t=1
+    /// ${aspnet-request-url:IncludeQueryString=true} - produces http://www.example.com/?t=1
+    /// ${aspnet-request-url:IncludeQueryString=false} - produces http://www.example.com/
+    /// ${aspnet-request-url:IncludePort=true} - produces http://www.example.com:80/
+    /// ${aspnet-request-url:IncludePort=false} - produces http://www.example.com/
+    /// ${aspnet-request-url:IncludeScheme=false} - produces www.example.com/
+    /// ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.example.com:80/?t=1
     /// </code>
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer">Documentation on NLog Wiki</seealso>
@@ -32,29 +31,77 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
+        /// A flags enumeration that controls which of the five portions of the URL are logged.
+        /// Defaults to scheme://host/path, port and query string are by default not logged.
+        /// </summary>
+        public AspNetRequestUrlProperty Properties { get; set; } = AspNetRequestUrlProperty.Default;
+
+        /// <summary>
         /// To specify whether to include / exclude the Query string. Default is false.
         /// </summary>
-        public bool IncludeQueryString { get; set; }
+        [Obsolete("Please use the Properties flags enumeration instead")]
+        public bool IncludeQueryString 
+        {
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Query);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Query, value);
+        }
 
         /// <summary>
         /// To specify whether to include / exclude the Port. Default is false.
         /// </summary>
-        public bool IncludePort { get; set; }
+        [Obsolete("Please use the Properties flags enumeration instead")]
+        public bool IncludePort
+        {
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Port);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Port, value);
+        }
 
         /// <summary>
         /// To specify whether to exclude / include the host. Default is true.
         /// </summary>
-        public bool IncludeHost { get; set; } = true;
+        [Obsolete("Please use the Properties flags enumeration instead")]
+        public bool IncludeHost
+        {
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Host);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Host, value);
+        }
 
         /// <summary>
-        /// To specify whether to exclude / include the scheme. Default is true.
+        /// To specify whether to exclude / include the scheme. Ex. 'http' or 'https'.  Default is true.
         /// </summary>
-        public bool IncludeScheme { get; set; } = true;
+        [Obsolete("Please use the Properties flags enumeration instead")]
+        public bool IncludeScheme
+        {
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Scheme);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Scheme, value);
+        }
 
         /// <summary>
         /// To specify whether to exclude / include the url-path. Default is true.
         /// </summary>
-        public bool IncludePath { get; set; } = true;
+        [Obsolete("Please use the Properties flags enumeration instead")]
+        public bool IncludePath
+        {
+            get => HasPropertiesFlag(AspNetRequestUrlProperty.Path);
+            set => SetPropertiesFlag(AspNetRequestUrlProperty.Path, value);
+        }
+
+        private void SetPropertiesFlag(AspNetRequestUrlProperty bit, bool flag)
+        {
+            if (flag)
+            {
+                Properties |= bit;
+            }
+            else
+            {
+                Properties &= ~bit;
+            }
+        }
+
+        private bool HasPropertiesFlag(AspNetRequestUrlProperty bit)
+        {
+            return (Properties & bit) == bit;
+        }
 
 #if ASP_NET_CORE
 
@@ -91,29 +138,33 @@ namespace NLog.Web.LayoutRenderers
         {
             var url = httpRequest.Url;
             if (url == null)
+            {
                 return;
+            }
 
-            if (IncludeScheme && !string.IsNullOrEmpty(url.Scheme))
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
+                !string.IsNullOrEmpty(url.Scheme))
             {
                 builder.Append(url.Scheme);
                 builder.Append("://");
             }
-            if (IncludeHost)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Host))
             {
                 builder.Append(url.Host);
             }
-            if (IncludePort && url.Port > 0)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Port) && url.Port > 0)
             {
                 builder.Append(':');
                 builder.Append(url.Port);
             }
 
-            if (IncludePath)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
-                var pathAndQuery = IncludeQueryString ? url.PathAndQuery : url.AbsolutePath;
+                var pathAndQuery = HasPropertiesFlag(AspNetRequestUrlProperty.Query) ? 
+                    url.PathAndQuery : url.AbsolutePath;
                 builder.Append(pathAndQuery);
             }
-            else if (IncludeQueryString)
+            else if (HasPropertiesFlag(AspNetRequestUrlProperty.Query))
             {
                 builder.Append(url.Query);
             }
@@ -121,24 +172,26 @@ namespace NLog.Web.LayoutRenderers
 #else
         private void RenderUrl(HttpRequest httpRequest, StringBuilder builder)
         {
-            if (IncludeScheme && !string.IsNullOrWhiteSpace(httpRequest.Scheme))
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
+                !string.IsNullOrWhiteSpace(httpRequest.Scheme))
             {
                 builder.Append(httpRequest.Scheme);
                 builder.Append("://");
             }
 
-            if (IncludeHost)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Host))
             {
                 builder.Append(httpRequest.Host.Host);
             }
 
-            if (IncludePort && httpRequest.Host.Port > 0)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Port) && 
+                httpRequest.Host.Port > 0)
             {
                 builder.Append(':');
                 builder.Append(httpRequest.Host.Port.Value);
             }
 
-            if (IncludePath)
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
                 IHttpRequestFeature httpRequestFeature;
                 if (UseRawTarget && (httpRequestFeature = httpRequest.HttpContext.Features.Get<IHttpRequestFeature>()) != null)
@@ -149,13 +202,13 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append((httpRequest.PathBase + httpRequest.Path).ToUriComponent());
 
-                    if (IncludeQueryString)
+                    if (HasPropertiesFlag(AspNetRequestUrlProperty.Query))
                     {
                         builder.Append(httpRequest.QueryString.Value);
                     }
                 }
             }
-            else if (IncludeQueryString)
+            else if (HasPropertiesFlag(AspNetRequestUrlProperty.Query))
             {
                 builder.Append(httpRequest.QueryString.Value);
             }
