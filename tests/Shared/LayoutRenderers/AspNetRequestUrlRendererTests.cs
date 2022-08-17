@@ -2,6 +2,7 @@
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
+using System;
 
 #if ASP_NET_CORE
 using System.IO;
@@ -26,6 +27,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http");
@@ -38,6 +40,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_IncludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -50,6 +53,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_ExcludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -73,6 +77,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -84,6 +89,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme_IncludePort_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -97,6 +103,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme_IncludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -109,6 +116,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme_ExcludeHost()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -121,6 +129,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeHost()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -132,6 +141,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeHost_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -155,6 +165,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_UseRawTarget_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp", rawTarget: "/rawTarget");

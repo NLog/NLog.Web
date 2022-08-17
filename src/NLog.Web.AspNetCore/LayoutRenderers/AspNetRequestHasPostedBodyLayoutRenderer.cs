@@ -24,8 +24,9 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-has-body}</code>
     /// </remarks>
-        [LayoutRenderer("aspnet-request-has-body")]
-    public class AspNetRequestHasBodyLayoutRenderer : AspNetLayoutRendererBase
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Has-Posted-Body-Layout-Renderer">Documentation on NLog Wiki</seealso>
+    [LayoutRenderer("aspnet-request-has-posted-body")]
+    public class AspNetRequestHasPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
