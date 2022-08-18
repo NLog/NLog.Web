@@ -84,10 +84,10 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
 	<PackageReference Include="NLog.Extensions.Logging" Version="5.0.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
-    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->
+    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.22" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="4.5.1" />
   </ItemGroup>
   <ItemGroup>
