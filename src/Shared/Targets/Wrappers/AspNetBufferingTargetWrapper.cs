@@ -167,11 +167,6 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// The Key for the buffer dictionary in the HttpContext.Items collection
-        /// </summary>
-        private static readonly object HttpContextItemsKey = new object();
-
-        /// <summary>
         /// Must be called by the HttpModule/Middleware upon starting.
         /// This creates the dictionary in the HttpContext.Items with the proper key.
         /// </summary>
@@ -226,6 +221,11 @@ namespace NLog.Web.Targets.Wrappers
                 return buffer;
             }
         }
+
+        /// <summary>
+        /// The Key for the buffer dictionary in the HttpContext.Items collection
+        /// </summary>
+        private static readonly object HttpContextItemsKey = new object();
 
         /// <summary>
         /// Return the buffer dictionary from the HttpContext.Items using HttpContextItemsKey
