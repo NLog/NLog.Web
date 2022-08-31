@@ -1,15 +1,13 @@
-﻿using NLog.Web.Enums;
+﻿using System;
+using NLog.Web.Enums;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
-using System;
 
 #if ASP_NET_CORE
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-#else
-using System;
 #endif
 
 namespace NLog.Web.Tests.LayoutRenderers
