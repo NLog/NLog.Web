@@ -4,6 +4,16 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.1.2 (2022/09/01)
+
+- **NLog.Web.AspNetCore**
+  - [#861](https://github.com/NLog/NLog.Web/pull/861) Loading NLog.config from ContentRootPath as last fallback (#861) (@snakefoot)
+  - [#858](https://github.com/NLog/NLog.Web/pull/858) Updated Microsoft.AspNetCore.Abstractions to match Microsoft.AspNetCore.Http (#858) (@snakefoot)
+  - [#863](https://github.com/NLog/NLog.Web/pull/863) Updated NLog.Extensions.Logging to v5.0.3 (#863) (@snakefoot)
+
+- **NLog.Web**
+  - [#863](https://github.com/NLog/NLog.Web/pull/863) Updated dependency NLog v5.0.3 (#863) (@snakefoot)
+
 ### Version 5.1.1 (2022/08/17)
 
 - **NLog.Web.AspNetCore**
