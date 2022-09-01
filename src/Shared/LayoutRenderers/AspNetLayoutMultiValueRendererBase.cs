@@ -53,6 +53,11 @@ namespace NLog.Web.LayoutRenderers
         public bool ValuesOnly { get; set; }
 
         /// <summary>
+        /// Convert the key to lowercase if true, otherwise render the raw value of key. Default is false.
+        /// </summary>
+        public bool LowerCaseKeys { get; set; }
+
+        /// <summary>
         /// Serialize multiple key/value pairs
         /// </summary>
         /// <param name="pairs">The key/value pairs.</param>
@@ -95,7 +100,6 @@ namespace NLog.Web.LayoutRenderers
                 }
 
                 SerializePairJson(builder, item);
-
                 firstItem = false;
             }
 
@@ -124,7 +128,12 @@ namespace NLog.Web.LayoutRenderers
                 {
                     builder.Append('{');
                 }
-                AppendQuoted(builder, key);
+
+                key = key?.Replace('"', '_');    // Ensure valid JSON String-Property-Key
+
+                builder.Append('"');
+                AppendPropertyKey(builder, key);
+                builder.Append('"');
                 builder.Append(':');
             }
 
@@ -158,12 +167,24 @@ namespace NLog.Web.LayoutRenderers
 
                 if (!ValuesOnly)
                 {
-                    builder.Append(key);
-
+                    AppendPropertyKey(builder, key);
                     builder.Append(valueSeparator);
                 }
 
                 builder.Append(value);
+            }
+        }
+
+        private void AppendPropertyKey(StringBuilder builder, string key)
+        {
+            if (LowerCaseKeys && !string.IsNullOrEmpty(key))
+            {
+                foreach (var chr in key)
+                    builder.Append(char.ToLowerInvariant(chr));
+            }
+            else
+            {
+                builder.Append(key);
             }
         }
 
@@ -264,7 +285,7 @@ namespace NLog.Web.LayoutRenderers
             }
             else
             {
-                builder.Append(value);
+                builder.Append(value ?? string.Empty);
             }
 
             builder.Append('"');

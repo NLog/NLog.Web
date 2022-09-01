@@ -18,6 +18,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-servervariable:Item=KeyName}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-ServerVariable-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-servervariable")]
     public class AspNetRequestServerVariableLayoutRenderer : AspNetLayoutRendererBase
     {

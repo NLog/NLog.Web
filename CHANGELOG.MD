@@ -4,6 +4,76 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.1.2 (2022/09/01)
+
+- **NLog.Web.AspNetCore**
+  - [#861](https://github.com/NLog/NLog.Web/pull/861) Loading NLog.config from ContentRootPath as last fallback (#861) (@snakefoot)
+  - [#858](https://github.com/NLog/NLog.Web/pull/858) Updated Microsoft.AspNetCore.Abstractions to match Microsoft.AspNetCore.Http (#858) (@snakefoot)
+  - [#863](https://github.com/NLog/NLog.Web/pull/863) Updated NLog.Extensions.Logging to v5.0.3 (#863) (@snakefoot)
+
+- **NLog.Web**
+  - [#863](https://github.com/NLog/NLog.Web/pull/863) Updated dependency NLog v5.0.3 (#863) (@snakefoot)
+
+### Version 5.1.1 (2022/08/17)
+
+- **NLog.Web.AspNetCore**
+  - [#836](https://github.com/NLog/NLog.Web/pull/836) Fixed offset by one in AspNetRequestDurationLayoutRenderer (#836) (@snakefoot)
+  - [#840](https://github.com/NLog/NLog.Web/pull/840) Added option LowercaseKeys for ${aspnet-request-querystring} (#840) (@czd890)
+  - [#845](https://github.com/NLog/NLog.Web/pull/845) Added ${aspnet-request-has-posted-body} Layout Renderer (#845) (@bakgerman)
+  - [#845](https://github.com/NLog/NLog.Web/pull/845) Added ${aspnet-request-stream-id} Layout Renderer (#845) (@bakgerman)
+  - [#850](https://github.com/NLog/NLog.Web/pull/850) + [#853](https://github.com/NLog/NLog.Web/pull/853)  Improved re-Entrancy scope lock for Session Value Layout Render (#850) (@bakgerman)
+  - [#854](https://github.com/NLog/NLog.Web/pull/854) Updated dependency NLog.Extensions.Logging v5.0.2 (#854) (@snakefoot)
+  - [#856](https://github.com/NLog/NLog.Web/pull/856) Added option Properties for ${aspnet-request-url} instead of booleans (#856) (@bakgerman)
+
+- **NLog.Web**
+  - [#836](https://github.com/NLog/NLog.Web/pull/836) Fixed offset by one in AspNetRequestDurationLayoutRenderer (#836) (@snakefoot)
+  - [#840](https://github.com/NLog/NLog.Web/pull/840) Added option LowercaseKeys for ${aspnet-request-querystring} (#840) (@czd890)
+  - [#854](https://github.com/NLog/NLog.Web/pull/854) Updated dependency NLog v5.0.2 (#854) (@snakefoot)
+  - [#856](https://github.com/NLog/NLog.Web/pull/856) Added option Properties for ${aspnet-request-url} instead of booleans (#856) (@bakgerman)
+
+### Version 5.1.0 (2022/07/18)
+
+- **NLog.Web.AspNetCore**
+  - [#828](https://github.com/NLog/NLog.Web/pull/828) Reverted default value for ShutdownOnDispose to false (#828) (@snakefoot)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-request-trailers} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-response-trailers} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-response-https-compression} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-request-tracking-consent} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-request-tls-token-binding} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-request-inherent-keep-alive} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-request-http-transport-type} Layout Renderer (#815) (@bakgerman)
+  - [#815](https://github.com/NLog/NLog.Web/pull/815) Added ${aspnet-request-bidirectional-stream} Layout Renderer (#815) (@bakgerman)
+  - [#811](https://github.com/NLog/NLog.Web/pull/811) Added ${aspnet-request-servervariable} Layout Renderer (#811) (@bakgerman)
+  - [#802](https://github.com/NLog/NLog.Web/pull/802) Added ${aspnet-request-tls-handshake} Layout Renderer (#802) (@bakgerman)
+  - [#796](https://github.com/NLog/NLog.Web/pull/796) Added ${aspnet-request-connection-id} Layout Renderer (#796) (@bakgerman)
+  - [#796](https://github.com/NLog/NLog.Web/pull/796) Added ${aspnet-response-has-started} Layout Renderer (#796) (@bakgerman)
+  - [#789](https://github.com/NLog/NLog.Web/pull/789) Added ${aspnet-response-cookie} Layout Renderer (#789) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-client-certificate} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-is-web-socket} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-local-ip} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-local-port} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-remote-port} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-web-socket-requested-protocols} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-response-contenttype} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-response-headers} Layout Renderer (#784) (@bakgerman)
+  - [#781](https://github.com/NLog/NLog.Web/pull/781) NLogRequestPostedBodyMiddleware - Restore support for ${aspnet-request-posted-body} (#781) (@bakgerman)
+  - [#783](https://github.com/NLog/NLog.Web/pull/783) NLogRequestLoggingMiddleware - Added support for custom ShouldLogRequest-delegate (#783) (@snakefoot)
+
+- **NLog.Web**
+  - [#811](https://github.com/NLog/NLog.Web/pull/811) Added ${aspnet-request-servervariable} Layout Renderer (#811) (@bakgerman)
+  - [#796](https://github.com/NLog/NLog.Web/pull/796) Added ${aspnet-response-has-started} Layout Renderer for NET46 (#796) (@bakgerman)
+  - [#789](https://github.com/NLog/NLog.Web/pull/789) Added ${aspnet-response-cookie} Layout Renderer (#789) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-client-certificate} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-is-web-socket} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-local-ip} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-local-port} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-remote-port} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-request-web-socket-requested-protocols} Layout Renderer for NET46 (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-response-contenttype} Layout Renderer (#784) (@bakgerman)
+  - [#784](https://github.com/NLog/NLog.Web/pull/784) Added ${aspnet-response-headers} Layout Renderer (#784) (@bakgerman)
+  - [#785](https://github.com/NLog/NLog.Web/pull/785) NLogRequestPostedBodyModule - Restore support for ${aspnet-request-posted-body} (#785) (@bakgerman)
+  - [#792](https://github.com/NLog/NLog.Web/pull/792) Added ${aspnet-user-claim} Layout Renderer for NET46 (#792) (@snakefoot)
+
 ### Version 5.0.0 (2022/05/17)
 
 - **NLog.Web.AspNetCore**

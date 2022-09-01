@@ -16,6 +16,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-user-identity}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetUserIdentity-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-user-identity")]
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {

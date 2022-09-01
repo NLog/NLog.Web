@@ -22,6 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-trailers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Trailers-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-trailers")]
     public class AspNetRequestTrailersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

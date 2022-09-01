@@ -13,6 +13,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-web-socket-requested-protocols:OutputFormat=JsonArray}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-WebSocket-Requested-Protocols-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-web-socket-requested-protocols")]
     public class AspNetRequestWebSocketRequestedProtocolsLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {

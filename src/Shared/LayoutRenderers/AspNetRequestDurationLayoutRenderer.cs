@@ -13,6 +13,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-duration}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Duration-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-duration")]
     public class AspNetRequestDurationLayoutRenderer : AspNetLayoutRendererBase
     {
@@ -96,7 +97,7 @@ namespace NLog.Web.LayoutRenderers
             if (ReferenceEquals(Culture, CultureInfo.InvariantCulture))
             {
                 var truncateMs = (long)durationMs;
-                if (DurationMsFormat != null && truncateMs >= 0 && truncateMs <= DurationMsFormat.Length)
+                if (DurationMsFormat != null && truncateMs >= 0 && truncateMs < DurationMsFormat.Length)
                 {
                     builder.Append(DurationMsFormat[truncateMs]);
                 }
@@ -113,7 +114,7 @@ namespace NLog.Web.LayoutRenderers
                     if (preciseMs < 10)
                         builder.Append('0');
 
-                    if (DurationMsFormat != null && preciseMs <= DurationMsFormat.Length)
+                    if (DurationMsFormat != null && preciseMs < DurationMsFormat.Length)
                     {
                         builder.Append(DurationMsFormat[preciseMs]);
                     }

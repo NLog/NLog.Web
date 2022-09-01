@@ -11,6 +11,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-contenttype}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-ContentType-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-contenttype")]
     public class AspNetRequestContentTypeLayoutRenderer : AspNetLayoutRendererBase
     {

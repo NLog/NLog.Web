@@ -17,6 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-tracking-consent:Property=IsConsentNeeded}
     /// </code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Tracking-Consent-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-tracking-consent")]
     public class AspNetRequestTrackingConsentLayoutRenderer : AspNetLayoutRendererBase
     {

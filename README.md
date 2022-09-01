@@ -27,8 +27,7 @@ The packages contain targets and layout-renderes specific to ASP.NET (Core), MVC
 - [Getting started for ASP.NET Core 6](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
 - [Getting started for ASP.NET Core 5](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-5)
 - [Getting started for ASP.NET Core 3](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3)
-- [Getting started for ASP.NET Core 2](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-2)
-- [Getting started for .NET Core 2 Console application](https://github.com/NLog/NLog/wiki/Getting-started-with-.NET-Core-2---Console-application)
+- [Getting started for .NET Core Console application](https://github.com/NLog/NLog/wiki/Getting-started-with-.NET-Core-2---Console-application)
 - [How to use structured logging](https://github.com/NLog/NLog/wiki/How-to-use-structured-logging)
 
 ### Config
@@ -48,8 +47,8 @@ The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-pa
 
 - For ASP.NET Core 6, .NET 6
 - For ASP.NET Core 5, .NET 5
-- For ASP.NET Core 3, .NET Core 3.0
-- For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
+- For ASP.NET Core 3, .NET Core 3
+- For ASP.NET Core 2.1 .NET Standard 2.0 for .NET 4.6.1
 
 ℹ️  Missing the trace and debug logs? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-2%3F)
 

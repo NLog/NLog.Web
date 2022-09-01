@@ -91,6 +91,22 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        public void KeyFoundRendersValue_QueryString_Single_Item_Json_Formatting_KeyLowercase()
+        {
+            var expectedResult = "[{\"id\":\"1\"}]";
+
+            var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"));
+
+            renderer.QueryStringKeys = new List<string> { "Id" };
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
+            renderer.LowerCaseKeys = true;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
         public void KeyFoundRendersValue_QueryString_Multiple_Item_Flat_Formatting()
         {
             var expectedResult = "Id=1,Id2=2";
@@ -99,6 +115,22 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             renderer.QueryStringKeys = new List<string> { "Id", "Id2" };
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void KeyFoundRendersValue_QueryString_Multiple_Item_Flat_Formatting_KeyLowercase()
+        {
+            var expectedResult = "id=1,id2=2";
+
+            var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
+
+            renderer.QueryStringKeys = new List<string> { "Id", "Id2" };
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
+            renderer.LowerCaseKeys = true;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -243,7 +275,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-        [Fact] public void MultipleValuesForOneKeyShouldWork_ValuesOnly()
+        [Fact]
+        public void MultipleValuesForOneKeyShouldWork_ValuesOnly()
         {
             var expectedResult = "1,2,3";
 
@@ -258,7 +291,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-    
+
         /// <summary>
         /// Create tuple with 1 or more values (with 1 key)
         /// </summary>

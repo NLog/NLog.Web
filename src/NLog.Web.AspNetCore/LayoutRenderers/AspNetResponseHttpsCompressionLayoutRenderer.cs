@@ -23,22 +23,16 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-response-https-compression}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-HTTPS-Compression-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-https-compression")]
     public class AspNetResponseHttpsCompressionLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-
-            var mode = HttpsCompressionMode.Default;
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            var compression = features?.Get<IHttpsCompressionFeature>();
-            if (compression != null)
-            {
-                mode = compression.Mode;
-            }
-            builder.Append(mode);
-
+            var compressionMode = features?.Get<IHttpsCompressionFeature>()?.Mode ?? HttpsCompressionMode.Default;
+            builder.Append(compressionMode);
         }
     }
 }

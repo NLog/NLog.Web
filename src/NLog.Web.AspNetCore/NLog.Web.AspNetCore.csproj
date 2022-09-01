@@ -19,16 +19,17 @@ Supported platforms:
     <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web.AspNetCore</AssemblyName>
     <PackageId>NLog.Web.AspNetCore</PackageId>
-    <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext;session</PackageTags>
+    <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext</PackageTags>
     <PackageReleaseNotes>
-## Improvements
+- Loading NLog.config from ContentRootPath as last fallback (#861) (@snakefoot)
+- Updated Microsoft.AspNetCore.Abstractions to match Microsoft.AspNetCore.Http (#858) (@snakefoot)
+- Updated NLog.Extensions.Logging to v5.0.3 (#863) (@snakefoot)
 
-- [#749] Include ContentRootPath when scanning for NLog.config candidate (#749) (@snakefoot)
-- [#747] NLogRequestLogging - Added DurationThresholdMs + ExcludeRequestPaths (#747) (@snakefoot)
+List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
-NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html
+List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-renderers&amp;search=package:nlog.web.aspnetcore
     </PackageReleaseNotes>
     <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
@@ -75,13 +76,13 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-	<PackageReference Include="NLog.Extensions.Logging" Version="5.0.1" />
+	<PackageReference Include="NLog.Extensions.Logging" Version="5.0.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
-    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->
+    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.22" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="4.5.1" />
   </ItemGroup>
   <ItemGroup>

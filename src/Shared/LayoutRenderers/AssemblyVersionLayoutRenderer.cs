@@ -9,6 +9,10 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Extend NLog.LayoutRenderers.AssemblyVersionLayoutRenderer with ASP.NET Full and Core support
     /// </summary>
+    /// <remarks>
+    /// <code>${assembly-version}</code>
+    /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AssemblyVersion-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("assembly-version")]
     [ThreadAgnostic]
     public class AssemblyVersionLayoutRenderer : NLog.LayoutRenderers.AssemblyVersionLayoutRenderer
