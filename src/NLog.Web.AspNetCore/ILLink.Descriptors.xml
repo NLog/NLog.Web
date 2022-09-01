@@ -1,0 +1,5 @@
+<linker>
+  <assembly fullname="NLog" preserve="all" />
+  <assembly fullname="NLog.Extensions.Logging" preserve="all" />
+  <assembly fullname="NLog.Web.AspNetCore" preserve="all" />
+</linker>
