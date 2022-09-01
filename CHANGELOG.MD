@@ -4,6 +4,15 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.1.4 (2022/09/01)
+
+- **NLog.Web.AspNetCore**
+  - [#865](https://github.com/NLog/NLog.Web/pull/865) Added embedded resource ILLink.Descriptors.xml (#865) (@snakefoot)
+  - [#865](https://github.com/NLog/NLog.Web/pull/865) Updated NLog.Extensions.Logging to v5.0.4 (#865) (@snakefoot)
+
+- **NLog.Web**
+  - [#865](https://github.com/NLog/NLog.Web/pull/865) Updated dependency NLog v5.0.4 (#863) (@snakefoot)
+
 ### Version 5.1.2 (2022/09/01)
 
 - **NLog.Web.AspNetCore**
