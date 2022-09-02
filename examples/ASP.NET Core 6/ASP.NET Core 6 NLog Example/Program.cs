@@ -12,7 +12,6 @@ try
 
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();
-    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
     builder.Host.UseNLog();
 
     var app = builder.Build();
@@ -29,6 +28,8 @@ try
     app.UseStaticFiles();
 
     app.UseRouting();
+
+    //app.UseAuthorization()
 
     app.MapControllerRoute(
         name: "default",
