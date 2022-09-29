@@ -45,7 +45,7 @@ namespace NLog.Web
             var config = builder.Build();
             if (!string.IsNullOrEmpty(nlogConfigSection) && config.GetSection(nlogConfigSection)?.GetChildren().Any() == true)
             {
-                return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb()).LoadConfigurationFromSection(config, nlogConfigSection);
+                return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config)).LoadConfigurationFromSection(config, nlogConfigSection);
             }
             else
             {
