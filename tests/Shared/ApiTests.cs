@@ -155,6 +155,19 @@
         }
 
         [Fact]
+        public void NoThreadAgnostic_For_HttpContext()
+        {
+            foreach (Type type in allTypes)
+            {
+                if (typeof(AspNetLayoutRendererBase).IsAssignableFrom(type))
+                {
+                    var threadAgnosticAttribute = type.GetCustomAttribute<ThreadAgnosticAttribute>();
+                    Assert.True(threadAgnosticAttribute is null, $"{type.ToString()} cannot be [ThreadAgnostic]");
+                }
+            }
+        }
+
+        [Fact]
         public void RequiredConfigOptionMustBeClass()
         {
             foreach (Type type in allTypes)
