@@ -4,6 +4,15 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.1.5 (2022/10/26)
+
+- **NLog.Web.AspNetCore**
+  - [#875](https://github.com/NLog/NLog.Web/pull/875) Introduced NET6 since LTS (#875) (@snakefoot)
+  - [#875](https://github.com/NLog/NLog.Web/pull/875) Updated NLog.Extensions.Logging to v5.1.0 (#875) (@snakefoot)
+
+- **NLog.Web**
+  - [#875](https://github.com/NLog/NLog.Web/pull/875) Updated dependency NLog v5.0.5 (#875) (@snakefoot)
+
 ### Version 5.1.4 (2022/09/01)
 
 - **NLog.Web.AspNetCore**

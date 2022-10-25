@@ -64,7 +64,7 @@ namespace NLog.Web
             {
                 if (exception != null)
                 {
-                    _logger.Log(logLevel, 0, exception, "HttpRequest Exception", Array.Empty<object>());
+                    _logger.Log(logLevel, 0, exception, "HttpRequest Exception");
                 }
                 else
                 {
@@ -73,12 +73,12 @@ namespace NLog.Web
                         case Microsoft.Extensions.Logging.LogLevel.Trace:
                         case Microsoft.Extensions.Logging.LogLevel.Debug:
                         case Microsoft.Extensions.Logging.LogLevel.Information:
-                            _logger.Log(logLevel, 0, null, "HttpRequest Completed", Array.Empty<object>());
+                            _logger.Log(logLevel, 0, null, "HttpRequest Completed");
                             break;
                         case Microsoft.Extensions.Logging.LogLevel.Warning:
                         case Microsoft.Extensions.Logging.LogLevel.Error:
                         case Microsoft.Extensions.Logging.LogLevel.Critical:
-                            _logger.Log(logLevel, 0, null, "HttpRequest Failure", Array.Empty<object>());
+                            _logger.Log(logLevel, 0, null, "HttpRequest Failure");
                             break;
                     }
                 }

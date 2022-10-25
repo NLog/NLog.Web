@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
@@ -21,11 +21,8 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Added embedded resource ILLink.Descriptors.xml (#865) (@snakefoot)
-- Updated NLog.Extensions.Logging to v5.0.4 (#865) (@snakefoot)
-- Loading NLog.config from ContentRootPath as last fallback (#861) (@snakefoot)
-- Updated Microsoft.AspNetCore.Abstractions to match Microsoft.AspNetCore.Http (#858) (@snakefoot)
-- Updated NLog.Extensions.Logging to v5.0.3 (#863) (@snakefoot)
+- Introduced Introduced NET6 since LTS (@snakefoot)
+- Updated NLog.Extensions.Logging to v5.1.0 (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -78,7 +75,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-	<PackageReference Include="NLog.Extensions.Logging" Version="5.0.4" />
+	<PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
