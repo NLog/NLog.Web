@@ -7,11 +7,11 @@ Date format: (year/month/day)
 ### Version 5.1.5 (2022/10/26)
 
 - **NLog.Web.AspNetCore**
-  - [#875](https://github.com/NLog/NLog.Web/pull/875) Introduced NET6 since LTS (#875) (@snakefoot)
-  - [#875](https://github.com/NLog/NLog.Web/pull/875) Updated NLog.Extensions.Logging to v5.1.0 (#875) (@snakefoot)
+  - [#876](https://github.com/NLog/NLog.Web/pull/876) Introduced NET6 since LTS (#876) (@snakefoot)
+  - [#876](https://github.com/NLog/NLog.Web/pull/876) Updated NLog.Extensions.Logging to v5.1.0 (#876) (@snakefoot)
 
 - **NLog.Web**
-  - [#875](https://github.com/NLog/NLog.Web/pull/875) Updated dependency NLog v5.0.5 (#875) (@snakefoot)
+  - [#876](https://github.com/NLog/NLog.Web/pull/876) Updated dependency NLog v5.0.5 (#876) (@snakefoot)
 
 ### Version 5.1.4 (2022/09/01)
 
