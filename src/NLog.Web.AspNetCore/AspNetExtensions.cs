@@ -136,7 +136,7 @@ namespace NLog.Web
         {
             AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
             {
-                config = SetupNLogConfigSettings(serviceProvider, config);
+                config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
                 // Delay initialization of targets until we have loaded config-settings
                 var logFactory = factoryBuilder(serviceProvider);
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, opt, logFactory);
@@ -245,7 +245,7 @@ namespace NLog.Web
         {
             AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
             {
-                config = SetupNLogConfigSettings(serviceProvider, config);
+                config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
                 // Delay initialization of targets until we have loaded config-settings
                 var logFactory = factoryBuilder(serviceProvider);
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options, logFactory);
@@ -366,7 +366,7 @@ namespace NLog.Web
         {
             NLogLoggerProvider provider = new NLogLoggerProvider(options, logFactory ?? LogManager.LogFactory);
 
-            var configuration = SetupNLogConfigSettings(serviceProvider, hostConfiguration);
+            var configuration = SetupNLogConfigSettings(serviceProvider, hostConfiguration, provider.LogFactory);
 
             if (configuration != null && (!ReferenceEquals(configuration, hostConfiguration) || options == null))
             {
@@ -438,14 +438,11 @@ namespace NLog.Web
             return cfg?.LoggingRules?.Count > 0 && cfg?.AllTargets?.Count > 0;
         }
 
-        private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration)
+        private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration, LogFactory logFactory)
         {
             ServiceLocator.ServiceProvider = serviceProvider;
-            configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
-            if (configuration != null)
-            {
-                ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
-            }
+            configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration) ?? ConfigSettingLayoutRenderer.DefaultConfiguration;
+            logFactory.Setup().SetupExtensions(ext => ext.RegisterConfigSettings(configuration));
             return configuration;
         }
 

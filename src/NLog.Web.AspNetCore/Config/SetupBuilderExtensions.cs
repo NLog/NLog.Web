@@ -102,11 +102,7 @@ namespace NLog.Web
                 configuration = serviceProvider.GetService(typeof(IConfiguration)) as IConfiguration;
             }
 
-            if (configuration != null)
-            { 
-                setupBuilder.SetupExtensions(e => e.RegisterConfigSettings(configuration));
-            }
-
+            setupBuilder.SetupExtensions(e => e.RegisterConfigSettings(configuration ?? ConfigSettingLayoutRenderer.DefaultConfiguration));
             return setupBuilder;
         }
     }
