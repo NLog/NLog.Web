@@ -441,7 +441,7 @@ namespace NLog.Web
         private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration, LogFactory logFactory)
         {
             ServiceLocator.ServiceProvider = serviceProvider;
-            configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration) ?? ConfigSettingLayoutRenderer.DefaultConfiguration;
+            configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
             logFactory.Setup().SetupExtensions(ext => ext.RegisterConfigSettings(configuration));
             return configuration;
         }
