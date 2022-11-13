@@ -6,8 +6,6 @@ QUESTIONS are preferred on StackOverflow. You could expect a faster response the
 
 Please only post issues here related to NLog.Web. If unsure, please post on https://github.com/NLog/NLog/issues/new
 
-For .NET Core users, please check the platform support: https://github.com/NLog/NLog/wiki/platform-support
-
 **Type** (choose one):
 
 - Bug
@@ -15,13 +13,13 @@ For .NET Core users, please check the platform support: https://github.com/NLog/
 - Question
 
 
-**NLog version**: (e.g. 4.2.3)
+**NLog version**: (e.g. 4.5.6)
 
-**NLog.Web/NLog.Web.AspNetCore version**: 
+**NLog.Web / NLog.Web.AspNetCore version**: 
 
 **NLog.Extensions.Logging version**: 
 
-**Platform**: .Net 3.5 / .Net 4.0 / .Net 4.5/ .NET Core 1 / .NET Core 2 
+**Platform**: .Net 3.5 / .Net 4.6 / .NET Core 3.1 / .NET 6.0
 
 **Current NLog config** (xml or C#, if relevant)
 
@@ -50,5 +48,3 @@ In case of a FEATURE REQUEST:
  
  - Why do we need it?
  - An example of the XML config, if relevant. 
-
-
