@@ -17,9 +17,7 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=coverage)](https://sonarcloud.io/component_measures?id=nlog.web&branch=master&metric=coverage) 
 
-These packages are extensions to [NLog](https://github.com/NLog/NLog/). 
-
-The packages contain targets and layout-renderes specific to ASP.NET (Core), MVC and IIS.
+These packages are extensions to [NLog](https://github.com/NLog/NLog/), and provides targets and layout-renderes specific to ASP.NET (Core), MVC and IIS.
 
 ## Getting started with NLog
 
@@ -50,7 +48,7 @@ The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-pa
 - For ASP.NET Core 3, .NET Core 3
 - For ASP.NET Core 2.1 .NET Standard 2.0 for .NET 4.6.1
 
-ℹ️  Missing the trace and debug logs? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-2%3F)
+ℹ️  Missing the trace and debug logs? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-6%3F)
 
 Use the NLog.Web.AspNetCore package
 
