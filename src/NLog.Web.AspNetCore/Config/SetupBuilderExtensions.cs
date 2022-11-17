@@ -25,7 +25,12 @@ namespace NLog.Web
             var currentBasePath = basePath;
             if (currentBasePath is null)
             {
-                currentBasePath = AppContext.BaseDirectory;
+                var webHostDefaultConfig = new ConfigurationBuilder()
+                    .AddEnvironmentVariables(prefix: "ASPNETCORE_")
+                    .Build();
+
+                var contentRootPath = webHostDefaultConfig.GetValue<string>(Microsoft.AspNetCore.Hosting.WebHostDefaults.ContentRootKey);
+                currentBasePath = ResolveContentRootPath(contentRootPath, AppContext.BaseDirectory);
                 if (string.IsNullOrEmpty(currentBasePath))
                 {
                     currentBasePath = Directory.GetCurrentDirectory();
@@ -84,6 +89,19 @@ namespace NLog.Web
                 NLog.Common.InternalLogger.Error(ex, "Failed to lookup environment variable {0}", variableName);
                 return null;
             }
+        }
+
+        private static string ResolveContentRootPath(string contentRootPath, string basePath)
+        {
+            if (string.IsNullOrEmpty(contentRootPath))
+            {
+                return basePath;
+            }
+            if (Path.IsPathRooted(contentRootPath))
+            {
+                return contentRootPath;
+            }
+            return Path.Combine(Path.GetFullPath(basePath), contentRootPath);
         }
 #endif
 
