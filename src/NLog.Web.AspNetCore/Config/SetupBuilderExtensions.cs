@@ -21,14 +21,18 @@ namespace NLog.Web
         public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
+            basePath = basePath ?? GetAspNetCoreEnvironment("ASPNETCORE_CONTENTROOT") ?? GetAspNetCoreEnvironment("DOTNET_CONTENTROOT");
 
             var currentBasePath = basePath;
             if (currentBasePath is null)
             {
-                currentBasePath = AppContext.BaseDirectory;
-                if (string.IsNullOrEmpty(currentBasePath))
+                currentBasePath = Environment.CurrentDirectory;
+
+                var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                var normalizeAppDir = Path.GetFullPath(AppContext.BaseDirectory).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                if (normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
                 {
-                    currentBasePath = Directory.GetCurrentDirectory();
+                    currentBasePath = AppContext.BaseDirectory; // Avoid using Windows-System32 as current directory
                 }
             }
 
