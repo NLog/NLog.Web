@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 #if ASP_NET_CORE
 using NLog.Web.DependencyInjection;
@@ -13,6 +14,7 @@ using NLog.Web.Internal;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
+using System.Linq;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -40,12 +42,13 @@ namespace NLog.Web.LayoutRenderers
         }
         private IHostEnvironment _hostEnvironment;
         private string _contentRootPath;
+        private static string _currentAppPath;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var contentRootPath = _contentRootPath ?? (_contentRootPath = ResolveContentRootPath());
-            builder.Append(contentRootPath ?? LookupBaseDirectory());
+            builder.Append(contentRootPath ?? _currentAppPath);
         }
 
         private IHostEnvironment ResolveHostEnvironment()
@@ -63,41 +66,53 @@ namespace NLog.Web.LayoutRenderers
             var contentRootPath = HostEnvironment?.ContentRootPath;
             if (string.IsNullOrEmpty(contentRootPath))
             {
-                try
-                {
-                    contentRootPath = Environment.GetEnvironmentVariable("ASPNETCORE_CONTENTROOT");
-                }
-                catch
-                {
-                    // Not supported or access denied
-                }
+                contentRootPath = GetAspNetCoreEnvironment("ASPNETCORE_CONTENTROOT") ?? GetAspNetCoreEnvironment("DOTNET_CONTENTROOT");
             }
 #else
             var contentRootPath = HostEnvironment?.MapPath("~");
 #endif
-            return string.IsNullOrEmpty(contentRootPath) ? null : contentRootPath;
+            return TrimEndDirectorySeparator(contentRootPath);
         }
 
-        private static string LookupBaseDirectory()
+        private static string TrimEndDirectorySeparator(string directoryPath)
+        {
+            return string.IsNullOrEmpty(directoryPath) ? null : directoryPath.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
+        }
+
+        private static string ResolveCurrentAppDirectory()
         {
 #if ASP_NET_CORE
-            var baseDirectory = AppContext.BaseDirectory;
+            var currentAppPath = AppContext.BaseDirectory;
 #else
-            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var currentAppPath = AppDomain.CurrentDomain.BaseDirectory;
 #endif
-            if (string.IsNullOrEmpty(baseDirectory))
-            {
-                try
-                {
-                    baseDirectory = System.IO.Directory.GetCurrentDirectory();
-                }
-                catch
-                {
-                    // Not supported or access denied
-                }
-            }
 
-            return baseDirectory; 
+            try
+            {
+                var currentBasePath = Environment.CurrentDirectory;
+                var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                var normalizeAppDir = Path.GetFullPath(currentAppPath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                if (string.IsNullOrEmpty(normalizeCurDir) || normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    currentBasePath = currentAppPath; // Avoid using Windows-System32 as current directory
+                }
+                return currentBasePath;
+            }
+            catch
+            {
+                // Not supported or access denied
+                return currentAppPath;
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void InitializeLayoutRenderer()
+        {
+            if (string.IsNullOrEmpty(_currentAppPath))
+            {
+                // Capture current directory at startup, before it changes
+                _currentAppPath = TrimEndDirectorySeparator(ResolveCurrentAppDirectory());
+            }
         }
 
         /// <inheritdoc/>
@@ -107,5 +122,24 @@ namespace NLog.Web.LayoutRenderers
             _contentRootPath = null;
             base.CloseLayoutRenderer();
         }
+
+#if ASP_NET_CORE
+        private static string GetAspNetCoreEnvironment(string variableName)
+        {
+            try
+            {
+                var environment = Environment.GetEnvironmentVariable(variableName);
+                if (string.IsNullOrWhiteSpace(environment))
+                    return null;
+
+                return environment.Trim();
+            }
+            catch (Exception ex)
+            {
+                NLog.Common.InternalLogger.Error(ex, "Failed to lookup environment variable {0}", variableName);
+                return null;
+            }
+        }
+#endif
     }
 }

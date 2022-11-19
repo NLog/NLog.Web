@@ -30,7 +30,7 @@ namespace NLog.Web
 
                 var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 var normalizeAppDir = Path.GetFullPath(AppContext.BaseDirectory).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                if (normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
+                if (string.IsNullOrWhiteSpace(normalizeCurDir) || normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
                 {
                     currentBasePath = AppContext.BaseDirectory; // Avoid using Windows-System32 as current directory
                 }
