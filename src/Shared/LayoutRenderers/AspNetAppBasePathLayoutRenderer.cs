@@ -48,7 +48,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var contentRootPath = _contentRootPath ?? (_contentRootPath = ResolveContentRootPath());
-            builder.Append(contentRootPath ?? _currentAppPath);
+            builder.Append(contentRootPath ?? ResolveCurrentAppDirectory());
         }
 
         private IHostEnvironment ResolveHostEnvironment()
@@ -81,6 +81,9 @@ namespace NLog.Web.LayoutRenderers
 
         private static string ResolveCurrentAppDirectory()
         {
+            if (!string.IsNullOrEmpty(_currentAppPath))
+                return _currentAppPath;
+
 #if ASP_NET_CORE
             var currentAppPath = AppContext.BaseDirectory;
 #else
@@ -96,23 +99,20 @@ namespace NLog.Web.LayoutRenderers
                 {
                     currentBasePath = currentAppPath; // Avoid using Windows-System32 as current directory
                 }
-                return currentBasePath;
+                return _currentAppPath = TrimEndDirectorySeparator(currentBasePath);
             }
             catch
             {
                 // Not supported or access denied
-                return currentAppPath;
+                return _currentAppPath = TrimEndDirectorySeparator(currentAppPath);
             }
         }
 
         /// <inheritdoc/>
         protected override void InitializeLayoutRenderer()
         {
-            if (string.IsNullOrEmpty(_currentAppPath))
-            {
-                // Capture current directory at startup, before it changes
-                _currentAppPath = TrimEndDirectorySeparator(ResolveCurrentAppDirectory());
-            }
+            ResolveCurrentAppDirectory();   // Capture current directory at startup, before it changes
+            base.InitializeLayoutRenderer();
         }
 
         /// <inheritdoc/>
