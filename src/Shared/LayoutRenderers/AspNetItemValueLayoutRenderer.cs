@@ -40,13 +40,12 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        [RequiredParameter]
         [DefaultParameter]
         public string Item { get; set; }
 
         /// <summary>
         /// Gets or sets the object-property-navigation-path for lookup of nested property
-        /// If this is set the Item should not have any dots in its string and also
+        /// If this is set the Item property will be ignored and
         /// this will set EvaluateNestedProperties to true.
         /// Example:
         /// Item="person";
@@ -82,17 +81,16 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var item = Item;
-            if (item == null)
-                return;
-
             var context = HttpContextAccessor.HttpContext;
             object value = null;
 
             // Function using the Item string as the object path
             if (ObjectPath == null)
             {
-                value = PropertyReader.GetValue(item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+                if (Item == null)
+                    return;
+
+                value = PropertyReader.GetValue(Item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
             }
             // Function using the ObjectPath as the object path, hard code evaluateNestedProperties argument to true
             else
