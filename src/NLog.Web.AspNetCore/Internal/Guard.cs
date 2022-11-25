@@ -31,7 +31,7 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#if NET461 || NETSTANDARD2_0
+#if !NETCOREAPP3_1_OR_GREATER
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Parameter)]
