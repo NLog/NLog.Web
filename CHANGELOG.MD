@@ -4,6 +4,51 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.1.5 (2022/10/26)
+
+- **NLog.Web.AspNetCore**
+  - [#876](https://github.com/NLog/NLog.Web/pull/876) Introduced NET6 since LTS (#876) (@snakefoot)
+  - [#876](https://github.com/NLog/NLog.Web/pull/876) Updated NLog.Extensions.Logging to v5.1.0 (#876) (@snakefoot)
+
+- **NLog.Web**
+  - [#876](https://github.com/NLog/NLog.Web/pull/876) Updated dependency NLog v5.0.5 (#876) (@snakefoot)
+
+### Version 5.1.4 (2022/09/01)
+
+- **NLog.Web.AspNetCore**
+  - [#865](https://github.com/NLog/NLog.Web/pull/865) Added embedded resource ILLink.Descriptors.xml (#865) (@snakefoot)
+  - [#865](https://github.com/NLog/NLog.Web/pull/865) Updated NLog.Extensions.Logging to v5.0.4 (#865) (@snakefoot)
+
+- **NLog.Web**
+  - [#865](https://github.com/NLog/NLog.Web/pull/865) Updated dependency NLog v5.0.4 (#863) (@snakefoot)
+
+### Version 5.1.2 (2022/09/01)
+
+- **NLog.Web.AspNetCore**
+  - [#861](https://github.com/NLog/NLog.Web/pull/861) Loading NLog.config from ContentRootPath as last fallback (#861) (@snakefoot)
+  - [#858](https://github.com/NLog/NLog.Web/pull/858) Updated Microsoft.AspNetCore.Abstractions to match Microsoft.AspNetCore.Http (#858) (@snakefoot)
+  - [#863](https://github.com/NLog/NLog.Web/pull/863) Updated NLog.Extensions.Logging to v5.0.3 (#863) (@snakefoot)
+
+- **NLog.Web**
+  - [#863](https://github.com/NLog/NLog.Web/pull/863) Updated dependency NLog v5.0.3 (#863) (@snakefoot)
+
+### Version 5.1.1 (2022/08/17)
+
+- **NLog.Web.AspNetCore**
+  - [#836](https://github.com/NLog/NLog.Web/pull/836) Fixed offset by one in AspNetRequestDurationLayoutRenderer (#836) (@snakefoot)
+  - [#840](https://github.com/NLog/NLog.Web/pull/840) Added option LowercaseKeys for ${aspnet-request-querystring} (#840) (@czd890)
+  - [#845](https://github.com/NLog/NLog.Web/pull/845) Added ${aspnet-request-has-posted-body} Layout Renderer (#845) (@bakgerman)
+  - [#845](https://github.com/NLog/NLog.Web/pull/845) Added ${aspnet-request-stream-id} Layout Renderer (#845) (@bakgerman)
+  - [#850](https://github.com/NLog/NLog.Web/pull/850) + [#853](https://github.com/NLog/NLog.Web/pull/853)  Improved re-Entrancy scope lock for Session Value Layout Render (#850) (@bakgerman)
+  - [#854](https://github.com/NLog/NLog.Web/pull/854) Updated dependency NLog.Extensions.Logging v5.0.2 (#854) (@snakefoot)
+  - [#856](https://github.com/NLog/NLog.Web/pull/856) Added option Properties for ${aspnet-request-url} instead of booleans (#856) (@bakgerman)
+
+- **NLog.Web**
+  - [#836](https://github.com/NLog/NLog.Web/pull/836) Fixed offset by one in AspNetRequestDurationLayoutRenderer (#836) (@snakefoot)
+  - [#840](https://github.com/NLog/NLog.Web/pull/840) Added option LowercaseKeys for ${aspnet-request-querystring} (#840) (@czd890)
+  - [#854](https://github.com/NLog/NLog.Web/pull/854) Updated dependency NLog v5.0.2 (#854) (@snakefoot)
+  - [#856](https://github.com/NLog/NLog.Web/pull/856) Added option Properties for ${aspnet-request-url} instead of booleans (#856) (@bakgerman)
+
 ### Version 5.1.0 (2022/07/18)
 
 - **NLog.Web.AspNetCore**

@@ -1,12 +1,7 @@
 using System.Text;
 using NLog.Common;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-
-#if !ASP_NET_CORE
-using System.Web;
-#endif
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -31,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 if (!reEntryScopeLock.IsLockAcquired)
                 {
-                    InternalLogger.Debug("aspnet-session-item - Lookup skipped because reentrant-scope-lock already taken");
+                    InternalLogger.Debug("aspnet-session-id - Lookup skipped because reentrant-scope-lock already taken");
                     return;
                 }
 #else

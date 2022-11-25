@@ -55,11 +55,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             renderer.HostEnvironment = hostEnvironment;
             string actual = renderer.Render(new LogEventInfo());
 
-#if !ASP_NET_CORE
-            Assert.Equal(System.IO.Directory.GetCurrentDirectory(), actual);
-#else
-            Assert.Equal(AppContext.BaseDirectory, actual);
-#endif
+            Assert.Equal(System.IO.Directory.GetCurrentDirectory().TrimEnd(System.IO.Path.DirectorySeparatorChar).TrimEnd(System.IO.Path.AltDirectorySeparatorChar), actual);
         }
 
         [Fact]

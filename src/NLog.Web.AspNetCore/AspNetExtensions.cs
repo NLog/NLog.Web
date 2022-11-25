@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using NLog.Config;
@@ -65,7 +64,7 @@ namespace NLog.Web
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            var fileName = Path.Combine(env.ContentRootPath, configFileRelativePath);
+            var fileName = System.IO.Path.Combine(env.ContentRootPath, configFileRelativePath);
             LogManager.LoadConfiguration(fileName);
             return LogManager.Configuration;
         }
@@ -138,7 +137,7 @@ namespace NLog.Web
         {
             AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
             {
-                config = SetupNLogConfigSettings(serviceProvider, config);
+                config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
                 // Delay initialization of targets until we have loaded config-settings
                 var logFactory = factoryBuilder(serviceProvider);
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, opt, logFactory);
@@ -247,7 +246,7 @@ namespace NLog.Web
         {
             AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
             {
-                config = SetupNLogConfigSettings(serviceProvider, config);
+                config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
                 // Delay initialization of targets until we have loaded config-settings
                 var logFactory = factoryBuilder(serviceProvider);
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options, logFactory);
@@ -362,7 +361,7 @@ namespace NLog.Web
         {
             NLogLoggerProvider provider = new NLogLoggerProvider(options, logFactory ?? LogManager.LogFactory);
 
-            var configuration = SetupNLogConfigSettings(serviceProvider, hostConfiguration);
+            var configuration = SetupNLogConfigSettings(serviceProvider, hostConfiguration, provider.LogFactory);
 
             if (configuration != null && (!ReferenceEquals(configuration, hostConfiguration) || options == null))
             {
@@ -397,37 +396,48 @@ namespace NLog.Web
         {
             logFactory.Setup().LoadConfiguration(config =>
             {
-                if (config.Configuration.LoggingRules.Count == 0 && config.Configuration.AllTargets.Count == 0)
+                if (!IsLoggingConfigurationLoaded(config.Configuration))
                 {
-                    var standardPath = Path.Combine(contentRootPath, "NLog.config");
-                    if (File.Exists(standardPath))
+                    config.Configuration = config.LogFactory.Configuration;
+                    if (!IsLoggingConfigurationLoaded(config.Configuration))
                     {
-                        config.Configuration = new XmlLoggingConfiguration(standardPath, config.LogFactory);
-                    }
-                    else
-                    {
-                        var lowercasePath = System.IO.Path.Combine(contentRootPath, "nlog.config");
-                        if (File.Exists(lowercasePath))
-                        {
-                            config.Configuration = new XmlLoggingConfiguration(lowercasePath, config.LogFactory);
-                        }
-                        else
-                        {
-                            config.Configuration = null;    // Perform default loading
-                        }
+                        config.Configuration = LoadXmlLoggingConfigurationFromPath(contentRootPath, config.LogFactory);
                     }
                 }
             });
         }
 
-        private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration)
+        private static LoggingConfiguration LoadXmlLoggingConfigurationFromPath(string contentRootPath, LogFactory logFactory)
+        {
+            var standardPath = System.IO.Path.Combine(contentRootPath, "NLog.config");
+            if (System.IO.File.Exists(standardPath))
+            {
+                return new XmlLoggingConfiguration(standardPath, logFactory);
+            }
+            else
+            {
+                var lowercasePath = System.IO.Path.Combine(contentRootPath, "nlog.config");
+                if (System.IO.File.Exists(lowercasePath))
+                {
+                    return new XmlLoggingConfiguration(lowercasePath, logFactory);
+                }
+                else
+                {
+                    return null;    // Perform default loading
+                }
+            }
+        }
+
+        private static bool IsLoggingConfigurationLoaded(LoggingConfiguration cfg)
+        {
+            return cfg?.LoggingRules?.Count > 0 && cfg?.AllTargets?.Count > 0;
+        }
+
+        private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration, LogFactory logFactory)
         {
             ServiceLocator.ServiceProvider = serviceProvider;
             configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
-            if (configuration != null)
-            {
-                ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
-            }
+            logFactory.Setup().SetupExtensions(ext => ext.RegisterConfigSettings(configuration));
             return configuration;
         }
 

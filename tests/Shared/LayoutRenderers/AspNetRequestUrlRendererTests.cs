@@ -1,4 +1,5 @@
-﻿using NLog.Web.Enums;
+﻿using System;
+using NLog.Web.Enums;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
@@ -7,8 +8,6 @@ using Xunit;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-#else
-using System;
 #endif
 
 namespace NLog.Web.Tests.LayoutRenderers
@@ -26,6 +25,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http");
@@ -38,6 +38,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_IncludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -50,6 +51,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_IncludeQueryString_ExcludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -73,6 +75,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -84,6 +87,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme_IncludePort_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -97,6 +101,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme_IncludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -109,6 +114,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeScheme_ExcludeHost()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -121,6 +127,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeHost()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -132,6 +139,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_ExcludeHost_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
@@ -155,6 +163,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public void UrlPresentRenderNonEmpty_UseRawTarget_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp", rawTarget: "/rawTarget");

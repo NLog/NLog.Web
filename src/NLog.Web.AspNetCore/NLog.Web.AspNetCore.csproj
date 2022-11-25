@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
@@ -21,38 +21,14 @@ Supported platforms:
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext</PackageTags>
     <PackageReleaseNotes>
-Thank you Burak Akgerman (@bakgerman) for making this huge contribution and restoring ${aspnet-request-posted-body}
-      
-## Improvements
+- Introduced Introduced NET6 since LTS (@snakefoot)
+- Updated NLog.Extensions.Logging to v5.1.0 (@snakefoot)
 
-- [#828] Reverted default value for ShutdownOnDispose to false (#828) (@snakefoot)
-- [#815] Added ${aspnet-request-trailers} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-response-trailers} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-response-https-compression} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-request-tracking-consent} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-request-tls-token-binding} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-request-inherent-keep-alive} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-request-http-transport-type} Layout Renderer (#815) (@bakgerman)
-- [#815] Added ${aspnet-request-bidirectional-stream} Layout Renderer (#815) (@bakgerman)
-- [#811] Added ${aspnet-request-servervariable} Layout Renderer (#811) (@bakgerman)
-- [#802] Added ${aspnet-request-tls-handshake} Layout Renderer (#802) (@bakgerman)
-- [#796] Added ${aspnet-request-connection-id} Layout Renderer (#796) (@bakgerman)
-- [#796] Added ${aspnet-response-has-started} Layout Renderer (#796) (@bakgerman)
-- [#789] Added ${aspnet-response-cookie} Layout Renderer (#789) (@bakgerman)
-- [#785] Added ${aspnet-request-client-certificate} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-request-is-web-socket} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-request-local-ip} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-request-local-port} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-request-remote-port} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-request-web-socket-requested-protocols} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-response-contenttype} Layout Renderer (#785) (@bakgerman)
-- [#785] Added ${aspnet-response-headers} Layout Renderer (#785) (@bakgerman)
-- [#781] NLogRequestPostedBodyMiddleware - Restore support for ${aspnet-request-posted-body} (#781) (@bakgerman)
-- [#783] NLogRequestLoggingMiddleware - Added support for custom ShouldLogRequest-delegate (#783) (@snakefoot)
+List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
-NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready.html
+List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-renderers&amp;search=package:nlog.web.aspnetcore
     </PackageReleaseNotes>
     <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.Web</PackageProjectUrl>
@@ -99,13 +75,13 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-	<PackageReference Include="NLog.Extensions.Logging" Version="5.0.2" />
+	<PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
-    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and works with vanilla .NET Core 2.1 SDK -->
+    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.22" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="4.5.1" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +99,13 @@ NLog 5 release post: https://nlog-project.org/2021/08/25/nlog-5-0-preview1-ready
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+      
   <ItemGroup>
     <Content Include="readme.txt">
       <Pack>true</Pack>

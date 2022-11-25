@@ -21,14 +21,18 @@ namespace NLog.Web
         public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
+            basePath = basePath ?? GetAspNetCoreEnvironment("ASPNETCORE_CONTENTROOT") ?? GetAspNetCoreEnvironment("DOTNET_CONTENTROOT");
 
             var currentBasePath = basePath;
             if (currentBasePath is null)
             {
-                currentBasePath = AppContext.BaseDirectory;
-                if (string.IsNullOrEmpty(currentBasePath))
+                currentBasePath = Environment.CurrentDirectory;
+
+                var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                var normalizeAppDir = Path.GetFullPath(AppContext.BaseDirectory).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                if (string.IsNullOrWhiteSpace(normalizeCurDir) || normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
                 {
-                    currentBasePath = Directory.GetCurrentDirectory();
+                    currentBasePath = AppContext.BaseDirectory; // Avoid using Windows-System32 as current directory
                 }
             }
 
@@ -45,7 +49,7 @@ namespace NLog.Web
             var config = builder.Build();
             if (!string.IsNullOrEmpty(nlogConfigSection) && config.GetSection(nlogConfigSection)?.GetChildren().Any() == true)
             {
-                return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb()).LoadConfigurationFromSection(config, nlogConfigSection);
+                return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config)).LoadConfigurationFromSection(config, nlogConfigSection);
             }
             else
             {
@@ -102,11 +106,7 @@ namespace NLog.Web
                 configuration = serviceProvider.GetService(typeof(IConfiguration)) as IConfiguration;
             }
 
-            if (configuration != null)
-            { 
-                setupBuilder.SetupExtensions(e => e.RegisterConfigSettings(configuration));
-            }
-
+            setupBuilder.SetupExtensions(e => e.RegisterConfigSettings(configuration));
             return setupBuilder;
         }
     }

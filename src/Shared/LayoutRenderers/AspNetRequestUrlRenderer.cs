@@ -39,7 +39,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To specify whether to include / exclude the Query string. Default is false.
         /// </summary>
-        [Obsolete("Please use the Properties flags enumeration instead")]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public bool IncludeQueryString 
         {
             get => HasPropertiesFlag(AspNetRequestUrlProperty.Query);
@@ -49,7 +49,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To specify whether to include / exclude the Port. Default is false.
         /// </summary>
-        [Obsolete("Please use the Properties flags enumeration instead")]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public bool IncludePort
         {
             get => HasPropertiesFlag(AspNetRequestUrlProperty.Port);
@@ -59,7 +59,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To specify whether to exclude / include the host. Default is true.
         /// </summary>
-        [Obsolete("Please use the Properties flags enumeration instead")]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public bool IncludeHost
         {
             get => HasPropertiesFlag(AspNetRequestUrlProperty.Host);
@@ -69,7 +69,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To specify whether to exclude / include the scheme. Ex. 'http' or 'https'.  Default is true.
         /// </summary>
-        [Obsolete("Please use the Properties flags enumeration instead")]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public bool IncludeScheme
         {
             get => HasPropertiesFlag(AspNetRequestUrlProperty.Scheme);
@@ -79,7 +79,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// To specify whether to exclude / include the url-path. Default is true.
         /// </summary>
-        [Obsolete("Please use the Properties flags enumeration instead")]
+        [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
         public bool IncludePath
         {
             get => HasPropertiesFlag(AspNetRequestUrlProperty.Path);

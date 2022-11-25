@@ -16,6 +16,7 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-stream-id}</code>
     /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-StreamId-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-stream-id")]
     public class AspNetRequestStreamIdLayoutRenderer : AspNetLayoutRendererBase
     {
@@ -23,8 +24,11 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            var streamIdFeature = features?.Get<IStreamIdFeature>();
-            builder.Append(streamIdFeature?.StreamId);
+            var streamId = features?.Get<IStreamIdFeature>()?.StreamId ?? 0L;
+            if (streamId != 0L)
+            {
+                builder.Append(streamId);
+            }
         }
     }
 }
