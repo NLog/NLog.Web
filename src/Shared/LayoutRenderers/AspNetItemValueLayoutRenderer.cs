@@ -45,6 +45,17 @@ namespace NLog.Web.LayoutRenderers
         public string Item { get; set; }
 
         /// <summary>
+        /// Gets or sets the object-property-navigation-path for lookup of nested property
+        /// If this is set the Item should not have any dots in its string and also
+        /// this will set EvaluateNestedProperties to true.
+        /// Example:
+        /// Item="person";
+        /// ObjectPath="person.Name.First"
+        /// </summary>
+        /// <docgen category='Layout Options' order='20' />
+        public string ObjectPath { get; set; }
+
+        /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
@@ -76,7 +87,18 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
             var context = HttpContextAccessor.HttpContext;
-            var value = PropertyReader.GetValue(item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+            object value = null;
+
+            // Function using the Item string as the object path
+            if (ObjectPath == null)
+            {
+                value = PropertyReader.GetValue(item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+            }
+            // Function using the ObjectPath as the object path, hard code evaluateNestedProperties argument to true
+            else
+            {
+                value = PropertyReader.GetValue(ObjectPath, context?.Items, (items, key) => LookupItemValue(items, key), true);
+            }
             var formatProvider = GetFormatProvider(logEvent, Culture);
             builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
         }
