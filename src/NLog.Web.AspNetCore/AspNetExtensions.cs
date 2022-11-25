@@ -15,12 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-
-#if NET6_0_OR_GREATER
-using ArgumentNullException = System.ArgumentNullException;
-#else
-using ArgumentNullException = NLog.Web.Internal.ArgumentNullException;
-#endif
+using NLog.Internal;
 
 namespace NLog.Web
 {
@@ -293,13 +288,9 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
-                ArgumentNullException.ThrowIfNull(builder
-#if NET461 || NETSTANDARD2_0
-                , nameof(builder)
-#endif
-                );
+            Guard.ThrowIfNull(builder);
 
-            builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment as IHostEnvironment, options, CreateNLogLoggerProvider));
+                builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment as IHostEnvironment, options, CreateNLogLoggerProvider));
             return builder;
         }
 
@@ -318,11 +309,7 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static IHostBuilder UseNLog(this IHostBuilder builder, NLogAspNetCoreOptions options)
         {
-            ArgumentNullException.ThrowIfNull(builder
-#if NET461 || NETSTANDARD2_0
-                , nameof(builder)
-#endif
-            );
+            Guard.ThrowIfNull(builder);
 
 #if ASP_NET_CORE2
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, null, options, CreateNLogLoggerProvider));
