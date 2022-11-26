@@ -245,7 +245,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items["person"].Returns(person);
 #endif
             renderer.Item = "person";
-            renderer.ObjectPath = "person.Name.Last";
+            renderer.ObjectPath = "Name.Last";
 
             renderer.EvaluateAsNestedProperties = false;
 
@@ -281,7 +281,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items.Contains("person").Returns(true);
             httpContext.Items["person"].Returns(person);
 #endif
-            renderer.ObjectPath = "person.Name.Last";
+            renderer.Item = "person";
+            renderer.ObjectPath = "Name.Last";
 
             renderer.EvaluateAsNestedProperties = false;
 

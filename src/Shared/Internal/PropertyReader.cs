@@ -21,8 +21,31 @@ namespace NLog.Web.Internal
                 return null;
             }
 
-            var value = evaluateAsNestedProperties ? GetValueAsNestedProperties(key, container, getVal) : getVal(container, key);
-            return value;
+            return evaluateAsNestedProperties ? GetValueAsNestedProperties(key, container, getVal) : getVal(container, key);
+        }
+
+        /// <summary>
+        /// Get value of a property
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="container">Container to perform value lookup using key</param>
+        /// <param name="getVal">function to get a value with this key</param>
+        /// <param name="objectPath">evaluate the string as a dot notated path to a aproperty in the object, returned by lookup by the key parameter</param>
+        /// <returns>value</returns>
+        public static object GetValue<T>(string key, T container, Func<T, string, object> getVal, string objectPath)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+
+            var value = getVal(container, key);
+            if (value == null)
+            {
+                return null;
+            }
+
+            return GetValueAsNestedProperties(value, objectPath);
         }
 
         private static object GetValueAsNestedProperties<T>(string key, T container, Func<T, string, object> getVal)
@@ -33,6 +56,26 @@ namespace NLog.Web.Internal
             if (value != null && path?.Length > 1)
             {
                 for (int i = 1; i < path.Length; ++i)
+                {
+                    var propertyInfo = GetPropertyInfo(value, path[i]);
+                    value = propertyInfo?.GetValue(value, null);
+                    if (value == null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return value;
+        }
+
+        private static object GetValueAsNestedProperties(object value, string objectPath)
+        {
+            var path = objectPath.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            
+            if (value != null && path?.Length > 0)
+            {
+                for (int i = 0; i < path.Length; ++i)
                 {
                     var propertyInfo = GetPropertyInfo(value, path[i]);
                     value = propertyInfo?.GetValue(value, null);
