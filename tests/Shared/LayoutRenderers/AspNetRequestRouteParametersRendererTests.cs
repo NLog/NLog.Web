@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog.Web.LayoutRenderers;
-using NLog.Web.Enums;
 using Xunit;
-using System.Collections.Specialized;
 using NSubstitute;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
@@ -15,21 +13,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 {
     public class AspNetRequestRouteParametersRendererTests : LayoutRenderersTestBase<AspNetRequestRouteParametersRenderer>
     {
-        [Fact]
-        public void NullRouteParametersRenderersEmptyString()
-        {
-            // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext();
-
-            AddRoutingFeature(httpContext);
-
-            // Act
-            string result = renderer.Render(LogEventInfo.CreateNullEvent());
-
-            // Assert
-            Assert.Empty(result);
-        }
-
 #if ASP_NET_CORE
         [Fact]
         public void NullKeyRendersAllRouteParameters()
@@ -69,6 +52,11 @@ namespace NLog.Web.Tests.LayoutRenderers
             var routingFeature = Substitute.For<IRoutingFeature>();
             var collection = new FeatureCollection();
             collection.Set(routingFeature);
+#if ASP_NET_CORE3
+            var routingValuesFeature = Substitute.For<IRouteValuesFeature>();
+            routingValuesFeature.RouteValues.Returns(routeData.Values);
+            collection.Set(routingValuesFeature);
+#endif
             httpContext.Features.Returns(collection);
 
             routeData.Values.Add("key1", "value1");

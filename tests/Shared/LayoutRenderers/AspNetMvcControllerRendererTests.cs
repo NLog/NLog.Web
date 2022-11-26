@@ -7,8 +7,7 @@ using System.Web.Routing;
 using System.Collections.Specialized;
 using System.Web.SessionState;
 #else
-using Microsoft.Extensions.Primitives;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http.Features;
 #endif
@@ -25,15 +24,48 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullRoutesRenderersEmptyString()
         {
             // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext();
+            var (renderer, _) = CreateWithHttpContext();
 
-            AddRoutingFeature(httpContext);
-            
             // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
             Assert.Empty(result);
         }
+
+#if ASP_NET_CORE
+        [Fact]
+        public void ControllerKeyRendersRouteParameter()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            SetupRouteParameters(httpContext);
+
+            // Act
+            string result = renderer.Render(LogEventInfo.CreateNullEvent());
+
+            // Assert
+            Assert.Equal("controllerName", result);
+        }
+
+        private void SetupRouteParameters(HttpContext httpContext)
+        {
+            var collection = new FeatureCollection();
+            var routeData = new RouteData();
+            var routingFeature = Substitute.For<IRoutingFeature>();
+            collection.Set(routingFeature);
+#if ASP_NET_CORE3
+            var routingValuesFeature = Substitute.For<IRouteValuesFeature>();
+            routingValuesFeature.RouteValues.Returns(routeData.Values);
+            collection.Set(routingValuesFeature);
+#endif
+            httpContext.Features.Returns(collection);
+
+            routeData.Values.Add("action", "actionName");
+            routeData.Values.Add("controller", "controllerName");
+            routingFeature.RouteData.Returns(routeData);
+        }
+#endif
     }
 }

@@ -125,19 +125,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Equal(SslProtocols.Tls13.ToString(), result);
         }
-
-
-        protected override void NullRendersEmptyString()
-        {
-            // Arrange
-            var (renderer, _) = CreateWithHttpContext();
-
-            // Act
-            string result = renderer.Render(LogEventInfo.CreateNullEvent());
-
-            // Assert
-            Assert.Equal("None", result);
-        }
     }
 }
 #endif
