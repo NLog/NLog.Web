@@ -56,6 +56,7 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the session item name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
+        [Obsolete("Instead use Item. Marked obsolete with NLog.Web 5.3")]
         public string Variable { get => Item; set => Item = value; }
 
         /// <summary>

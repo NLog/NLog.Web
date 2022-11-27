@@ -45,7 +45,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, _) = CreateRenderer();
-            renderer.Variable = "a";
+            renderer.Item = "a";
 
             // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
@@ -59,7 +59,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, _) = CreateRenderer();
-            renderer.Variable = "b";
+            renderer.Item = "b";
             renderer.ValueType = SessionValueType.Int32;
 
             // Act
@@ -74,7 +74,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, _) = CreateRenderer();
-            renderer.Variable = "nope";
+            renderer.Item = "nope";
 
             // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
@@ -98,7 +98,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         private class SessionFeatureMock : ISessionFeature
         {
-            #region Implementation of ISessionFeature
+#region Implementation of ISessionFeature
 
             /// <inheritdoc />
             public SessionFeatureMock(ISession session)
@@ -109,7 +109,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             /// <inheritdoc />
             public ISession Session { get; set; }
 
-            #endregion
+#endregion
         }
 
         private class SessionMock : ISession
@@ -123,7 +123,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 _throwsErrorOnGet = throwsErrorOnGet;
             }
 
-            #region Implementation of ISession
+#region Implementation of ISession
 
             /// <summary>
             /// Load the session from the data store. This may throw if the data store is unavailable.
@@ -193,7 +193,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             /// <inheritdoc />
             public IEnumerable<string> Keys => _values.Keys;
 
-            #endregion
+#endregion
         }
     }
 }
