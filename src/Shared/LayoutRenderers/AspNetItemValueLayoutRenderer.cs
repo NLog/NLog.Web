@@ -36,6 +36,8 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-item")]
     public class AspNetItemValueLayoutRenderer : AspNetLayoutRendererBase
     {
+        private readonly NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper _objectPathRenderer = new NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper();
+
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
@@ -53,7 +55,7 @@ namespace NLog.Web.LayoutRenderers
         /// This will emit the First Name property of the object in HttpContext.Items woith the key of 'person' in the collection
         /// </summary>
         /// <docgen category='Layout Options' order='20' />
-        public string ObjectPath { get; set; }
+        public string ObjectPath { get => _objectPathRenderer.ObjectPath; set => _objectPathRenderer.ObjectPath = value; }
 
         /// <summary>
         /// Gets or sets the item variable name.
@@ -67,6 +69,7 @@ namespace NLog.Web.LayoutRenderers
         /// invoked since ObjectPath is set
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
+        [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
@@ -84,24 +87,36 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
+            var item = Item;
+            if (string.IsNullOrEmpty(item))
+            {
+                return;
+            }
 
-            if (Item == null)
+            var context = HttpContextAccessor.HttpContext;
+            if (context is null)
             {
                 return;
             }
 
             object value = null;
 
-            // Function using the Item string as the object path
-            if (ObjectPath == null)
+            if (ObjectPath is null)
             {
-                value = PropertyReader.GetValue(Item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+#pragma warning disable CS0618 // Type or member is obsolete
+                value = PropertyReader.GetValue(item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+#pragma warning restore CS0618 // Type or member is obsolete
+                if (value is null)
+                    return;
             }
-            // Function using the ObjectPath as the object path, hard code evaluateNestedProperties argument to true
             else
             {
-                value = PropertyReader.GetValue(Item, context?.Items, (items, key) => LookupItemValue(items, key), ObjectPath);
+                value = LookupItemValue(context?.Items, item);
+                if (value is null)
+                    return;
+                
+                if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
+                    return;
             }
 
             var formatProvider = GetFormatProvider(logEvent, Culture);
