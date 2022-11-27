@@ -47,7 +47,7 @@ namespace System.Runtime.CompilerServices
 }
 #endif
 
-namespace NLog.Internal
+namespace NLog.Web.Internal
 {
     using System;
     using System.Runtime.CompilerServices;
@@ -60,7 +60,7 @@ namespace NLog.Internal
         {
             if (arg is null)
             {
-                throw new ArgumentNullException(param);
+                throw new ArgumentNullException(string.IsNullOrEmpty(param) ? typeof(T).Name : param);
             }
 
             return arg;
