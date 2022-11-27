@@ -40,9 +40,20 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        [RequiredParameter]
         [DefaultParameter]
+        [RequiredParameter]
         public string Item { get; set; }
+
+        /// <summary>
+        /// Gets or sets the object-property-navigation-path for lookup of nested property.
+        /// In this case the Item should have have any dot notation, as the nested properties path is in this variable
+        /// Example:
+        /// Item="person";
+        /// ObjectPath="Name.First"
+        /// This will emit the First Name property of the object in HttpContext.Items woith the key of 'person' in the collection
+        /// </summary>
+        /// <docgen category='Layout Options' order='20' />
+        public string ObjectPath { get; set; }
 
         /// <summary>
         /// Gets or sets the item variable name.
@@ -51,7 +62,9 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
-        /// Gets or sets whether items with a dot are evaluated as properties or not
+        /// Gets or sets whether the Item string with a dot are evaluated as properties or not
+        /// If ObjectPath is not null, the Item should have no dot notation and nested properties will be automatically
+        /// invoked since ObjectPath is set
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public bool EvaluateAsNestedProperties { get; set; }
@@ -71,12 +84,26 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var item = Item;
-            if (item == null)
-                return;
-
             var context = HttpContextAccessor.HttpContext;
-            var value = PropertyReader.GetValue(item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+
+            if (Item == null)
+            {
+                return;
+            }
+
+            object value = null;
+
+            // Function using the Item string as the object path
+            if (ObjectPath == null)
+            {
+                value = PropertyReader.GetValue(Item, context?.Items, (items, key) => LookupItemValue(items, key), EvaluateAsNestedProperties);
+            }
+            // Function using the ObjectPath as the object path, hard code evaluateNestedProperties argument to true
+            else
+            {
+                value = PropertyReader.GetValue(Item, context?.Items, (items, key) => LookupItemValue(items, key), ObjectPath);
+            }
+
             var formatProvider = GetFormatProvider(logEvent, Culture);
             builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
         }
