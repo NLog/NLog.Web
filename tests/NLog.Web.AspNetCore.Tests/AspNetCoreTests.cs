@@ -249,6 +249,24 @@ namespace NLog.Web.Tests
         }
 
         [Fact]
+        public void UseNLogWithNullWebHostBuilderThrowsArgumentNullException()
+        {
+            IWebHostBuilder builder = null;
+            Assert.Throws<ArgumentNullException>(() => builder.UseNLog());
+
+            try
+            {
+                builder.UseNLog();
+            }
+            catch (Exception e)
+            {
+                Assert.IsType<ArgumentNullException>(e);
+
+                Assert.Equal("builder", (e as ArgumentNullException).ParamName);
+            }
+        }
+
+        [Fact]
         public void UseNLog_ReplaceLoggerFactory_FromConfiguration()
         {
             var host = CreateWebHostBuilder().ConfigureAppConfiguration((context, config) =>
