@@ -260,9 +260,8 @@ namespace NLog.Web.Tests
             }
             catch (Exception e)
             {
-                Assert.IsType<ArgumentNullException>(e);
-
-                Assert.Equal("builder", (e as ArgumentNullException).ParamName);
+                var argNullException = Assert.IsType<ArgumentNullException>(e);
+                Assert.Equal("builder", argNullException.ParamName);    // Verify CallerArgumentExpressionAttribute works
             }
         }
 
