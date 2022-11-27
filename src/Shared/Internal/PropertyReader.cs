@@ -4,6 +4,7 @@ using System.Reflection;
 
 namespace NLog.Web.Internal
 {
+    [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
     internal static class PropertyReader
     {
         /// <summary>
@@ -14,6 +15,7 @@ namespace NLog.Web.Internal
         /// <param name="getVal">function to get a value with this key</param>
         /// <param name="evaluateAsNestedProperties">evaluate <paramref name="key" /> as a nested property path. E.g. A.B is property B inside A.</param>
         /// <returns>value</returns>
+        [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
         public static object GetValue<T>(string key, T container, Func<T, string, object> getVal, bool evaluateAsNestedProperties)
         {
             if (string.IsNullOrEmpty(key))
@@ -24,30 +26,7 @@ namespace NLog.Web.Internal
             return evaluateAsNestedProperties ? GetValueAsNestedProperties(key, container, getVal) : getVal(container, key);
         }
 
-        /// <summary>
-        /// Get value of a property
-        /// </summary>
-        /// <param name="key">key</param>
-        /// <param name="container">Container to perform value lookup using key</param>
-        /// <param name="getVal">function to get a value with this key</param>
-        /// <param name="objectPath">evaluate the string as a dot notated path to a aproperty in the object, returned by lookup by the key parameter</param>
-        /// <returns>value</returns>
-        public static object GetValue<T>(string key, T container, Func<T, string, object> getVal, string objectPath)
-        {
-            if (string.IsNullOrEmpty(key))
-            {
-                return null;
-            }
-
-            var value = getVal(container, key);
-            if (value == null)
-            {
-                return null;
-            }
-
-            return GetValueAsNestedProperties(value, objectPath);
-        }
-
+        [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
         private static object GetValueAsNestedProperties<T>(string key, T container, Func<T, string, object> getVal)
         {
             var path = key.Contains('.') ? key.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries) : null;
@@ -69,26 +48,7 @@ namespace NLog.Web.Internal
             return value;
         }
 
-        private static object GetValueAsNestedProperties(object value, string objectPath)
-        {
-            var path = objectPath.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-            
-            if (value != null && path?.Length > 0)
-            {
-                for (int i = 0; i < path.Length; ++i)
-                {
-                    var propertyInfo = GetPropertyInfo(value, path[i]);
-                    value = propertyInfo?.GetValue(value, null);
-                    if (value == null)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return value;
-        }
-
+        [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
         private static PropertyInfo GetPropertyInfo(object value, string propertyName)
         {
 #if !ASP_NET_CORE

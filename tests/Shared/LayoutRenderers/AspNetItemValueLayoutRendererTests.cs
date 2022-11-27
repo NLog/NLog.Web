@@ -113,7 +113,9 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             var culture = CultureInfo.CurrentUICulture;
             renderer.Variable = variable;
+#pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = true;
+#pragma warning restore CS0618 // Type or member is obsolete
             renderer.Culture = culture;
 
             // Act
@@ -138,7 +140,9 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             var culture = CultureInfo.CurrentUICulture;
             renderer.Variable = variable;
+#pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = true;
+#pragma warning restore CS0618 // Type or member is obsolete
             renderer.Culture = culture;
 
             // Act
@@ -209,7 +213,9 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             renderer.Item = "person.Name.First";
 
+#pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = true;
+#pragma warning restore CS0618 // Type or member is obsolete
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -247,7 +253,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             renderer.Item = "person";
             renderer.ObjectPath = "Name.Last";
 
+#pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = false;
+#pragma warning restore CS0618 // Type or member is obsolete
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -283,8 +291,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             renderer.Item = "person";
             renderer.ObjectPath = "Name.Last";
-
-            renderer.EvaluateAsNestedProperties = false;
 
             // Act
             string result = renderer.Render(new LogEventInfo());

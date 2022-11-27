@@ -4,6 +4,24 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.2.0 (2022/11/27)
+
+- **NLog.Web.AspNetCore**
+  - [#885](https://github.com/NLog/NLog.Web/pull/885) Changed LoadConfigurationFromAppSettings to prioritize current directory (#885) (@snakefoot)
+  - [#887](https://github.com/NLog/NLog.Web/pull/887) Changed AspNetAppBasePathLayoutRenderer to prioritize current directory (#887) (@snakefoot)
+  - [#890](https://github.com/NLog/NLog.Web/pull/890) Add ObjectPath to AspNetItemValueLayoutRenderer as better alternative to EvaluateAsNestedProperties (#890) (@bakgerman)
+  - [#894](https://github.com/NLog/NLog.Web/pull/894) Add ObjectPath to AspNetSessionValueLayoutRenderer as better alternative to EvaluateAsNestedProperties (#894) (@snakefoot)
+  - [#889](https://github.com/NLog/NLog.Web/pull/889) Use CallerArgumentExpressionAttribute in helper method for throwing ArgumentNullException (#889) (@bakgerman)
+  - [#891](https://github.com/NLog/NLog.Web/pull/891) Skip allocating RouteData when only need to lookup single value (#891)  (@snakefoot)
+  - [#878](https://github.com/NLog/NLog.Web/pull/878) + [#879](https://github.com/NLog/NLog.Web/pull/879) Use RegisterConfigSettings instead of ConfigSettingLayoutRenderer (#878 + #879) (@snakefoot)
+  - [#894](https://github.com/NLog/NLog.Web/pull/894) Updated dependency NLog.Extensions.Logging v5.2.0 (#894) (@snakefoot)
+
+- **NLog.Web**
+  - [#890](https://github.com/NLog/NLog.Web/pull/890) Add ObjectPath to AspNetItemValueLayoutRenderer as better alternative to EvaluateAsNestedProperties (#890) (@bakgerman)
+  - [#894](https://github.com/NLog/NLog.Web/pull/894) Add ObjectPath to AspNetSessionValueLayoutRenderer as better alternative to EvaluateAsNestedProperties (#894) (@snakefoot)
+  - [#889](https://github.com/NLog/NLog.Web/pull/889) Use CallerArgumentExpressionAttribute in helper method for throwing ArgumentNullException (#889) (@bakgerman)
+  - [#894](https://github.com/NLog/NLog.Web/pull/894) Updated dependency NLog v5.1.0 (#894) (@snakefoot)
+
 ### Version 5.1.5 (2022/10/26)
 
 - **NLog.Web.AspNetCore**
