@@ -51,10 +51,6 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- EmbedUntrackedSources for deterministic build -->
-	
-	<IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	
 	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
