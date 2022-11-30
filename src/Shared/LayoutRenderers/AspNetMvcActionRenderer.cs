@@ -29,11 +29,12 @@ namespace NLog.Web.LayoutRenderers
             var context = HttpContextAccessor.HttpContext;
 
 #if !ASP_NET_CORE
-            var controller = RouteTable.Routes?.GetRouteData(context)?.Values[key]?.ToString();
+            object actionValue = null;
+            RouteTable.Routes?.GetRouteData(context)?.Values?.TryGetValue(key, out actionValue);
 #else
-            var controller = context?.GetRouteData()?.Values?[key]?.ToString();
+            var actionValue = context?.GetRouteValue(key);
 #endif
-            builder.Append(controller);
+            builder.Append(actionValue?.ToString());
         }
     }
 }

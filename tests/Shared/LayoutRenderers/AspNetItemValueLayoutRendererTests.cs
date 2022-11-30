@@ -100,7 +100,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Theory, MemberData(nameof(NestedPropertyData))]
-        public void NestedPropertyRendersValue(string itemKey, string variable, object data, object expectedValue)
+        public void NestedPropertyRendersValueItem(string itemKey, string variable, object data, object expectedValue)
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -113,7 +113,36 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             var culture = CultureInfo.CurrentUICulture;
             renderer.Variable = variable;
+#pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = true;
+#pragma warning restore CS0618 // Type or member is obsolete
+            renderer.Culture = culture;
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(Convert.ToString(expectedValue, culture), result);
+        }
+
+        [Theory, MemberData(nameof(NestedPropertyData))]
+        public void NestedPropertyRendersValueObjectPath(string itemKey, string variable, object data,
+            object expectedValue)
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+#if ASP_NET_CORE
+            httpContext.Items = new Dictionary<object, object> {{itemKey, data}};
+#else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains(itemKey).Returns(true);
+            httpContext.Items[itemKey].Returns(data);
+#endif
+            var culture = CultureInfo.CurrentUICulture;
+            renderer.Variable = variable;
+#pragma warning disable CS0618 // Type or member is obsolete
+            renderer.EvaluateAsNestedProperties = true;
+#pragma warning restore CS0618 // Type or member is obsolete
             renderer.Culture = culture;
 
             // Act
@@ -127,11 +156,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             get
             {
-                yield return new object[] { "string" };
-                yield return new object[] { 1 };
-                yield return new object[] { 1.5 };
-                yield return new object[] { DateTime.Now };
-                yield return new object[] { Tuple.Create("a", 1) };
+                yield return new object[] {"string"};
+                yield return new object[] {1};
+                yield return new object[] {1.5};
+                yield return new object[] {DateTime.Now};
+                yield return new object[] {Tuple.Create("a", 1)};
             }
         }
 
@@ -139,9 +168,135 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             get
             {
-                yield return new object[] { "key", "key.Item1", Tuple.Create("value"), "value" };
-                yield return new object[] { "key", "key.Item1.Item1", Tuple.Create(Tuple.Create(1)), 1 };
+                yield return new object[] {"key", "key.Item1", Tuple.Create("value"), "value"};
+                yield return new object[] {"key", "key.Item1.Item1", Tuple.Create(Tuple.Create(1)), 1};
             }
+        }
+
+
+        // Nested Properties Tests
+        internal class Person
+        {
+            public Name Name { get; set; }
+        }
+
+        internal class Name
+        {
+            public string First { get; set; }
+            public string Last { get; set; }
+        }
+
+        [Fact]
+        public void NestedItemRendersProperly()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            string expectedValue = "John";
+
+            Person person = new Person
+            {
+                Name = new Name
+                {
+                    First = "John",
+                    Last = "Smith"
+                }
+            };
+
+#if ASP_NET_CORE
+            httpContext.Items = new Dictionary<object, object>();
+            httpContext.Items.Add("person", person);
+#else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains("person").Returns(true);
+            httpContext.Items["person"].Returns(person);
+#endif
+            renderer.Item = "person.Name.First";
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            renderer.EvaluateAsNestedProperties = true;
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedValue, result);
+        }
+
+
+        [Fact]
+        public void NestedObjectPathRendersProperly()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            string expectedValue = "Smith";
+
+            Person person = new Person
+            {
+                Name = new Name
+                {
+                    First = "John",
+                    Last = "Smith"
+                }
+            };
+
+#if ASP_NET_CORE
+            httpContext.Items = new Dictionary<object, object>();
+            httpContext.Items.Add("person", person);
+#else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains("person").Returns(true);
+            httpContext.Items["person"].Returns(person);
+#endif
+            renderer.Item = "person";
+            renderer.ObjectPath = "Name.Last";
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            renderer.EvaluateAsNestedProperties = false;
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedValue, result);
+        }
+
+        [Fact]
+        public void NestedObjectPathRendersProperlyII()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            string expectedValue = "Smith";
+
+            Person person = new Person
+            {
+                Name = new Name
+                {
+                    First = "John",
+                    Last = "Smith"
+                }
+            };
+
+#if ASP_NET_CORE
+            httpContext.Items = new Dictionary<object, object>();
+            httpContext.Items.Add("person", person);
+#else
+            httpContext.Items.Count.Returns(1);
+            httpContext.Items.Contains("person").Returns(true);
+            httpContext.Items["person"].Returns(person);
+#endif
+            renderer.Item = "person";
+            renderer.ObjectPath = "Name.Last";
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedValue, result);
         }
     }
 }

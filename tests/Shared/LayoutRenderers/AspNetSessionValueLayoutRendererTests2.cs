@@ -92,8 +92,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             mockSession.SetInt32("b", 123);
             httpContext.Session = mockSession;
             httpContext.Items = new Dictionary<object, object>();
-            var sessionFeature = new SessionFeatureMock(mockSession);
-            httpContext.Features.Get<ISessionFeature>().Returns(sessionFeature);
+
             return (renderer, httpContext);
         }
 

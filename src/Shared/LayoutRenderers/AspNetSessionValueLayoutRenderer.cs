@@ -42,6 +42,8 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-session")]
     public class AspNetSessionValueLayoutRenderer : AspNetLayoutRendererBase
     {
+        private readonly NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper _objectPathRenderer = new NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper();
+
         /// <summary>
         /// Gets or sets the session item name.
         /// </summary>
@@ -57,9 +59,15 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
+        /// Gets or sets the object-property-navigation-path for lookup of nested property
+        /// </summary>
+        public string ObjectPath { get => _objectPathRenderer.ObjectPath; set => _objectPathRenderer.ObjectPath = value; }
+
+        /// <summary>
         /// Gets or sets whether variables with a dot are evaluated as properties or not
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
+        [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>
@@ -99,13 +107,13 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var item = Item;
-            if (item == null)
+            if (string.IsNullOrEmpty(item))
             {
                 return;
             }
 
             var context = HttpContextAccessor.HttpContext;
-            if (context == null)
+            if (context is null)
             {
                 return;
             }
@@ -131,12 +139,28 @@ namespace NLog.Web.LayoutRenderers
                     return;
                 }
 
-                var value = PropertyReader.GetValue(item, contextSession, _sessionValueLookup, EvaluateAsNestedProperties);
-                if (value != null)
+                object value = null;
+
+                if (ObjectPath is null)
                 {
-                    var formatProvider = GetFormatProvider(logEvent, Culture);
-                    builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
+#pragma warning disable CS0618 // Type or member is obsolete
+                    value = PropertyReader.GetValue(item, contextSession, _sessionValueLookup, EvaluateAsNestedProperties);
+#pragma warning restore CS0618 // Type or member is obsolete
+                    if (value is null)
+                        return;
                 }
+                else
+                {
+                    value = _sessionValueLookup(contextSession, item);
+                    if (value is null)
+                        return;
+
+                    if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
+                        return;
+                }
+
+                var formatProvider = GetFormatProvider(logEvent, Culture);
+                builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
             }
         }
 

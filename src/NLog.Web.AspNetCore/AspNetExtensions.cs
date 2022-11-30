@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using NLog.Web.Internal;
 
 namespace NLog.Web
 {
@@ -30,6 +31,7 @@ namespace NLog.Web
         [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static void AddNLogWeb(this IApplicationBuilder app)
         {
+            Guard.ThrowIfNull(app);
             app.ApplicationServices.SetupNLogServiceLocator();
         }
 #endif
@@ -61,6 +63,8 @@ namespace NLog.Web
         [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
         public static LoggingConfiguration ConfigureNLog(this IHostEnvironment env, string configFileRelativePath)
         {
+            Guard.ThrowIfNull(env);
+
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
             var fileName = System.IO.Path.Combine(env.ContentRootPath, configFileRelativePath);
@@ -82,7 +86,7 @@ namespace NLog.Web
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            builder.AddNLog();
+            builder.AddNLogWeb();
             return LogManager.LoadConfiguration(configFileName);
         }
 
@@ -98,7 +102,7 @@ namespace NLog.Web
         public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
             ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            builder.AddNLog();
+            builder.AddNLogWeb();
             LogManager.Configuration = configuration;
             return LogManager.LogFactory;
         }
@@ -119,6 +123,8 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, NLogAspNetCoreOptions options)
         {
+            Guard.ThrowIfNull(builder);
+
             AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
             {
                 return CreateNLogLoggerProvider(serviceProvider, config, env, opt);
@@ -134,6 +140,9 @@ namespace NLog.Web
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, NLogAspNetCoreOptions options, Func<IServiceProvider, LogFactory> factoryBuilder)
         {
+            Guard.ThrowIfNull(builder);
+            Guard.ThrowIfNull(factoryBuilder);
+
             AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
             {
                 config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
@@ -163,6 +172,8 @@ namespace NLog.Web
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, string configFileName)
         {
+            Guard.ThrowIfNull(builder);
+
             AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
             {
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options);
@@ -191,7 +202,7 @@ namespace NLog.Web
         /// <param name="configuration">Config for NLog</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
-            return AddNLogWeb(builder, configuration, null);
+            return AddNLogWeb(builder, configuration, NLogAspNetCoreOptions.Default);
         }
 
         /// <summary>
@@ -214,6 +225,8 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
         {
+            Guard.ThrowIfNull(builder);
+
             AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
             {
                 var logFactory = configuration?.LogFactory ?? LogManager.LogFactory;
@@ -243,6 +256,9 @@ namespace NLog.Web
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, Func<IServiceProvider, LogFactory> factoryBuilder)
         {
+            Guard.ThrowIfNull(builder);
+            Guard.ThrowIfNull(factoryBuilder);
+
             AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
             {
                 config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
@@ -262,6 +278,8 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, LogFactory logFactory, NLogAspNetCoreOptions options)
         {
+            Guard.ThrowIfNull(builder);
+
             AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
             {
                 logFactory = logFactory ?? LogManager.LogFactory;
@@ -276,7 +294,7 @@ namespace NLog.Web
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
         {
-            return UseNLog(builder, null);
+            return UseNLog(builder, NLogAspNetCoreOptions.Default);
         }
 
         /// <summary>
@@ -286,10 +304,7 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            Guard.ThrowIfNull(builder);
 
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment as IHostEnvironment, options, CreateNLogLoggerProvider));
             return builder;
@@ -300,7 +315,7 @@ namespace NLog.Web
         /// </summary>
         public static IHostBuilder UseNLog(this IHostBuilder builder)
         {
-            return UseNLog(builder, null);
+            return UseNLog(builder, NLogAspNetCoreOptions.Default);
         }
 
         /// <summary>
@@ -310,10 +325,7 @@ namespace NLog.Web
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
         public static IHostBuilder UseNLog(this IHostBuilder builder, NLogAspNetCoreOptions options)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            Guard.ThrowIfNull(builder);
 
 #if ASP_NET_CORE2
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, null, options, CreateNLogLoggerProvider));

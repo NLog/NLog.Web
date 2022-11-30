@@ -1,12 +1,13 @@
 using System.Text;
-using NLog.LayoutRenderers;
 using System.Collections.Generic;
-using System.Linq;
 #if !ASP_NET_CORE
+using System.Web;
 using System.Web.Routing;
 #else
 using Microsoft.AspNetCore.Routing;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
+using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -28,7 +29,13 @@ namespace NLog.Web.LayoutRenderers
         /// List Route Parameter' Key to be rendered from Request.
         /// If empty, then render all parameters
         /// </summary>
-        public List<string> RouteParameterKeys { get; set; }
+        public List<string> RouteParameterKeys { get => Items; set => Items = value; }
+
+        /// <summary>
+        /// List Route Parameter' Key to be rendered from Request.
+        /// If empty, then render all parameters
+        /// </summary>
+        public List<string> Items { get; set; }
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -39,41 +46,62 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-#if !ASP_NET_CORE
-            RouteValueDictionary routeParameters = RouteTable.Routes?.GetRouteData(context)?.Values;
-#else
-            RouteValueDictionary routeParameters = context.GetRouteData()?.Values;
-#endif
-            if (routeParameters == null || routeParameters.Count == 0)
+            var pairs = GetPairs(context, Items);
+            if (pairs != null)
             {
-                return;
+                SerializePairs(pairs, builder, logEvent);
             }
-
-            var routeParameterKeys = RouteParameterKeys;
-            bool printAllRouteParameter = routeParameterKeys == null || routeParameterKeys.Count == 0;
-            if (printAllRouteParameter)
-            {
-                routeParameterKeys = routeParameters.Keys.ToList();
-            }
-
-            IEnumerable<KeyValuePair<string, string>> pairs = GetPairs(routeParameters, routeParameterKeys);
-            SerializePairs(pairs, builder, logEvent);
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetPairs(RouteValueDictionary routeParameters, List<string> routeParameterKeys)
+        private static IEnumerable<KeyValuePair<string, string>> GetPairs(HttpContextBase httpContext, List<string> routeParameterKeys)
         {
-            foreach (string key in routeParameterKeys)
+            if (routeParameterKeys?.Count == 1 && !string.IsNullOrEmpty(routeParameterKeys[0]))
             {
-                // This platform specific code is to prevent an unncessary .ToString call otherwise. 
-                if (!routeParameters.TryGetValue(key, out object objValue))
-                {
-                    continue;
-                }
+#if !ASP_NET_CORE
+                object routeValue = null;
+                RouteTable.Routes?.GetRouteData(httpContext)?.Values?.TryGetValue(routeParameterKeys[0], out routeValue);
+#else
+                var routeValue = httpContext?.GetRouteValue(routeParameterKeys[0]);
+#endif
+                var routeStringValue = routeValue?.ToString();
+                if (!string.IsNullOrEmpty(routeStringValue))
+                    return new[] { new KeyValuePair<string, string>(routeParameterKeys[0], routeStringValue) };
+            }
+            else
+            {
+#if !ASP_NET_CORE
+                RouteValueDictionary routeValues = RouteTable.Routes?.GetRouteData(httpContext)?.Values;
+#else
+                RouteValueDictionary routeValues = httpContext.GetRouteData()?.Values;
+#endif
+                if (routeValues?.Count > 0)
+                    return routeParameterKeys?.Count > 0 ? GetManyPairs(routeValues, routeParameterKeys) : GetAllPairs(routeValues);
+            }
 
-                string value = objValue?.ToString();
-                if (!string.IsNullOrEmpty(value))
+            return null;
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> GetManyPairs(RouteValueDictionary routeValues, List<string> routeParameterKeys)
+        {
+            foreach (var routeKey in routeParameterKeys)
+            {
+                if (routeValues.TryGetValue(routeKey, out var routeValue))
                 {
-                    yield return new KeyValuePair<string, string>(key, value);
+                    string value = routeValue?.ToString();
+                    if (!string.IsNullOrEmpty(value))
+                        yield return new KeyValuePair<string, string>(routeKey, value);
+                }
+            }
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> GetAllPairs(RouteValueDictionary routeValues)
+        {
+            foreach (var routeItem in routeValues)
+            {
+                string routeValue = routeItem.Value?.ToString();
+                if (!string.IsNullOrEmpty(routeValue))
+                {
+                    yield return new KeyValuePair<string, string>(routeItem.Key, routeValue);
                 }
             }
         }
