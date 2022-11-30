@@ -42,10 +42,17 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources> <!-- EmbedUntrackedSources for deterministic build -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources> 
+	<!-- EmbedUntrackedSources for deterministic build -->
+	
+	<IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
+	<None Include="..\..\README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
