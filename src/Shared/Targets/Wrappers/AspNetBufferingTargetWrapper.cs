@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Web;
 using NLog.Common;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
-using NLog.Web.Internal;
+#if !ASP_NET_CORE
+using System.Web;
+#else
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
+using Microsoft.AspNetCore.Http;
+using NLog.Web.DependencyInjection;
+#endif
 
 namespace NLog.Web.Targets.Wrappers
 {
@@ -21,7 +27,7 @@ namespace NLog.Web.Targets.Wrappers
     /// to apply after all logs for a page have been generated.
     /// </p>
     /// <p>
-    /// To use this target, you need to add an entry in the httpModules section of
+    /// To use this target, for classic ASP.NET you need to add an entry in the httpModules section of
     /// web.config:
     /// </p>
     /// <code lang="XML">
@@ -29,10 +35,16 @@ namespace NLog.Web.Targets.Wrappers
     /// <configuration>
     ///   <system.web>
     ///     <httpModules>
-    ///       <add name="NLog" type="NLog.Web.NLogHttpModule, NLog.Extended"/>
+    ///       <add name="NLogBufferingTargetWrapperModule" type="NLog.Web.NLogBufferingTargetWrapperModule, NLog.Web"/>
     ///     </httpModules>
     ///   </system.web>
     /// </configuration>
+    /// ]]>
+    /// </code>
+    /// to use this target, for ASP.NET Core, you need to add a line fo code to involve the proper middleware
+    /// <code>
+    /// <![CDATA[
+    ///    app.UseMiddleware<NLogBufferingTargetWrapperMiddleware>();
     /// ]]>
     /// </code>
     /// </remarks>
@@ -61,9 +73,6 @@ namespace NLog.Web.Targets.Wrappers
     [Target("AspNetBufferingWrapper", IsWrapper = true)]
     public class AspNetBufferingTargetWrapper : WrapperTargetBase
     {
-        private readonly object dataSlot = new object();
-        private int growLimit;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
         /// </summary>
@@ -88,8 +97,9 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="bufferSize">Size of the buffer.</param>
         public AspNetBufferingTargetWrapper(Target wrappedTarget, int bufferSize)
         {
-            WrappedTarget = wrappedTarget;
-            BufferSize = bufferSize;
+        
+            WrappedTarget      = wrappedTarget;
+            BufferSize         = bufferSize;
             GrowBufferAsNeeded = true;
         }
 
@@ -113,102 +123,182 @@ namespace NLog.Web.Targets.Wrappers
         public bool GrowBufferAsNeeded { get; set; }
 
         /// <summary>
+        /// Limits the amount of slots that the buffer should grow
+        /// </summary>
+        private int _bufferGrowLimit;
+
+        /// <summary>
         /// Gets or sets the maximum number of log events that the buffer can keep.
         /// </summary>
         /// <docgen category='Buffering Options' order='100' />
         public int BufferGrowLimit
         {
-            get
-            {
-                return growLimit;
-            }
+            get => _bufferGrowLimit;
 
             set
             {
-                growLimit = value;
+                _bufferGrowLimit = value;
                 GrowBufferAsNeeded = (value >= BufferSize);
             }
         }
 
         /// <summary>
-        /// Initializes the target by hooking up the NLogHttpModule BeginRequest and EndRequest events.
+        /// Context for DI
         /// </summary>
-        protected override void InitializeTarget()
+        private IHttpContextAccessor _httpContextAccessor;
+
+        /// <summary>
+        /// Provides access to the current request HttpContext.
+        /// </summary>
+        /// <returns>HttpContextAccessor or <c>null</c></returns>
+        internal IHttpContextAccessor HttpContextAccessor
         {
-            base.InitializeTarget();
+            get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
+            set => _httpContextAccessor = value;
+        }
 
-            // Prevent double subscribe
-            NLogHttpModule.BeginRequest -= OnBeginRequest;
-            NLogHttpModule.EndRequest -= OnEndRequest;
+        private IHttpContextAccessor RetrieveHttpContextAccessor()
+        {
+#if ASP_NET_CORE
+            return ServiceLocator.ResolveService<IHttpContextAccessor>(ResolveService<IServiceProvider>(), LoggingConfiguration);
+#else
+            return new DefaultHttpContextAccessor();
+#endif
+        }
 
-            NLogHttpModule.BeginRequest += OnBeginRequest;
-            NLogHttpModule.EndRequest += OnEndRequest;
-
-            if (HttpContext.Current != null)
+        /// <summary>
+        /// Must be called by the HttpModule/Middleware upon starting.
+        /// This creates the dictionary in the HttpContext.Items with the proper key.
+        /// </summary>
+        /// <param name="context"></param>
+        internal static void OnBeginRequest(HttpContextBase context)
+        {
+            if (context == null)
             {
-                // we are in the context already, it's too late for OnBeginRequest to be called, so let's 
-                // just call it ourselves
-                OnBeginRequest(null, null);
+                return;
+            }
+
+            var bufferDictionary = GetBufferDictionary(context);
+
+            // If the dictionary is missing, create that first
+            if (bufferDictionary == null)
+            {
+                SetBufferDictionary(context);
             }
         }
 
         /// <summary>
-        /// Closes the target by flushing pending events in the buffer (if any).
+        /// Called from the HttpModule or Middleware upon the end of the HTTP pipeline
+        /// Flushes all instances of this class registered in the HttpContext
         /// </summary>
-        protected override void CloseTarget()
+        /// <param name="context"></param>
+        internal static void OnEndRequest(HttpContextBase context)
         {
-            NLogHttpModule.BeginRequest -= OnBeginRequest;
-            NLogHttpModule.EndRequest -= OnEndRequest;
-            base.CloseTarget();
+            var bufferDictionary = GetBufferDictionary(context);
+            if (bufferDictionary == null)
+            {
+                return;
+            }
+            foreach (var bufferKeyValuePair in bufferDictionary)
+            {
+                bufferKeyValuePair.Key?.Flush(bufferKeyValuePair.Value);
+            }
         }
 
         /// <summary>
-        /// Adds the specified log event to the buffer.
+        /// Called by the above static Flush method.
         /// </summary>
-        /// <param name="logEvent">The log event.</param>
-        protected override void Write(AsyncLogEventInfo logEvent)
+        /// <param name="buffer"></param>
+        private void Flush(Internal.LogEventInfoBuffer buffer)
         {
-            var buffer = GetRequestBuffer();
-            if (buffer != null)
+            if (buffer == null)
             {
-                WrappedTarget.PrecalculateVolatileLayouts(logEvent.LogEvent);
-
-                buffer.Append(logEvent);
-                InternalLogger.Trace("Appending log event {0} to ASP.NET request buffer.", logEvent.LogEvent.SequenceID);
+                return;
             }
-            else
-            {
-                InternalLogger.Trace("ASP.NET request buffer does not exist. Passing to wrapped target.");
-                WrappedTarget.WriteAsyncLogEvent(logEvent);
-            }
+            InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
+            WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
         }
 
-        private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer()
+        /// <summary>
+        /// Obtains a slot in the buffer dictionary for 'this' class instance
+        /// If that does not exist, that is created first
+        /// if the dictionary does not exist, that is created first
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private Internal.LogEventInfoBuffer GetOrCreateRequestBuffer(HttpContextBase context) 
         {
-            HttpContext context = HttpContext.Current;
+            // If the context is missing, stop
             if (context == null)
             {
                 return null;
             }
 
-            return context.Items[dataSlot] as NLog.Web.Internal.LogEventInfoBuffer;
+            var bufferDictionary = GetBufferDictionary(context);
+
+            // If the dictionary is missing, stop
+            if (bufferDictionary == null)
+            {
+                return null;
+            }
+
+            lock (bufferDictionary)
+            {
+                if (!bufferDictionary.TryGetValue(this, out var buffer))
+                {
+                    buffer = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+                    bufferDictionary.Add(this, buffer);
+                }
+
+                return buffer;
+            }
         }
 
-        private void OnBeginRequest(object sender, EventArgs args)
+        /// <summary>
+        /// The Key for the buffer dictionary in the HttpContext.Items collection
+        /// </summary>
+        private static readonly object HttpContextItemsKey = new object();
+
+        /// <summary>
+        /// Return the buffer dictionary from the HttpContext.Items using HttpContextItemsKey
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(HttpContextBase context)
         {
-            InternalLogger.Trace("Setting up ASP.NET request buffer.");
-            HttpContext context = HttpContext.Current;
-            context.Items[dataSlot] = new NLog.Web.Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
+            return context?.Items?[HttpContextItemsKey] as
+                Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
         }
 
-        private void OnEndRequest(object sender, EventArgs args)
+        /// <summary>
+        /// Create the buffer dictionary in the HttpContext.Items using HttpContextItemsKey
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static void SetBufferDictionary(HttpContextBase context)
         {
-            var buffer = GetRequestBuffer();
+            context.Items[HttpContextItemsKey] = new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
+        }
+
+        /// <summary>
+        /// Adds the specified log event to the buffer.
+        /// NOTE: if Write is never called, this instance will not be registered in the buffer dictionary in HttpContext.Items.
+        /// That is expected normal behavior.
+        /// </summary>
+        /// <param name="logEvent">The log event.</param>
+        protected override void Write(AsyncLogEventInfo logEvent)
+        {
+            var buffer = GetOrCreateRequestBuffer(HttpContextAccessor.HttpContext);
             if (buffer != null)
             {
-                InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
-                AsyncLogEventInfo[] events = buffer.GetEventsAndClear();
-                WrappedTarget.WriteAsyncLogEvents(events);
+                WrappedTarget?.PrecalculateVolatileLayouts(logEvent.LogEvent);
+                InternalLogger.Trace("Appending log event {0} to ASP.NET request buffer.", logEvent.LogEvent.SequenceID);
+                buffer.Append(logEvent);
+            }
+            else
+            {
+                InternalLogger.Trace("ASP.NET request buffer does not exist. Passing to wrapped target.");
+                WrappedTarget?.WriteAsyncLogEvent(logEvent);
             }
         }
     }
