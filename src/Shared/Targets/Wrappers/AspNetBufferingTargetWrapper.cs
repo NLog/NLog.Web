@@ -171,7 +171,7 @@ namespace NLog.Web.Targets.Wrappers
         /// This creates the dictionary in the HttpContext.Items with the proper key.
         /// </summary>
         /// <param name="context"></param>
-        internal static void Initialize(HttpContextBase context)
+        internal static void OnBeginRequest(HttpContextBase context)
         {
             if (context == null)
             {
@@ -185,6 +185,38 @@ namespace NLog.Web.Targets.Wrappers
             {
                 SetBufferDictionary(context);
             }
+        }
+
+        /// <summary>
+        /// Called from the HttpModule or Middleware upon the end of the HTTP pipeline
+        /// Flushes all instances of this class registered in the HttpContext
+        /// </summary>
+        /// <param name="context"></param>
+        internal static void OnEndRequest(HttpContextBase context)
+        {
+            var bufferDictionary = GetBufferDictionary(context);
+            if (bufferDictionary == null)
+            {
+                return;
+            }
+            foreach (var bufferKeyValuePair in bufferDictionary)
+            {
+                bufferKeyValuePair.Key?.Flush(bufferKeyValuePair.Value);
+            }
+        }
+
+        /// <summary>
+        /// Called by the above static Flush method.
+        /// </summary>
+        /// <param name="buffer"></param>
+        private void Flush(Internal.LogEventInfoBuffer buffer)
+        {
+            if (buffer == null)
+            {
+                return;
+            }
+            InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
+            WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
         }
 
         /// <summary>
@@ -268,38 +300,6 @@ namespace NLog.Web.Targets.Wrappers
                 InternalLogger.Trace("ASP.NET request buffer does not exist. Passing to wrapped target.");
                 WrappedTarget?.WriteAsyncLogEvent(logEvent);
             }
-        }
-
-        /// <summary>
-        /// Called from the HttpModule or Middleware upon the end of the HTTP pipeline
-        /// Flushes all instances of this class registered in the HttpContext
-        /// </summary>
-        /// <param name="context"></param>
-        internal static void Flush(HttpContextBase context)
-        {
-            var bufferDictionary = GetBufferDictionary(context);
-            if (bufferDictionary == null)
-            {
-                return;
-            }
-            foreach(var bufferKeyValuePair in bufferDictionary)
-            {
-                bufferKeyValuePair.Key?.Flush(bufferKeyValuePair.Value);
-            }
-        }
-
-        /// <summary>
-        /// Called by the above static Flush method.
-        /// </summary>
-        /// <param name="buffer"></param>
-        private void Flush(Internal.LogEventInfoBuffer buffer)
-        {
-            if (buffer == null)
-            {
-                return;
-            }
-            InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", WrappedTarget);
-            WrappedTarget?.WriteAsyncLogEvents(buffer.GetEventsAndClear());
         }
     }
 }

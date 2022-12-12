@@ -44,7 +44,7 @@ namespace NLog.Web.Tests
             target.HttpContextAccessor = new FakeHttpContextAccessor(new HttpContextWrapper(httpContext));
 
             // Act
-            var httpModule = new NLogBufferingTargetWrapperModule();
+            var httpModule = new NLogHttpModule();
             httpModule.Initialize(httpContext);
 
             ILogger logger = logFactory.GetCurrentClassLogger();

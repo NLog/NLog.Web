@@ -7,7 +7,7 @@ namespace NLog.Web
     /// <summary>
     /// ASP.NET IHttpModule that enables AspNetBufferingTargetWrapper proper functioning
     /// </summary>
-    public class NLogBufferingTargetWrapperModule : IHttpModule
+    public class NLogHttpModule : IHttpModule
     {
         /// <summary>
         /// Initializes the HttpModule.
@@ -36,7 +36,7 @@ namespace NLog.Web
 
         internal void Initialize(HttpContext context)
         {
-            AspNetBufferingTargetWrapper.Initialize(new HttpContextWrapper(context));
+            AspNetBufferingTargetWrapper.OnBeginRequest(new HttpContextWrapper(context));
         }
 
         internal void EndRequestEventHandler(object sender, EventArgs args)
@@ -47,7 +47,7 @@ namespace NLog.Web
 
         internal void Flush(HttpContext context)
         {
-            AspNetBufferingTargetWrapper.Flush(new HttpContextWrapper(context));
+            AspNetBufferingTargetWrapper.OnEndRequest(new HttpContextWrapper(context));
         }
     }
 }
