@@ -29,7 +29,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a"
+                Item = "a"
             };
 
             ExecTest("a", "b", "b", appSettingLayoutRenderer);
@@ -40,7 +40,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a.b"
+                Item = "a.b"
             };
 
             ExecTest("a.b", "c", "c", appSettingLayoutRenderer);
@@ -51,7 +51,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a.b",
+                Item = "a.b",
 #pragma warning disable CS0618 // Type or member is obsolete
                 EvaluateAsNestedProperties = true
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -67,7 +67,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a",
+                Item = "a",
                 ObjectPath = "b",
             };
 
@@ -81,7 +81,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a.b.c",
+                Item = "a.b.c",
 #pragma warning disable CS0618 // Type or member is obsolete
                 EvaluateAsNestedProperties = true
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -97,7 +97,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a",
+                Item = "a",
                 ObjectPath = "b.c"
             };
 
@@ -111,7 +111,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "a.b..c",
+                Item = "a.b..c",
 #pragma warning disable CS0618 // Type or member is obsolete
                 EvaluateAsNestedProperties = true
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -127,7 +127,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "",
+                Item = "",
 #pragma warning disable CS0618 // Type or member is obsolete
                 EvaluateAsNestedProperties = true
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -143,7 +143,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
             {
-                Variable = "",
+                Item = "",
 #pragma warning disable CS0618 // Type or member is obsolete
                 EvaluateAsNestedProperties = true
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -201,6 +201,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             Assert.Equal(expected, rendered);
         }
-        }
     }
+}
 #endif
