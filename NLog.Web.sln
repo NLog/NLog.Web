@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.NET Core 3 - VS2019", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.NET Core 5 NLog Example", "examples\ASP.NET Core 5\ASP.NET Core 5 NLog Example\ASP.NET Core 5 NLog Example.csproj", "{6B629300-2FD1-4465-B077-24D01E2BB5E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.NET Core 6 NLog Example", "examples\ASP.NET Core 6\ASP.NET Core 6 NLog Example\ASP.NET Core 6 NLog Example.csproj", "{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.NET Core 6 NLog Example", "examples\ASP.NET Core 6\ASP.NET Core 6 NLog Example\ASP.NET Core 6 NLog Example.csproj", "{C7F367FA-9DFC-4AA4-81AF-1B4933EAE516}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
