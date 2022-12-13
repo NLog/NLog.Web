@@ -7,15 +7,14 @@ Supported platforms:
 
 .NET 3.5 - 4.8
 
+Registration of NLog.Web in the NLog.config File
+	<!-- enable ASP.NET layout renderers -->
+	<extensions>
+		<add assembly="NLog.Web"/>
+	</extensions>
+
 Useful Links
 - [Change Log](https://github.com/NLog/NLog.Web/releases)
 - [Tutorial](https://github.com/NLog/NLog/wiki/Tutorial)
 - [ASP.NET Layout Renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web)
 - [Logging Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
-
-Registration of NLog.Web in the NLog.config File
-
-	<!-- enable ASP.NET layout renderers -->
-	<extensions>
-		<add assembly="NLog.Web"/>
-	</extensions>
