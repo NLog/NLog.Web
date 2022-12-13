@@ -18,7 +18,7 @@ namespace NLog.Web
         public void Init(HttpApplication context)
         {
             Initialize(context);
-            context.EndRequest += EndRequestEventHandler;
+            context.EndRequest += OnEndRequest;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace NLog.Web
             AspNetBufferingTargetWrapper.OnBeginRequest(new HttpContextWrapper(context));
         }
 
-        internal void EndRequestEventHandler(object sender, EventArgs args)
+        internal void OnEndRequest(object sender, EventArgs args)
         {
 
             Flush((sender as HttpApplication)?.Context);
