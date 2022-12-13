@@ -13,7 +13,7 @@ Supported platforms:
 Registration of NLog.Web.AspNetCore in the NLog.config File
 
 ```xml
-	<!-- enable ASP.NET layout renderers -->
+	<!-- enable ASP.NET Core layout renderers -->
 	<extensions>
 		<add assembly="NLog.Web"/>
 	</extensions>
