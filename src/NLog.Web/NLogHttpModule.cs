@@ -40,18 +40,15 @@ namespace NLog.Web
 
         private void BeginRequestHandler(object sender, EventArgs args)
         {
-            if (BeginRequest != null)
-            {
-                OnBeginRequest((sender as HttpApplication)?.Context);
-            }
+            BeginRequest?.Invoke(sender, args);
+            OnBeginRequest((sender as HttpApplication)?.Context);
+
         }
 
         private void EndRequestHandler(object sender, EventArgs args)
         {
-            if (EndRequest != null)
-            {
-                OnEndRequest((sender as HttpApplication)?.Context);
-            }
+            EndRequest?.Invoke(sender, args);
+            OnEndRequest((sender as HttpApplication)?.Context);
         }
 
         internal void OnBeginRequest(HttpContext context)
