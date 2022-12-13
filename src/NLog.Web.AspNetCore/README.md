@@ -10,7 +10,7 @@ Supported platforms:
 - For ASP.NET Core 3, .NET Core 3.1
 - For ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.1+
 
-Registration of NLog.Web in the NLog.config File
+Registration of NLog.Web.AspNetCore in the NLog.config File
 
 ```xml
 	<!-- enable ASP.NET layout renderers -->
