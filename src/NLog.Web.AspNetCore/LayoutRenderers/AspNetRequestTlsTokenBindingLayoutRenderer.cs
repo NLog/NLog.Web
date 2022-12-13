@@ -40,19 +40,13 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if (features == null)
-            {
-                return;
-            }
-
-            var tlsTokenBinding = features.Get<ITlsTokenBindingFeature>();
+            var tlsTokenBinding = HttpContextAccessor.HttpContext.TryGetFeatureCollection()?.Get<ITlsTokenBindingFeature>();
             if (tlsTokenBinding == null)
             {
                 return;
             }
 
-            switch(Property)
+            switch (Property)
             {
                 case TlsTokenBindingProperty.Referrer:
                     builder.Append(ToFormattedString(tlsTokenBinding.GetReferredTokenBindingId()));
@@ -66,18 +60,16 @@ namespace NLog.Web.LayoutRenderers
 
         private string ToFormattedString(byte[] bytes)
         {
-            if(bytes == null || bytes.Length == 0)
+            if (bytes?.Length > 0)
             {
-                return null;
-            }
+                switch (Format)
+                {
+                    case ByteArrayFormatProperty.Base64:
+                        return Convert.ToBase64String(bytes);
 
-            switch (Format)
-            {
-                case ByteArrayFormatProperty.Base64:
-                    return Convert.ToBase64String(bytes);
-
-                case ByteArrayFormatProperty.Hex:
-                    return BitConverter.ToString(bytes);
+                    case ByteArrayFormatProperty.Hex:
+                        return BitConverter.ToString(bytes);
+                }
             }
 
             return null;
