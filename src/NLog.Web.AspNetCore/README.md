@@ -11,12 +11,16 @@ Supported platforms:
 - For ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.1+
 
 Registration of NLog.Web in the NLog.config File
+
+```xml
 	<!-- enable ASP.NET layout renderers -->
 	<extensions>
 		<add assembly="NLog.Web"/>
 	</extensions>
+```
 
 Useful Links
+
 - [Change Log](https://github.com/NLog/NLog.Web/releases)
 - [Getting started with ASP.NET Core 6](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
 - [Getting started with ASP.NET Core 5](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-5)
