@@ -18,7 +18,7 @@ Registration of NLog.Web.AspNetCore in the NLog.config File
 ```xml
 	<!-- enable ASP.NET Core layout renderers -->
 	<extensions>
-		<add assembly="NLog.Web"/>
+		<add assembly="NLog.Web.AspNetCore"/>
 	</extensions>
 ```
 
