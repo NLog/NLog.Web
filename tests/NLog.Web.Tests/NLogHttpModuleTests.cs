@@ -45,7 +45,7 @@ namespace NLog.Web.Tests
 
             // Act
             var httpModule = new NLogHttpModule();
-            httpModule.Initialize(httpContext);
+            httpModule.OnBeginRequest(httpContext);
 
             ILogger logger = logFactory.GetCurrentClassLogger();
 
@@ -73,7 +73,7 @@ namespace NLog.Web.Tests
                 }
             }
 
-            httpModule.Flush(httpContext);
+            httpModule.OnEndRequest(httpContext);
         }
     }
 }

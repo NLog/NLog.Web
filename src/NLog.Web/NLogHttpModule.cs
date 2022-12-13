@@ -5,20 +5,30 @@ using System.Web;
 namespace NLog.Web
 {
     /// <summary>
-    /// ASP.NET IHttpModule that enables AspNetBufferingTargetWrapper proper functioning
+    /// ASP.NET HttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
     /// </summary>
     public class NLogHttpModule : IHttpModule
     {
         /// <summary>
+        /// Event to be raised at the end of each HTTP Request.
+        /// </summary>
+        public static event EventHandler EndRequest;
+
+        /// <summary>
+        /// Event to be raised at the beginning of each HTTP Request.
+        /// </summary>
+        public static event EventHandler BeginRequest;
+
+        /// <summary>
         /// Initializes the HttpModule.
         /// </summary>
-        /// <param name="context">
+        /// <param name="application">
         /// ASP.NET application.
         /// </param>
-        public void Init(HttpApplication context)
+        public void Init(HttpApplication application)
         {
-            Initialize(context);
-            context.EndRequest += OnEndRequest;
+            application.BeginRequest += BeginRequestHandler;
+            application.EndRequest += EndRequestHandler;
         }
 
         /// <summary>
@@ -26,26 +36,30 @@ namespace NLog.Web
         /// </summary>
         public void Dispose()
         {
-            // Method intentionally left empty.
         }
 
-        internal void Initialize(HttpApplication application)
+        private void BeginRequestHandler(object sender, EventArgs args)
         {
-            Initialize(application.Context);
+            if (BeginRequest != null)
+            {
+                OnBeginRequest((sender as HttpApplication)?.Context);
+            }
         }
 
-        internal void Initialize(HttpContext context)
+        private void EndRequestHandler(object sender, EventArgs args)
+        {
+            if (EndRequest != null)
+            {
+                OnEndRequest((sender as HttpApplication)?.Context);
+            }
+        }
+
+        internal void OnBeginRequest(HttpContext context)
         {
             AspNetBufferingTargetWrapper.OnBeginRequest(new HttpContextWrapper(context));
         }
 
-        internal void OnEndRequest(object sender, EventArgs args)
-        {
-
-            Flush((sender as HttpApplication)?.Context);
-        }
-
-        internal void Flush(HttpContext context)
+        internal void OnEndRequest(HttpContext context)
         {
             AspNetBufferingTargetWrapper.OnEndRequest(new HttpContextWrapper(context));
         }
