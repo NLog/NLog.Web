@@ -1,10 +1,11 @@
 # NLog.Web.AspNetCore
 
-- LoggerProvider for ASP.NET Core platform. 
-- Access many properties via [layout renderers](https://nlog-project.org/config/?tab=layout-renderers) of the event and the application.
+- LoggerProvider for ASP.NET Core platform via extension methods for ILoggingProvider, IWebHostBuilder, and IHostBuilder.
+- Log all properties of HttpContext and IHostEnvironment via [layout renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) just by changing the NLog.config file.
 - Capable to log to many destinations via [targets](https://nlog-project.org/config/?tab=targets).
 - Supports common [layouts](https://nlog-project.org/config/?tab=layouts), such as CVS, JSON, W3C ELF, and XML.
-- To add new features [pull Requests](https://github.com/NLog/NLog.Web/pulls) are alwsys welcome.
+- Supports advanced HTTP pipeline interception via provided IMiddleware classes, including logging of HTTP request body and HTTP response body.
+- To add new features [pull Requests](https://github.com/NLog/NLog.Web/pulls) are always welcome.
 
 Supported platforms:
 
@@ -16,10 +17,10 @@ Supported platforms:
 Registration of NLog.Web.AspNetCore in the NLog.config File
 
 ```xml
-	<!-- enable ASP.NET Core layout renderers -->
-	<extensions>
-		<add assembly="NLog.Web.AspNetCore"/>
-	</extensions>
+<!-- enable ASP.NET Core layout renderers -->
+<extensions>
+    <add assembly="NLog.Web.AspNetCore"/>
+</extensions>
 ```
 
 Useful Links

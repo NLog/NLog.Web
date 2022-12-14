@@ -1,10 +1,11 @@
 # NLog.Web
 
-- LoggerProvider for ASP.NET platform. 
-- Access many properties via [layout renderers](https://nlog-project.org/config/?tab=layout-renderers) of the event and the application.
+- Logger Provider for ASP.NET platform.
+- Log all properties of HttpContext and HostingEnvironment via [layout renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) just by changing the NLog.config file.
 - Capable to log to many destinations via [targets](https://nlog-project.org/config/?tab=targets).
 - Supports common [layouts](https://nlog-project.org/config/?tab=layouts), such as CVS, JSON, W3C ELF, and XML.
-- To add new features [pull requests](https://github.com/NLog/NLog.Web/pulls) are alwsys welcome.
+- Supports advanced HTTP pipeline interception via provided IHttpModule classes, including logging of HTTP request body.
+- To add new features [pull requests](https://github.com/NLog/NLog.Web/pulls) are always welcome.
 
 Supported platforms:
 
@@ -13,10 +14,10 @@ Supported platforms:
 Registration of NLog.Web in the NLog.config File
 
 ```xml
-	<!-- enable ASP.NET layout renderers -->
-	<extensions>
-		<add assembly="NLog.Web"/>
-	</extensions>
+<!-- enable ASP.NET layout renderers -->
+<extensions>
+    <add assembly="NLog.Web"/>
+</extensions>
 ```
 
 Useful Links
