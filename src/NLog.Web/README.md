@@ -1,9 +1,9 @@
 # NLog.Web
 
 - Logger Provider for ASP.NET platform.
-- Log all properties of HttpContext and HostingEnvironment via [layout renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) just by changing the NLog.config file.
-- Capable to log to many destinations via [targets](https://nlog-project.org/config/?tab=targets).
-- Supports common [layouts](https://nlog-project.org/config/?tab=layouts), such as CVS, JSON, W3C ELF, and XML.
+- Extends logging output with details from the active HttpContext via NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web), just by changing NLog.config file.
+- Capable to log to many destinations via NLog [Targets](https://nlog-project.org/config/?tab=targets).
+- Supports logging output in standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
 - Supports advanced HTTP pipeline interception via provided IHttpModule classes, including logging of HTTP request body.
 - To add new features [pull requests](https://github.com/NLog/NLog.Web/pulls) are always welcome.
 
@@ -27,4 +27,4 @@ Useful Links
 - [Tutorial](https://github.com/NLog/NLog/wiki/Tutorial)
 - [ASP.NET Layout Renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web)
 - [Logging Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
-- [Support](https://stackoverflow.com/questions/tagged/nlog)
+- [Have a question?](https://stackoverflow.com/questions/tagged/nlog)

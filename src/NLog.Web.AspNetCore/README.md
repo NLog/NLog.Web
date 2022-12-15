@@ -1,11 +1,11 @@
 # NLog.Web.AspNetCore
 
-- LoggerProvider for ASP.NET Core platform via extension methods for ILoggingProvider, IWebHostBuilder, and IHostBuilder.
-- Log all properties of HttpContext and IHostEnvironment via [layout renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) just by changing the NLog.config file.
-- Capable to log to many destinations via [targets](https://nlog-project.org/config/?tab=targets).
-- Supports common [layouts](https://nlog-project.org/config/?tab=layouts), such as CVS, JSON, W3C ELF, and XML.
+- [Logging provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging-providers) for ASP.NET Core platform via extension methods for IHostBuilder, and IWebHostBuilder.
+- Extends logging output with details from the active HttpContext via NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), just by changing NLog.config file.
+- Capable to log to many destinations via NLog [Targets](https://nlog-project.org/config/?tab=targets).
+- Supports logging output in standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
 - Supports advanced HTTP pipeline interception via provided IMiddleware classes, including logging of HTTP request body and HTTP response body.
-- To add new features [pull Requests](https://github.com/NLog/NLog.Web/pulls) are always welcome.
+- To add new features [pull requests](https://github.com/NLog/NLog.Web/pulls) are always welcome.
 
 Supported platforms:
 
@@ -32,4 +32,4 @@ Useful Links
 - [Getting started with ASP.NET Core 3](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3)
 - [ASP.NET Core Layout Renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore)
 - [Logging Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
-- [Support](https://stackoverflow.com/questions/tagged/nlog)
+- [Have a question?](https://stackoverflow.com/questions/tagged/nlog)
