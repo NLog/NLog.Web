@@ -40,7 +40,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, _) = CreateWithHttpContext();
-            renderer.Variable = "key";
+            renderer.Item = "key";
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -64,7 +64,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items["key"].Returns(expectedValue);
 #endif
             var cultureInfo = new CultureInfo("nl-NL");
-            renderer.Variable = "key";
+            renderer.Item = "key";
             renderer.Culture = cultureInfo;
 
             // Act
@@ -89,7 +89,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items["key"].Returns(expectedValue);
 #endif
             var culture = CultureInfo.CurrentUICulture;
-            renderer.Variable = "key";
+            renderer.Item = "key";
             renderer.Culture = culture;
 
             // Act
@@ -112,7 +112,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items[itemKey].Returns(data);
 #endif
             var culture = CultureInfo.CurrentUICulture;
-            renderer.Variable = variable;
+            renderer.Item = variable;
 #pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = true;
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -139,7 +139,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items[itemKey].Returns(data);
 #endif
             var culture = CultureInfo.CurrentUICulture;
-            renderer.Variable = variable;
+            renderer.Item = variable;
 #pragma warning disable CS0618 // Type or member is obsolete
             renderer.EvaluateAsNestedProperties = true;
 #pragma warning restore CS0618 // Type or member is obsolete

@@ -11,12 +11,12 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     /// <remarks>
     /// <code>
-    /// ${aspnet-application:variable=myvariable} - produces "123"
-    /// ${aspnet-application:variable=anothervariable} - produces "01/01/2006 00:00:00"
-    /// ${aspnet-application:variable=anothervariable:culture=pl-PL} - produces "2006-01-01 00:00:00"
-    /// ${aspnet-application:variable=myvariable:padding=5} - produces "  123"
-    /// ${aspnet-application:variable=myvariable:padding=-5} - produces "123  "
-    /// ${aspnet-application:variable=stringvariable:upperCase=true} - produces "AAA BBB"
+    /// ${aspnet-application:item=myvariable} - produces "123"
+    /// ${aspnet-application:item=anothervariable} - produces "01/01/2006 00:00:00"
+    /// ${aspnet-application:item=anothervariable:culture=pl-PL} - produces "2006-01-01 00:00:00"
+    /// ${aspnet-application:item=myvariable:padding=5} - produces "  123"
+    /// ${aspnet-application:item=myvariable:padding=-5} - produces "123  "
+    /// ${aspnet-application:item=stringvariable:upperCase=true} - produces "AAA BBB"
     /// </code>
     /// </remarks>
     /// <example>
@@ -33,6 +33,8 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-application")]
     public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
     {
+        private readonly NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper _objectPathRenderer = new NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper();
+
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
@@ -45,7 +47,13 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
+        [Obsolete("Instead use Item. Marked obsolete with NLog.Web 5.3")]
         public string Variable { get => Item; set => Item = value; }
+
+        /// <summary>
+        /// Gets or sets the object-property-navigation-path for lookup of nested property
+        /// </summary>
+        public string ObjectPath { get => _objectPathRenderer.ObjectPath; set => _objectPathRenderer.ObjectPath = value; }
 
         /// <summary>
         /// Format string for conversion from object to string.
@@ -74,8 +82,23 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
+            var value = application[item];
+            if (value is null)
+            {
+                return;
+            }
+
+            if (!(ObjectPath is null))
+            {
+                if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
+                    return;
+
+                if (value is null)
+                    return;
+            }
+
             var formatProvider = GetFormatProvider(logEvent, Culture);
-            builder.AppendFormattedValue(application[item], Format, formatProvider, ValueFormatter);
+            builder.AppendFormattedValue(value, Format, formatProvider, ValueFormatter);
         }
     }
 }
