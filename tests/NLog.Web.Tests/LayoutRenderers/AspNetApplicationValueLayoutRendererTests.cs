@@ -16,12 +16,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullHttpContextRendersEmptyString()
         {
             var renderer = new AspNetApplicationValueLayoutRenderer();
-            renderer.Variable = string.Empty;
+            renderer.Item = string.Empty;
 
             string result = renderer.Render(new LogEventInfo());
             Assert.Empty(result);
 
-            renderer.Variable = null;
+            renderer.Item = null;
             result = renderer.Render(new LogEventInfo());
             Assert.Empty(result);
         }
@@ -32,7 +32,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
 
             var renderer = new AspNetApplicationValueLayoutRenderer();
-            renderer.Variable = "key";
+            renderer.Item = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
             string result = renderer.Render(new LogEventInfo());
@@ -48,13 +48,31 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var culture = CultureInfo.CurrentUICulture;
             var renderer = new AspNetApplicationValueLayoutRenderer();
-            renderer.Variable = "key";
+            renderer.Item = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.Culture = culture;
 
             string result = renderer.Render(new LogEventInfo());
 
             Assert.Equal(Convert.ToString(expectedValue, culture), result);
+        }
+
+        [Fact]
+        public void NestedObjectPath()
+        {
+            var expectedValue = "a";
+
+            var httpContext = Substitute.For<HttpContextBase>();
+            httpContext.Application["key"].Returns(Tuple.Create(expectedValue, 1));
+
+            var renderer = new AspNetApplicationValueLayoutRenderer();
+            renderer.Item = "key";
+            renderer.ObjectPath = "Item1";
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedValue, result);
         }
 
         public static IEnumerable<object[]> VariableFoundData

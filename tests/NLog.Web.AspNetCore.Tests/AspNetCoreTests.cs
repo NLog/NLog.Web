@@ -34,10 +34,12 @@ namespace NLog.Web.Tests
 
         #endregion
 
-        [Fact]
-        public void UseNLogShouldLogTest()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void UseNLogShouldLogTest(bool useNLogWeb)
         {
-            var webhost = CreateWebHost();
+            var webhost = useNLogWeb ? CreateWebHost() : CreateWebHostAddNLogWeb();
 
             var loggerFact = GetLoggerFactory(webhost);
 
@@ -304,6 +306,13 @@ namespace NLog.Web.Tests
         {
             return CreateWebHostBuilder()
                 .UseNLog(options)
+                .Build();
+        }
+
+        private static IWebHost CreateWebHostAddNLogWeb()
+        {
+            return CreateWebHostBuilder()
+                .ConfigureLogging(builder => builder.ClearProviders().AddNLogWeb())
                 .Build();
         }
 

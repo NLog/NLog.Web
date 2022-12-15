@@ -56,6 +56,7 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the session item name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
+        [Obsolete("Instead use Item. Marked obsolete with NLog.Web 5.3")]
         public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
@@ -141,22 +142,25 @@ namespace NLog.Web.LayoutRenderers
 
                 object value = null;
 
-                if (ObjectPath is null)
-                {
 #pragma warning disable CS0618 // Type or member is obsolete
-                    value = PropertyReader.GetValue(item, contextSession, _sessionValueLookup, EvaluateAsNestedProperties);
-#pragma warning restore CS0618 // Type or member is obsolete
+                if (EvaluateAsNestedProperties)
+                {
+                    value = PropertyReader.GetValue(item, contextSession, _sessionValueLookup, true);
                     if (value is null)
                         return;
                 }
+#pragma warning restore CS0618 // Type or member is obsolete
                 else
                 {
                     value = _sessionValueLookup(contextSession, item);
                     if (value is null)
                         return;
 
-                    if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
-                        return;
+                    if (ObjectPath != null)
+                    {
+                        if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
+                            return;
+                    }
                 }
 
                 var formatProvider = GetFormatProvider(logEvent, Culture);

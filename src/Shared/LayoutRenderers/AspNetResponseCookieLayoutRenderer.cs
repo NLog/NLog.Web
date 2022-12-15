@@ -205,13 +205,13 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append('{');
 
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name, false);
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value, includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain, includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path, includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString(), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Name), cookie.Name, false);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Value), cookie.Value, includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Domain), cookie.Domain, includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Path), cookie.Path, includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires.ToUniversalTime().ToString("u"), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Secure), cookie.Secure.ToString(), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), includeSeparator);
 
                 builder.Append('}');
 
@@ -247,13 +247,13 @@ namespace NLog.Web.LayoutRenderers
                 }
                 firstObject = false;
 
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name,   valueSeparator, "");
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value,  valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain, valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path,   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires.ToUniversalTime().ToString("u"), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name,   valueSeparator, "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value,  valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain, valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path,   valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires.ToUniversalTime().ToString("u"), valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), valueSeparator, includeSeparator ? propertySeparator : "");
             }
         }
 
@@ -395,14 +395,14 @@ namespace NLog.Web.LayoutRenderers
 
                 builder.Append('{');
 
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Name),    cookie.Name.ToString(), false);
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Value),   cookie.Value.ToString(), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Domain),  cookie.Domain.ToString(), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Path),    cookie.Path.ToString(), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires?.ToUniversalTime().ToString("u"), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.Secure),  cookie.Secure.ToString(), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), includeSeparator) || includeSeparator;
-                includeSeparator = AppendJsonProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), includeSeparator) || includeSeparator;
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Name),    cookie.Name.ToString(), false);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Value),   cookie.Value.ToString(), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Domain),  cookie.Domain.ToString(), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Path),    cookie.Path.ToString(), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Expires), cookie.Expires?.ToUniversalTime().ToString("u"), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.Secure),  cookie.Secure.ToString(), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), includeSeparator);
+                includeSeparator |= AppendJsonProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), includeSeparator);
 
                 builder.Append('}');
 
@@ -438,14 +438,14 @@ namespace NLog.Web.LayoutRenderers
                 }
                 firstObject = false;
 
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name.ToString(), valueSeparator, "");
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString(),  valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path.ToString(),    valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
-                includeSeparator = AppendFlatProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), valueSeparator, includeSeparator ? propertySeparator : "") || includeSeparator;
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Name),     cookie.Name.ToString(), valueSeparator, "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Value),    cookie.Value.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Domain),   cookie.Domain.ToString(),  valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Path),     cookie.Path.ToString(),    valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Expires),  cookie.Expires?.ToUniversalTime().ToString("u"), valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.Secure),   cookie.Secure.ToString(),   valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.HttpOnly), cookie.HttpOnly.ToString(), valueSeparator, includeSeparator ? propertySeparator : "");
+                includeSeparator |= AppendFlatProperty(builder, nameof(cookie.SameSite), cookie.SameSite.ToString(), valueSeparator, includeSeparator ? propertySeparator : "");
             }
         }
 #endif
