@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -32,7 +33,14 @@ namespace NLog.Web.LayoutRenderers
         /// Header names to be rendered.
         /// If <c>null</c> or empty array, all headers will be rendered.
         /// </summary>
-        public List<string> HeaderNames { get; set; }
+        [DefaultParameter]
+        public List<string> Items { get; set; }
+
+        /// <summary>
+        /// Header names to be rendered.
+        /// If <c>null</c> or empty array, all headers will be rendered.
+        /// </summary>
+        public List<string> HeaderNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
@@ -64,7 +72,7 @@ namespace NLog.Web.LayoutRenderers
             var headers = httpRequest.Headers;
             if (headers?.Count > 0)
             {
-                bool checkForExclude = (HeaderNames == null || HeaderNames.Count == 0) && Exclude?.Count > 0;
+                bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;
                 var headerValues = GetHeaderValues(headers, checkForExclude);
                 SerializePairs(headerValues, builder, logEvent);
             }
@@ -73,7 +81,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
         private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool checkForExclude)
         {
-            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys.Cast<string>();
+            var headerNames = Items?.Count > 0 ? Items : headers.Keys.Cast<string>();
             foreach (var headerName in headerNames)
             {
                 if (checkForExclude && Exclude.Contains(headerName))
@@ -91,7 +99,7 @@ namespace NLog.Web.LayoutRenderers
 #else
         private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, bool checkForExclude)
         {
-            var headerNames = HeaderNames?.Count > 0 ? HeaderNames : headers.Keys;
+            var headerNames = Items?.Count > 0 ? Items : headers.Keys;
             foreach (var headerName in headerNames)
             {
                 if (checkForExclude && Exclude.Contains(headerName))

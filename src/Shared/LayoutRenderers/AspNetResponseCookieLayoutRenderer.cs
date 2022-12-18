@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog.LayoutRenderers;
-using NLog.Web.Enums;
-using NLog.Web.Internal;
-using NLog.Layouts;
 #if !ASP_NET_CORE
 using System.Web;
 #else
@@ -13,6 +9,12 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 #endif
+
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Layouts;
+using NLog.Web.Enums;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -43,7 +45,14 @@ namespace NLog.Web.LayoutRenderers
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
-        public List<string> CookieNames { get; set; }
+        [DefaultParameter]
+        public List<string> Items { get; set; }
+
+        /// <summary>
+        /// Cookie names to be rendered.
+        /// If <c>null</c> or empty array, all cookies will be rendered.
+        /// </summary>
+        public List<string> CookieNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Render all of the cookie properties, such as Daom and Path, not merely Name and Value
@@ -157,13 +166,13 @@ namespace NLog.Web.LayoutRenderers
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies)
         {
             var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
-            return HttpCookieCollectionValues.GetCookieValues(cookies, CookieNames, Exclude, expandMultiValue);
+            return HttpCookieCollectionValues.GetCookieValues(cookies, Items, Exclude, expandMultiValue);
         }
 
         private IEnumerable<HttpCookie> GetVerboseCookieValues(HttpCookieCollection cookies)
         {
             var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
-            return HttpCookieCollectionValues.GetVerboseCookieValues(cookies, CookieNames, Exclude, expandMultiValue);
+            return HttpCookieCollectionValues.GetVerboseCookieValues(cookies, Items, Exclude, expandMultiValue);
         }
 
         private void SerializeAllProperties(IEnumerable<HttpCookie> verboseCookieValues, StringBuilder builder, LogEventInfo logEvent)
@@ -274,9 +283,9 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IList<SetCookieHeaderValue> cookies)
         {
-            if (CookieNames?.Count > 0)
+            if (Items?.Count > 0)
             {
-                return GetCookieNameValues(cookies, CookieNames);
+                return GetCookieNameValues(cookies, Items);
             }
             else
             {
@@ -286,9 +295,9 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<SetCookieHeaderValue> GetVerboseCookieValues(IList<SetCookieHeaderValue> cookies)
         {
-            if (CookieNames?.Count > 0)
+            if (Items?.Count > 0)
             {
-                return GetCookieVerboseValues(cookies, CookieNames);
+                return GetCookieVerboseValues(cookies, Items);
             }
             else
             {

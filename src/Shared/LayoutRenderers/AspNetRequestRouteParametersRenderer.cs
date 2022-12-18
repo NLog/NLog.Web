@@ -7,6 +7,7 @@ using System.Web.Routing;
 using Microsoft.AspNetCore.Routing;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
+using NLog.Config;
 using NLog.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
@@ -29,13 +30,14 @@ namespace NLog.Web.LayoutRenderers
         /// List Route Parameter' Key to be rendered from Request.
         /// If empty, then render all parameters
         /// </summary>
-        public List<string> RouteParameterKeys { get => Items; set => Items = value; }
+        [DefaultParameter]
+        public List<string> Items { get; set; }
 
         /// <summary>
         /// List Route Parameter' Key to be rendered from Request.
         /// If empty, then render all parameters
         /// </summary>
-        public List<string> Items { get; set; }
+        public List<string> RouteParameterKeys { get => Items; set => Items = value; }
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
