@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 #if !ASP_NET_CORE
-using NLog.Web.Enums;
 using System.Web;
+using NLog.Web.Enums;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -33,7 +34,14 @@ namespace NLog.Web.LayoutRenderers
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
-        public List<string> CookieNames { get; set; }
+        [DefaultParameter]
+        public List<string> Items { get; set; }
+
+        /// <summary>
+        /// Cookie names to be rendered.
+        /// If <c>null</c> or empty array, all cookies will be rendered.
+        /// </summary>
+        public List<string> CookieNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
@@ -79,9 +87,9 @@ namespace NLog.Web.LayoutRenderers
 #else
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IRequestCookieCollection cookies)
         {
-            if (CookieNames?.Count > 0)
+            if (Items?.Count > 0)
             {
-                foreach (var cookieName in CookieNames)
+                foreach (var cookieName in Items)
                 {
                     if (cookies.TryGetValue(cookieName, out var cookieValue))
                     {
