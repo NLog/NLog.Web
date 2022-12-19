@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <TargetLatestAspNetCoreRuntimePatch>true</TargetLatestAspNetCoreRuntimePatch>
     <RuntimeFrameworkVersion>2.1.*</RuntimeFrameworkVersion>
     <AssemblyName>ASP.NetCore2_NLog_Web_Example</AssemblyName>
     <RootNamespace>ASP.NetCore2_NLog_Web_Example</RootNamespace>
@@ -15,7 +14,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.*" AllowExplicitVersion="true" />
   </ItemGroup>
   
   <ItemGroup>
