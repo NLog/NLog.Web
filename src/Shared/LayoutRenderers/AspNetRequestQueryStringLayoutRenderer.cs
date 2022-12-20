@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
 #else
 using Microsoft.AspNetCore.Http;
 #endif
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -29,7 +30,14 @@ namespace NLog.Web.LayoutRenderers
         /// List Query Strings' Key to be rendered from Request.
         /// If empty, then render all querystrings
         /// </summary>
-        public List<string> QueryStringKeys { get; set; }
+        [DefaultParameter]
+        public List<string> Items { get; set; }
+
+        /// <summary>
+        /// List Query Strings' Key to be rendered from Request.
+        /// If empty, then render all querystrings
+        /// </summary>
+        public List<string> QueryStringKeys { get => Items; set => Items = value; }
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -48,7 +56,7 @@ namespace NLog.Web.LayoutRenderers
             if (queryStrings == null || queryStrings.Count == 0)
                 return;
 
-            var queryStringKeys = QueryStringKeys;
+            var queryStringKeys = Items;
             var printAllQueryString = queryStringKeys == null || queryStringKeys.Count == 0;
             if (printAllQueryString)
             {
