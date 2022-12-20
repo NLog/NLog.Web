@@ -1,5 +1,6 @@
 ﻿using NLog.Web.Targets.Wrappers;
 using System;
+using System.Runtime.InteropServices;
 using System.Web;
 
 namespace NLog.Web
@@ -53,12 +54,26 @@ namespace NLog.Web
 
         internal void OnBeginRequest(HttpContext context)
         {
-            AspNetBufferingTargetWrapper.OnBeginRequest(new HttpContextWrapper(context));
+            if (context != null)
+            {
+                AspNetBufferingTargetWrapper.OnBeginRequest(new HttpContextWrapper(context));
+            }
+            else
+            {
+                AspNetBufferingTargetWrapper.OnBeginRequest(null);
+            }
         }
 
         internal void OnEndRequest(HttpContext context)
         {
-            AspNetBufferingTargetWrapper.OnEndRequest(new HttpContextWrapper(context));
+            if (context != null)
+            {
+                AspNetBufferingTargetWrapper.OnEndRequest(new HttpContextWrapper(context));
+            }
+            else
+            {
+                AspNetBufferingTargetWrapper.OnEndRequest(null);
+            }
         }
     }
 }

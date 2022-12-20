@@ -182,7 +182,7 @@ namespace NLog.Web.Targets.Wrappers
 
         private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer()
         {
-            var context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor?.HttpContext;
             if (context == null)
             {
                 return null;
@@ -242,7 +242,7 @@ namespace NLog.Web.Targets.Wrappers
 
             foreach (var bufferKeyValuePair in bufferDictionary)
             {
-                var wrappedTarget = bufferKeyValuePair.Key;
+                var wrappedTarget = bufferKeyValuePair.Key.WrappedTarget;
                 var buffer = bufferKeyValuePair.Value;
                 if (buffer != null)
                 {
