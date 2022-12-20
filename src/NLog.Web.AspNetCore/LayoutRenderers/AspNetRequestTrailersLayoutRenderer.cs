@@ -1,12 +1,13 @@
 ﻿#if ASP_NET_CORE3
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
-using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using NLog.Config;
+using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -30,7 +31,14 @@ namespace NLog.Web.LayoutRenderers
         /// Trailer names to be rendered.
         /// If <c>null</c> or empty array, all trailers will be rendered.
         /// </summary>
-        public List<string> TrailerNames { get; set; }
+        [DefaultParameter]
+        public List<string> Items { get; set; }
+
+        /// <summary>
+        /// Trailer names to be rendered.
+        /// If <c>null</c> or empty array, all trailers will be rendered.
+        /// </summary>
+        public List<string> TrailerNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
@@ -61,7 +69,7 @@ namespace NLog.Web.LayoutRenderers
             var trailers = httpRequestTrailers.Trailers;
             if (trailers?.Count > 0)
             {
-                bool checkForExclude = (TrailerNames == null || TrailerNames.Count == 0) && Exclude?.Count > 0;
+                bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;
                 var headerValues = GetTrailerValues(trailers, checkForExclude);
                 SerializePairs(headerValues, builder, logEvent);
             }
@@ -69,7 +77,7 @@ namespace NLog.Web.LayoutRenderers
 
         private IEnumerable<KeyValuePair<string, string>> GetTrailerValues(IHeaderDictionary trailers, bool checkForExclude)
         {
-            var trailerNames = TrailerNames?.Count > 0 ? TrailerNames : trailers.Keys;
+            var trailerNames = Items?.Count > 0 ? Items : trailers.Keys;
             foreach (var trailerName in trailerNames)
             {
                 if (checkForExclude && Exclude.Contains(trailerName))
