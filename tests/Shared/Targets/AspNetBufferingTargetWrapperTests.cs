@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
@@ -256,6 +257,94 @@ namespace NLog.Web.Tests
 
             logFactory.Shutdown();
         }
+
+#if NET46_OR_GREATER || ASP_NET_CORE
+        [Fact]
+        public void TestSingleMemoryTargetWithMultipleContext()
+        {
+            var context = SetUpFakeHttpContext();
+            Assert.NotNull(context);
+
+            var logFactory = RegisterSingleMemoryTarget();
+            var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only");
+            Assert.NotNull(target);
+            target.HttpContextAccessor = new FakeAsyncLocalHttpContextAccessor(context);
+
+            var releaseThread = new ManualResetEvent(false);
+            var waitThread = new ManualResetEvent(false);
+            var bonusThread = new System.Threading.Thread((state) =>
+            {
+                releaseThread.WaitOne(5000);
+
+                var bonusContext = SetUpFakeHttpContext();
+                Assert.NotNull(bonusContext);
+                target.HttpContextAccessor = new FakeAsyncLocalHttpContextAccessor(bonusContext);
+
+                ExecuteLogging(bonusContext, () =>
+                {
+                    ILogger logger = logFactory.GetCurrentClassLogger();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        logger.Debug((Environment.CurrentManagedThreadId + i).ToString);
+                    }
+                });
+
+                waitThread.Set();
+            });
+
+            bonusThread.Start();
+
+            ExecuteLogging(context, () =>
+            {
+                releaseThread.Set();
+
+                ILogger logger = logFactory.GetCurrentClassLogger();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    logger.Debug(i.ToString);
+                }
+
+                waitThread.WaitOne(5000);
+            });
+
+            var wrappedTarget = target.WrappedTarget;
+            var memoryTarget = wrappedTarget as MemoryTarget;
+
+            Assert.NotNull(memoryTarget);
+
+            Assert.NotNull(memoryTarget.Logs);
+
+            Assert.NotEmpty(memoryTarget.Logs);
+
+            Assert.Equal(18, memoryTarget.Logs.Count);
+
+            for (int i = 0; i < 9; i++)
+            {
+                Assert.Equal((bonusThread.ManagedThreadId + i + 1).ToString(), memoryTarget.Logs[i]);
+            }
+            for (int i = 0; i < 9; i++)
+            {
+                Assert.Equal((i + 1).ToString(), memoryTarget.Logs[i + 9]);
+            }
+        }
+
+        private class FakeAsyncLocalHttpContextAccessor : IHttpContextAccessor
+        {
+            private static readonly AsyncLocal<HttpContext> _context = new AsyncLocal<HttpContext>();
+
+#if ASP_NET_CORE
+            public HttpContext HttpContext { get => _context.Value; set => _context.Value = value; }
+#else
+            public HttpContextBase HttpContext => new HttpContextWrapper(_context.Value);
+#endif
+
+            public FakeAsyncLocalHttpContextAccessor(HttpContext httpContext)
+            {
+                _context.Value = httpContext;
+            }
+        }
+#endif
 
         [Fact]
         public void TestMultipleMemoryTargets()
