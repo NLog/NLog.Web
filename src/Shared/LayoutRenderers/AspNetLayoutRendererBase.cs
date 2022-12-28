@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
@@ -40,7 +40,6 @@ namespace NLog.Web.LayoutRenderers
         internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
         internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration) => DefaultHttpContextAccessor;
 #else
-
         internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
         {
             return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
@@ -54,13 +53,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="logEvent">Logging event.</param>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContextAccessor = HttpContextAccessor;
-            if (httpContextAccessor == null)
-            {
-                return;
-            }
-
-            if (httpContextAccessor.HttpContext == null)
+            if (!HttpContextAccessor.HasActiveHttpContext())
             {
                 InternalLogger.Debug("No available HttpContext, because outside valid request context. Logger: {0}", logEvent.LoggerName);
                 return;

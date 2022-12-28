@@ -17,6 +17,14 @@ namespace NLog.Web.Internal
     internal static class HttpContextExtensions
     {
 #if !ASP_NET_CORE
+        internal static bool HasActiveHttpContext(this IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor is DefaultHttpContextAccessor defaultHttpContextAccessor)
+                return defaultHttpContextAccessor.HasActiveHttpContext();    // Skip allocating HttpContextWrapper
+            else
+                return httpContextAccessor?.HttpContext != null;
+        }
+
         internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
         {
             try
@@ -49,6 +57,11 @@ namespace NLog.Web.Internal
             }
         }
 #else
+        internal static bool HasActiveHttpContext(this IHttpContextAccessor httpContextAccessor)
+        {
+            return httpContextAccessor?.HttpContext != null;
+        }
+
         internal static WebSocketManager TryGetWebSocket(this HttpContext context)
         {
             var websocket = context?.WebSockets;
