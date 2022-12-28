@@ -54,26 +54,12 @@ namespace NLog.Web
 
         internal void OnBeginRequest(HttpContext context)
         {
-            if (context != null)
-            {
-                AspNetBufferingTargetWrapper.OnBeginRequest(new HttpContextWrapper(context));
-            }
-            else
-            {
-                AspNetBufferingTargetWrapper.OnBeginRequest(null);
-            }
+            AspNetBufferingTargetWrapper.OnBeginRequest(context);
         }
 
         internal void OnEndRequest(HttpContext context)
         {
-            if (context != null)
-            {
-                AspNetBufferingTargetWrapper.OnEndRequest(new HttpContextWrapper(context));
-            }
-            else
-            {
-                AspNetBufferingTargetWrapper.OnEndRequest(null);
-            }
+            AspNetBufferingTargetWrapper.OnEndRequest(context);
         }
     }
 }
