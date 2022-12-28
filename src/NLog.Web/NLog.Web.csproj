@@ -66,10 +66,4 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <Compile Include="..\Shared\**\*.cs" />
     <None Include="NLog.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="readme.txt">
-      <Pack>true</Pack>
-      <PackagePath>\</PackagePath>
-    </Content>
-  </ItemGroup>
 </Project>
