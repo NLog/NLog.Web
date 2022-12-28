@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-#if !ASP_NET_CORE
-using System.Collections.Specialized;
-#else
-using Microsoft.AspNetCore.Http;
-#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
@@ -72,47 +66,9 @@ namespace NLog.Web.LayoutRenderers
             var headers = httpRequest.Headers;
             if (headers?.Count > 0)
             {
-                bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;
-                var headerValues = GetHeaderValues(headers, checkForExclude);
+                var headerValues = HttpHeaderCollectionValues.GetHeaderValues(headers, Items, Exclude);
                 SerializePairs(headerValues, builder, logEvent);
             }
         }
-
-#if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, bool checkForExclude)
-        {
-            var headerNames = Items?.Count > 0 ? Items : headers.Keys.Cast<string>();
-            foreach (var headerName in headerNames)
-            {
-                if (checkForExclude && Exclude.Contains(headerName))
-                    continue;
-
-                var headerValue = headers[headerName];
-                if (headerValue == null)
-                {
-                    continue;
-                }
-
-                yield return new KeyValuePair<string, string>(headerName, headerValue);
-            }
-        }
-#else
-        private IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, bool checkForExclude)
-        {
-            var headerNames = Items?.Count > 0 ? Items : headers.Keys;
-            foreach (var headerName in headerNames)
-            {
-                if (checkForExclude && Exclude.Contains(headerName))
-                    continue;
-
-                if (!headers.TryGetValue(headerName, out var headerValue))
-                {
-                    continue;
-                }
-
-                yield return new KeyValuePair<string, string>(headerName, headerValue);
-            }
-        }
-#endif
     }
 }
