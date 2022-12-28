@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 #if !ASP_NET_CORE
 using System.Web;
 #else
@@ -75,7 +76,7 @@ namespace NLog.Web.Targets.Wrappers
     public class AspNetBufferingTargetWrapper : WrapperTargetBase
     {
         private static readonly object dataSlot = new object();
-        private int growLimit;
+        private int _bufferGrowLimit;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
@@ -131,14 +132,10 @@ namespace NLog.Web.Targets.Wrappers
         /// <docgen category='Buffering Options' order='100' />
         public int BufferGrowLimit
         {
-            get
-            {
-                return growLimit;
-            }
-
+            get => _bufferGrowLimit;
             set
             {
-                growLimit = value;
+                _bufferGrowLimit = value;
                 GrowBufferAsNeeded = (value >= BufferSize);
             }
         }
@@ -163,19 +160,18 @@ namespace NLog.Web.Targets.Wrappers
         /// Adds the specified log event to the buffer.
         /// </summary>
         /// <param name="logEvent">The log event.</param>
-        protected override void Write(AsyncLogEventInfo logEvent)
+        protected override void WriteAsyncThreadSafe(AsyncLogEventInfo logEvent)
         {
             var buffer = GetRequestBuffer();
             if (buffer != null)
             {
+                InternalLogger.Trace("{0}: Append to active Request buffer", this);
                 WrappedTarget.PrecalculateVolatileLayouts(logEvent.LogEvent);
-
                 buffer.Append(logEvent);
-                InternalLogger.Trace("Appending log event {0} to ASP.NET request buffer.", logEvent.LogEvent.SequenceID);
             }
             else
             {
-                InternalLogger.Trace("ASP.NET request buffer does not exist. Passing to wrapped target.");
+                InternalLogger.Trace("{0}: Request buffer not active, writing to wrapped target.", this);
                 WrappedTarget.WriteAsyncLogEvent(logEvent);
             }
         }
@@ -188,33 +184,61 @@ namespace NLog.Web.Targets.Wrappers
                 return null;
             }
 
-            var bufferDictionary = GetBufferDictionary(context);
-            if (bufferDictionary == null)
-            {
-                return null;
-            }
+            var targetBufferList = GetTargetBufferList(context);
+            return targetBufferList?.GetRequestBuffer(this);
+        }
 
-            lock (bufferDictionary)
+        private static TargetBufferListNode GetTargetBufferList(HttpContextBase context)
+        {
+            return context?.Items?[dataSlot] as TargetBufferListNode;
+        }
+
+        private static void SetTargetBufferList(HttpContextBase context)
+        {
+            context.Items[dataSlot] = new TargetBufferListNode();
+        }
+
+        private class TargetBufferListNode
+        {
+            public AspNetBufferingTargetWrapper Target => _target;
+            public Internal.LogEventInfoBuffer RequestBuffer => _requestBuffer;
+            public TargetBufferListNode NextNode => _nextNode;
+
+            private AspNetBufferingTargetWrapper _target;
+            private Internal.LogEventInfoBuffer _requestBuffer;
+            private TargetBufferListNode _nextNode;
+
+            public Internal.LogEventInfoBuffer GetRequestBuffer(AspNetBufferingTargetWrapper target)
             {
-                if (!bufferDictionary.TryGetValue(this, out var buffer))
+                if (NodeForTarget(target))
                 {
-                    buffer = new Internal.LogEventInfoBuffer(BufferSize, GrowBufferAsNeeded, BufferGrowLimit);
-                    bufferDictionary.Add(this, buffer);
+                    var requestBuffer = _requestBuffer;
+                    if (requestBuffer is null)
+                    {
+                        var buffer = new Internal.LogEventInfoBuffer(target.BufferSize, target.GrowBufferAsNeeded, target.BufferGrowLimit);
+                        requestBuffer = Interlocked.CompareExchange(ref _requestBuffer, buffer, null) ?? buffer;
+                    }
+                    return requestBuffer;
                 }
-
-                return buffer;
+                else
+                {
+                    var nextNode = _nextNode;
+                    if (nextNode is null)
+                    {
+                        nextNode = new TargetBufferListNode();
+                        nextNode = Interlocked.CompareExchange(ref _nextNode, nextNode, null) ?? nextNode;
+                    }
+                    return nextNode.GetRequestBuffer(target);
+                }
             }
-        }
 
-        private static Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer> GetBufferDictionary(HttpContextBase context)
-        {
-            return context?.Items?[dataSlot] as
-                Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
-        }
+            private bool NodeForTarget(AspNetBufferingTargetWrapper target)
+            {
+                if (_target is null && Interlocked.CompareExchange(ref _target, target, null) == null)
+                    return true;
 
-        private static void SetBufferDictionary(HttpContextBase context)
-        {
-            context.Items[dataSlot] = new Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>();
+                return ReferenceEquals(_target, target);
+            }
         }
 
         internal static void OnBeginRequest(HttpContextBase context)
@@ -224,32 +248,30 @@ namespace NLog.Web.Targets.Wrappers
                 return;
             }
 
-            var bufferDictionary = GetBufferDictionary(context);
-            if (bufferDictionary == null)
+            var targetBufferList = GetTargetBufferList(context);
+            if (targetBufferList == null)
             {
                 InternalLogger.Trace("Setting up ASP.NET request buffer.");
-                SetBufferDictionary(context);
+                SetTargetBufferList(context);
             }
         }
 
         internal static void OnEndRequest(HttpContextBase context)
         {
-            var bufferDictionary = GetBufferDictionary(context);
-            if (bufferDictionary == null)
-            {
-                return;
-            }
+            var targetBufferList = GetTargetBufferList(context);
 
-            foreach (var bufferKeyValuePair in bufferDictionary)
+            while (targetBufferList?.Target != null)
             {
-                var wrappedTarget = bufferKeyValuePair.Key.WrappedTarget;
-                var buffer = bufferKeyValuePair.Value;
+                var buffer = targetBufferList.RequestBuffer;
+                var target = targetBufferList.Target;
                 if (buffer != null)
                 {
-                    InternalLogger.Trace("Sending buffered events to wrapped target: {0}.", wrappedTarget);
+                    InternalLogger.Trace("{0}: Request Buffer flushed to wrapped target", target);
                     AsyncLogEventInfo[] events = buffer.GetEventsAndClear();
-                    wrappedTarget.WriteAsyncLogEvents(events);
+                    target.WrappedTarget.WriteAsyncLogEvents(events);
                 }
+
+                targetBufferList = targetBufferList.NextNode;
             }
         }
     }

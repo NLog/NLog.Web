@@ -24,7 +24,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var expectedResult = "";
 #if ASP_NET_CORE
-            var httpContext = this.HttpContext;
+            var httpContext = SetUpFakeHttpContext();
 #else
             var httpContext = Substitute.For<HttpContextBase>();
 #endif
@@ -134,7 +134,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         private AspNetRequestFormLayoutRenderer CreateRenderer(bool hasFormValues = true)
         {
 #if ASP_NET_CORE
-            var httpContext = this.HttpContext;
+            var httpContext = SetUpFakeHttpContext();
             httpContext.Request.ContentType = "application/x-www-form-urlencoded";
 #else
             var httpContext = Substitute.For<HttpContextBase>();

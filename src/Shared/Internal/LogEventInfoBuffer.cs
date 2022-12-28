@@ -68,7 +68,7 @@ namespace NLog.Web.Internal
         /// <summary>
         /// Gets the capacity of the buffer
         /// </summary>
-        public int Size => _buffer.Length;
+        public int Capacity => _buffer.Length;
 
         /// <summary>
         /// Gets the number of items in the buffer
