@@ -377,7 +377,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var cookieNames = new List<string>();
 #if ASP_NET_CORE
-            var httpContext = HttpContext;
+            var httpContext = SetUpFakeHttpContext();
 #else
             var httpContext = Substitute.For<HttpContextBase>();
 #endif

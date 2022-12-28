@@ -1,22 +1,25 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+#if ASP_NET_CORE
+using Microsoft.AspNetCore.Http;
+#else
 using System.Web;
+#endif
 using NLog.Targets;
 using NLog.Targets.Wrappers;
-using NLog.Web.Internal;
 using NLog.Web.Targets.Wrappers;
 using NLog.Web.Tests.LayoutRenderers;
 using Xunit;
 
 namespace NLog.Web.Tests
 {
-    public class NLogHttpModuleTests : TestInvolvingAspNetHttpContext
+    public class AspNetBufferingTargetWrapperTests : TestInvolvingAspNetHttpContext
     {
         private static LogFactory RegisterSingleDebugTarget()
         {
-            LogManager.LogFactory.Setup().RegisterNLogWeb().LoadConfigurationFromXml(
+            return new LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 @"<nlog throwConfigExceptions='true'>
                     <targets>
                         <target 
@@ -31,13 +34,12 @@ namespace NLog.Web.Tests
                     <rules>
                         <logger name='*' minlevel='Debug' writeTo='only' />
                     </rules>
-                </nlog>");
-            return LogManager.LogFactory;
+                </nlog>").LogFactory;
         }
 
         private static LogFactory RegisterSingleMemoryTarget()
         {
-            LogManager.LogFactory.Setup().RegisterNLogWeb().LoadConfigurationFromXml(
+            return new LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 @"<nlog throwConfigExceptions='true'>
                     <targets>
                         <target 
@@ -52,13 +54,12 @@ namespace NLog.Web.Tests
                     <rules>
                         <logger name='*' minlevel='Debug' writeTo='only' />
                     </rules>
-                </nlog>");
-            return LogManager.LogFactory;
+                </nlog>").LogFactory;
         }
 
         private static LogFactory RegisterMultipleMemoryTargets()
         {
-            LogManager.LogFactory.Setup().RegisterNLogWeb().LoadConfigurationFromXml(
+            return new LogFactory().Setup().RegisterNLogWeb().LoadConfigurationFromXml(
                 @"<nlog throwConfigExceptions='true'>
                     <targets>
                         <target 
@@ -91,55 +92,29 @@ namespace NLog.Web.Tests
                         <logger name='*' minlevel='Debug' writeTo='second' />
                         <logger name='*' minlevel='Debug' writeTo='third' />
                     </rules>
-                </nlog>");
-            return LogManager.LogFactory;
+                </nlog>").LogFactory;
         }
 
         [Fact]
         public void TestSingleDebugTarget()
         {
-            var logFactory = RegisterSingleDebugTarget();
-
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only"));
-
             var context = SetUpFakeHttpContext();
+            Assert.NotNull(context);
 
+            var logFactory = RegisterSingleDebugTarget();
             var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only");
-            target.HttpContextAccessor = new FakeHttpContextAccessor(new HttpContextWrapper(context));
+            Assert.NotNull(target);
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
-            // Act
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(context);
-
-            ILogger logger = logFactory.GetCurrentClassLogger();
-
-            for (int i = 0; i < 10; i++)
+            ExecuteLogging(context, () =>
             {
-                logger.Debug(i.ToString());
-            }
+                ILogger logger = logFactory.GetCurrentClassLogger();
 
-            Assert.NotNull(context.Items);
-            Assert.NotEmpty(context.Items);
-            Assert.Equal(1, context.Items.Count);
-
-            foreach (var itemValue in context.Items.Values)
-            {
-                var bufferDictionary =
-                    itemValue as Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
-
-                Assert.NotNull(bufferDictionary);
-
-                Assert.Single(bufferDictionary);
-
-                foreach (var bufferValue in bufferDictionary.Values)
+                for (int i = 0; i < 10; i++)
                 {
-                    Assert.NotNull(bufferValue);
-
-                    Assert.Equal(9, bufferValue.Count);
+                    logger.Debug(i.ToString);
                 }
-            }
-
-            httpModule.OnEndRequest(context);
+            });
 
             var wrappedTarget = target.WrappedTarget;
             var debugTarget = wrappedTarget as DebugTarget;
@@ -151,54 +126,29 @@ namespace NLog.Web.Tests
 
             Assert.Equal("9", debugTarget.LastMessage);
 
-            LogManager.Shutdown();
+            logFactory.Shutdown();
         }
 
         [Fact]
         public void TestSingleMemoryTarget()
         {
-            var logFactory = RegisterSingleMemoryTarget();
-
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only"));
-
             var context = SetUpFakeHttpContext();
+            Assert.NotNull(context);
 
+            var logFactory = RegisterSingleMemoryTarget();
             var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only");
-            target.HttpContextAccessor = new FakeHttpContextAccessor(new HttpContextWrapper(context));
+            Assert.NotNull(target);
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
-            // Act
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(context);
-
-            ILogger logger = logFactory.GetCurrentClassLogger();
-
-            for (int i = 0; i < 10; i++)
+            ExecuteLogging(context, () =>
             {
-                logger.Debug(i.ToString());
-            }
+                ILogger logger = logFactory.GetCurrentClassLogger();
 
-            Assert.NotNull(context.Items);
-            Assert.NotEmpty(context.Items);
-            Assert.Equal(1, context.Items.Count);
-
-            foreach (var itemValue in context.Items.Values)
-            {
-                var bufferDictionary =
-                    itemValue as Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
-
-                Assert.NotNull(bufferDictionary);
-
-                Assert.Single(bufferDictionary);
-
-                foreach (var bufferValue in bufferDictionary.Values)
+                for (int i = 0; i < 10; i++)
                 {
-                    Assert.NotNull(bufferValue);
-
-                    Assert.Equal(9, bufferValue.Count);
+                    logger.Debug(i.ToString);
                 }
-            }
-
-            httpModule.OnEndRequest(context);
+            });
 
             var wrappedTarget = target.WrappedTarget;
             var memoryTarget = wrappedTarget as MemoryTarget;
@@ -222,33 +172,29 @@ namespace NLog.Web.Tests
                 j++;
             }
 
-            LogManager.Shutdown();
+            logFactory.Shutdown();
         }
 
         [Fact]
         public void TestSingleDebugTargetWithNullContext()
         {
+            var context = SetUpFakeHttpContext(true);
+            Assert.Null(context);
+
             var logFactory = RegisterSingleDebugTarget();
-
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only"));
-
-            HttpContext context = null;
-
             var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only");
-            target.HttpContextAccessor = new FakeHttpContextAccessor(null);
+            Assert.NotNull(target);
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
-            // Act
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(context);
-
-            ILogger logger = logFactory.GetCurrentClassLogger();
-
-            for (int i = 0; i < 10; i++)
+            ExecuteLogging(context, () =>
             {
-                logger.Debug(i.ToString());
-            }
+                ILogger logger = logFactory.GetCurrentClassLogger();
 
-            httpModule.OnEndRequest(context);
+                for (int i = 0; i < 10; i++)
+                {
+                    logger.Debug(i.ToString);
+                }
+            });
 
             var wrappedTarget = target.WrappedTarget;
             var debugTarget = wrappedTarget as DebugTarget;
@@ -262,33 +208,29 @@ namespace NLog.Web.Tests
 
             Assert.Equal("9", debugTarget.LastMessage);
 
-            LogManager.Shutdown();
+            logFactory.Shutdown();
         }
 
         [Fact]
         public void TestSingleMemoryTargetWithNullContext()
         {
+            var context = SetUpFakeHttpContext(nullContext: true);
+            Assert.Null(context);
+
             var logFactory = RegisterSingleMemoryTarget();
-
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only"));
-
-            HttpContext context = null;
-
             var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only");
-            target.HttpContextAccessor = new FakeHttpContextAccessor(null);
+            Assert.NotNull(target);
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
-            // Act
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(context);
-
-            ILogger logger = logFactory.GetCurrentClassLogger();
-
-            for (int i = 0; i < 10; i++)
+            ExecuteLogging(context, () =>
             {
-                logger.Debug(i.ToString());
-            }
+                ILogger logger = logFactory.GetCurrentClassLogger();
 
-            httpModule.OnEndRequest(context);
+                for (int i = 0; i < 10; i++)
+                {
+                    logger.Debug(i.ToString);
+                }
+            });
 
             var wrappedTarget = target.WrappedTarget;
             var memoryTarget = wrappedTarget as MemoryTarget;
@@ -299,7 +241,7 @@ namespace NLog.Web.Tests
 
             Assert.NotEmpty(memoryTarget.Logs);
 
-            Assert.Equal(10, memoryTarget.Logs.Count);
+            Assert.Equal(10,memoryTarget.Logs.Count);
 
             // because we had a null HttpContext, we did not go thru the
             // buffered wrapper where the buffer limit was 9,
@@ -312,108 +254,103 @@ namespace NLog.Web.Tests
                 j++;
             }
 
-            LogManager.Shutdown();
+            logFactory.Shutdown();
         }
 
         [Fact]
-        public void TestMutipleMemoryTargetsWithNullContext()
+        public void TestMultipleMemoryTargets()
         {
-            var logFactory = RegisterMultipleMemoryTargets();
-
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first"));
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second"));
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third"));
-
-            HttpContext context = null;
-
-            var firstTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first");
-            firstTarget.HttpContextAccessor = new FakeHttpContextAccessor(null);
-
-            var secondTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second");
-            secondTarget.HttpContextAccessor = new FakeHttpContextAccessor(null);
-
-            var thirdTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third");
-            thirdTarget.HttpContextAccessor = new FakeHttpContextAccessor(null);
-
-            // Act
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(context);
-
-            ILogger logger = logFactory.GetCurrentClassLogger();
-
-            for (int i = 0; i < 10; i++)
-            {
-                logger.Debug(i.ToString());
-            }
-
-            httpModule.OnEndRequest(context);
-
-            TestMemoryTargetForMultipleCaseNullContext(firstTarget);
-            TestMemoryTargetForMultipleCaseNullContext(secondTarget);
-            TestMemoryTargetForMultipleCaseNullContext(thirdTarget);
-
-            LogManager.Shutdown();
-        }
-
-        [Fact]
-        public void TestMutipleMemoryTargets()
-        {
-            var logFactory = RegisterMultipleMemoryTargets();
-
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first"));
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second"));
-            Assert.NotNull(logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third"));
-
             var context = SetUpFakeHttpContext();
+            Assert.NotNull(context);
 
+            var logFactory = RegisterMultipleMemoryTargets();
             var firstTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first");
-            firstTarget.HttpContextAccessor = new FakeHttpContextAccessor(new HttpContextWrapper(context));
+            Assert.NotNull(firstTarget);
+            firstTarget.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
             var secondTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second");
-            secondTarget.HttpContextAccessor = new FakeHttpContextAccessor(new HttpContextWrapper(context));
+            Assert.NotNull(secondTarget);
+            secondTarget.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
             var thirdTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third");
-            thirdTarget.HttpContextAccessor = new FakeHttpContextAccessor(new HttpContextWrapper(context));
+            Assert.NotNull(thirdTarget);
+            thirdTarget.HttpContextAccessor = new FakeHttpContextAccessor(context);
 
-            // Act
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(context);
-
-            ILogger logger = logFactory.GetCurrentClassLogger();
-
-            for (int i = 0; i < 10; i++)
+            ExecuteLogging(context, () =>
             {
-                logger.Debug(i.ToString());
-            }
+                ILogger logger = logFactory.GetCurrentClassLogger();
 
-            Assert.NotNull(context.Items);
-            Assert.NotEmpty(context.Items);
-            Assert.Equal(1, context.Items.Count);
-
-            foreach (var itemValue in context.Items.Values)
-            {
-                var bufferDictionary =
-                    itemValue as Dictionary<AspNetBufferingTargetWrapper, Internal.LogEventInfoBuffer>;
-
-                Assert.NotNull(bufferDictionary);
-
-                Assert.Equal(3,bufferDictionary.Count);
-
-                foreach (var bufferValue in bufferDictionary.Values)
+                for (int i = 0; i < 10; i++)
                 {
-                    Assert.NotNull(bufferValue);
-
-                    Assert.Equal(9, bufferValue.Count);
+                    logger.Debug(i.ToString);
                 }
-            }
-
-            httpModule.OnEndRequest(context);
+            });
 
             TestMemoryTargetForMultipleCase(firstTarget);
             TestMemoryTargetForMultipleCase(secondTarget);
             TestMemoryTargetForMultipleCase(thirdTarget);
 
-            LogManager.Shutdown();
+            logFactory.Shutdown();
+        }
+
+        private void TestMemoryTargetForMultipleCase(WrapperTargetBase target)
+        {
+            var wrappedTarget = target.WrappedTarget;
+            var memoryTarget = wrappedTarget as MemoryTarget;
+
+            Assert.NotNull(memoryTarget);
+
+            Assert.NotNull(memoryTarget.Logs);
+
+            Assert.NotEmpty(memoryTarget.Logs);
+
+            Assert.Equal(9, memoryTarget.Logs.Count);
+
+            // We went thru the buffered wrapper where the buffer limit was 9,
+            // so in this case we have only 9 messages starting at 1, not
+            // 10 messages starting at 0.
+
+            int j = 1;
+            foreach (var message in memoryTarget.Logs)
+            {
+                Assert.Equal(j.ToString(), message);
+                j++;
+            }
+        }
+
+        [Fact]
+        public void TestMultipleMemoryTargetsWithNullContext()
+        {
+            var context = SetUpFakeHttpContext(nullContext: true);
+
+            var logFactory = RegisterMultipleMemoryTargets();
+            var firstTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("first");
+            Assert.NotNull(firstTarget);
+            firstTarget.HttpContextAccessor = new FakeHttpContextAccessor(context);
+
+            var secondTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("second");
+            Assert.NotNull(secondTarget);
+            secondTarget.HttpContextAccessor = new FakeHttpContextAccessor(context);
+
+            var thirdTarget = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("third");
+            Assert.NotNull(thirdTarget);
+            thirdTarget.HttpContextAccessor = new FakeHttpContextAccessor(context);
+
+            ExecuteLogging(context, () =>
+            {
+                ILogger logger = logFactory.GetCurrentClassLogger();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    logger.Debug(i.ToString);
+                }
+            });
+
+            TestMemoryTargetForMultipleCaseNullContext(firstTarget);
+            TestMemoryTargetForMultipleCaseNullContext(secondTarget);
+            TestMemoryTargetForMultipleCaseNullContext(thirdTarget);
+
+            logFactory.Shutdown();
         }
 
         private void TestMemoryTargetForMultipleCaseNullContext(WrapperTargetBase target)
@@ -441,29 +378,27 @@ namespace NLog.Web.Tests
             }
         }
 
-        private void TestMemoryTargetForMultipleCase(WrapperTargetBase target)
+#if ASP_NET_CORE
+        private void ExecuteLogging(HttpContext httpContext, Action loggingInvoker)
         {
-            var wrappedTarget = target.WrappedTarget;
-            var memoryTarget = wrappedTarget as MemoryTarget;
-
-            Assert.NotNull(memoryTarget);
-
-            Assert.NotNull(memoryTarget.Logs);
-
-            Assert.NotEmpty(memoryTarget.Logs);
-
-            Assert.Equal(9, memoryTarget.Logs.Count);
-
-            // We went thru the buffered wrapper where the buffer limit was 9,
-            // so in this case we have only 9 messages starting at 1, not
-            // 10 messages starting at 0.
-
-            int j = 1;
-            foreach (var message in memoryTarget.Logs)
+            RequestDelegate next = (HttpContext hc) =>
             {
-                Assert.Equal(j.ToString(), message);
-                j++;
-            }
+                loggingInvoker();
+                return Task.CompletedTask;
+            };
+
+            NLogBufferingTargetWrapperMiddleware middleware = new NLogBufferingTargetWrapperMiddleware(next);
+            middleware.Invoke(httpContext).GetAwaiter().GetResult();
         }
+#else
+        private void ExecuteLogging(System.Web.HttpContext httpContext, Action loggingInvoker)
+        {
+            var httpModule = new NLogHttpModule();
+            httpModule.OnBeginRequest(httpContext);
+            loggingInvoker();
+            httpModule.OnEndRequest(httpContext);
+        }
+#endif
+
     }
 }
