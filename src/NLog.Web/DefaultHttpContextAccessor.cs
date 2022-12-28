@@ -21,5 +21,9 @@ namespace NLog.Web
             }
         }
 
+        internal bool HasActiveHttpContext()
+        {
+            return System.Web.HttpContext.Current != null;  // Skip allocating HttpContextWrapper
+        }
     }
 }
