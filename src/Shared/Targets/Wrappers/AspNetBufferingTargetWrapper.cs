@@ -5,7 +5,6 @@ using System.Threading;
 #if !ASP_NET_CORE
 using System.Web;
 #else
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
 using NLog.Web.DependencyInjection;
 #endif
@@ -178,7 +177,11 @@ namespace NLog.Web.Targets.Wrappers
 
         private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer()
         {
+#if ASP_NET_CORE
             var context = HttpContextAccessor?.HttpContext;
+#else
+            var context = HttpContext.Current;
+#endif
             if (context == null)
             {
                 return null;
@@ -188,17 +191,17 @@ namespace NLog.Web.Targets.Wrappers
             return targetBufferList?.GetRequestBuffer(this);
         }
 
-        private static TargetBufferListNode GetTargetBufferList(HttpContextBase context)
+        private static TargetBufferListNode GetTargetBufferList(HttpContext context)
         {
             return context?.Items?[dataSlot] as TargetBufferListNode;
         }
 
-        private static void SetTargetBufferList(HttpContextBase context)
+        private static void SetTargetBufferList(HttpContext context)
         {
             context.Items[dataSlot] = new TargetBufferListNode();
         }
 
-        private class TargetBufferListNode
+        private sealed class TargetBufferListNode
         {
             public AspNetBufferingTargetWrapper Target => _target;
             public Internal.LogEventInfoBuffer RequestBuffer => _requestBuffer;
@@ -241,7 +244,7 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        internal static void OnBeginRequest(HttpContextBase context)
+        internal static void OnBeginRequest(HttpContext context)
         {
             if (context == null)
             {
@@ -256,7 +259,7 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        internal static void OnEndRequest(HttpContextBase context)
+        internal static void OnEndRequest(HttpContext context)
         {
             var targetBufferList = GetTargetBufferList(context);
 
