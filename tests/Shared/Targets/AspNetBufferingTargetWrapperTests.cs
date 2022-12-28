@@ -127,6 +127,11 @@ namespace NLog.Web.Tests
 
             Assert.Equal("9", debugTarget.LastMessage);
 
+            // Verify that logging after end-request are not buffered
+            logFactory.GetCurrentClassLogger().Debug(666);
+            Assert.Equal(10, debugTarget.Counter);
+            Assert.Equal("666", debugTarget.LastMessage);
+
             logFactory.Shutdown();
         }
 
@@ -172,6 +177,11 @@ namespace NLog.Web.Tests
                 Assert.Equal(j.ToString(), message);
                 j++;
             }
+
+            // Verify that logging after end-request are not buffered
+            logFactory.GetCurrentClassLogger().Debug(666);
+            Assert.Equal(10, memoryTarget.Logs.Count);
+            Assert.Equal("666", memoryTarget.Logs.Last());
 
             logFactory.Shutdown();
         }
@@ -482,10 +492,9 @@ namespace NLog.Web.Tests
 #else
         private void ExecuteLogging(System.Web.HttpContext httpContext, Action loggingInvoker)
         {
-            var httpModule = new NLogHttpModule();
-            httpModule.OnBeginRequest(httpContext);
+            AspNetBufferingTargetWrapper.OnBeginRequest(httpContext);
             loggingInvoker();
-            httpModule.OnEndRequest(httpContext);
+            AspNetBufferingTargetWrapper.OnEndRequest(httpContext);
         }
 #endif
 

@@ -1,6 +1,4 @@
-﻿using NLog.Web.Targets.Wrappers;
-using System;
-using System.Runtime.InteropServices;
+﻿using System;
 using System.Web;
 
 namespace NLog.Web
@@ -42,24 +40,11 @@ namespace NLog.Web
         private void BeginRequestHandler(object sender, EventArgs args)
         {
             BeginRequest?.Invoke(sender, args);
-            OnBeginRequest((sender as HttpApplication)?.Context);
-
         }
 
         private void EndRequestHandler(object sender, EventArgs args)
         {
             EndRequest?.Invoke(sender, args);
-            OnEndRequest((sender as HttpApplication)?.Context);
-        }
-
-        internal void OnBeginRequest(HttpContext context)
-        {
-            AspNetBufferingTargetWrapper.OnBeginRequest(context);
-        }
-
-        internal void OnEndRequest(HttpContext context)
-        {
-            AspNetBufferingTargetWrapper.OnEndRequest(context);
         }
     }
 }

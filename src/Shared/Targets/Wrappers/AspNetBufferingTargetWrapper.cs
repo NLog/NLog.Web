@@ -155,6 +155,36 @@ namespace NLog.Web.Targets.Wrappers
 #endif
         }
 
+        /// <inheritdoc/>
+        protected override void InitializeTarget()
+        {
+            var httpContextAccessor = HttpContextAccessor;  // Best to resolve HttpContext before starting logging
+            if (httpContextAccessor is null)
+                InternalLogger.Debug("{0}: HttpContextAccessor not available", this);
+
+#if !ASP_NET_CORE
+            // Prevent double subscribe
+            NLogHttpModule.BeginRequest -= OnBeginRequestHandler;
+            NLogHttpModule.EndRequest -= OnEndRequestHandler;
+
+            NLogHttpModule.BeginRequest += OnBeginRequestHandler;
+            NLogHttpModule.EndRequest += OnEndRequestHandler;
+#endif
+            
+            base.InitializeTarget();
+        }
+
+        /// <inheritdoc/>
+        protected override void CloseTarget()
+        {
+#if !ASP_NET_CORE
+            NLogHttpModule.BeginRequest -= OnBeginRequestHandler;
+            NLogHttpModule.EndRequest -= OnEndRequestHandler;
+#endif
+
+            base.CloseTarget();
+        }
+
         /// <summary>
         /// Adds the specified log event to the buffer.
         /// </summary>
@@ -165,30 +195,41 @@ namespace NLog.Web.Targets.Wrappers
             if (buffer != null)
             {
                 InternalLogger.Trace("{0}: Append to active Request buffer", this);
-                WrappedTarget.PrecalculateVolatileLayouts(logEvent.LogEvent);
+                WrappedTarget?.PrecalculateVolatileLayouts(logEvent.LogEvent);
                 buffer.Append(logEvent);
             }
             else
             {
                 InternalLogger.Trace("{0}: Request buffer not active, writing to wrapped target.", this);
-                WrappedTarget.WriteAsyncLogEvent(logEvent);
+                WrappedTarget?.WriteAsyncLogEvent(logEvent);
             }
         }
 
         private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer()
         {
-#if ASP_NET_CORE
-            var context = HttpContextAccessor?.HttpContext;
-#else
-            var context = HttpContext.Current;
-#endif
-            if (context == null)
+            try
             {
+#if ASP_NET_CORE
+                var context = HttpContextAccessor?.HttpContext;
+#else
+                var context = HttpContext.Current;
+#endif
+                if (context == null)
+                {
+                    return null;
+                }
+
+                var targetBufferList = GetTargetBufferList(context);
+                return targetBufferList?.GetRequestBuffer(this);
+            }
+            catch (Exception ex)
+            {
+                if (LogManager.ThrowExceptions)
+                    throw;
+
+                InternalLogger.Error(ex, "{0}: Failed to retrieve Request Buffer", this);
                 return null;
             }
-
-            var targetBufferList = GetTargetBufferList(context);
-            return targetBufferList?.GetRequestBuffer(this);
         }
 
         private static TargetBufferListNode GetTargetBufferList(HttpContext context)
@@ -196,9 +237,9 @@ namespace NLog.Web.Targets.Wrappers
             return context?.Items?[dataSlot] as TargetBufferListNode;
         }
 
-        private static void SetTargetBufferList(HttpContext context)
+        private static void SetTargetBufferList(HttpContext context, TargetBufferListNode newEmptyList)
         {
-            context.Items[dataSlot] = new TargetBufferListNode();
+            context.Items[dataSlot] = newEmptyList;
         }
 
         private sealed class TargetBufferListNode
@@ -246,36 +287,71 @@ namespace NLog.Web.Targets.Wrappers
 
         internal static void OnBeginRequest(HttpContext context)
         {
-            if (context == null)
+            try
             {
-                return;
-            }
+                if (context == null)
+                {
+                    return;
+                }
 
-            var targetBufferList = GetTargetBufferList(context);
-            if (targetBufferList == null)
+                var targetBufferList = GetTargetBufferList(context);
+                if (targetBufferList is null)
+                {
+                    InternalLogger.Trace("AspNetBufferingWrapper Request Buffer Initializing.");
+                    SetTargetBufferList(context, new TargetBufferListNode());
+                }
+            }
+            catch (Exception ex)
             {
-                InternalLogger.Trace("Setting up ASP.NET request buffer.");
-                SetTargetBufferList(context);
+                if (LogManager.ThrowExceptions)
+                    throw;
+
+                InternalLogger.Error(ex, "AspNetBufferingWrapper Failed to initialize Request Buffer");
             }
         }
 
         internal static void OnEndRequest(HttpContext context)
         {
-            var targetBufferList = GetTargetBufferList(context);
-
-            while (targetBufferList?.Target != null)
+            try
             {
-                var buffer = targetBufferList.RequestBuffer;
-                var target = targetBufferList.Target;
-                if (buffer != null)
+                var targetBufferList = GetTargetBufferList(context);
+                if (targetBufferList is null)
+                    return;
+
+                while (targetBufferList?.Target != null)
                 {
-                    InternalLogger.Trace("{0}: Request Buffer flushed to wrapped target", target);
-                    AsyncLogEventInfo[] events = buffer.GetEventsAndClear();
-                    target.WrappedTarget.WriteAsyncLogEvents(events);
+                    var target = targetBufferList.Target;
+                    var events = targetBufferList.RequestBuffer?.GetEventsAndClear();
+                    if (events?.Length > 0)
+                    {
+                        InternalLogger.Trace("{0}: Request Buffer (Cnt={1}) flushed to wrapped target", target, events.Length);
+                        target.WrappedTarget?.WriteAsyncLogEvents(events);
+                    }
+
+                    targetBufferList = targetBufferList.NextNode;
                 }
 
-                targetBufferList = targetBufferList.NextNode;
+                SetTargetBufferList(context, null); // Disable buffering
+            }
+            catch (Exception ex)
+            {
+                if (LogManager.ThrowExceptions)
+                    throw;
+
+                InternalLogger.Error(ex, "AspNetBufferingWrapper Failed to flush Request Buffer");
             }
         }
+
+#if !ASP_NET_CORE
+        private void OnBeginRequestHandler(object sender, EventArgs e)
+        {
+            OnBeginRequest(HttpContext.Current);
+        }
+
+        private void OnEndRequestHandler(object sender, EventArgs e)
+        {
+            OnEndRequest(HttpContext.Current);
+        }
+#endif
     }
 }
