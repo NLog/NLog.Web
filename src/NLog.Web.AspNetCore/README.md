@@ -10,7 +10,7 @@ Integrates NLog as [Logging provider](https://learn.microsoft.com/en-us/dotnet/c
 Providing features like:
 
 - Enrich logging output with additional details from active HttpContext using NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), by just updating the NLog configuration.
-- Supports middleware injection for [HTTP Request Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging)
+- Supports middleware injection for [HTTP Request Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging) and [HTTP Response Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Response-Body-Capture).
 - Logging output can be routed to multiple destinations via the available NLog [Targets](https://nlog-project.org/config/?tab=targets)
 - Supports logging output in standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
 - Contributions are always welcome, by creating a [pull request](https://github.com/NLog/NLog.Web/pulls).
