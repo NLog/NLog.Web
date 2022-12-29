@@ -11,8 +11,8 @@ Providing features like:
 
 - Enrich logging output with additional details from active HttpContext using NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), by just updating the NLog configuration.
 - Supports HttpModule injection for [HTTP Request Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging)
-- Logging output can be routed to multiple destinations via the available NLog [Targets](https://nlog-project.org/config/?tab=targets)
-- Supports logging output in standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
+- Routing logging output to multiple destinations via the available NLog [Targets](https://nlog-project.org/config/?tab=targets)
+- Rendering logging output into standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
 - Contributions are always welcome, by creating a [pull request](https://github.com/NLog/NLog.Web/pulls).
 
 Supported platforms:
