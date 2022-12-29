@@ -1,11 +1,19 @@
 # NLog.Web.AspNetCore
 
-- [Logging provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging-providers) for ASP.NET Core platform via extension methods for IHostBuilder, and IWebHostBuilder.
-- Extends logging output with details from the active HttpContext via NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), just by changing NLog.config file.
-- Capable to log to many destinations via NLog [Targets](https://nlog-project.org/config/?tab=targets).
+[![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=reliability_rating)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
+[![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
+[![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=bugs)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
+[![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=vulnerabilities)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
+
+Integrates NLog as [Logging provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging-providers) for ASP.NET Core platform via extension methods for IHostBuilder, and IWebHostBuilder.
+
+Providing features like:
+
+- Enrich logging output with additional details from active HttpContext using NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), by just updating the NLog configuration.
+- Supports middleware injection for [HTTP Request Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging)
+- Logging output can be routed to multiple destinations via the available NLog [Targets](https://nlog-project.org/config/?tab=targets)
 - Supports logging output in standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
-- Supports advanced HTTP pipeline interception via provided IMiddleware classes, including logging of HTTP request body and HTTP response body.
-- To add new features [pull requests](https://github.com/NLog/NLog.Web/pulls) are always welcome.
+- Contributions are always welcome, by creating a [pull request](https://github.com/NLog/NLog.Web/pulls).
 
 Supported platforms:
 
