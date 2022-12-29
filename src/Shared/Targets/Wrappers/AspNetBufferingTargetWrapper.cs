@@ -297,7 +297,7 @@ namespace NLog.Web.Targets.Wrappers
                 var targetBufferList = GetTargetBufferList(context);
                 if (targetBufferList is null)
                 {
-                    InternalLogger.Trace("AspNetBufferingWrapper Request Buffer Initializing.");
+                    InternalLogger.Trace("AspNetBufferingWrapper Request Buffer Initializing");
                     SetTargetBufferList(context, new TargetBufferListNode());
                 }
             }
@@ -343,12 +343,12 @@ namespace NLog.Web.Targets.Wrappers
         }
 
 #if !ASP_NET_CORE
-        private void OnBeginRequestHandler(object sender, EventArgs e)
+        private static void OnBeginRequestHandler(object sender, EventArgs e)
         {
             OnBeginRequest(HttpContext.Current);
         }
 
-        private void OnEndRequestHandler(object sender, EventArgs e)
+        private static void OnEndRequestHandler(object sender, EventArgs e)
         {
             OnEndRequest(HttpContext.Current);
         }
