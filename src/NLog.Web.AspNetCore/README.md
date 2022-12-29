@@ -5,7 +5,7 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=bugs)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=vulnerabilities)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 
-Integrates NLog as [Logging provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging-providers) for ASP.NET Core platform via extension methods for IHostBuilder, and IWebHostBuilder.
+Integrates NLog as [Logging provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging-providers) for the ASP.NET Core platform, by just calling `UseNLog()` with the application host-builder.
 
 Providing features like:
 
@@ -22,13 +22,19 @@ Supported platforms:
 - For ASP.NET Core 3, .NET Core 3.1
 - For ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.1+
 
-Registration of NLog.Web.AspNetCore in the NLog.config File
+Registration of NLog.Web.AspNetCore in the NLog.config file:
 
 ```xml
 <!-- enable ASP.NET Core layout renderers -->
 <extensions>
     <add assembly="NLog.Web.AspNetCore"/>
 </extensions>
+```
+
+Registration of NLog.Web.AspNetCore can also be performed with fluent setup:
+
+```csharp
+NLog.LogManager.Setup().LoadConfigurationFromAppSettings();
 ```
 
 Useful Links

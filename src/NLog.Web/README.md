@@ -19,13 +19,19 @@ Supported platforms:
 
  - .NET 3.5 - 4.8
 
-Registration of NLog.Web in the NLog.config File
+Registration of NLog.Web in the NLog.config file:
 
 ```xml
 <!-- enable ASP.NET layout renderers -->
 <extensions>
     <add assembly="NLog.Web"/>
 </extensions>
+```
+
+Registration of NLog.Web can also be performed with fluent setup:
+
+```csharp
+NLog.LogManager.Setup().RegisterNLogWeb();
 ```
 
 Useful Links
