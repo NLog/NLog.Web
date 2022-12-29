@@ -4,15 +4,8 @@
     <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
-NLog LoggerProvider for Microsoft.Extensions.Logging and ASP.NET Core platform. Adds helpers and layout renderers for websites and web applications.
-
-Supported platforms:
-
-- For ASP.NET Core 6, .NET 6
-- For ASP.NET Core 5, .NET 5
-- For ASP.NET Core 3, .NET Core 3.1
-- For ASP.NET Core 2, .NET Standard 2.0+ and .NET 4.6+
-    </Description>
+	    Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog LayoutRenderers to enrich logging output with details from HttpContext.
+	</Description>
     <Authors>Julian Verdurmen</Authors>
     <Company>NLog</Company>
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
@@ -51,9 +44,11 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- EmbedUntrackedSources for deterministic build -->
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
+	<None Include="README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
@@ -110,12 +105,5 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <EmbeddedResource Include="ILLink.Descriptors.xml">
       <LogicalName>ILLink.Descriptors.xml</LogicalName>
     </EmbeddedResource>
-  </ItemGroup>
-      
-  <ItemGroup>
-    <Content Include="readme.txt">
-      <Pack>true</Pack>
-      <PackagePath>\</PackagePath>
-    </Content>
   </ItemGroup>
 </Project>
