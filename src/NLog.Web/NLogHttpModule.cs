@@ -39,18 +39,12 @@ namespace NLog.Web
 
         private void BeginRequestHandler(object sender, EventArgs args)
         {
-            if (BeginRequest != null)
-            {
-                BeginRequest(sender, args);
-            }
+            BeginRequest?.Invoke(sender, args);
         }
 
         private void EndRequestHandler(object sender, EventArgs args)
         {
-            if (EndRequest != null)
-            {
-                EndRequest(sender, args);
-            }
+            EndRequest?.Invoke(sender, args);
         }
     }
 }

@@ -25,6 +25,14 @@ namespace NLog.Web.Tests
         {
             HttpContext = httpContext;
         }
+
+        public FakeHttpContextAccessor(HttpContext httpContext)
+        {
+            if (httpContext is null)
+                HttpContext = null;
+            else
+                HttpContext = new HttpContextWrapper(httpContext);
+        }
 #endif
     }
 }

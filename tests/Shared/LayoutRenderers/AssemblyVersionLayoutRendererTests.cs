@@ -51,7 +51,8 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void HttpContextAssemblyNameVersionTest()
         {
-            HttpContext.ApplicationInstance = new TestAplication();
+            var httpContext = SetUpFakeHttpContext();
+            httpContext.ApplicationInstance = new TestAplication();
 
             var logFactory = new LogFactory().Setup().SetupExtensions(evt => evt.RegisterAssembly(typeof(IHttpContextAccessor).Assembly)).LoadConfigurationFromXml(@"
                 <nlog throwConfigExceptions='true'>

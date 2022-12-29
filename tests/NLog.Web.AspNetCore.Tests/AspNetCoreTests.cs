@@ -17,6 +17,7 @@ using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
+using NLog.Web.Targets.Wrappers;
 
 namespace NLog.Web.Tests
 {
@@ -244,7 +245,7 @@ namespace NLog.Web.Tests
             logger.LogError("error1");
 
             var loggerProvider = host.Services.GetService<ILoggerProvider>() as NLogLoggerProvider;
-            var logged = loggerProvider.LogFactory.Configuration.FindTargetByName<Targets.MemoryTarget>("inMemory").Logs;
+            var logged = loggerProvider.LogFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("inMemory").Logs;
 
             Assert.Single(logged);
             Assert.Equal("logger1|error1|Memory", logged[0]);

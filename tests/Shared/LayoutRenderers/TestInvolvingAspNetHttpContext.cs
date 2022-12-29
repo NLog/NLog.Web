@@ -17,16 +17,6 @@ namespace NLog.Web.Tests.LayoutRenderers
     {
         private static readonly Uri DefaultTestUri = new Uri("https://nlog-project.org/documentation/");
 
-        protected HttpContext HttpContext;
-
-        protected TestInvolvingAspNetHttpContext()
-        {
-            HttpContext = SetUpFakeHttpContext();
-#if !ASP_NET_CORE
-            HttpContext.Current = HttpContext;
-#endif
-        }
-
         // teardown
         public void Dispose()
         {
@@ -38,11 +28,19 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #if !ASP_NET_CORE
 
-        protected HttpContext SetUpFakeHttpContext()
+        protected HttpContext SetUpFakeHttpContext(bool nullContext = false)
         {
+            if (nullContext)
+            {
+                HttpContext.Current = null;
+                return null;
+            }
+
             var httpRequest = SetUpHttpRequest();
             var httpResponse = SetUpHttpResponse();
-            return new HttpContext(httpRequest, httpResponse);
+            var httpContext = new HttpContext(httpRequest, httpResponse);
+            HttpContext.Current = httpContext;
+            return httpContext;
         }
 
         protected virtual HttpRequest SetUpHttpRequest(Uri uri = null)
@@ -61,8 +59,11 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #else
 
-        protected HttpContext SetUpFakeHttpContext()
+        protected HttpContext SetUpFakeHttpContext(bool nullContext = false)
         {
+            if (nullContext)
+                return null;
+
             var context = new DefaultHttpContext();
             var httpRequest = SetUpHttpRequest(context);
             var httpResponse = SetUpHttpResponse(context);

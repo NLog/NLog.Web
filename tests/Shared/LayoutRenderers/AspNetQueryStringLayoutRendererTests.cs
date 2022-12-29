@@ -309,7 +309,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             var pairCollection = new NameValueCollection();
 #else
-            var httpContext = HttpContext;
+            var httpContext = SetUpFakeHttpContext();
             var pairCollection = new QueryBuilder();
 #endif
 
