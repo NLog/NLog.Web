@@ -4,8 +4,8 @@
     <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
-	    Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog LayoutRenderers to enrich logging output with details from HttpContext.
-	</Description>
+Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog LayoutRenderers to enrich logging output with details from HttpContext.
+    </Description>
     <Authors>Julian Verdurmen</Authors>
     <Company>NLog</Company>
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
@@ -14,14 +14,10 @@
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Changed LoadConfigurationFromAppSettings to prioritize current directory (#885) (@snakefoot)
-- Changed AspNetAppBasePathLayoutRenderer to prioritize current directory (#887) (@snakefoot)
-- Add ObjectPath to AspNetItemValueLayoutRenderer as better alternative to EvaluateAsNestedProperties (#890) (@bakgerman)
-- Add ObjectPath to AspNetSessionValueLayoutRenderer as better alternative to EvaluateAsNestedProperties (#894) (@snakefoot)
-- Use CallerArgumentExpressionAttribute in helper method for throwing ArgumentNullException (#889) (@bakgerman)
-- Skip allocating RouteData when only need to lookup single value (#891)  (@snakefoot)
-- Use RegisterConfigSettings instead of ConfigSettingLayoutRenderer (#878 + #879) (@snakefoot)
-- Updated dependency NLog.Extensions.Logging v5.2.0 (#894) (@snakefoot)
+- Introduced NLogBufferingTargetWrapperMiddleware to support AspNetBufferingWrapper (#900) (@bakgerman)
+- Created README.md for the NLog.Web.AspNetCore nuget-package (#898) (@bakgerman)
+- Added common Items-property for LayoutRenderers that can output multiple values. Ex Headers/Cookies (#904) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.2.1 (#915) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -42,13 +38,13 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyTitle>$(Title)</AssemblyTitle>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- EmbedUntrackedSources for deterministic build -->
-	<PackageReadmeFile>README.md</PackageReadmeFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
-	<None Include="README.md" Pack="true" PackagePath=""/>
+    <None Include="README.md" Pack="true" PackagePath=""/>
   </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
@@ -76,7 +72,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-	<PackageReference Include="NLog.Extensions.Logging" Version="5.2.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
@@ -100,7 +96,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   <ItemGroup>
     <Compile Include="..\Shared\**\*.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="ILLink.Descriptors.xml">
       <LogicalName>ILLink.Descriptors.xml</LogicalName>
