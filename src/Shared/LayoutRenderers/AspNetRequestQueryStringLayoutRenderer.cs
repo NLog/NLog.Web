@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 #if !ASP_NET_CORE
 using System.Collections.Specialized;
@@ -39,6 +40,24 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public List<string> QueryStringKeys { get => Items; set => Items = value; }
 
+        /// <summary>
+        /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+        /// </summary>
+        /// <docgen category='Rendering Options' order='10' />
+#if ASP_NET_CORE
+        public ISet<string> Exclude { get; set; }
+#else
+        public HashSet<string> Exclude { get; set; }
+#endif
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AspNetQueryStringLayoutRenderer" /> class.
+        /// </summary>
+        public AspNetQueryStringLayoutRenderer()
+        {
+            Exclude = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        }
+
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
@@ -56,39 +75,36 @@ namespace NLog.Web.LayoutRenderers
             if (queryStrings == null || queryStrings.Count == 0)
                 return;
 
-            var queryStringKeys = Items;
-            var printAllQueryString = queryStringKeys == null || queryStringKeys.Count == 0;
-            if (printAllQueryString)
-            {
-                queryStringKeys = new List<string>(queryStrings.Count);
-                foreach (var key in queryStrings.Keys)
-                {
-                    if (key != null)
-                    {
-                        queryStringKeys.Add(key.ToString());
-                    }
-                }
-            }
-
-            var pairs = GetPairs(queryStrings, queryStringKeys);
+            var queryStringKeys = Items?.Count > 0 ? Items :
+#if !ASP_NET_CORE
+                queryStrings.Keys.Cast<string>();
+#else
+                queryStrings.Keys;
+#endif
+            bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;
+            var pairs = GetQueryStringValues(queryStrings, queryStringKeys, checkForExclude, Exclude);
             SerializePairs(pairs, builder, logEvent);
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetPairs(
+        private static IEnumerable<KeyValuePair<string, string>> GetQueryStringValues(
 #if !ASP_NET_CORE
             NameValueCollection queryStrings,
 #else
             IQueryCollection queryStrings,
 #endif
-            List<string> queryStringKeys)
+            IEnumerable<string> queryStringKeys,
+            bool checkForExclude,
+            ICollection<string> excludeNames)
         {
-            foreach (var key in queryStringKeys)
+            foreach (var queryKey in queryStringKeys)
             {
-                // This platoform specific code is to prevent an unncessary .ToString call otherwise. 
+                if (checkForExclude && excludeNames.Contains(queryKey))
+                    continue;
+
 #if !ASP_NET_CORE
-                var value = queryStrings[key];
+                var value = queryStrings[queryKey];
 #else
-                if (!queryStrings.TryGetValue(key, out var objValue))
+                if (!queryStrings.TryGetValue(queryKey, out var objValue))
                 {
                     continue;
                 }
@@ -96,9 +112,7 @@ namespace NLog.Web.LayoutRenderers
                 var value = objValue.ToString();
 #endif
                 if (!string.IsNullOrEmpty(value))
-                {
-                    yield return new KeyValuePair<string, string>(key, value);
-                }
+                    yield return new KeyValuePair<string, string>(queryKey, value);
             }
         }
     }
