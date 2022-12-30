@@ -166,6 +166,23 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void NullKeyRendersAllExceptExcluded()
+        {
+            var expectedResult = "Id=1,Id2=2";
+
+            var renderer = CreateAndMockRenderer(CreateTuple("Id", "1"), CreateTuple("Id2", "2"));
+
+            renderer.QueryStringKeys = null;
+            renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
+            renderer.Exclude.Add("1");
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.Equal(expectedResult, result);
+        }
+
         [Fact]
         public void MultipleValuesForOneKeyShouldWork()
         {
