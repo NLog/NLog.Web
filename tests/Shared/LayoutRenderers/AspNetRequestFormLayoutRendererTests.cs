@@ -115,10 +115,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void ExcludeShouldTakePrecedenceOverInclude()
+        public void IncludeTakePrecedenceOverExclude()
         {
             // Arrange
-            var expectedResult = "name=Test Person";
+            var expectedResult = "id=1,name=Test Person";
             var renderer = CreateRenderer();
             renderer.Include.Add("id");
             renderer.Include.Add("name");

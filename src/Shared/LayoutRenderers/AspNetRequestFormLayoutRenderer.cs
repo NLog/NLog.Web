@@ -27,13 +27,25 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestFormLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
+        /// Gets or sets the form keys to include in the output.
+        /// 
+        /// If <c>null</c> or empty array, all will be included.
+        /// </summary>
+        [DefaultParameter]
+#if ASP_NET_CORE
+        public ISet<string> Items { get; set; }
+#else
+        public HashSet<string> Items { get; set; }
+#endif
+
+        /// <summary>
         /// Gets or sets the form keys to include in the output.  If omitted, all are included.  <see cref="Exclude" /> takes precedence over <see cref="Include" />.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
 #if ASP_NET_CORE
-        public ISet<string> Include { get; set; }
+        public ISet<string> Include { get => Items; set => Items = value; }
 #else
-        public HashSet<string> Include { get; set; }
+        public HashSet<string> Include { get => Items; set => Items = value; }
 #endif
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public AspNetRequestFormLayoutRenderer()
         {
-            Include = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            Items = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             Exclude = new HashSet<string>(new[] { "Password", "Pwd" }, StringComparer.OrdinalIgnoreCase);
         }
 
@@ -59,6 +71,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+
 #if !ASP_NET_CORE
             var formKeys = httpRequest?.Form?.Keys;
 #else
@@ -66,12 +79,12 @@ namespace NLog.Web.LayoutRenderers
 #endif
             if (formKeys?.Count > 0)
             {
-                var formDataToInclude = GetPairsToInclude(formKeys, httpRequest);
+                var formDataToInclude = GetFormDataValues(formKeys, httpRequest);
                 SerializePairs(formDataToInclude, builder, logEvent);
             }
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetPairsToInclude(
+        private IEnumerable<KeyValuePair<string, string>> GetFormDataValues(
 #if !ASP_NET_CORE
             System.Collections.Specialized.NameValueCollection.KeysCollection formKeys,
             System.Web.HttpRequestBase httpRequest
@@ -81,13 +94,19 @@ namespace NLog.Web.LayoutRenderers
 #endif
         )
         {
+            bool checkForInclude = Items?.Count > 0;
+            bool checkForExclude = !checkForInclude && Exclude?.Count > 0;
+
             // ReSharper disable once SuggestVarOrType_BuiltInTypes
             foreach (string key in formKeys)
             {
-                if ((Include.Count == 0 || Include.Contains(key)) && !Exclude.Contains(key))
-                {
-                    yield return new KeyValuePair<string, string>(key, httpRequest.Form[key]);
-                }
+                if (checkForInclude && !Items.Contains(key))
+                    continue;
+
+                if (checkForExclude && Exclude.Contains(key))
+                    continue;
+
+                yield return new KeyValuePair<string, string>(key, httpRequest.Form[key]);
             }
         }
     }
