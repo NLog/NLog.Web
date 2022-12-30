@@ -9,13 +9,16 @@ Date format: (year/month/day)
 - **NLog.Web.AspNetCore**
   - [#900](https://github.com/NLog/NLog.Web/pull/900) Introduced NLogBufferingTargetWrapperMiddleware to support AspNetBufferingWrapper (#900) (@bakgerman)
   - [#898](https://github.com/NLog/NLog.Web/pull/898) Created README.md for the NLog.Web.AspNetCore nuget-package (#898) (@bakgerman)
+  - [#895](https://github.com/NLog/NLog.Web/pull/895) Add ObjectPath to AspNetApplicationValueLayoutRenderer (#895) (@snakefoot)
   - [#904](https://github.com/NLog/NLog.Web/pull/904) Added common Items-property for LayoutRenderers that can output multiple values. Ex Headers/Cookies (#904) (@snakefoot)
   - [#915](https://github.com/NLog/NLog.Web/pull/915) Updated dependency NLog.Extensions.Logging v5.2.1 (#915) (@snakefoot)
 
 - **NLog.Web**
   - [#900](https://github.com/NLog/NLog.Web/pull/900) Extend AspNetBufferingWrapper to allow use with other integrations than NLogHttpModule (#900) (@bakgerman)
   - [#898](https://github.com/NLog/NLog.Web/pull/898) Created README.md for the NLog.Web nuget-package (#898) (@bakgerman)
+  - [#895](https://github.com/NLog/NLog.Web/pull/895) Add ObjectPath to AspNetApplicationValueLayoutRenderer (#895) (@snakefoot)
   - [#904](https://github.com/NLog/NLog.Web/pull/904) Added common Items-property for LayoutRenderers that can output multiple values. Ex Headers/Cookies (#904) (@snakefoot)
+  - [#906](https://github.com/NLog/NLog.Web/pull/906) Skip unnecessary allocation of HttpContextWrapper for all ASP.NET layout-renderers  (#906) (@snakefoot)
   - [#915](https://github.com/NLog/NLog.Web/pull/915) Updated dependency NLog v5.1.1 (#915) (@snakefoot)
 
 ### Version 5.2.0 (2022/11/27)
