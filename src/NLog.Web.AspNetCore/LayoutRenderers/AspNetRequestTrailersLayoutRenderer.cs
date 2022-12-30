@@ -44,7 +44,7 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public ISet<string> Exclude { get; set; } = new HashSet<string>();
+        public ISet<string> Exclude { get; set; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
