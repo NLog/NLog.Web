@@ -22,7 +22,6 @@ Supported platforms:
 Registration of NLog.Web in the NLog.config file:
 
 ```xml
-<!-- enable ASP.NET layout renderers -->
 <extensions>
     <add assembly="NLog.Web"/>
 </extensions>
