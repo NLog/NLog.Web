@@ -11,22 +11,28 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Response Status Code.
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-response-statuscode} emits the http status code as an int</code>
-    /// <code>${aspnet-response-statuscode:Format=value} where value is a valid enumeration format string emits the specified format</code>
-    /// 'value' is case-insensitive
-    /// Supported formats for 'value'
-    /// f or g: outputs the HttpStatusCode enum as a string if possible, otherwise an int
-    /// d: outputs the HttpStatusCode enum as a int
-    /// x: outputs the HttpStatusCode enum as a hexdecimal
-    /// See https://learn.microsoft.com/en-us/dotnet/standard/base-types/enumeration-format-strings for more information
+    /// <code>${aspnet-response-statuscode}          emits the http status code as integer</code>
+    /// <code>${aspnet-response-statuscode:Format=D} emits the http status code as integer</code>
+    /// <code>${aspnet-response-statuscode:Format=F} emits the http status code as enum-string-value</code>
+    /// <code>${aspnet-response-statuscode:Format=G} emits the http status code as enum-string-value</code>
+    /// <code>${aspnet-response-statuscode:Format=X} emits the http status code as hexadecimal</code>
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetResponse-StatusCode-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-statuscode")]
     public class AspNetResponseStatusCodeRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// A valid enumeration format string
+        /// A valid enumeration format string, defaults to integer format
         /// </summary>
+        /// <remarks>
+        /// Supported Values, Case Insensitive
+        /// D: outputs the HttpStatusCode enum as a integer
+        /// F: outputs the HttpStatusCode enum as a string if possible, otherwise an integer
+        /// G: outputs the HttpStatusCode enum as a string if possible, otherwise an integer
+        /// X: outputs the HttpStatusCode enum as a hexadecimal
+        /// </remarks>
+        /// <seealso href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/enumeration-format-strings">Documentation on Enum Format Strings</seealso>
+
         [DefaultParameter]
         public string Format { get; set; } = "d";
 
