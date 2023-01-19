@@ -24,13 +24,11 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-response-statuscode")]
     public class AspNetResponseStatusCodeRenderer : AspNetLayoutRendererBase
     {
-        private const string IntegerFormat = "d";
-
         /// <summary>
         /// A valid enumeration format string
         /// </summary>
         [DefaultParameter]
-        public string Format { get; set; } = IntegerFormat;
+        public string Format { get; set; } = "d";
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
