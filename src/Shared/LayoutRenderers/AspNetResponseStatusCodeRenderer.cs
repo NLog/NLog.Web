@@ -12,8 +12,13 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-response-statuscode} emits the http status code as an int</code>
-    /// <code>${aspnet-response-statuscode:Format=d} also emits the http status code as an int</code>
-    /// <code>${aspnet-response-statuscode:Format=[anything other than d]} emits the http status code as the enum HttpStatusCode.ToString()</code>
+    /// <code>${aspnet-response-statuscode:Format=value} where value is a valid enumeration format string emits the specified format</code>
+    /// 'value' is case-insensitive
+    /// Supported formats for 'value'
+    /// f or g: outputs the HttpStatusCode enum as a string if possible, otherwise an int
+    /// d: outputs the HttpStatusCode enum as a int
+    /// x: outputs the HttpStatusCode enum as a hexdecimal
+    /// See https://learn.microsoft.com/en-us/dotnet/standard/base-types/enumeration-format-strings for more information
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetResponse-StatusCode-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-statuscode")]
@@ -22,9 +27,7 @@ namespace NLog.Web.LayoutRenderers
         private const string IntegerFormat = "d";
 
         /// <summary>
-        /// If this is 'd', output the int of the http status code
-        /// Otherwise, output the Enum.ToString() of the HttpStatusCode.
-        /// Defaults to 'd'
+        /// A valid enumeration format string
         /// </summary>
         [DefaultParameter]
         public string Format { get; set; } = IntegerFormat;
@@ -45,15 +48,15 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            // .NET format strings are case-insensitive
-            // See https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings
-            if (string.Equals(Format, IntegerFormat, StringComparison.InvariantCultureIgnoreCase))
+            try
             {
-                builder.Append(statusCode);
+                builder.Append(((HttpStatusCode)statusCode).ToString(Format));
             }
-            else
+            catch (Exception ex)
             {
-                builder.Append(((HttpStatusCode)statusCode).ToString());
+                NLog.Common.InternalLogger.Error(ex, 
+                    "Error occurred outputting HttpStatusCode enum ToString() with format specifier of {0} and value of {1}",
+                    Format, statusCode);
             }
         }
     }
