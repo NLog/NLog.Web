@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Text;
 using NLog.Config;
@@ -21,6 +22,12 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-response-statuscode")]
     public class AspNetResponseStatusCodeRenderer : AspNetLayoutRendererBase
     {
+        const int HttpStatusCodeLow = 100;
+        const int HttpStatusCodeHigh = 999;
+
+        private string[] FormatMapper => _formatMapper ?? (_formatMapper = Enumerable.Range(0, HttpStatusCodeHigh + 1).Select(s => ((HttpStatusCode)s).ToString(Format)).ToArray());
+        private string[] _formatMapper;
+
         /// <summary>
         /// A valid enumeration format string, defaults to integer format
         /// </summary>
@@ -32,9 +39,19 @@ namespace NLog.Web.LayoutRenderers
         /// X: outputs the HttpStatusCode enum as a hexadecimal
         /// </remarks>
         /// <seealso href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/enumeration-format-strings">Documentation on Enum Format Strings</seealso>
-
-        [DefaultParameter]
-        public string Format { get; set; } = "d";
+        public string Format
+        {
+            get => _format;
+            set
+            {
+                if (_format != value)
+                {
+                    _format = value;
+                    _formatMapper = null;
+                }
+            }
+        }
+        private string _format = "d";
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -45,22 +62,24 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var statusCode = httpResponse.StatusCode;
-            if (statusCode < 100 || statusCode > 599)
-            {
-                // Only output valid HTTP status codes
-                return;
-            }
+            builder.Append(ConvertToString(httpResponse.StatusCode));
+        }
 
+        private string ConvertToString(int httpStatusCode)
+        {
             try
             {
-                builder.Append(((HttpStatusCode)statusCode).ToString(Format));
+                if (httpStatusCode < HttpStatusCodeLow || httpStatusCode > HttpStatusCodeHigh)
+                {
+                    return string.Empty;    // Only output valid HTTP status codes
+                }
+
+                return FormatMapper[httpStatusCode];
             }
             catch (Exception ex)
             {
-                NLog.Common.InternalLogger.Error(ex, 
-                    "Error occurred outputting HttpStatusCode enum ToString() with format specifier of {0} and value of {1}",
-                    Format, statusCode);
+                NLog.Common.InternalLogger.Warn(ex, "aspnet-response-statuscode - Failed to Format HttpStatusCode={0}", httpStatusCode);
+                return null;
             }
         }
     }
