@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.Internal;
@@ -17,7 +15,10 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request IP address of the remote client
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-request-ip}</code>
+    /// <code>${aspnet-request-ip}</code> to return the Remote IP
+    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true}</code> to return first element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true:Index=1}</code> to return second element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true:Index=1:ForwardedForHeader=myHeader}</code> to return second element in the myHeader header
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-ip")]
@@ -34,6 +35,12 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public bool CheckForwardedForHeader { get; set; }
+
+        /// <summary>
+        /// Gets or sets the array index of the X-Forwarded-For header to use, if the desired client IP is not at
+        /// the zeroth index.  Defaults to zero.  If the index is too large the last array element is returned instead.
+        /// </summary>
+        public int Index { get; set; } = 0;
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -71,7 +78,11 @@ namespace NLog.Web.LayoutRenderers
                 var addresses = forwardedHeader.Split(',');
                 if (addresses.Length > 0)
                 {
-                    return addresses[0];
+                    if (Index >= addresses.Length)
+                    {
+                        Index = addresses.Length - 1;
+                    }
+                    return addresses[Index]?.Trim();
                 }
             }
 
@@ -86,7 +97,11 @@ namespace NLog.Web.LayoutRenderers
                 var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(headerName);
                 if (forwardedHeaders.Length > 0)
                 {
-                    return forwardedHeaders[0];
+                    if (Index >= forwardedHeaders.Length)
+                    {
+                        Index = forwardedHeaders.Length - 1;
+                    }
+                    return forwardedHeaders[Index]?.Trim();
                 }
             }
 
