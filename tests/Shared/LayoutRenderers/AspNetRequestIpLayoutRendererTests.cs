@@ -143,7 +143,32 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void ForwardedForHeaderContainsMultipleEntriesExcessiveIndexRendersLastIndexValue()
+        public void ForwardedForHeaderContainsMultipleEntriesRendersLastValue()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+#if !ASP_NET_CORE
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.Headers.Returns(
+                new NameValueCollection {{ForwardedForHeader, "192.168.1.1, 127.0.0.1"}});
+#else
+            var headers = new HeaderDict();
+            headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
+            httpContext.Request.Headers.Returns(callinfo => headers);
+#endif
+            renderer.CheckForwardedForHeader = true;
+            renderer.Index = -1;
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal("127.0.0.1", result);
+        }
+
+        [Fact]
+        public void ForwardedForHeaderContainsMultipleEntriesExcessiveIndexRendersLastValue()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -167,6 +192,39 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal("127.0.0.1", result);
 
             renderer.Index = 3;
+
+            // Act
+            result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal("127.0.0.1", result);
+        }
+
+        [Fact]
+        public void ForwardedForHeaderContainsMultipleEntriesExcessiveNegativeIndexRendersFirstValue()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+#if !ASP_NET_CORE
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.Headers.Returns(
+                new NameValueCollection {{ForwardedForHeader, "127.0.0.1, 192.168.1.1"}});
+#else
+            var headers = new HeaderDict();
+            headers.Add(ForwardedForHeader, new StringValues("127.0.0.1, 192.168.1.1"));
+            httpContext.Request.Headers.Returns(callinfo => headers);
+#endif
+            renderer.CheckForwardedForHeader = true;
+            renderer.Index = -3;
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal("127.0.0.1", result);
+
+            renderer.Index = -4;
 
             // Act
             result = renderer.Render(new LogEventInfo());
