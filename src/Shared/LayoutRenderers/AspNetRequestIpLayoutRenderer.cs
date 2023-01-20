@@ -40,6 +40,9 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the array index of the X-Forwarded-For header to use, if the desired client IP is not at
         /// the zeroth index.  Defaults to zero.  If the index is too large the last array element is returned instead.
+        /// If a negative index is used, this is used as the position from the end of the array.
+        /// Minus one will indicate the last element in the array.  If the negative index is too large the first index
+        /// of the array is returned instead.
         /// </summary>
         public int Index { get; set; } = 0;
 
