@@ -122,7 +122,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [InlineData(99, false)]
         [InlineData(100, true)]
         [InlineData(599, true)]
-        [InlineData(600, false)]
+        [InlineData(1000, false)]
         public void Only_Render_Valid_StatusCodes_DefaultFormat(int statusCode, bool shouldBeRendered)
         {
             // Arrange
@@ -148,7 +148,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [InlineData(99, false)]
         [InlineData(100, true)]
         [InlineData(599, true)]
-        [InlineData(600, false)]
+        [InlineData(1000, false)]
         public void Only_Render_Valid_StatusCodes_EnumFormatF(int statusCode, bool shouldBeRendered)
         {
             // Arrange
@@ -176,7 +176,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [InlineData(99, false)]
         [InlineData(100, true)]
         [InlineData(599, true)]
-        [InlineData(600, false)]
+        [InlineData(1000, false)]
         public void Only_Render_Valid_StatusCodes_EnumFormatG(int statusCode, bool shouldBeRendered)
         {
             // Arrange
@@ -203,7 +203,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [InlineData(99, false)]
         [InlineData(100, true)]
         [InlineData(599, true)]
-        [InlineData(600, false)]
+        [InlineData(1000, false)]
         public void Only_Render_Valid_StatusCodes_IntegerFormat(int statusCode, bool shouldBeRendered)
         {
             // Arrange
@@ -230,7 +230,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [InlineData(99, false)]
         [InlineData(100, true)]
         [InlineData(599, true)]
-        [InlineData(600, false)]
+        [InlineData(1000, false)]
         public void Only_Render_Valid_StatusCodes_UpperCaseIntegerFormat(int statusCode, bool shouldBeRendered)
         {
             // Arrange
@@ -257,7 +257,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [InlineData(99, false)]
         [InlineData(100, true)]
         [InlineData(599, true)]
-        [InlineData(600, false)]
+        [InlineData(1000, false)]
         public void Only_Render_Valid_StatusCodes_HexFormat(int statusCode, bool shouldBeRendered)
         {
             // Arrange
