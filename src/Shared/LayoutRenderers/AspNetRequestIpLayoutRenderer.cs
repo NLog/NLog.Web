@@ -17,9 +17,9 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>${aspnet-request-ip}</code> to return the Remote IP
     /// <code>${aspnet-request-ip:CheckForwardedForHeader=true}</code> to return first element in the X-Forwarded-For header
-    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true:Index=1}</code> to return second element in the X-Forwarded-For header
-    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true:Index=-1}</code> to return last element in the X-Forwarded-For header
-    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true:Index=1:ForwardedForHeader=myHeader}</code> to return second element in the myHeader header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=1}</code>  to return second element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=-1}</code> to return last element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=1:ForwardedForHeader=myHeader}</code> to return second element in the myHeader header
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-ip")]
@@ -44,7 +44,16 @@ namespace NLog.Web.LayoutRenderers
         /// Minus one will indicate the last element in the array.  If the negative index is too large the first index
         /// of the array is returned instead.
         /// </summary>
-        public int Index { get; set; } = 0;
+        public int CheckForwardedForHeaderOffset
+        {
+            get => _checkForwardedForHeaderOffset;
+            set
+            {
+                _checkForwardedForHeaderOffset = value;
+                CheckForwardedForHeader = true;
+            }
+        }
+        private int _checkForwardedForHeaderOffset;
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -73,7 +82,7 @@ namespace NLog.Web.LayoutRenderers
 
         private int CalculatePosition(string[] headerContents)
         {
-            var position = Index;
+            var position = CheckForwardedForHeaderOffset;
 
             if (position < 0)
             {

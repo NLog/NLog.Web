@@ -132,8 +132,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
             httpContext.Request.Headers.Returns(callinfo => headers);
 #endif
-            renderer.CheckForwardedForHeader = true;
-            renderer.Index = 1;
+            renderer.CheckForwardedForHeaderOffset = 1;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -157,8 +156,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
             httpContext.Request.Headers.Returns(callinfo => headers);
 #endif
-            renderer.CheckForwardedForHeader = true;
-            renderer.Index = -1;
+            renderer.CheckForwardedForHeaderOffset = -1;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -182,8 +180,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
             httpContext.Request.Headers.Returns(callinfo => headers);
 #endif
-            renderer.CheckForwardedForHeader = true;
-            renderer.Index = 2;
+            renderer.CheckForwardedForHeaderOffset = 2;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -191,7 +188,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Equal("127.0.0.1", result);
 
-            renderer.Index = 3;
+            renderer.CheckForwardedForHeaderOffset = 3;
 
             // Act
             result = renderer.Render(new LogEventInfo());
@@ -215,8 +212,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             headers.Add(ForwardedForHeader, new StringValues("127.0.0.1, 192.168.1.1"));
             httpContext.Request.Headers.Returns(callinfo => headers);
 #endif
-            renderer.CheckForwardedForHeader = true;
-            renderer.Index = -3;
+            renderer.CheckForwardedForHeaderOffset = -3;
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -224,7 +220,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Equal("127.0.0.1", result);
 
-            renderer.Index = -4;
+            renderer.CheckForwardedForHeaderOffset = -4;
 
             // Act
             result = renderer.Render(new LogEventInfo());
