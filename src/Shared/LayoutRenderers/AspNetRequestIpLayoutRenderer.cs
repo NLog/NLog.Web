@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.Internal;
@@ -17,7 +15,11 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request IP address of the remote client
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-request-ip}</code>
+    /// <code>${aspnet-request-ip}</code> to return the Remote IP
+    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true}</code> to return first element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=1}</code>  to return second element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=-1}</code> to return last element in the X-Forwarded-For header
+    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=1:ForwardedForHeader=myHeader}</code> to return second element in the myHeader header
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-ip")]
@@ -34,6 +36,24 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         public bool CheckForwardedForHeader { get; set; }
+
+        /// <summary>
+        /// Gets or sets the array index of the X-Forwarded-For header to use, if the desired client IP is not at
+        /// the zeroth index.  Defaults to zero.  If the index is too large the last array element is returned instead.
+        /// If a negative index is used, this is used as the position from the end of the array.
+        /// Minus one will indicate the last element in the array.  If the negative index is too large the first index
+        /// of the array is returned instead.
+        /// </summary>
+        public int CheckForwardedForHeaderOffset
+        {
+            get => _checkForwardedForHeaderOffset;
+            set
+            {
+                _checkForwardedForHeaderOffset = value;
+                CheckForwardedForHeader = true;
+            }
+        }
+        private int _checkForwardedForHeaderOffset;
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
@@ -60,6 +80,25 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(ip);
         }
 
+        private int CalculatePosition(string[] headerContents)
+        {
+            var position = CheckForwardedForHeaderOffset;
+
+            if (position < 0)
+            {
+                position = headerContents.Length + position;
+            }
+            if (position < 0)
+            {
+                position = 0;
+            }
+            if (position >= headerContents.Length)
+            {
+                position = headerContents.Length - 1;
+            }
+            return position;
+        }
+
 #if !ASP_NET_CORE
         string TryLookupForwardHeader(HttpRequestBase httpRequest, LogEventInfo logEvent)
         {
@@ -71,7 +110,8 @@ namespace NLog.Web.LayoutRenderers
                 var addresses = forwardedHeader.Split(',');
                 if (addresses.Length > 0)
                 {
-                    return addresses[0];
+                    var position = CalculatePosition(addresses);
+                    return addresses[position]?.Trim();
                 }
             }
 
@@ -86,7 +126,8 @@ namespace NLog.Web.LayoutRenderers
                 var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(headerName);
                 if (forwardedHeaders.Length > 0)
                 {
-                    return forwardedHeaders[0];
+                    var position = CalculatePosition(forwardedHeaders);
+                    return forwardedHeaders[position]?.Trim();
                 }
             }
 
