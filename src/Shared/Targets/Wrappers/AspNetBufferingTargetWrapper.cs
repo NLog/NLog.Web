@@ -135,6 +135,7 @@ namespace NLog.Web.Targets.Wrappers
             set
             {
                 _bufferGrowLimit = value;
+                BufferSize = (value > 0 && BufferSize < value) ? value : BufferSize;
                 GrowBufferAsNeeded = (value >= BufferSize);
             }
         }
