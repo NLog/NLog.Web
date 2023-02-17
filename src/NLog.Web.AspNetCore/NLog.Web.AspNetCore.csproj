@@ -14,10 +14,14 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageId>NLog.Web.AspNetCore</PackageId>
     <PackageTags>logging;log;NLog;web;aspnet;aspnetcore;MVC;Microsoft.Extensions.Logging;httpcontext</PackageTags>
     <PackageReleaseNotes>
-- Introduced NLogBufferingTargetWrapperMiddleware to support AspNetBufferingWrapper (#900) (@bakgerman)
-- Created README.md for the NLog.Web.AspNetCore nuget-package (#898) (@bakgerman)
-- Added common Items-property for LayoutRenderers that can output multiple values. Ex Headers/Cookies (#904) (@snakefoot)
-- Updated dependency NLog.Extensions.Logging v5.2.1 (#915) (@snakefoot)
+ChangeLog:
+
+- AspNetQueryStringLayoutRenderer - Added Exclude-option for consistency (#917) (@snakefoot)
+- AspNetRequestFormLayoutRenderer - Added Items-option for consistency (#918) (@snakefoot)
+- AspNet Response HttpStatusCode LayoutRenderer as Enum.ToString (#921) (@bakgerman)
+- AspNet Request-Ip with support for CheckForwardedForHeaderOffset (#923) (@bakgerman)  
+- AspNetBufferingTargetWrapper - BufferGrowLimit cealing BufferSize (#924) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.2.2 (#927) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -44,7 +48,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   </PropertyGroup>
   <ItemGroup>
     <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
-    <None Include="README.md" Pack="true" PackagePath=""/>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
@@ -72,7 +76,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->

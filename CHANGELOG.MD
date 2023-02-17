@@ -4,6 +4,23 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.2.2 (2023/02/17)
+
+- **NLog.Web.AspNetCore**
+  - [#917](https://github.com/NLog/NLog.Web/pull/917) AspNetQueryStringLayoutRenderer - Added Exclude-option for consistency (#917) (@snakefoot)
+  - [#918](https://github.com/NLog/NLog.Web/pull/918) AspNetRequestFormLayoutRenderer - Added Items-option for consistency (#918) (@snakefoot)
+  - [#921](https://github.com/NLog/NLog.Web/pull/921) AspNet Response HttpStatusCode LayoutRenderer as Enum.ToString (#921) (@bakgerman)
+  - [#923](https://github.com/NLog/NLog.Web/pull/923) AspNet Request-Ip with support for CheckForwardedForHeaderOffset (#923) (@bakgerman)  
+  - [#924](https://github.com/NLog/NLog.Web/pull/924) AspNetBufferingTargetWrapper - BufferGrowLimit cealing BufferSize (#924) (@snakefoot)
+  - [#927](https://github.com/NLog/NLog.Web/pull/927) Updated dependency NLog.Extensions.Logging v5.2.2 (#927) (@snakefoot)
+
+- **NLog.Web**
+  - [#917](https://github.com/NLog/NLog.Web/pull/917) AspNetQueryStringLayoutRenderer - Added Exclude-option for consistency (#917) (@snakefoot)
+  - [#918](https://github.com/NLog/NLog.Web/pull/918) AspNetRequestFormLayoutRenderer - Added Items-option for consistency (#918) (@snakefoot)
+  - [#921](https://github.com/NLog/NLog.Web/pull/921) AspNet Response HttpStatusCode LayoutRenderer as Enum.ToString (#921) (@bakgerman)
+  - [#924](https://github.com/NLog/NLog.Web/pull/924) AspNetBufferingTargetWrapper - BufferGrowLimit cealing BufferSize (#924) (@snakefoot)
+  - [#927](https://github.com/NLog/NLog.Web/pull/927) Updated dependency NLog v5.1.2 (#927) (@snakefoot)
+
 ### Version 5.2.1 (2022/12/29)
 
 - **NLog.Web.AspNetCore**
