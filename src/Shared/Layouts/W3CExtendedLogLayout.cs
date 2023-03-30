@@ -127,7 +127,7 @@ namespace NLog.Web.Layouts
 
         [ThreadAgnostic]
         [AppDomainFixedOutput]
-        private class W3CExtendedHeaderLayout : Layout
+        private sealed class W3CExtendedHeaderLayout : Layout
         {
             private readonly W3CExtendedLogLayout _parent;
 
