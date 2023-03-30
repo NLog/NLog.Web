@@ -71,8 +71,6 @@ The [NLog.Web](https://www.nuget.org/packages/NLog.Web)-package works with class
 
 ## HTTP module (ASP.NET non-core)
 
-_note: not listed on https://nlog-project.org/config_
-
 There is a ASP.NET ASP.NET HttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
 
 The `NLogHttpModule` needs a registration in the web.config:
