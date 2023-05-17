@@ -59,22 +59,20 @@ namespace NLog.Web
 
         private bool ShouldCaptureRequestBody(HttpContext context)
         {
-            // Perform null checking
-            if (context == null)
+            if (context is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext is null");
                 return false;
             }
 
-            // Perform null checking
-            if (context.Request == null)
+            if (context.Request is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request stream is null");
                 return false;
             }
 
             var stream = context.Request.InputStream;
-            if (stream == null)
+            if (stream is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is null");
                 return false;
@@ -84,6 +82,13 @@ namespace NLog.Web
             if (!stream.CanRead)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is non-readable");
+                return false;
+            }
+
+            // If we cannot seek the stream we cannot capture the body
+            if (!stream.CanSeek)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is non-seekable");
                 return false;
             }
 
@@ -111,13 +116,6 @@ namespace NLog.Web
         private string GetString(Stream stream)
         {
             string responseText = null;
-
-            // If we cannot seek the stream we cannot capture the body
-            if (!stream.CanSeek)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpApplication.HttpContext.Request.Body stream is non-seekable");
-                return responseText;
-            }
 
             // Save away the original stream position
             var originalPosition = stream.Position;

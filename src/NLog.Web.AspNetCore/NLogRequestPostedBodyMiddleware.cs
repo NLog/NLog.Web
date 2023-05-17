@@ -67,7 +67,6 @@ namespace NLog.Web
 
         private bool ShouldCaptureRequestBody(HttpContext context)
         {
-            // Perform null checking
             if (context is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext is null");
@@ -89,7 +88,6 @@ namespace NLog.Web
             }
 #endif
 
-            // Perform null checking
             var postedBody = context.Request.Body;
             if (postedBody is null)
             {
