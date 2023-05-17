@@ -2,7 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using NLog.Common;
+using NLog.Web.Internal;
 using NLog.Web.LayoutRenderers;
 
 namespace NLog.Web
@@ -66,29 +68,46 @@ namespace NLog.Web
         private bool ShouldCaptureRequestBody(HttpContext context)
         {
             // Perform null checking
-            if (context == null)
+            if (context is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext is null");
                 return false;
             }
 
-            if (context.Request == null)
+            if (context.Request is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request is null");
                 return false;
             }
 
+#if NET5_0_OR_GREATER
+            var features = context.TryGetFeatureCollection();
+            if (features?.Get<IHttpRequestBodyDetectionFeature>()?.CanHaveBody == false)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Feature.CanHaveBody = false");
+                return false;
+            }
+#endif
+
             // Perform null checking
-            if (context.Request.Body == null)
+            var postedBody = context.Request.Body;
+            if (postedBody is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is null");
                 return false;
             }
 
             // If we cannot read the stream we cannot capture the body
-            if (!context.Request.Body.CanRead)
+            if (!postedBody.CanRead)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-readable");
+                return false;
+            }
+
+            // If we cannot seek the stream we cannot capture the body
+            if (!postedBody.CanSeek)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-seekable");
                 return false;
             }
 
@@ -105,13 +124,6 @@ namespace NLog.Web
         private static async Task<string> GetString(Stream stream)
         {
             string responseText = null;
-
-            // If we cannot seek the stream we cannot capture the body
-            if (!stream.CanSeek)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpApplication.HttpContext.Request.Body stream is non-seekable");
-                return responseText;
-            }
 
             // Save away the original stream position
             var originalPosition = stream.Position;
