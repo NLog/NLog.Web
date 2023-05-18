@@ -10,14 +10,16 @@ using NLog.Web.LayoutRenderers;
 namespace NLog.Web
 {
     /// <summary>
-    /// This class is to intercept the HTTP pipeline and to allow additional logging of the following
+    /// ASP.NET Core Middleware that enables ${aspnet-request-posted-body}
     ///
-    /// POST request body
-    ///
-    /// Usage: app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
-    /// 
     /// Inject the NLogRequestPostBodyMiddlewareOption in the IoC if wanting to override default values for constructor
     /// </summary>
+    /// <remarks>
+    /// Usage:
+    /// 
+    /// app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
+    /// </remarks>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
     public class NLogRequestPostedBodyMiddleware
     {
         private readonly RequestDelegate _next;

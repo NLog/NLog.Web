@@ -56,7 +56,7 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the session item name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        [Obsolete("Instead use Item. Marked obsolete with NLog.Web 5.3")]
+        [Obsolete("Instead use Item-property. Marked obsolete with NLog.Web 5.3")]
         public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets whether variables with a dot are evaluated as properties or not
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        [Obsolete("Instead use ObjectPath. Marked obsolete with NLog.Web 5.2")]
+        [Obsolete("Instead use ObjectPath-property. Marked obsolete with NLog.Web 5.2")]
         public bool EvaluateAsNestedProperties { get; set; }
 
         /// <summary>

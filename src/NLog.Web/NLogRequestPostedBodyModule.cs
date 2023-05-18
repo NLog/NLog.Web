@@ -12,6 +12,7 @@ namespace NLog.Web
     /// <summary>
     /// HttpModule that enables ${aspnet-request-posted-body}
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
     public class NLogRequestPostedBodyModule : IHttpModule
     {
         /// <summary>

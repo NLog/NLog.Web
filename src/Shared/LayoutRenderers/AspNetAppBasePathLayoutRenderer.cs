@@ -22,10 +22,12 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Rendering Application BasePath. <see cref="IHostEnvironment.ContentRootPath" /> (Previous IApplicationEnvironment.ApplicationBasePath)
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-AppBasePath-layout-renderer">Documentation on NLog Wiki</seealso>
 #else
     /// <summary>
     /// Rendering Application BasePath. <see cref="IHostEnvironment.MapPath"/>("~")
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-AppBasePath-layout-renderer">Documentation on NLog Wiki</seealso>
 #endif
     [LayoutRenderer("aspnet-appbasepath")]
     [ThreadAgnostic]

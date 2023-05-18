@@ -9,6 +9,7 @@ namespace NLog.Web.Layouts
     /// <summary>
     /// A specialized layout that renders W3C Extended Log Format (ELF).
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/W3CExtendedLogLayout">Documentation on NLog Wiki</seealso>
     [Layout("W3CExtendedLogLayout")]
     [ThreadAgnostic]
     [AppDomainFixedOutput]

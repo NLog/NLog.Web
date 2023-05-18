@@ -19,7 +19,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-trailers:OutputFormat=Flat}
     /// ${aspnet-request-trailers:OutputFormat=JsonArray}
     /// ${aspnet-request-trailers:OutputFormat=JsonDictionary}
-    /// ${aspnet-request-trailers:OutputFormat=JsonDictionary:TrailerNames=username}
+    /// ${aspnet-request-trailers:OutputFormat=JsonDictionary:Items=username}
     /// ${aspnet-request-trailers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
@@ -38,6 +38,7 @@ namespace NLog.Web.LayoutRenderers
         /// Trailer names to be rendered.
         /// If <c>null</c> or empty array, all trailers will be rendered.
         /// </summary>
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public List<string> TrailerNames { get => Items; set => Items = value; }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace NLog.Web
     ///
     /// Usage: app.UseMiddleware&lt;NLogBufferingTargetWrapperMiddleware&gt;(); where app is an IApplicationBuilder
     /// </summary>
+    /// <seealso href="https://github.com/nlog/nlog/wiki/AspNetBufferingWrapper-target">Documentation on NLog Wiki</seealso>
     public class NLogBufferingTargetWrapperMiddleware
     {
         private readonly RequestDelegate _next;

@@ -19,7 +19,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.RouteParameterKeys = null;
+            renderer.Items = null;
 
             SetupRouteParameters(httpContext);
 
@@ -35,7 +35,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.RouteParameterKeys = new List<string> { "key2" };
+            renderer.Items = new List<string> { "key2" };
 
             SetupRouteParameters(httpContext);
 

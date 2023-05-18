@@ -25,7 +25,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "Name=key,Value=TEST,Domain=www.nlog.com,Path=/nlog.web,Expires=2022-02-04 13:14:15Z,Secure=False,HttpOnly=True;Name=Key1,Value=TEST1,Domain=www.nlog.com,Path=/nlog.web2,Expires=2022-02-04 16:17:18Z,Secure=True,HttpOnly=False";
 #endif
             var renderer = CreateRenderer();
-            renderer.CookieNames = null;
+            renderer.Items = null;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -41,7 +41,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "Name=Key1,Value=TEST1,Domain=www.nlog.com,Path=/nlog.web2,Expires=2022-02-04 16:17:18Z,Secure=True,HttpOnly=False";
 #endif
             var renderer = CreateRenderer();
-            renderer.CookieNames = null;
+            renderer.Items = null;
             renderer.Exclude.Add("key");
 
             string result = renderer.Render(new LogEventInfo());
@@ -54,7 +54,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
-            renderer.CookieNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -66,7 +66,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
-            renderer.CookieNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -78,7 +78,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonDictionary;
-            renderer.CookieNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -214,7 +214,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedResult = "Name=key,Value=TEST,Domain=www.nlog.com,Path=/nlog.web,Expires=2022-02-04 13:14:15Z,Secure=False,HttpOnly=True;Name=key2,Value=Test&key3=Test456,Domain=www.nlog.com,Path=/nlog.web3,Expires=2022-02-04 19:20:21Z,Secure=True,HttpOnly=True";
 
             var renderer = CreateRenderer(addSecondCookie: true, addMultiValueCookieKey: true);
-            renderer.CookieNames = new List<string> { "key", "key2" };
+            renderer.Items = new List<string> { "key", "key2" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -246,7 +246,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var layoutRender = new AspNetRequestCookieLayoutRenderer()
             {
-                CookieNames = new List<string> { "key", "key1" }
+                Items = new List<string> { "key", "key1" }
             };
 
             var httpContextAccessorMock = CreateHttpContextAccessorMockWithCookie(cookie);
@@ -268,7 +268,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var layoutRender = new AspNetRequestCookieLayoutRenderer()
             {
-                CookieNames = new List<string> { "key", "key1" },
+                Items = new List<string> { "key", "key1" },
                 OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray
             };
 
@@ -397,7 +397,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetResponseCookieLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.CookieNames = cookieNames;
+            renderer.Items = cookieNames;
             renderer.Verbose = true;
             return renderer;
         }

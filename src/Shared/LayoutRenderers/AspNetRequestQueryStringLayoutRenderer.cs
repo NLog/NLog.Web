@@ -38,6 +38,7 @@ namespace NLog.Web.LayoutRenderers
         /// List Query Strings' Key to be rendered from Request.
         /// If empty, then render all querystrings
         /// </summary>
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public List<string> QueryStringKeys { get => Items; set => Items = value; }
 
         /// <summary>

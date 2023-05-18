@@ -26,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-response-cookie:OutputFormat=Flat}
     /// ${aspnet-response-cookie:OutputFormat=JsonArray}
     /// ${aspnet-response-cookie:OutputFormat=JsonDictionary}
-    /// ${aspnet-response-cookie:OutputFormat=JsonDictionary:CookieNames=username}
+    /// ${aspnet-response-cookie:OutputFormat=JsonDictionary:Items=username}
     /// ${aspnet-response-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
@@ -52,6 +52,7 @@ namespace NLog.Web.LayoutRenderers
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public List<string> CookieNames { get => Items; set => Items = value; }
 
         /// <summary>

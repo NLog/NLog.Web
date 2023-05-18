@@ -15,7 +15,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-headers:OutputFormat=Flat}
     /// ${aspnet-request-headers:OutputFormat=JsonArray}
     /// ${aspnet-request-headers:OutputFormat=JsonDictionary}
-    /// ${aspnet-request-headers:OutputFormat=JsonDictionary:HeaderNames=username}
+    /// ${aspnet-request-headers:OutputFormat=JsonDictionary:Items=username}
     /// ${aspnet-request-headers:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
@@ -34,6 +34,7 @@ namespace NLog.Web.LayoutRenderers
         /// Header names to be rendered.
         /// If <c>null</c> or empty array, all headers will be rendered.
         /// </summary>
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public List<string> HeaderNames { get => Items; set => Items = value; }
 
         /// <summary>

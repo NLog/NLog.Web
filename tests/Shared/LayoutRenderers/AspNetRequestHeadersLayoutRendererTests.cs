@@ -21,7 +21,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var expectedResult = "key=TEST,Key1=TEST1";
             var renderer = CreateRenderer();
-            renderer.HeaderNames = null;
+            renderer.Items = null;
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -33,7 +33,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var expectedResult = "Key1=TEST1";
             var renderer = CreateRenderer();
-            renderer.HeaderNames = null;
+            renderer.Items = null;
             renderer.Exclude.Add("key");
 
             string result = renderer.Render(new LogEventInfo());
@@ -46,7 +46,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
-            renderer.HeaderNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -58,7 +58,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
-            renderer.HeaderNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -179,7 +179,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.Flat;
-            renderer.HeaderNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -192,7 +192,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var renderer = CreateRenderer();
             renderer.OutputFormat = AspNetRequestLayoutOutputFormat.JsonArray;
-            renderer.HeaderNames = new List<string> { "notfound" };
+            renderer.Items = new List<string> { "notfound" };
             renderer.ValuesOnly = true;
 
             string result = renderer.Render(new LogEventInfo());
@@ -325,7 +325,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var renderer = new AspNetRequestHeadersLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
-            renderer.HeaderNames = headerNames;
+            renderer.Items = headerNames;
             return renderer;
         }
     }
