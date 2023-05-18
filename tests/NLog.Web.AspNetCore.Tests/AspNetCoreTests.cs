@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +16,6 @@ using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
-using NLog.Web.Targets.Wrappers;
 
 namespace NLog.Web.Tests
 {

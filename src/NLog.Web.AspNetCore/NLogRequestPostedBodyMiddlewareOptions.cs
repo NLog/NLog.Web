@@ -9,6 +9,7 @@ namespace NLog.Web
     /// <summary>
     /// Contains the configuration for the NLogRequestPostedBodyMiddleware
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
     public class NLogRequestPostedBodyMiddlewareOptions
     {
         /// <summary>

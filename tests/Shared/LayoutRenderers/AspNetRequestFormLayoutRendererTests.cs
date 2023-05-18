@@ -69,13 +69,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void ShouldReturnOnlySpecifiedIfIncludeIsUsed()
+        public void ShouldReturnOnlySpecifiedIfItemsIsUsed()
         {
             // Arrange
             var expectedResult = "id=1,name=Test Person";
             var renderer = CreateRenderer();
-            renderer.Include.Add("id");
-            renderer.Include.Add("name");
+            renderer.Items.Add("id");
+            renderer.Items.Add("name");
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -115,13 +115,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Fact]
-        public void IncludeTakePrecedenceOverExclude()
+        public void ItemsTakePrecedenceOverExclude()
         {
             // Arrange
             var expectedResult = "id=1,name=Test Person";
             var renderer = CreateRenderer();
-            renderer.Include.Add("id");
-            renderer.Include.Add("name");
+            renderer.Items.Add("id");
+            renderer.Items.Add("name");
             renderer.Exclude.Add("id");
 
             // Act

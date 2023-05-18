@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Collections.Generic;
 #if !ASP_NET_CORE
@@ -37,6 +38,7 @@ namespace NLog.Web.LayoutRenderers
         /// List Route Parameter' Key to be rendered from Request.
         /// If empty, then render all parameters
         /// </summary>
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public List<string> RouteParameterKeys { get => Items; set => Items = value; }
 
         /// <inheritdoc/>

@@ -16,9 +16,9 @@ namespace NLog.Web.LayoutRenderers
     /// <remarks>
     /// <code>
     /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a comma.
-    /// ${aspnet-request-form:Include=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
+    /// ${aspnet-request-form:Items=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
     /// ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
-    /// ${aspnet-request-form:Include=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude" /> takes precedence over <see cref="Include" />).
+    /// ${aspnet-request-form:Items=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude" /> takes precedence over <see cref="Include" />).
     /// ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// </code>
     /// </remarks>
@@ -43,6 +43,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
 #if ASP_NET_CORE
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public ISet<string> Include { get => Items; set => Items = value; }
 #else
         public HashSet<string> Include { get => Items; set => Items = value; }

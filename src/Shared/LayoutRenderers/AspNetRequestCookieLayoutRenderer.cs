@@ -22,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-cookie:OutputFormat=Flat}
     /// ${aspnet-request-cookie:OutputFormat=JsonArray}
     /// ${aspnet-request-cookie:OutputFormat=JsonDictionary}
-    /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:CookieNames=username}
+    /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:Items=username}
     /// ${aspnet-request-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
     /// </code>
     /// </remarks>
@@ -41,6 +41,7 @@ namespace NLog.Web.LayoutRenderers
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
+        [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
         public List<string> CookieNames { get => Items; set => Items = value; }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace NLog.Web.LayoutRenderers
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies)
         {
             var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
-            return HttpCookieCollectionValues.GetCookieValues(cookies, CookieNames, Exclude, expandMultiValue);
+            return HttpCookieCollectionValues.GetCookieValues(cookies, Items, Exclude, expandMultiValue);
         }
 #else
         private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IRequestCookieCollection cookies)

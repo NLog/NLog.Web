@@ -10,6 +10,7 @@ namespace NLog.Web.Layouts
     /// <summary>
     /// Field in W3C Extended Formatted event
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog/wiki/W3CExtendedLogLayout">Documentation on NLog Wiki</seealso>
     [NLogConfigurationItem]
     public class W3CExtendedLogField
     {
