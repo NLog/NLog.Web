@@ -152,7 +152,7 @@ namespace NLog.Web.Internal
         {
             try
             {
-                if (context?.Features.Get<ISessionFeature>()?.Session != null)
+                if (context?.Features?.Get<ISessionFeature>()?.Session != null)
                 {
                     var session = context?.Session;
                     if (session == null)

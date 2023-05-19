@@ -157,8 +157,12 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void SessionWithCulture()
         {
-            LayoutRenderer.Register<AspNetSessionValueLayoutRenderer>("aspnet-session");
-            Layout layout = "${aspnet-session:a.b:culture=en-GB:evaluateAsNestedProperties=true}";
+            Layout layout = null;
+
+            var logFactory = new LogFactory().Setup().SetupExtensions(ext => ext.RegisterLayoutRenderer<AspNetSessionValueLayoutRenderer>("aspnet-session")).LoadConfiguration(c =>
+            {
+                layout = "${aspnet-session:a.b:culture=en-GB:evaluateAsNestedProperties=true}";
+            });
 
             var o = new { b = new DateTime(2015, 11, 24, 2, 30, 23) };
             //set in "a"
