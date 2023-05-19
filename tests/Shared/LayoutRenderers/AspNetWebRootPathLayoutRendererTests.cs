@@ -7,14 +7,11 @@ using Xunit;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
 using NLog.Web.Internal;
+#elif NETCOREAPP3_0_OR_GREATER
+using Microsoft.AspNetCore.Hosting;
 #else
-#if ASP_NET_CORE2
 using Microsoft.AspNetCore.Hosting;
 using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
-#if ASP_NET_CORE3
-using Microsoft.AspNetCore.Hosting;
-#endif
 #endif
 
 namespace NLog.Web.Tests.LayoutRenderers

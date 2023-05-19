@@ -1,4 +1,4 @@
-#if !ASP_NET_CORE || ASP_NET_CORE3
+#if !ASP_NET_CORE || NETCOREAPP3_0_OR_GREATER
 using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
@@ -22,7 +22,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-servervariable")]
     public class AspNetRequestServerVariableLayoutRenderer : AspNetLayoutRendererBase
     {
-
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
@@ -45,7 +44,7 @@ namespace NLog.Web.LayoutRenderers
             return httpContext?.TryGetRequest()?.ServerVariables?[key];
         }
 
-#elif ASP_NET_CORE3
+#elif NETCOREAPP3_0_OR_GREATER
         private static string LookupItemValue(string key, HttpContext httpContext)
         {
             return httpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];

@@ -19,7 +19,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #if !ASP_NET_CORE
             httpContext.Timestamp.Returns(dateTime);
-#elif !ASP_NET_CORE2
+#elif NETCOREAPP3_0_OR_GREATER
             var newActivity = new System.Diagnostics.Activity(null).Start();
             System.Diagnostics.Activity.Current.SetStartTime(dateTime);
 #else
@@ -44,7 +44,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #if !ASP_NET_CORE
             httpContext.Timestamp.Returns(dateTime);
-#elif !ASP_NET_CORE2
+#elif NETCOREAPP3_0_OR_GREATER
             var newActivity = new System.Diagnostics.Activity(null).Start();
             System.Diagnostics.Activity.Current.SetStartTime(dateTime);
 #else
@@ -72,7 +72,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #if !ASP_NET_CORE
             httpContext.Timestamp.Returns(dateTime);
-#elif !ASP_NET_CORE2
+#elif NETCOREAPP3_0_OR_GREATER
             var firstActivity = new System.Diagnostics.Activity(null).Start();
             System.Diagnostics.Activity.Current.SetStartTime(dateTime.ToUniversalTime());
             var secondActivity = new System.Diagnostics.Activity(null).Start();

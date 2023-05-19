@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Web;
 #else
 using System.Text;
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.AspNetCore.Connections.Features;
 #endif
 using Microsoft.AspNetCore.Http;
@@ -103,7 +103,7 @@ namespace NLog.Web.Internal
         }
 #endif
 
-#if ASP_NET_CORE2
+#if ASP_NET_CORE && !NETCOREAPP3_0_OR_GREATER
         internal static string GetString(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))

@@ -52,7 +52,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var routingFeature = Substitute.For<IRoutingFeature>();
             var collection = new FeatureCollection();
             collection.Set(routingFeature);
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
             var routingValuesFeature = Substitute.For<IRouteValuesFeature>();
             routingValuesFeature.RouteValues.Returns(routeData.Values);
             collection.Set(routingValuesFeature);

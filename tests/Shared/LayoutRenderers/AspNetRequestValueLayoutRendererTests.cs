@@ -318,7 +318,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 #endif
 
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
         public class ServerVariablesTests
         {
             [Fact]

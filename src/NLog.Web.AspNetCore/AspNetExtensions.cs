@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using NLog.Config;
 using NLog.Web.DependencyInjection;
-#if ASP_NET_CORE2
+#if !NETCOREAPP3_0_OR_GREATER
 using Microsoft.AspNetCore.Builder;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
@@ -23,7 +23,7 @@ namespace NLog.Web
     /// </summary>
     public static class AspNetExtensions
     {
-#if ASP_NET_CORE2
+#if !NETCOREAPP3_0_OR_GREATER
         /// <summary>
         /// Enable NLog Web for ASP.NET Core.
         /// </summary>
@@ -53,7 +53,7 @@ namespace NLog.Web
             return serviceProvider;
         }
 
-#if ASP_NET_CORE2
+#if !NETCOREAPP3_0_OR_GREATER
         /// <summary>
         /// Apply NLog configuration from XML config.
         /// </summary>
@@ -327,10 +327,10 @@ namespace NLog.Web
         {
             Guard.ThrowIfNull(builder);
 
-#if ASP_NET_CORE2
-            builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, null, options, CreateNLogLoggerProvider));
-#else
+#if NETCOREAPP3_0_OR_GREATER
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment, options, CreateNLogLoggerProvider));
+#else
+            builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, null, options, CreateNLogLoggerProvider));
 #endif
             return builder;
         }

@@ -1,4 +1,4 @@
-﻿#if ASP_NET_CORE3
+﻿#if NETCOREAPP3_0_OR_GREATER
 using System;
 using System.Collections.Generic;
 using System.Text;

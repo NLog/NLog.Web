@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         public bool IgnoreActivityId { get; set; }
 
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
         private string LookupTraceIdentifier(HttpContext httpContext)
         {
             if (IgnoreActivityId)

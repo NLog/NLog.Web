@@ -3,8 +3,9 @@ using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
+#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.AspNetCore.Hosting;
-#if ASP_NET_CORE2
+#else
 using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
 using NLog.Web.DependencyInjection;

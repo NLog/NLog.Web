@@ -1,4 +1,5 @@
-﻿#if ASP_NET_CORE3
+﻿#if NETCOREAPP3_0_OR_GREATER
+
 namespace NLog.Web.Enums
 {
     /// <summary>
@@ -16,4 +17,5 @@ namespace NLog.Web.Enums
         Referrer
     }
 }
+
 #endif
