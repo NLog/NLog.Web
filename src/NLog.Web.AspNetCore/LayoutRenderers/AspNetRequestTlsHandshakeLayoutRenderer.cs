@@ -36,13 +36,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if(features == null)
-            {
-                return;
-            }
-            var tlsHandshake = features.Get<ITlsHandshakeFeature>();
-            if (tlsHandshake == null)
+            var tlsHandshake = HttpContextAccessor.HttpContext.TryGetFeature<ITlsHandshakeFeature>();
+            if (tlsHandshake is null)
             {
                 return;
             }

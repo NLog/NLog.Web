@@ -193,7 +193,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
-                if (UseRawTarget && httpRequest.HttpContext?.Features?.Get<IHttpRequestFeature>() is IHttpRequestFeature httpRequestFeature)
+                if (UseRawTarget && httpRequest.HttpContext.TryGetFeature<IHttpRequestFeature>() is IHttpRequestFeature httpRequestFeature)
                 {
                     builder.Append(httpRequestFeature.RawTarget);
                 }

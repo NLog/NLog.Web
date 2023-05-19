@@ -31,9 +31,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            var value = features?.Get<IHttpRequestBodyDetectionFeature>()?.CanHaveBody ?? false;
-            builder.Append(value ? '1' : '0');
+            var requestFeature = HttpContextAccessor.HttpContext.TryGetFeature<IHttpRequestBodyDetectionFeature>();
+            builder.Append(requestFeature?.CanHaveBody == true ? '1' : '0');
         }
     }
 }

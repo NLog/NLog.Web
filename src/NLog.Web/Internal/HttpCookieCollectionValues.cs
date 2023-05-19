@@ -24,7 +24,7 @@ namespace NLog.Web.Internal
             foreach (var cookieName in cookieNames)
             {
                 var httpCookie = cookies[cookieName];
-                if (httpCookie == null)
+                if (httpCookie is null)
                     continue;
 
                 if (expandMultiValue)
@@ -52,7 +52,7 @@ namespace NLog.Web.Internal
                     continue;
 
                 var httpCookie = cookies[cookieName];
-                if (httpCookie == null)
+                if (httpCookie is null)
                     continue;
 
                 if (expandMultiValue)
@@ -128,7 +128,7 @@ namespace NLog.Web.Internal
             foreach (var cookieName in cookieNames)
             {
                 var httpCookie = cookies[cookieName];
-                if (httpCookie == null)
+                if (httpCookie is null)
                     continue;
 
                 if (expandMultiValue && httpCookie.Values.Count > 1)
@@ -152,7 +152,7 @@ namespace NLog.Web.Internal
                     continue;
 
                 var httpCookie = cookies[cookieName];
-                if (httpCookie == null)
+                if (httpCookie is null)
                     continue;
 
                 if (expandMultiValue && httpCookie.Values.Count > 1)

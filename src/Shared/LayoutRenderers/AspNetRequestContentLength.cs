@@ -19,12 +19,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (httpRequest == null)
-            {
-                return;
-            }
 
-            long? contentLength = httpRequest.ContentLength;
+            long? contentLength = httpRequest?.ContentLength;
             if (contentLength > 0L)
             {
                 builder.Append(contentLength.Value);

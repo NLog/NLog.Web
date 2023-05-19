@@ -82,8 +82,7 @@ namespace NLog.Web
             }
 
 #if NET5_0_OR_GREATER
-            var features = context.TryGetFeatureCollection();
-            if (features?.Get<IHttpRequestBodyDetectionFeature>()?.CanHaveBody == false)
+            if (context.TryGetFeature<IHttpRequestBodyDetectionFeature>()?.CanHaveBody == false)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Feature.CanHaveBody = false");
                 return false;

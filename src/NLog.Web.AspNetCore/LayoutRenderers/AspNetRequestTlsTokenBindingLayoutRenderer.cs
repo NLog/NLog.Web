@@ -40,8 +40,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var tlsTokenBinding = HttpContextAccessor.HttpContext.TryGetFeatureCollection()?.Get<ITlsTokenBindingFeature>();
-            if (tlsTokenBinding == null)
+            var tlsTokenBinding = HttpContextAccessor.HttpContext.TryGetFeature<ITlsTokenBindingFeature>();
+            if (tlsTokenBinding is null)
             {
                 return;
             }

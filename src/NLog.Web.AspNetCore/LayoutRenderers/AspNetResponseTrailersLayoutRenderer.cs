@@ -49,18 +49,9 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            if (features == null)
-            {
-                return;
-            }
-            var httpResponseTrailers = features.Get<IHttpResponseTrailersFeature>();
-            if (httpResponseTrailers == null)
-            {
-                return;
-            }
+            var httpResponseTrailers = HttpContextAccessor.HttpContext.TryGetFeature<IHttpResponseTrailersFeature>();
 
-            var trailers = httpResponseTrailers.Trailers;
+            var trailers = httpResponseTrailers?.Trailers;
             if (trailers?.Count > 0)
             {
                 bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;

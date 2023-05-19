@@ -3,6 +3,7 @@
 using System;
 using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -19,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var endPoint = HttpContextAccessor.HttpContext?.Features?.Get<Microsoft.AspNetCore.Http.Features.IEndpointFeature>()?.Endpoint;
+            var endPoint = HttpContextAccessor.HttpContext.TryGetFeature<Microsoft.AspNetCore.Http.Features.IEndpointFeature>()?.Endpoint;
             builder.Append(endPoint?.DisplayName);
         }
     }

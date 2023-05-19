@@ -71,13 +71,13 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var item = Item;
-            if (item == null)
+            if (item is null)
             {
                 return;
             }
 
             var application = HttpContextAccessor.HttpContext.Application;
-            if (application == null)
+            if (application is null)
             {
                 return;
             }

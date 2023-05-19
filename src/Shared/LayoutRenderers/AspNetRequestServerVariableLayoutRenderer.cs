@@ -47,7 +47,7 @@ namespace NLog.Web.LayoutRenderers
 #elif NETCOREAPP3_0_OR_GREATER
         private static string LookupItemValue(string key, HttpContext httpContext)
         {
-            return httpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
+            return httpContext?.TryGetFeature<IServerVariablesFeature>()?[key];
         }
 #endif
     }
