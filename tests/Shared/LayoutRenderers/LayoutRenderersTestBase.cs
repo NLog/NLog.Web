@@ -47,7 +47,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             collection.Set<ISessionFeature>(sessionFeature);
             httpContext.Features.Returns(collection);
 #endif
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
             httpContext.Request.RouteValues.Returns(new RouteValueDictionary());
 #endif
             var renderer = new TLayoutRenderer

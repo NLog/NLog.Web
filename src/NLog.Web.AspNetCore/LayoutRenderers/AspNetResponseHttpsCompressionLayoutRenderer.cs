@@ -1,4 +1,4 @@
-﻿#if ASP_NET_CORE3
+﻿#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.AspNetCore.Http.Features;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;

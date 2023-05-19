@@ -51,24 +51,24 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Framework 4.6+</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
     <Title>ASP.NET Core 3 integration for NLog - .NET Core 3.1</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <Title>ASP.NET Core 5 integration for NLog - .NET 5.0</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <Title>ASP.NET Core 6 integration for NLog - .NET 6.0</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />

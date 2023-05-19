@@ -74,7 +74,7 @@ namespace NLog.Web
 
         private bool IsSlowHttpRequest()
         {
-#if !ASP_NET_CORE2
+#if NETCOREAPP3_0_OR_GREATER
             var currentActivity = System.Diagnostics.Activity.Current;
             var activityStartTime = DateTime.MinValue;
             while (currentActivity != null)

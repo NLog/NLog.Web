@@ -71,7 +71,7 @@ namespace NLog.Web.Tests
             Assert.Equal(typeof(NLogLoggerProvider), loggerProvider.GetType());
         }
 
-#if !ASP_NET_CORE2
+#if NETCOREAPP3_0_OR_GREATER
         [Fact]
         public void LoadConfigurationFromAppSettingsShouldLogTest()
         {

@@ -7,12 +7,11 @@ using System.Web.Hosting;
 using NLog.Web.Internal;
 #else
 using NLog.Web.DependencyInjection;
-#if ASP_NET_CORE2
+#if NETCOREAPP3_0_OR_GREATER
+using Microsoft.Extensions.Hosting;
+#else
 using Microsoft.AspNetCore.Hosting;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
-#if ASP_NET_CORE3
-using Microsoft.Extensions.Hosting;
 #endif
 #endif
 

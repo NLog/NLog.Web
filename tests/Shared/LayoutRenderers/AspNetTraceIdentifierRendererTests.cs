@@ -44,7 +44,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult.ToString(), result);
         }
 
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
         [Fact]
         public void AvailableActivityIdOverridesGuid()
         {

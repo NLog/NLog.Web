@@ -13,10 +13,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'net461' ">
     <RuntimeFrameworkVersion>2.1.*</RuntimeFrameworkVersion>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE2</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0' or '$(TargetFramework)' == 'net6.0' ">
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE;ASP_NET_CORE3</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />

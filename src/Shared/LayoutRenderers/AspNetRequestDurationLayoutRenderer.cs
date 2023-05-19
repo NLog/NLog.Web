@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
         private static string[] DurationMsFormat = null;
 #if !ASP_NET_CORE
         private string _formatString;
-#elif ASP_NET_CORE2
+#elif !NETCOREAPP3_0_OR_GREATER
         private NLog.Layouts.SimpleLayout _scopeTiming;
 #endif
 
@@ -48,7 +48,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 _formatString = "{0:" + Format + "}";
             }
-#elif ASP_NET_CORE2
+#elif !NETCOREAPP3_0_OR_GREATER
             if (string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, CultureInfo.InvariantCulture))
                 _scopeTiming = new NLog.Layouts.SimpleLayout("${scopetiming}");
             else if (ReferenceEquals(Culture, CultureInfo.InvariantCulture))
@@ -69,7 +69,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-#if ASP_NET_CORE2
+#if ASP_NET_CORE && !NETCOREAPP3_0_OR_GREATER
             _scopeTiming?.Render(logEvent, builder);
 #else
 
@@ -165,7 +165,7 @@ namespace NLog.Web.LayoutRenderers
         }
 #endif
 
-#if ASP_NET_CORE && !ASP_NET_CORE2
+#if ASP_NET_CORE && NETCOREAPP3_0_OR_GREATER
         private static TimeSpan? GetDuration(System.Diagnostics.Activity activity)
         {
             var startTimeUtc = activity?.StartTimeUtc;

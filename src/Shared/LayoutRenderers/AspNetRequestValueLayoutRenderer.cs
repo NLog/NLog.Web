@@ -53,7 +53,7 @@ namespace NLog.Web.LayoutRenderers
         /// <docgen category='Rendering Options' order='10' />
         public string Cookie { get; set; }
 
-#if !ASP_NET_CORE || ASP_NET_CORE3
+#if !ASP_NET_CORE || NETCOREAPP3_0_OR_GREATER
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
@@ -89,7 +89,7 @@ namespace NLog.Web.LayoutRenderers
             {
                 value = LookupCookieValue(Cookie, httpRequest);
             }
-#if !ASP_NET_CORE || ASP_NET_CORE3
+#if !ASP_NET_CORE || NETCOREAPP3_0_OR_GREATER
             else if (ServerVariable != null)
             {
                 value = LookupServerVariableValue(ServerVariable, httpRequest);
@@ -202,7 +202,7 @@ namespace NLog.Web.LayoutRenderers
         }
 #endif
 
-#if ASP_NET_CORE3
+#if NETCOREAPP3_0_OR_GREATER
         private static string LookupServerVariableValue(string key, HttpRequest httpRequest)
         {
             return httpRequest?.HttpContext?.TryGetFeatureCollection()?.Get<IServerVariablesFeature>()?[key];
