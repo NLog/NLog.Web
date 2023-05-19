@@ -23,8 +23,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            var streamId = features?.Get<IStreamIdFeature>()?.StreamId ?? 0L;
+            var streamFeature = HttpContextAccessor.HttpContext.TryGetFeature<IStreamIdFeature>();
+            var streamId = streamFeature?.StreamId ?? 0L;
             if (streamId != 0L)
             {
                 builder.Append(streamId);

@@ -30,8 +30,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            var trackingConsent = features?.Get<ITrackingConsentFeature>();
+            var trackingConsent = HttpContextAccessor.HttpContext.TryGetFeature<ITrackingConsentFeature>();
             switch (Property)
             {
                 case TrackingConsentProperty.CanTrack:

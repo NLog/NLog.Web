@@ -19,15 +19,10 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var request = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (request == null)
-            {
-                return;
-            }
-
 #if ASP_NET_CORE
-            var host = request.Host.ToString();
+            var host = request?.Host.ToString();
 #else
-            var host = request.UserHostName?.ToString();
+            var host = request?.UserHostName?.ToString();
 #endif
             builder.Append(host);
         }

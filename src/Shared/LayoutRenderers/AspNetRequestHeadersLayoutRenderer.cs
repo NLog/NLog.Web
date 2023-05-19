@@ -59,12 +59,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (httpRequest == null)
-            {
-                return;
-            }
-
-            var headers = httpRequest.Headers;
+            var headers = httpRequest?.Headers;
             if (headers?.Count > 0)
             {
                 var headerValues = HttpHeaderCollectionValues.GetHeaderValues(headers, Items, Exclude);

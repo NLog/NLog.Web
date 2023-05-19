@@ -30,7 +30,7 @@ namespace NLog.Web.Internal
             try
             {
                 var request = context?.Request;
-                if (request == null)
+                if (request is null)
                     InternalLogger.Debug("HttpContext Request Lookup returned null");
                 return request;
             }
@@ -46,7 +46,7 @@ namespace NLog.Web.Internal
             try
             {
                 var response = context?.Response;
-                if (response == null)
+                if (response is null)
                     InternalLogger.Debug("HttpContext Response Lookup returned null");
                 return response;
             }
@@ -65,7 +65,7 @@ namespace NLog.Web.Internal
         internal static WebSocketManager TryGetWebSocket(this HttpContext context)
         {
             var websocket = context?.WebSockets;
-            if (websocket == null)
+            if (websocket is null)
                 InternalLogger.Debug("HttpContext WebSocket Lookup returned null");
             return websocket;
         }
@@ -73,7 +73,7 @@ namespace NLog.Web.Internal
         internal static ConnectionInfo TryGetConnection(this HttpContext context)
         {
             var connection = context?.Connection;
-            if (connection == null)
+            if (connection is null)
                 InternalLogger.Debug("HttpContext Connection Lookup returned null");
             return connection;
         }
@@ -81,7 +81,7 @@ namespace NLog.Web.Internal
         internal static HttpRequest TryGetRequest(this HttpContext context)
         {
             var request = context?.Request;
-            if (request == null)
+            if (request is null)
                 InternalLogger.Debug("HttpContext Request Lookup returned null");
             return request;
         }
@@ -89,17 +89,17 @@ namespace NLog.Web.Internal
         internal static HttpResponse TryGetResponse(this HttpContext context)
         {
             var response = context?.Response;
-            if (response == null)
+            if (response is null)
                 InternalLogger.Debug("HttpContext Response Lookup returned null");
             return response;
         }
 
-        internal static IFeatureCollection TryGetFeatureCollection(this HttpContext context)
+        internal static T TryGetFeature<T>(this HttpContext context) where T : class
         {
-            var features = context?.Features;
-            if (features == null)
-                InternalLogger.Debug("HttpContext Features Lookup returned null");
-            return features;
+            var feature = context?.Features?.Get<T>();
+            if (feature is null)
+                InternalLogger.Debug("HttpContext Features Lookup returned null - {0}", typeof(T));
+            return feature;
         }
 #endif
 
@@ -152,18 +152,17 @@ namespace NLog.Web.Internal
         {
             try
             {
-                if (context?.Features?.Get<ISessionFeature>()?.Session != null)
+                var sessionFeature = context.TryGetFeature<ISessionFeature>();
+                if (sessionFeature is null)
+                    return null;
+                    
+                if (sessionFeature.Session is null)
                 {
-                    var session = context?.Session;
-                    if (session == null)
-                        InternalLogger.Debug("HttpContext Session Lookup returned null");
-                    return session;
-                }
-                else
-                {
-                    InternalLogger.Debug("HttpContext Session Feature not available");
+                    InternalLogger.Debug("HttpContext Session Feature returned null");
                     return null;
                 }
+
+                return context?.Session;
             }
             catch (ObjectDisposedException ex)
             {

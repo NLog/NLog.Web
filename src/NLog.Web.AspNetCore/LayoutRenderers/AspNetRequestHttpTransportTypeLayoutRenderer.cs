@@ -27,10 +27,10 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext.TryGetFeatureCollection();
-            var value = features?.Get<IHttpTransportFeature>()?.TransportType ?? 
-                                        Microsoft.AspNetCore.Http.Connections.HttpTransportType.None;
-            builder.Append(value);
+            var transportFeature = HttpContextAccessor.HttpContext.TryGetFeature<IHttpTransportFeature>();
+            var value = transportFeature?.TransportType ?? Microsoft.AspNetCore.Http.Connections.HttpTransportType.None;
+            if (value != Microsoft.AspNetCore.Http.Connections.HttpTransportType.None)
+                builder.Append(value);
         }
     }
 }
