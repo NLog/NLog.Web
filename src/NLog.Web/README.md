@@ -2,7 +2,6 @@
 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=reliability_rating)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
-[![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=bugs)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=vulnerabilities)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 
 Integrates NLog with the System.Web.HttpContext. If using ASP.NET Core then check [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore).
