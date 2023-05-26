@@ -161,9 +161,16 @@ namespace NLog.Web.Targets.Wrappers
         {
             var httpContextAccessor = HttpContextAccessor;  // Best to resolve HttpContext before starting logging
             if (httpContextAccessor is null)
+            {
                 InternalLogger.Debug("{0}: HttpContextAccessor not available", this);
+            }
 
 #if !ASP_NET_CORE
+            if (httpContextAccessor?.HttpContext != null)
+            {
+                OnBeginRequest(HttpContext.Current);
+            }
+
             // Prevent double subscribe
             NLogHttpModule.BeginRequest -= OnBeginRequestHandler;
             NLogHttpModule.EndRequest -= OnEndRequestHandler;
@@ -171,7 +178,7 @@ namespace NLog.Web.Targets.Wrappers
             NLogHttpModule.BeginRequest += OnBeginRequestHandler;
             NLogHttpModule.EndRequest += OnEndRequestHandler;
 #endif
-            
+
             base.InitializeTarget();
         }
 
