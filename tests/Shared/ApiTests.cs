@@ -149,7 +149,7 @@
                 if (appDomainFixedOutputAttribute != null)
                 {
                     var threadAgnosticAttribute = type.GetCustomAttribute<ThreadAgnosticAttribute>();
-                    Assert.True(!(threadAgnosticAttribute is null), $"{type.ToString()} should also have ThreadAgnostic");
+                    Assert.True(!(threadAgnosticAttribute is null), $"{type.ToString()} is missing [ThreadAgnostic] attribute");
                 }
             }
         }
@@ -163,6 +163,21 @@
                 {
                     var threadAgnosticAttribute = type.GetCustomAttribute<ThreadAgnosticAttribute>();
                     Assert.True(threadAgnosticAttribute is null, $"{type.ToString()} cannot be [ThreadAgnostic]");
+                }
+            }
+        }
+
+        [Fact]
+        public void WrapperLayoutRenderer_EnsureThreadAgnostic()
+        {
+            foreach (Type type in allTypes)
+            {
+                if (typeof(NLog.LayoutRenderers.Wrappers.WrapperLayoutRendererBase).IsAssignableFrom(type))
+                {
+                    if (type.IsAbstract || !type.IsPublic)
+                        continue;   // skip non-concrete types, enumerations, and private nested types
+
+                    Assert.True(type.IsDefined(typeof(ThreadAgnosticAttribute), true), $"{type.ToString()} is missing [ThreadAgnostic] attribute.");
                 }
             }
         }
@@ -258,6 +273,103 @@
                     Assert.Equal("NLog.Web.LayoutRenderers", type.Namespace);
                 }
             }
+        }
+
+        [Fact]
+        public void ValidateConfigurationItemFactory()
+        {
+            ConfigurationItemFactory.Default = null;    // Reset
+
+            LogManager.Setup().SetupExtensions(ext => ext.RegisterNLogWeb());
+
+            var missingTypes = new List<string>();
+
+            foreach (Type type in allTypes)
+            {
+                if (!type.IsPublic || !type.IsClass || type.IsAbstract)
+                    continue;
+
+                if (typeof(NLog.Targets.Target).IsAssignableFrom(type))
+                {
+                    var configAttribs = type.GetCustomAttributes<NLog.Targets.TargetAttribute>(false);
+                    Assert.NotEmpty(configAttribs);
+
+                    foreach (var configName in configAttribs)
+                    {
+                        if (!ConfigurationItemFactory.Default.TargetFactory.TryCreateInstance(configName.Name, out var target))
+                        {
+                            Console.WriteLine(configName.Name);
+                            missingTypes.Add(configName.Name);
+                        }
+                        else if (type != target.GetType())
+                        {
+                            Console.WriteLine(type.Name);
+                            missingTypes.Add(type.Name);
+                        }
+                    }
+                }
+                else if (typeof(NLog.Layouts.Layout).IsAssignableFrom(type))
+                {
+                    var configAttribs = type.GetCustomAttributes<NLog.Layouts.LayoutAttribute>(false);
+                    Assert.NotEmpty(configAttribs);
+
+                    foreach (var configName in configAttribs)
+                    {
+                        if (!ConfigurationItemFactory.Default.LayoutFactory.TryCreateInstance(configName.Name, out var layout))
+                        {
+                            Console.WriteLine(configName.Name);
+                            missingTypes.Add(configName.Name);
+                        }
+                        else if (type != layout.GetType())
+                        {
+                            Console.WriteLine(type.Name);
+                            missingTypes.Add(type.Name);
+                        }
+                    }
+                }
+                else if (typeof(NLog.LayoutRenderers.LayoutRenderer).IsAssignableFrom(type))
+                {
+                    var configAttribs = type.GetCustomAttributes<NLog.LayoutRenderers.LayoutRendererAttribute>(false);
+                    Assert.NotEmpty(configAttribs);
+
+                    foreach (var configName in configAttribs)
+                    {
+                        if (!ConfigurationItemFactory.Default.LayoutRendererFactory.TryCreateInstance(configName.Name, out var layoutRenderer))
+                        {
+                            Console.WriteLine(configName.Name);
+                            missingTypes.Add(configName.Name);
+                        }
+                        else if (type != layoutRenderer.GetType())
+                        {
+                            Console.WriteLine(type.Name);
+                            missingTypes.Add(type.Name);
+                        }
+                    }
+
+                    if (typeof(NLog.LayoutRenderers.Wrappers.WrapperLayoutRendererBase).IsAssignableFrom(type))
+                    {
+                        var wrapperAttribs = type.GetCustomAttributes<NLog.LayoutRenderers.AmbientPropertyAttribute>(false);
+                        if (wrapperAttribs?.Any() == true)
+                        {
+                            foreach (var ambientName in wrapperAttribs)
+                            {
+                                if (!ConfigurationItemFactory.Default.AmbientRendererFactory.TryCreateInstance(ambientName.Name, out var layoutRenderer))
+                                {
+                                    Console.WriteLine(ambientName.Name);
+                                    missingTypes.Add(ambientName.Name);
+                                }
+                                else if (type != layoutRenderer.GetType())
+                                {
+                                    Console.WriteLine(type.Name);
+                                    missingTypes.Add(type.Name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Assert.Empty(missingTypes);
         }
     }
 }

@@ -66,13 +66,7 @@ namespace NLog.Web
                 return false;
             }
 
-            if (context.Request is null)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request stream is null");
-                return false;
-            }
-
-            var stream = context.Request.InputStream;
+            var stream = context.Request?.InputStream;
             if (stream is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is null");
