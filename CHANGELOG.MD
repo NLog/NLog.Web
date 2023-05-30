@@ -4,6 +4,21 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.0 (2023/05/30)
+
+- **NLog.Web.AspNetCore**
+  - [#943](https://github.com/NLog/NLog.Web/pull/943) UseNLog - Replaced dynamic assembly loading with registration methods (#943) (@snakefoot)
+  - [#943](https://github.com/NLog/NLog.Web/pull/943) Updated to NLog.Extensions.Logging v5.3 (#943) (@snakefoot)
+  - [#934](https://github.com/NLog/NLog.Web/pull/934) AspNetLayoutRenderers - Items-property is standard, and Names-option is obsolete (#934) (@snakefoot)
+  - [#936](https://github.com/NLog/NLog.Web/pull/936) aspnet-request-endpoint - EndPoint Routing DisplayName (#936) (@snakefoot)
+  - [#932](https://github.com/NLog/NLog.Web/pull/932) NLogRequestPostedBodyMiddleware - Check HttpRequest CanHaveBody (#932) (@snakefoot)
+ 
+- **NLog.Web**
+  - [#943](https://github.com/NLog/NLog.Web/pull/943) RegisterNLogWeb - Replaced dynamic assembly loading with registration methods (#943) (@snakefoot)
+  - [#943](https://github.com/NLog/NLog.Web/pull/943) Updated to NLog v5.2 (#943) (@snakefoot)
+  - [#934](https://github.com/NLog/NLog.Web/pull/934) AspNetLayoutRenderers - Items-property is standard, and Names-option is obsolete (#934) (@snakefoot)
+  - [#942](https://github.com/NLog/NLog.Web/pull/942) AspNetBufferingTargetWrapper - Register for initial request, when loading NLog config (#942) (@snakefoot)
+
 ### Version 5.2.3 (2023/03/28)
 
 - **NLog.Web.AspNetCore**
