@@ -16,7 +16,11 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Updated dependency NLog.Extensions.Logging v5.2.3 (#929) (@snakefoot)
+- UseNLog - Replaced dynamic assembly loading with registration methods (#943) (@snakefoot)
+- Updated to NLog.Extensions.Logging v5.3 (#943) (@snakefoot)
+- AspNetLayoutRenderers - Items-property is standard, and Names-option is obsolete (#934) (@snakefoot)
+- aspnet-request-endpoint - EndPoint Routing DisplayName (#936) (@snakefoot)
+- NLogRequestPostedBodyMiddleware - Check HttpRequest CanHaveBody (#932) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
