@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using NLog.Config;
 using NLog.Web.DependencyInjection;
 using NLog.Web.LayoutRenderers;
@@ -25,9 +24,9 @@ namespace NLog.Web
                 ServiceLocator.ServiceProvider = serviceProvider;
             }
 
-            return setupBuilder.RegisterAssembly(typeof(NLogAspNetCoreOptions).GetTypeInfo().Assembly);
+            NLog.Web.Internal.AssemblyExtensionTypes.RegisterTypes(setupBuilder);
+            return setupBuilder;
         }
-
 
         /// <summary>
         /// Register a custom layout renderer using custom delegate-method <paramref name="layoutMethod" />
@@ -37,7 +36,9 @@ namespace NLog.Web
         /// <param name="layoutMethod">Delegate method that returns layout renderer output.</param>
         public static ISetupExtensionsBuilder RegisterAspNetLayoutRenderer(this ISetupExtensionsBuilder setupBuilder, string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> layoutMethod)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             AspNetLayoutRendererBase.Register(name, layoutMethod);
+#pragma warning restore CS0618 // Type or member is obsolete
             return setupBuilder;
         }
     }

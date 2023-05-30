@@ -75,12 +75,6 @@ namespace NLog.Web
                 return false;
             }
 
-            if (context.Request is null)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request is null");
-                return false;
-            }
-
 #if NET5_0_OR_GREATER
             if (context.TryGetFeature<IHttpRequestBodyDetectionFeature>()?.CanHaveBody == false)
             {
@@ -89,7 +83,7 @@ namespace NLog.Web
             }
 #endif
 
-            var postedBody = context.Request.Body;
+            var postedBody = context.TryGetRequest()?.Body;
             if (postedBody is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is null");

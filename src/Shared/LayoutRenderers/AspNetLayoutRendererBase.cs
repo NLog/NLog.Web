@@ -84,6 +84,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="name">Name of the layout renderer - without ${}.</param>
         /// <param name="func">Callback that returns the value for the layout renderer.</param>
+        [Obsolete("Instead use LogManager.Setup().SetupExtensions(). Marked obsolete with NLog v5.2")]
         public static void Register(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func)
         {
             var renderer = new NLogWebFuncLayoutRenderer(name, func);

@@ -20,10 +20,10 @@ namespace NLog.Web
         /// </remarks>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
+        [Obsolete("Use LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
         public static LogFactory ConfigureNLog(string configFileName)
         {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            return LogManager.LoadConfiguration(configFileName);
+            return LogManager.Setup().RegisterNLogWeb().LoadConfigurationFromFile(configFileName, optional: false).LogFactory;
         }
 
         /// <summary>
@@ -34,11 +34,10 @@ namespace NLog.Web
         /// </remarks>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
+        [Obsolete("Use LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
         public static LogFactory ConfigureNLog(LoggingConfiguration configuration)
         {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.Configuration = configuration;
-            return LogManager.LogFactory;
+            return LogManager.Setup().RegisterNLogWeb().LoadConfiguration(configuration).LogFactory;
         }
     }
 }

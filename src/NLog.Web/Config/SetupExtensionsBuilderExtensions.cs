@@ -15,7 +15,8 @@ namespace NLog.Web
         /// </summary>
         public static ISetupExtensionsBuilder RegisterNLogWeb(this ISetupExtensionsBuilder setupBuilder)
         {
-            return setupBuilder.RegisterAssembly(typeof(SetupExtensionsBuilderExtensions).Assembly);
+            NLog.Web.Internal.AssemblyExtensionTypes.RegisterTypes(setupBuilder);
+            return setupBuilder;
         }
 
         /// <summary>
@@ -26,7 +27,9 @@ namespace NLog.Web
         /// <param name="layoutMethod">Delegate method that returns layout renderer output.</param>
         public static ISetupExtensionsBuilder RegisterAspNetLayoutRenderer(this ISetupExtensionsBuilder setupBuilder, string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> layoutMethod)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             AspNetLayoutRendererBase.Register(name, layoutMethod);
+#pragma warning restore CS0618 // Type or member is obsolete
             return setupBuilder;
         }
     }
