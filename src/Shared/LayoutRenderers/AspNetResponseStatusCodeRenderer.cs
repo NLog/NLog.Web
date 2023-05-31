@@ -12,11 +12,13 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Response Status Code.
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-response-statuscode}          emits the http status code as integer</code>
-    /// <code>${aspnet-response-statuscode:Format=D} emits the http status code as integer</code>
-    /// <code>${aspnet-response-statuscode:Format=F} emits the http status code as enum-string-value</code>
-    /// <code>${aspnet-response-statuscode:Format=G} emits the http status code as enum-string-value</code>
-    /// <code>${aspnet-response-statuscode:Format=X} emits the http status code as hexadecimal</code>
+    /// <code>
+    /// ${aspnet-response-statuscode} - Render http status code as integer
+    /// ${aspnet-response-statuscode:Format=D} - Render http status code as integer
+    /// ${aspnet-response-statuscode:Format=F} - Render http status code as enum-string-value
+    /// ${aspnet-response-statuscode:Format=G} - Render http status code as enum-string-value
+    /// ${aspnet-response-statuscode:Format=X} - Render http status code as hexadecimal
+    /// </code>
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetResponse-StatusCode-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-statuscode")]

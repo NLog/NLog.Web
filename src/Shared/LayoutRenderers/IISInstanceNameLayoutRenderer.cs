@@ -21,11 +21,17 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Rendering site name in IIS. <see cref="IHostingEnvironment.ApplicationName" />
     /// </summary>
+    /// <remarks>
+    /// <code>${iis-site-name}</code>
+    /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer">Documentation on NLog Wiki</seealso>
 #else
     /// <summary>
     /// Rendering site name in IIS. <see cref="HostingEnvironment.SiteName"/>
     /// </summary>
+    /// <remarks>
+    /// <code>${iis-site-name}</code>
+    /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer">Documentation on NLog Wiki</seealso>
 #endif
     [LayoutRenderer("iis-site-name")]

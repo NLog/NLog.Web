@@ -15,11 +15,13 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET Request IP address of the remote client
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-request-ip}</code> to return the Remote IP
-    /// <code>${aspnet-request-ip:CheckForwardedForHeader=true}</code> to return first element in the X-Forwarded-For header
-    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=1}</code>  to return second element in the X-Forwarded-For header
-    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=-1}</code> to return last element in the X-Forwarded-For header
-    /// <code>${aspnet-request-ip:CheckForwardedForHeaderOffset=1:ForwardedForHeader=myHeader}</code> to return second element in the myHeader header
+    /// <code>
+    /// ${aspnet-request-ip} - Return the Remote IP
+    /// ${aspnet-request-ip:CheckForwardedForHeader=true} - Return first element in the X-Forwarded-For header
+    /// ${aspnet-request-ip:CheckForwardedForHeaderOffset=1} - Return second element in the X-Forwarded-For header
+    /// ${aspnet-request-ip:CheckForwardedForHeaderOffset=-1} - Return last element in the X-Forwarded-For header
+    /// ${aspnet-request-ip:CheckForwardedForHeader=true:ForwardedForHeader=myHeader} - Return first element in the myHeader header
+    /// </code>
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-ip")]

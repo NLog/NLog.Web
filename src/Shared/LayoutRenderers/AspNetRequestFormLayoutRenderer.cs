@@ -18,7 +18,6 @@ namespace NLog.Web.LayoutRenderers
     /// ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a comma.
     /// ${aspnet-request-form:Items=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
     /// ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
-    /// ${aspnet-request-form:Items=id,name:Exclude=id} - Produces - Only Form Data from the Request with key "name" (<see cref="Exclude" /> takes precedence over <see cref="Include" />).
     /// ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
     /// </code>
     /// </remarks>
