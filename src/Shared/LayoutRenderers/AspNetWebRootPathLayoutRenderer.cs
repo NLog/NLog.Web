@@ -20,11 +20,17 @@ namespace NLog.Web.LayoutRenderers
     /// <summary>
     /// Rendering WebRootPath. <see cref="IWebHostEnvironment.WebRootPath" />
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-webrootpath}</code>
+    /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-WebRootPath-layout-renderer">Documentation on NLog Wiki</seealso>
 #else
     /// <summary>
     /// Rendering WebRootPath. <see cref="HostingEnvironment.MapPath"/>("/")
     /// </summary>
+    /// <remarks>
+    /// <code>${aspnet-webrootpath}</code>
+    /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-WebRootPath-layout-renderer">Documentation on NLog Wiki</seealso>
 #endif
     [LayoutRenderer("aspnet-webrootpath")]

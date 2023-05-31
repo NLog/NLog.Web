@@ -8,10 +8,10 @@ using System.Web;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET posted body, e.g. FORM or Ajax POST
+    /// ASP.NET posted body, e.g. FORM or AJAX POST, when ContentLength > 0
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-request-posted-body} - Produces - {username:xyz,password:xyz}</code>
+    /// <code>${aspnet-request-posted-body}</code>
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-posted-body")]

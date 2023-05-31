@@ -29,7 +29,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Gets or sets the item name. The QueryString, Form, Cookies, or ServerVariables collection variables having the specified name are rendered.
+        /// Gets or sets the HttpContext Item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
