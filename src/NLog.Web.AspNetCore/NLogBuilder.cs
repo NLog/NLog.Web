@@ -10,6 +10,7 @@ namespace NLog.Web
     /// <remarks>
     /// It is now recommended to use NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     /// </remarks>
+    [Obsolete("Use LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
     public static class NLogBuilder
     {
         /// <summary>
