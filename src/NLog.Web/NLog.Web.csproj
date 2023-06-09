@@ -20,9 +20,13 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <PackageReleaseNotes>
 Remember to register NLog.Web in NLog.config
 
-&lt;extensions&gt;
-  &lt;add assembly="NLog.Web" /&gt;
-&lt;/extensions&gt;
+   &lt;extensions&gt;
+     &lt;add assembly="NLog.Web" /&gt;
+   &lt;/extensions&gt;
+   
+Alternative register NLog.Web from code:
+
+   NLog.LogManager.Setup().RegisterNLogWeb()
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
