@@ -1,8 +1,6 @@
-﻿#if NET5_0_OR_GREATER
+﻿using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using System.Text;
-using Microsoft.AspNetCore.Http.Features;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -31,9 +29,18 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var requestFeature = HttpContextAccessor.HttpContext.TryGetFeature<IHttpRequestBodyDetectionFeature>();
-            builder.Append(requestFeature?.CanHaveBody == true ? '1' : '0');
+            builder.Append(CanHaveBody() ? '1' : '0');
+        }
+
+        private bool CanHaveBody()
+        {
+#if NET5_0_OR_GREATER
+            var requestFeature = HttpContextAccessor.HttpContext.TryGetFeature<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>();
+            return requestFeature?.CanHaveBody == true;
+#else
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+            return httpRequest?.ContentLength > 0L;
+#endif
         }
     }
 }
-#endif
