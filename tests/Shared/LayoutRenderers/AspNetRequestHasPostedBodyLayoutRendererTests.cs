@@ -1,6 +1,4 @@
-﻿#if NET5_0_OR_GREATER
-using NLog.Web.LayoutRenderers;
-using Microsoft.AspNetCore.Http.Features;
+﻿using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 
@@ -13,14 +11,20 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
- 
-            var bodyDetectionFeature = Substitute.For<IHttpRequestBodyDetectionFeature>();
+
+#if NET5_0_OR_GREATER
+            var bodyDetectionFeature = Substitute.For<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>();
             bodyDetectionFeature.CanHaveBody.Returns(true);
 
-            var featureCollection = new FeatureCollection();
-            featureCollection.Set<IHttpRequestBodyDetectionFeature>(bodyDetectionFeature);
-
+            var featureCollection = new Microsoft.AspNetCore.Http.Features.FeatureCollection();
+            featureCollection.Set<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>(bodyDetectionFeature);
             httpContext.Features.Returns(featureCollection);
+#elif ASP_NET_CORE
+            httpContext.Request.ContentLength = 42;
+#else
+            httpContext.Request.ContentLength.Returns(42);
+#endif
+
             // Act
             var result = renderer.Render(new LogEventInfo());
             // Assert
@@ -33,13 +37,19 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 
-            var bodyDetectionFeature = Substitute.For<IHttpRequestBodyDetectionFeature>();
+#if NET5_0_OR_GREATER
+            var bodyDetectionFeature = Substitute.For<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>();
             bodyDetectionFeature.CanHaveBody.Returns(false);
 
-            var featureCollection = new FeatureCollection();
-            featureCollection.Set<IHttpRequestBodyDetectionFeature>(bodyDetectionFeature);
-
+            var featureCollection = new Microsoft.AspNetCore.Http.Features.FeatureCollection();
+            featureCollection.Set<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>(bodyDetectionFeature);
             httpContext.Features.Returns(featureCollection);
+#elif ASP_NET_CORE
+            httpContext.Request.ContentLength = 0;
+#else
+            httpContext.Request.ContentLength.Returns(0);
+#endif
+
             // Act
             var result = renderer.Render(new LogEventInfo());
             // Assert
@@ -51,8 +61,9 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-
-            httpContext.Features.Returns(new FeatureCollection());
+#if NET5_0_OR_GREATER
+            httpContext.Features.Returns(new Microsoft.AspNetCore.Http.Features.FeatureCollection());
+#endif
             // Act
             var result = renderer.Render(new LogEventInfo());
             // Assert
@@ -72,4 +83,3 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
     }
 }
-#endif

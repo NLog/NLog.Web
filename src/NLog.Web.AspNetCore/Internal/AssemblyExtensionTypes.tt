@@ -115,7 +115,6 @@ namespace NLog.Web.Internal
 #>
 
 #if NET5_0_OR_GREATER
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHasPostedBodyLayoutRenderer>("aspnet-request-has-posted-body");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestStreamIdLayoutRenderer>("aspnet-request-stream-id");
 #endif
 #if NETCOREAPP3_0_OR_GREATER

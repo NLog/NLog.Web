@@ -54,6 +54,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer>("aspnet-request-cookie");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestDurationLayoutRenderer>("aspnet-request-duration");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer>("aspnet-request-form");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHasPostedBodyLayoutRenderer>("aspnet-request-has-posted-body");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer>("aspnet-request-headers");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHostLayoutRenderer>("aspnet-request-host");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHttpMethodRenderer>("aspnet-request-method");
