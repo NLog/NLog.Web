@@ -97,10 +97,9 @@ namespace NLog.Web
                 return false;
             }
 
-            // If we cannot seek the stream we cannot capture the body
-            if (!postedBody.CanSeek)
+            if (postedBody.Position != 0 && !postedBody.CanSeek)
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-seekable");
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream position non-zero");
                 return false;
             }
 
@@ -116,6 +115,13 @@ namespace NLog.Web
         /// <returns>The contents of the Stream read fully from start to end as a String</returns>
         private static async Task<string> GetString(Stream stream)
         {
+            // If we cannot seek the stream we cannot capture the body
+            if (!stream.CanSeek)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream is non-seekable");
+                return string.Empty;
+            }
+
             string responseText = null;
 
             // Save away the original stream position

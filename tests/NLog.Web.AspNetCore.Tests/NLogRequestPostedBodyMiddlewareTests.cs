@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -65,7 +66,6 @@ namespace NLog.Web.Tests
             // Assert
             Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
-            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
         }
 
         [Fact]
@@ -86,7 +86,6 @@ namespace NLog.Web.Tests
             // Assert
             Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
-            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
         }
 
         [Fact]
@@ -203,12 +202,9 @@ namespace NLog.Web.Tests
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
 
-            defaultContext.Request.Body = Substitute.For<Stream>();
-            defaultContext.Request.ContentLength = 1;
+            defaultContext.Request.Body = new NetworkStream() { _length = 2 };
+            defaultContext.Request.ContentLength = 2;
             defaultContext.Request.ContentType = "text/plain";
-
-            defaultContext.Request.Body.CanRead.Returns(true);
-            defaultContext.Request.Body.CanSeek.Returns(false);
 
             // Act
             var middlewareInstance =
@@ -217,7 +213,56 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
+            Assert.Single(defaultContext.Items);
+            Assert.NotNull(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
+        }
+
+        [Fact]
+        public void CannotSeekLengthAndStartedTest()
+        {
+            // Arrange
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+
+            defaultContext.Request.Body = new NetworkStream() { _length = 2, Position = 2 };
+            defaultContext.Request.ContentLength = 2;
+            defaultContext.Request.ContentType = "text/plain";
+
+            // Act
+            var middlewareInstance =
+                new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
+            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            // Assert
+            Assert.NotNull(defaultContext.Items);
             Assert.Empty(defaultContext.Items);
+        }
+
+        private sealed class NetworkStream : Stream
+        {
+            internal long _length;
+
+            public override bool CanRead => true;
+
+            public override bool CanSeek => false;
+
+            public override bool CanWrite => false;
+
+            public override long Length => _length;
+
+            public override long Position { get; set; }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                int delta = Math.Min((int)(Length - Position), count);
+                Position += delta;
+                return delta;
+            }
+
+            public override long Seek(long offset, SeekOrigin origin) => throw new System.NotSupportedException();
+            public override void SetLength(long value) => throw new System.NotSupportedException();
+            public override void Write(byte[] buffer, int offset, int count) => throw new System.NotSupportedException();
+            public override void Flush() => throw new System.NotSupportedException();
         }
     }
 }
