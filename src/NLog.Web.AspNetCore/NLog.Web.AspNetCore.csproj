@@ -16,11 +16,8 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- UseNLog - Replaced dynamic assembly loading with registration methods (#943) (@snakefoot)
-- Updated to NLog.Extensions.Logging v5.3 (#943) (@snakefoot)
-- AspNetLayoutRenderers - Items-property is standard, and Names-option is obsolete (#934) (@snakefoot)
-- aspnet-request-endpoint - EndPoint Routing DisplayName (#936) (@snakefoot)
-- NLogRequestPostedBodyMiddleware - Check HttpRequest CanHaveBody (#932) (@snakefoot)
+- NLogRequestPostedBodyMiddleware - Fixed handling of Stream.CanSeek (#958) (@snakefoot)
+- Updated to NLog.Extensions.Logging v5.3.1 (#959) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -88,7 +85,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
