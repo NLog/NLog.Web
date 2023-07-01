@@ -4,6 +4,16 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.1 (2023/07/01)
+
+- **NLog.Web.AspNetCore**
+  - [#958](https://github.com/NLog/NLog.Web/pull/958) NLogRequestPostedBodyMiddleware - Fixed handling of Stream.CanSeek (#958) (@snakefoot)
+  - [#959](https://github.com/NLog/NLog.Web/pull/959) Updated dependency NLog.Extensions.Logging v5.3.1 (#959) (@snakefoot)
+
+- **NLog.Web**
+  - [#959](https://github.com/NLog/NLog.Web/pull/959) Updated dependency NLog v5.2.1 (#959) (@snakefoot)
+  - [#952](https://github.com/NLog/NLog.Web/pull/952) AspNetRequestHasPostedBodyLayoutRenderer - Available for NLog.Web (#952) (@snakefoot)
+
 ### Version 5.3.0 (2023/05/30)
 
 - **NLog.Web.AspNetCore**
