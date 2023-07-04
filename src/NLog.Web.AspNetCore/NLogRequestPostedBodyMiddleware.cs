@@ -97,12 +97,6 @@ namespace NLog.Web
                 return false;
             }
 
-            if (postedBody.Position != 0 && !postedBody.CanSeek)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.Body stream position non-zero");
-                return false;
-            }
-
             return _options.ShouldCapture(context);
         }
 

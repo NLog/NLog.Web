@@ -218,26 +218,6 @@ namespace NLog.Web.Tests
             Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
         }
 
-        [Fact]
-        public void CannotSeekLengthAndStartedTest()
-        {
-            // Arrange
-            DefaultHttpContext defaultContext = new DefaultHttpContext();
-
-            defaultContext.Request.Body = new NetworkStream() { _length = 2, Position = 2 };
-            defaultContext.Request.ContentLength = 2;
-            defaultContext.Request.ContentType = "text/plain";
-
-            // Act
-            var middlewareInstance =
-                new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
-            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
-
-            // Assert
-            Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
-        }
-
         private sealed class NetworkStream : Stream
         {
             internal long _length;
@@ -250,19 +230,27 @@ namespace NLog.Web.Tests
 
             public override long Length => _length;
 
+#if NET6_0_OR_GREATER
+            public override long Position { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }  // Microsoft.AspNetCore.Server.IIS.Core.ReadOnlyStream
+#else
             public override long Position { get; set; }
+#endif
 
             public override int Read(byte[] buffer, int offset, int count)
             {
-                int delta = Math.Min((int)(Length - Position), count);
-                Position += delta;
-                return delta;
+                int delta = Math.Min((int)(Length - offset), count);
+                if (delta > 0)
+                {
+                    _length -= delta;
+                    return delta;
+                }
+                return 0;
             }
 
-            public override long Seek(long offset, SeekOrigin origin) => throw new System.NotSupportedException();
-            public override void SetLength(long value) => throw new System.NotSupportedException();
-            public override void Write(byte[] buffer, int offset, int count) => throw new System.NotSupportedException();
-            public override void Flush() => throw new System.NotSupportedException();
+            public override long Seek(long offset, SeekOrigin origin) => throw new System.NotSupportedException();  // Microsoft.AspNetCore.Server.IIS.Core.ReadOnlyStream
+            public override void SetLength(long value) => throw new System.NotSupportedException(); // Microsoft.AspNetCore.Server.IIS.Core.ReadOnlyStream
+            public override void Write(byte[] buffer, int offset, int count) => throw new System.NotSupportedException();   // Microsoft.AspNetCore.Server.IIS.Core.ReadOnlyStream
+            public override void Flush() => throw new System.NotSupportedException();   // Microsoft.AspNetCore.Server.IIS.Core.ReadOnlyStream
         }
     }
 }
