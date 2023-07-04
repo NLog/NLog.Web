@@ -4,6 +4,15 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.2 (2023/07/04)
+
+- **NLog.Web.AspNetCore**
+  - [#962](https://github.com/NLog/NLog.Web/pull/962) NLogRequestPostedBodyMiddleware - Fixed handling of Stream.Position (#962) (@snakefoot)
+  - [#963](https://github.com/NLog/NLog.Web/pull/963) Updated dependency NLog.Extensions.Logging v5.3.2 (#963) (@snakefoot)
+
+- **NLog.Web**
+  - [#963](https://github.com/NLog/NLog.Web/pull/963) Updated dependency NLog v5.2.2 (#963) (@snakefoot)
+
 ### Version 5.3.1 (2023/07/01)
 
 - **NLog.Web.AspNetCore**
