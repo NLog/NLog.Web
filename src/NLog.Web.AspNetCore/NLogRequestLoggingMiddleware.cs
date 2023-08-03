@@ -45,7 +45,9 @@ namespace NLog.Web
         {
             try
             {
-                await _next(httpContext);
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                await _next(httpContext);   // NOSONAR
+
                 LogHttpRequest(httpContext, null);
             }
             catch (Exception exception) when (LogHttpRequest(httpContext, exception))
