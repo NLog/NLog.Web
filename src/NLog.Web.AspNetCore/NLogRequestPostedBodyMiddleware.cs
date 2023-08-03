@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -50,21 +51,31 @@ namespace NLog.Web
         /// <returns></returns>
         public async Task Invoke(HttpContext context)
         {
-            if (ShouldCaptureRequestBody(context))
+            try
             {
-                // This is required, otherwise reading the request will destructively read the request
-                context.Request.EnableBuffering();
-
-                var requestBody = await GetString(context.Request.Body).ConfigureAwait(false);
-
-                if (!string.IsNullOrEmpty(requestBody))
+                if (ShouldCaptureRequestBody(context))
                 {
-                    context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
+                    // This is required, otherwise reading the request will destructively read the request
+                    context.Request.EnableBuffering();
+
+                    var requestBody = await ReadPostedBodyFromStream(context.Request.Body).ConfigureAwait(false);
+                    if (!string.IsNullOrEmpty(requestBody))
+                    {
+                        context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
+                    }
                 }
             }
-
-            // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-            await _next(context).ConfigureAwait(false);
+            catch (Exception ex)
+            {
+                InternalLogger.Error(ex, "NLogRequestPostedBodyMiddleware: Failed to read HttpContext.Request.Body");
+                if (LogManager.ThrowExceptions)
+                    throw;
+            }
+            finally
+            {
+                // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
+                await _next(context);   // NOSONAR
+            }
         }
 
         private bool ShouldCaptureRequestBody(HttpContext context)
@@ -107,7 +118,7 @@ namespace NLog.Web
         /// </summary>
         /// <param name="stream"></param>
         /// <returns>The contents of the Stream read fully from start to end as a String</returns>
-        private static async Task<string> GetString(Stream stream)
+        private static async Task<string> ReadPostedBodyFromStream(Stream stream)
         {
             // If we cannot seek the stream we cannot capture the body
             if (!stream.CanSeek)
