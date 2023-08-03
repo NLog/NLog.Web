@@ -1,5 +1,6 @@
 ﻿#if ASP_NET_CORE || NET46_OR_GREATER
 
+using System.Security.Claims;
 using System.Security.Principal;
 #if ASP_NET_CORE
 using Microsoft.Extensions.Primitives;
@@ -58,6 +59,30 @@ namespace NLog.Web.Tests.LayoutRenderers
             var expectedName = System.Security.Claims.ClaimTypes.Name;
             var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
             identity.FindFirst(expectedName).Returns(new System.Security.Claims.Claim(expectedName, expectedResult));
+            httpContext.User.Identity.Returns(identity);
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+
+        [Fact]
+        public void AllRendersAllValue()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.All = true;
+
+            var expectedResult = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country=CountryValue,http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue";
+
+            var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
+
+            identity.FindFirst(ClaimTypes.Actor).Returns(new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue"));
+            identity.FindFirst(ClaimTypes.Country).Returns(new System.Security.Claims.Claim(ClaimTypes.Country, "CountryValue"));
+
             httpContext.User.Identity.Returns(identity);
 
             // Act

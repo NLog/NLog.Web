@@ -1,8 +1,10 @@
 ﻿#if ASP_NET_CORE || NET46_OR_GREATER
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using NLog.Common;
 using NLog.Config;
@@ -18,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-User-Claim-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-user-claim")]
-    public class AspNetUserClaimLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetUserClaimLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// Key to lookup using <see cref="ClaimsIdentity.FindFirst(string)"/> with fallback to <see cref="ClaimsPrincipal.FindFirst(string)"/>
@@ -26,9 +28,13 @@ namespace NLog.Web.LayoutRenderers
         /// <remarks>
         /// When value is prefixed with "ClaimTypes." (Remember dot) then ít will lookup in well-known claim types from <see cref="ClaimTypes"/>. Ex. ClaimsTypes.Name
         /// </remarks>
-        [RequiredParameter]
         [DefaultParameter]
         public string ClaimType { get; set; }
+
+        /// <summary>
+        /// If this is set to true, then the ClaimType property is ignored and all Claim Types are rendered
+        /// </summary>
+        public bool All { get; set; }
 
         /// <inheritdoc />
         protected override void InitializeLayoutRenderer()
@@ -51,28 +57,67 @@ namespace NLog.Web.LayoutRenderers
         {
             try
             {
-                var claimsPrincipel = HttpContextAccessor.HttpContext.User;
-                if (claimsPrincipel == null)
+                var claimsPrincipal = HttpContextAccessor.HttpContext.User;
+                if (claimsPrincipal == null)
                 {
                     InternalLogger.Debug("aspnet-user-claim - HttpContext User is null");
                     return;
                 }
 
-                var claimsIdentity = claimsPrincipel.Identity as ClaimsIdentity;    // Prioritize primary identity
-                var claim = claimsIdentity?.FindFirst(ClaimType)
-#if ASP_NET_CORE
-                    ?? claimsPrincipel.FindFirst(ClaimType)
-#endif
-                    ;
-                if (claim != null)
+                if (All)
                 {
-                    builder.Append(claim?.Value);
+                    var claimTypes = GetAllClaimTypes();
+                    var claimKeyValuePairs =
+                        new List<KeyValuePair<string, string>>();
+                    foreach (var claimType in claimTypes)
+                    {
+                        var claim = GetClaim(claimsPrincipal, claimType);
+                        if (claim != null)
+                        {
+                            claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type,claim.Value));
+                        }
+                    }
+                    SerializePairs(claimKeyValuePairs, builder, logEvent);
+                }
+                else
+                {
+                    var claim = GetClaim(claimsPrincipal, ClaimType);
+                    if (claim != null)
+                    {
+                        builder.Append(claim?.Value);
+                    }
                 }
             }
             catch (ObjectDisposedException ex)
             {
                 InternalLogger.Debug(ex, "aspnet-user-claim - HttpContext has been disposed");
             }
+        }
+#if NET46
+        private Claim GetClaim(IPrincipal claimsPrincipal, string claimType)
+#else
+        private Claim GetClaim(ClaimsPrincipal claimsPrincipal, string claimType)
+#endif
+        {
+            var claimsIdentity = claimsPrincipal.Identity as ClaimsIdentity;    // Prioritize primary identity
+            return claimsIdentity?.FindFirst(claimType)
+#if ASP_NET_CORE
+                        ?? claimsPrincipal.FindFirst(claimType)
+#endif
+                ;
+        }
+
+        private List<string> GetAllClaimTypes()
+        {
+            var fields = typeof(ClaimTypes).GetFields(BindingFlags.Static | BindingFlags.Public);
+
+            var claimTypes = new List<string>();
+            foreach(var field in fields)
+            {
+                claimTypes.Add(field.GetValue(null) as string);
+            }
+
+            return claimTypes;
         }
     }
 }
