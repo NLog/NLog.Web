@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -71,10 +72,13 @@ namespace NLog.Web.LayoutRenderers
                         new List<KeyValuePair<string, string>>();
                     foreach (var claimType in claimTypes)
                     {
-                        var claim = GetClaim(claimsPrincipal, claimType);
-                        if (claim != null)
+                        var claims = GetAllClaims(claimsPrincipal, claimType);
+                        if (claims != null)
                         {
-                            claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type,claim.Value));
+                            foreach (var claim in claims)
+                            {
+                                claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
+                            }
                         }
                     }
                     SerializePairs(claimKeyValuePairs, builder, logEvent);
@@ -107,12 +111,29 @@ namespace NLog.Web.LayoutRenderers
                 ;
         }
 
+#if NET46
+        private IEnumerable<Claim> GetAllClaims(IPrincipal claimsPrincipal, string claimType)
+#else
+        private IEnumerable<Claim> GetAllClaims(ClaimsPrincipal claimsPrincipal, string claimType)
+#endif
+        {
+            var claimsIdentity = claimsPrincipal.Identity as ClaimsIdentity;    // Prioritize primary identity
+            return claimsIdentity?.FindAll(claimType)
+#if ASP_NET_CORE
+                   ?? claimsPrincipal.FindAll(claimType)
+#endif
+                ;
+        }
+
         private List<string> GetAllClaimTypes()
         {
             var fields = typeof(ClaimTypes).GetFields(BindingFlags.Static | BindingFlags.Public);
 
+            // Output the claim types predictably
+            var sortedFields = fields.OrderBy(field => field.Name).ToList();
+
             var claimTypes = new List<string>();
-            foreach(var field in fields)
+            foreach(var field in sortedFields)
             {
                 claimTypes.Add(field.GetValue(null) as string);
             }

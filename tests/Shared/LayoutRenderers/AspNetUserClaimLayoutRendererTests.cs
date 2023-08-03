@@ -1,5 +1,7 @@
 ﻿#if ASP_NET_CORE || NET46_OR_GREATER
 
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
 #if ASP_NET_CORE
@@ -76,12 +78,18 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
             renderer.All = true;
 
-            var expectedResult = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country=CountryValue,http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue";
+            var expectedResult = "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue1,http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue2,http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country=CountryValue";
 
             var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
 
-            identity.FindFirst(ClaimTypes.Actor).Returns(new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue"));
-            identity.FindFirst(ClaimTypes.Country).Returns(new System.Security.Claims.Claim(ClaimTypes.Country, "CountryValue"));
+            identity.FindAll(ClaimTypes.Actor).Returns(new List<Claim>()
+                {
+                    new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue1"),
+                    new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue2")
+                }
+            );
+
+            identity.FindAll(ClaimTypes.Country).Returns( new List<Claim>() { new System.Security.Claims.Claim(ClaimTypes.Country, "CountryValue") } );
 
             httpContext.User.Identity.Returns(identity);
 
