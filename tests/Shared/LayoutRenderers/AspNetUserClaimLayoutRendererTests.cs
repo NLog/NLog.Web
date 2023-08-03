@@ -70,7 +70,6 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
-
         [Fact]
         public void AllRendersAllValue()
         {
@@ -80,18 +79,17 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             var expectedResult = "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue1,http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue2,http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country=CountryValue";
 
-            var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
+            var principal = Substitute.For<System.Security.Claims.ClaimsPrincipal>();
 
-            identity.FindAll(ClaimTypes.Actor).Returns(new List<Claim>()
+            principal.Claims.Returns(new List<Claim>()
                 {
                     new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue1"),
-                    new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue2")
+                    new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue2"),
+                    new System.Security.Claims.Claim(ClaimTypes.Country, "CountryValue")
                 }
             );
 
-            identity.FindAll(ClaimTypes.Country).Returns( new List<Claim>() { new System.Security.Claims.Claim(ClaimTypes.Country, "CountryValue") } );
-
-            httpContext.User.Identity.Returns(identity);
+            httpContext.User.Returns(principal);
 
             // Act
             string result = renderer.Render(new LogEventInfo());

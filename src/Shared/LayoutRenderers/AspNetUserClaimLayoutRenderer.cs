@@ -67,20 +67,23 @@ namespace NLog.Web.LayoutRenderers
 
                 if (All)
                 {
-                    var claimTypes = GetAllClaimTypes();
                     var claimKeyValuePairs =
                         new List<KeyValuePair<string, string>>();
-                    foreach (var claimType in claimTypes)
+#if NET46
+                    // This is an IPrincipal in NET 46, need to cast
+                    if (claimsPrincipal is ClaimsPrincipal)
                     {
-                        var claims = GetAllClaims(claimsPrincipal, claimType);
-                        if (claims != null)
+                        foreach (var claim in (claimsPrincipal as ClaimsPrincipal).Claims)
                         {
-                            foreach (var claim in claims)
-                            {
-                                claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
-                            }
+                            claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
                         }
                     }
+#else
+                    foreach (var claim in claimsPrincipal.Claims)
+                    {
+                        claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
+                    }
+#endif
                     SerializePairs(claimKeyValuePairs, builder, logEvent);
                 }
                 else
@@ -109,36 +112,6 @@ namespace NLog.Web.LayoutRenderers
                         ?? claimsPrincipal.FindFirst(claimType)
 #endif
                 ;
-        }
-
-#if NET46
-        private IEnumerable<Claim> GetAllClaims(IPrincipal claimsPrincipal, string claimType)
-#else
-        private IEnumerable<Claim> GetAllClaims(ClaimsPrincipal claimsPrincipal, string claimType)
-#endif
-        {
-            var claimsIdentity = claimsPrincipal.Identity as ClaimsIdentity;    // Prioritize primary identity
-            return claimsIdentity?.FindAll(claimType)
-#if ASP_NET_CORE
-                   ?? claimsPrincipal.FindAll(claimType)
-#endif
-                ;
-        }
-
-        private List<string> GetAllClaimTypes()
-        {
-            var fields = typeof(ClaimTypes).GetFields(BindingFlags.Static | BindingFlags.Public);
-
-            // Output the claim types predictably
-            var sortedFields = fields.OrderBy(field => field.Name).ToList();
-
-            var claimTypes = new List<string>();
-            foreach(var field in sortedFields)
-            {
-                claimTypes.Add(field.GetValue(null) as string);
-            }
-
-            return claimTypes;
         }
     }
 }
