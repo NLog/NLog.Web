@@ -18,6 +18,12 @@ namespace NLog.Web
         /// <summary>
         /// Loads NLog LoggingConfiguration from appsettings.json from the NLog-section
         /// </summary>
+        /// <param name="setupBuilder"></param>
+        /// <param name="basePath">Override SetBasePath for <see cref="ConfigurationBuilder"/> with AddJsonFile. Default resolves from environment variables, else fallback to current directory.</param>
+        /// <param name="environment">Override Environment for appsettings.{environment}.json with AddJsonFile. Default resolves from environment variables, else fallback to "Production"</param>
+        /// <param name="nlogConfigSection">Override configuration-section-name to resolve NLog-configuration</param>
+        /// <param name="optional">Override optional with AddJsonFile</param>
+        /// <param name="reloadOnChange">Override reloadOnChange with AddJsonFile. Required for "autoReload":true to work.</param>
         public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
