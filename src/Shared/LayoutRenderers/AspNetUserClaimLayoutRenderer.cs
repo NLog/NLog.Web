@@ -85,20 +85,15 @@ namespace NLog.Web.LayoutRenderers
 #if NET46
         private IEnumerable<KeyValuePair<string, string>> GetAllClaims(IPrincipal claimsPrincipal)
         {
-            if (claimsPrincipal is ClaimsPrincipal)
-            {
-                return (claimsPrincipal as ClaimsPrincipal)?.Claims?.Select(claim => new KeyValuePair<string, string>(claim.Type, claim.Value));
-            }
-
-            return new List<KeyValuePair<string, string>>();
-        }
-#else
-        private IEnumerable<KeyValuePair<string, string>> GetAllClaims(ClaimsPrincipal claimsPrincipal)
-        {
-            return claimsPrincipal?.Claims?.Select(claim => new KeyValuePair<string, string>(claim.Type, claim.Value));
+              return GetAllClaims(claimsPrincipal as ClaimsPrincipal);
         }
 #endif
-
+        private IEnumerable<KeyValuePair<string, string>> GetAllClaims(ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal?.Claims?.Select(claim =>
+                       new KeyValuePair<string, string>(claim.Type, claim.Value)) ??
+                   new List<KeyValuePair<string, string>>();
+        }
 #if NET46
         private Claim GetClaim(IPrincipal claimsPrincipal, string claimType)
 #else
