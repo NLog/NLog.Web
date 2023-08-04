@@ -17,7 +17,8 @@ namespace NLog.Web.LayoutRenderers
     /// ASP.NET User ClaimType Value Lookup.
     /// </summary>
     /// <remarks>
-    /// <code>${aspnet-user-claim:ClaimType=Name}</code>
+    /// <code>${aspnet-user-claim:ClaimType=Name}</code> to render a single specific claim type
+    /// <code>${aspnet-user-claim}</code> to render all claim types
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-User-Claim-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-user-claim")]
@@ -28,19 +29,16 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <remarks>
         /// When value is prefixed with "ClaimTypes." (Remember dot) then ít will lookup in well-known claim types from <see cref="ClaimTypes"/>. Ex. ClaimsTypes.Name
+        /// If this is null or empty then all claim types are rendered
         /// </remarks>
         [DefaultParameter]
         public string ClaimType { get; set; }
 
-        /// <summary>
-        /// If this is set to true, then the ClaimType property is ignored and all Claim Types are rendered
-        /// </summary>
-        public bool All { get; set; }
-
         /// <inheritdoc />
         protected override void InitializeLayoutRenderer()
         {
-            if (ClaimType?.Trim().StartsWith("ClaimTypes.", StringComparison.OrdinalIgnoreCase) == true || ClaimType?.Trim().StartsWith("ClaimType.", StringComparison.OrdinalIgnoreCase) == true)
+            if (ClaimType?.Trim().StartsWith("ClaimTypes.", StringComparison.OrdinalIgnoreCase) == true || 
+                ClaimType?.Trim().StartsWith("ClaimType.",  StringComparison.OrdinalIgnoreCase) == true)
             {
                 var fieldName = ClaimType.Substring(ClaimType.IndexOf('.') + 1).Trim();
                 var claimTypesField = typeof(ClaimTypes).GetField(fieldName, BindingFlags.Static | BindingFlags.Public);
@@ -65,26 +63,9 @@ namespace NLog.Web.LayoutRenderers
                     return;
                 }
 
-                if (All)
+                if (string.IsNullOrEmpty(ClaimType))
                 {
-                    var claimKeyValuePairs =
-                        new List<KeyValuePair<string, string>>();
-#if NET46
-                    // This is an IPrincipal in NET 46, need to cast
-                    if (claimsPrincipal is ClaimsPrincipal)
-                    {
-                        foreach (var claim in (claimsPrincipal as ClaimsPrincipal).Claims)
-                        {
-                            claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
-                        }
-                    }
-#else
-                    foreach (var claim in claimsPrincipal.Claims)
-                    {
-                        claimKeyValuePairs.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
-                    }
-#endif
-                    SerializePairs(claimKeyValuePairs, builder, logEvent);
+                    SerializePairs(GetAllClaims(claimsPrincipal), builder, logEvent);
                 }
                 else
                 {
@@ -100,6 +81,24 @@ namespace NLog.Web.LayoutRenderers
                 InternalLogger.Debug(ex, "aspnet-user-claim - HttpContext has been disposed");
             }
         }
+
+#if NET46
+        private IEnumerable<KeyValuePair<string, string>> GetAllClaims(IPrincipal claimsPrincipal)
+        {
+            if (claimsPrincipal is ClaimsPrincipal)
+            {
+                return (claimsPrincipal as ClaimsPrincipal)?.Claims?.Select(claim => new KeyValuePair<string, string>(claim.Type, claim.Value));
+            }
+
+            return new List<KeyValuePair<string, string>>();
+        }
+#else
+        private IEnumerable<KeyValuePair<string, string>> GetAllClaims(ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal?.Claims?.Select(claim => new KeyValuePair<string, string>(claim.Type, claim.Value));
+        }
+#endif
+
 #if NET46
         private Claim GetClaim(IPrincipal claimsPrincipal, string claimType)
 #else

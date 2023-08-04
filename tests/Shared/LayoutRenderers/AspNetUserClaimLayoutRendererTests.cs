@@ -75,7 +75,6 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.All = true;
 
             var expectedResult = "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue1,http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue2,http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country=CountryValue";
 
