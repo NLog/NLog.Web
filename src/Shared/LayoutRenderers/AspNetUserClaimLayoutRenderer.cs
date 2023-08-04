@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using NLog.Common;
 using NLog.Config;
@@ -65,7 +64,8 @@ namespace NLog.Web.LayoutRenderers
 
                 if (string.IsNullOrEmpty(ClaimType))
                 {
-                    SerializePairs(GetAllClaims(claimsPrincipal), builder, logEvent);
+                    var allClaims = GetAllClaims(claimsPrincipal);
+                    SerializePairs(allClaims, builder, logEvent);
                 }
                 else
                 {
@@ -83,21 +83,21 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if NET46
-        private IEnumerable<KeyValuePair<string, string>> GetAllClaims(IPrincipal claimsPrincipal)
+        private static IEnumerable<KeyValuePair<string, string>> GetAllClaims(System.Security.Principal.IPrincipal claimsPrincipal)
         {
               return GetAllClaims(claimsPrincipal as ClaimsPrincipal);
         }
 #endif
-        private IEnumerable<KeyValuePair<string, string>> GetAllClaims(ClaimsPrincipal claimsPrincipal)
+        private static IEnumerable<KeyValuePair<string, string>> GetAllClaims(ClaimsPrincipal claimsPrincipal)
         {
             return claimsPrincipal?.Claims?.Select(claim =>
                        new KeyValuePair<string, string>(claim.Type, claim.Value)) ??
-                   new List<KeyValuePair<string, string>>();
+                   System.Linq.Enumerable.Empty<KeyValuePair<string, string>>();
         }
 #if NET46
-        private Claim GetClaim(IPrincipal claimsPrincipal, string claimType)
+        private static Claim GetClaim(System.Security.Principal.IPrincipal claimsPrincipal, string claimType)
 #else
-        private Claim GetClaim(ClaimsPrincipal claimsPrincipal, string claimType)
+        private static Claim GetClaim(ClaimsPrincipal claimsPrincipal, string claimType)
 #endif
         {
             var claimsIdentity = claimsPrincipal.Identity as ClaimsIdentity;    // Prioritize primary identity
