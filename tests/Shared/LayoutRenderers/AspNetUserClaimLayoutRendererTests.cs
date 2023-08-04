@@ -1,5 +1,8 @@
 ﻿#if ASP_NET_CORE || NET46_OR_GREATER
 
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Security.Principal;
 #if ASP_NET_CORE
 using Microsoft.Extensions.Primitives;
@@ -59,6 +62,33 @@ namespace NLog.Web.Tests.LayoutRenderers
             var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
             identity.FindFirst(expectedName).Returns(new System.Security.Claims.Claim(expectedName, expectedResult));
             httpContext.User.Identity.Returns(identity);
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void AllRendersAllValue()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            var expectedResult = "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue1,http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor=ActorValue2,http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country=CountryValue";
+
+            var principal = Substitute.For<System.Security.Claims.ClaimsPrincipal>();
+
+            principal.Claims.Returns(new List<Claim>()
+                {
+                    new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue1"),
+                    new System.Security.Claims.Claim(ClaimTypes.Actor, "ActorValue2"),
+                    new System.Security.Claims.Claim(ClaimTypes.Country, "CountryValue")
+                }
+            );
+
+            httpContext.User.Returns(principal);
 
             // Act
             string result = renderer.Render(new LogEventInfo());
