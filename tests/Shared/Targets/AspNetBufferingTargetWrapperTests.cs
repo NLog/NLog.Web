@@ -100,6 +100,7 @@ namespace NLog.Web.Tests
         public void TestSingleDebugTarget()
         {
             var context = SetUpFakeHttpContext();
+            context.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
             Assert.NotNull(context);
 
             var logFactory = RegisterSingleDebugTarget();
@@ -136,9 +137,55 @@ namespace NLog.Web.Tests
         }
 
         [Fact]
+        public void TestSingleMemoryTargetWithoutMiddleware()
+        {
+            var context = SetUpFakeHttpContext();
+            
+            Assert.NotNull(context);
+
+            var logFactory = RegisterSingleMemoryTarget();
+            var target = logFactory?.Configuration?.FindTargetByName<AspNetBufferingTargetWrapper>("only");
+            Assert.NotNull(target);
+            target.HttpContextAccessor = new FakeHttpContextAccessor(context);
+            var foo = context;
+
+
+            ILogger logger = logFactory.GetCurrentClassLogger();
+
+            for (int i = 0; i < 10; i++)
+            {
+                logger.Debug(i.ToString);
+            }
+
+            var wrappedTarget = target.WrappedTarget;
+            var memoryTarget = wrappedTarget as MemoryTarget;
+
+            Assert.NotNull(memoryTarget);
+
+            Assert.NotNull(memoryTarget.Logs);
+
+            Assert.NotEmpty(memoryTarget.Logs);
+
+            Assert.Equal(10, memoryTarget.Logs.Count);
+
+            // We went thru the buffered wrapper where the buffer limit was 9,
+            // but the middleware was disabled so we should have 10.
+
+            int j = 0;
+            foreach (var message in memoryTarget.Logs)
+            {
+                Assert.Equal(j.ToString(), message);
+                j++;
+            }
+
+            logFactory.Shutdown();
+        }
+
+        [Fact]
         public void TestSingleMemoryTarget()
         {
             var context = SetUpFakeHttpContext();
+            context.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
             Assert.NotNull(context);
 
             var logFactory = RegisterSingleMemoryTarget();
@@ -273,6 +320,7 @@ namespace NLog.Web.Tests
         public void TestSingleMemoryTargetWithMultipleContext()
         {
             var context = SetUpFakeHttpContext();
+            context.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
             Assert.NotNull(context);
 
             var logFactory = RegisterSingleMemoryTarget();
@@ -287,6 +335,7 @@ namespace NLog.Web.Tests
                 releaseThread.WaitOne(5000);
 
                 var bonusContext = SetUpFakeHttpContext();
+                bonusContext.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
                 Assert.NotNull(bonusContext);
                 target.HttpContextAccessor = new FakeAsyncLocalHttpContextAccessor(bonusContext);
 
@@ -360,6 +409,7 @@ namespace NLog.Web.Tests
         public void TestMultipleMemoryTargets()
         {
             var context = SetUpFakeHttpContext();
+            context.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
             Assert.NotNull(context);
 
             var logFactory = RegisterMultipleMemoryTargets();

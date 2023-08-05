@@ -24,7 +24,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(httpContext.Items);
-            Assert.Empty(httpContext.Items);
+            Assert.True(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
+            Assert.Null(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
         }
 
         [Fact]
@@ -42,9 +43,9 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(httpContext.Items);
-            Assert.Single(httpContext.Items);
             Assert.NotNull(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
             Assert.True(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
+            Assert.True(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
             Assert.Equal(expectedMessage, httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
         }
 
@@ -63,7 +64,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(httpContext.Items);
-            Assert.Empty(httpContext.Items);
+            Assert.True(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
+            Assert.Null(httpContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
         }
 
         public class MyWorkerRequest : SimpleWorkerRequest

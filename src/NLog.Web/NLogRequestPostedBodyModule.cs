@@ -47,6 +47,8 @@ namespace NLog.Web
 
         internal void OnBeginRequest(HttpContext context)
         {
+            HttpModuleIsInstalled(context);
+
             if (ShouldCaptureRequestBody(context))
             {
                 var requestBody = GetString(context.Request.InputStream);
@@ -55,6 +57,18 @@ namespace NLog.Web
                 {
                     context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Signal to the AspNetRequestPostedBodyLayoutRenderer class that the HttpModule is installed.
+        /// </summary>
+        /// <param name="context"></param>
+        private static void HttpModuleIsInstalled(HttpContext context)
+        {
+            if (context != null)
+            {
+                context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] = true;
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using NLog.Web.Targets.Wrappers;
 
 namespace NLog.Web
 {
@@ -29,6 +30,7 @@ namespace NLog.Web
         {
             application.BeginRequest += BeginRequestHandler;
             application.EndRequest += EndRequestHandler;
+            HttpModuleIsInstalled(application.Context);
         }
 
         /// <summary>
@@ -46,6 +48,18 @@ namespace NLog.Web
         private void EndRequestHandler(object sender, EventArgs args)
         {
             EndRequest?.Invoke(sender, args);
+        }
+
+        /// <summary>
+        /// Signal to the AspNetBufferingTargetWrapper class that the HttpModule is installed.
+        /// </summary>
+        /// <param name="context"></param>
+        private static void HttpModuleIsInstalled(HttpContext context)
+        {
+            if (context != null)
+            {
+                context.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
+            }
         }
     }
 }

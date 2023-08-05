@@ -43,9 +43,9 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Single(defaultContext.Items);
             Assert.NotNull(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
             Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
             Assert.Equal("This is a test request body", defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] as string);
             Assert.Equal(streamBeforePosition, streamAfterPosition);
         }
@@ -65,11 +65,12 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
-        public void ExcludContentTypeTest()
+        public void ExcludeContentTypeTest()
         {
             // Arrange
             DefaultHttpContext defaultContext = new DefaultHttpContext();
@@ -85,7 +86,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
@@ -116,7 +118,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
@@ -132,7 +135,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
@@ -151,7 +155,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
@@ -170,7 +175,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
@@ -193,7 +199,8 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Empty(defaultContext.Items);
+            Assert.Null(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         [Fact]
@@ -213,9 +220,9 @@ namespace NLog.Web.Tests
 
             // Assert
             Assert.NotNull(defaultContext.Items);
-            Assert.Single(defaultContext.Items);
             Assert.NotNull(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey]);
             Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] is string);
+            Assert.True(defaultContext.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] is bool);
         }
 
         private sealed class NetworkStream : Stream

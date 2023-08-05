@@ -21,6 +21,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string expected = "This is a test of the request posted body layout renderer.";
             var items = new Dictionary<object, object>();
             items.Add(AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey, expected);
+            items.Add(AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled, true);
             httpContext.Items.Returns(items);
             // Act
             var result = renderer.Render(new LogEventInfo());
@@ -33,7 +34,8 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 
-            httpContext.Items.ReturnsNull();
+            var items = new Dictionary<object, object>();
+            items.Add(AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled, true);
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -45,7 +47,8 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 
-            httpContext.Items.Returns(new Dictionary<object, object>());
+            var items = new Dictionary<object, object>();
+            items.Add(AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled, true);
 
             string result = renderer.Render(new LogEventInfo());
 
@@ -59,7 +62,25 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             httpContext.Items.Returns(new Dictionary<object, object>
             {
+                {AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled, true},
                 {AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey + "X","Not the Posted Body Value"}
+            });
+
+            string result = renderer.Render(new LogEventInfo());
+
+            Assert.NotEmpty(httpContext.Items);
+
+            Assert.Equal(string.Empty, result);
+        }
+
+        [Fact]
+        public void MiddlewareNotInstalledRendersEmptyString()
+        {
+            var (renderer, httpContext) = CreateWithHttpContext();
+
+            httpContext.Items.Returns(new Dictionary<object, object>
+            {
+                {AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey,"Posted Body Value"}
             });
 
             string result = renderer.Render(new LogEventInfo());
@@ -76,6 +97,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             httpContext.Items.Returns(new Dictionary<object, object>
             {
+                {AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled, true},
                 {AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey, 42}
             });
 

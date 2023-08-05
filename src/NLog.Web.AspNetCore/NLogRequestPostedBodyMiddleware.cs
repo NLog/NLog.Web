@@ -53,6 +53,8 @@ namespace NLog.Web
         {
             try
             {
+                MiddlewareIsInstalled(context);
+
                 if (ShouldCaptureRequestBody(context))
                 {
                     // This is required, otherwise reading the request will destructively read the request
@@ -75,6 +77,18 @@ namespace NLog.Web
             {
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
                 await _next(context);   // NOSONAR
+            }
+        }
+
+        /// <summary>
+        /// Signal to the AspNetRequestPostedBodyLayoutRenderer class that the Middleware is installed.
+        /// </summary>
+        /// <param name="context"></param>
+        private static void MiddlewareIsInstalled(HttpContext context)
+        {
+            if (context != null)
+            {
+                context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyMiddlewareInstalled] = true;
             }
         }
 

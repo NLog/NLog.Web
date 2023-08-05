@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Common;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #else
@@ -22,6 +23,11 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         internal static readonly object NLogPostedRequestBodyKey = new object();
 
+        /// <summary>
+        /// This provides the layout renderer an indication that the Middleware or HttpModule is in fact installed properly.
+        /// </summary>
+        internal static readonly object NLogPostedRequestBodyMiddlewareInstalled = new object();
+
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
@@ -32,11 +38,24 @@ namespace NLog.Web.LayoutRenderers
             }
 
 #if !ASP_NET_CORE
+
+            if (!items.Contains(NLogPostedRequestBodyMiddlewareInstalled))
+            {
+                InternalLogger.Warn("NLogRequestPostedBodyModule must be installed to use aspnet-request-posted-body in a layout.");
+                return;
+            }
+
             if (items.Contains(NLogPostedRequestBodyKey))
             {
                 builder.Append(items[NLogPostedRequestBodyKey] as string);
             }
 #else
+            if (!items.TryGetValue(NLogPostedRequestBodyMiddlewareInstalled, out var installed))
+            {
+                InternalLogger.Warn("NLogRequestPostedBodyMiddleware must be installed to use aspnet-request-posted-body in a layout.");
+                return;
+            }
+
             if (items.TryGetValue(NLogPostedRequestBodyKey, out var value))
             {
                 builder.Append(value as string);

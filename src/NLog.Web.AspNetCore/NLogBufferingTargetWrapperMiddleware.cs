@@ -40,6 +40,7 @@ namespace NLog.Web
         {
             try
             {
+                MiddlewareIsInstalled(context);
                 AspNetBufferingTargetWrapper.OnBeginRequest(context);
 
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
@@ -48,6 +49,18 @@ namespace NLog.Web
             finally
             {
                 AspNetBufferingTargetWrapper.OnEndRequest(context);
+            }
+        }
+
+        /// <summary>
+        /// Signal to the AspNetBufferingTargetWrapper class that the Middleware is installed.
+        /// </summary>
+        /// <param name="context"></param>
+        private static void MiddlewareIsInstalled(HttpContext context)
+        {
+            if (context != null)
+            {
+                context.Items[AspNetBufferingTargetWrapper.AspNetBufferingTargetWrapperMiddlewareInstalled] = true;
             }
         }
     }
