@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using NLog.Web.Targets.Wrappers;
 
 namespace NLog.Web
 {
@@ -18,6 +19,14 @@ namespace NLog.Web
         /// Event to be raised at the beginning of each HTTP Request.
         /// </summary>
         public static event EventHandler BeginRequest;
+
+        /// <summary>
+        /// Notify the wrapper target that the correct IHttpModule is installed
+        /// </summary>
+        public NLogHttpModule()
+        {
+            AspNetBufferingTargetWrapper.MiddlewareInstalled = true;
+        }
 
         /// <summary>
         /// Initializes the HttpModule.

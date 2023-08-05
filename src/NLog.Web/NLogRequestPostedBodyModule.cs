@@ -30,6 +30,8 @@ namespace NLog.Web
         /// </summary>
         public NLogRequestPostedBodyModule()
         {
+            AspNetRequestPostedBodyLayoutRenderer.MiddlewareInstalled = true;
+
             AllowContentTypes = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("application/", "json"),

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Common;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #else
@@ -17,10 +18,27 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-posted-body")]
     public class AspNetRequestPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
+        internal static bool MiddlewareInstalled;
+
         /// <summary>
         /// The object for the key in HttpContext.Items for the POST request body
         /// </summary>
         internal static readonly object NLogPostedRequestBodyKey = new object();
+
+        /// <inheritdoc />
+        protected override void InitializeLayoutRenderer()
+        {
+            if (!MiddlewareInstalled)
+            {
+#if ASP_NET_CORE
+                InternalLogger.Warn("NLogRequestPostedBodyMiddleware must be installed to use aspnet-request-posted-body in a layout.");
+#else
+                InternalLogger.Warn("NLogRequestPostedBodyModule must be installed to use aspnet-request-posted-body in a layout.");
+#endif
+            }
+
+            base.InitializeLayoutRenderer();
+        }
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)

@@ -74,6 +74,8 @@ namespace NLog.Web.Targets.Wrappers
     [Target("AspNetBufferingWrapper", IsWrapper = true)]
     public class AspNetBufferingTargetWrapper : WrapperTargetBase
     {
+        internal static bool MiddlewareInstalled;
+
         private static readonly object dataSlot = new object();
         private int _bufferGrowLimit;
 
@@ -178,6 +180,15 @@ namespace NLog.Web.Targets.Wrappers
             NLogHttpModule.BeginRequest += OnBeginRequestHandler;
             NLogHttpModule.EndRequest += OnEndRequestHandler;
 #endif
+
+            if (!MiddlewareInstalled)
+            {
+#if ASP_NET_CORE
+                InternalLogger.Warn("NLogBufferingTargetWrapperMiddleware must be installed to use AspNetBufferingWrapper target in the NLog.config.");
+#else
+                InternalLogger.Warn("NLogHttpModule must be installed to use AspNetBufferingWrapper target in the NLog.config.");
+#endif
+            }
 
             base.InitializeTarget();
         }
