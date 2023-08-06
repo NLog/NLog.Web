@@ -28,21 +28,34 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc />
         protected override void InitializeLayoutRenderer()
         {
-            if (!MiddlewareInstalled)
-            {
-#if ASP_NET_CORE
-                InternalLogger.Info("NLogRequestPostedBodyMiddleware is not yet initialized, which is required by aspnet-request-posted-body.");
-#else
-                InternalLogger.Info("NLogRequestPostedBodyModule is not yet initialized, which is required by aspnet-request-posted-body.");
-#endif
-            }
-
             base.InitializeLayoutRenderer();
         }
+
+        private static bool LogEventProcessed;
+        private static readonly object LogEventProcessedLock = new object();
 
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
+            if (!LogEventProcessed)
+            {
+                lock (LogEventProcessedLock)
+                {
+                    if (!LogEventProcessed)
+                    {
+                        LogEventProcessed = true;
+                        if (!MiddlewareInstalled)
+                        {
+#if ASP_NET_CORE
+                            InternalLogger.Info("NLogRequestPostedBodyMiddleware is not yet initialized, which is required by aspnet-request-posted-body.");
+#else
+                            InternalLogger.Info("NLogRequestPostedBodyModule is not yet initialized, which is required by aspnet-request-posted-body.");
+#endif
+                        }
+                    }
+                }
+            }
+
             var items = HttpContextAccessor.HttpContext?.Items;
             if (items == null || items.Count == 0)
             {
