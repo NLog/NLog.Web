@@ -194,8 +194,7 @@ namespace NLog.Web.Targets.Wrappers
             base.CloseTarget();
         }
 
-        private static bool LogEventProcessed;
-        private static readonly object LogEventProcessedLock = new object();
+        private bool _verifiedMiddlewareInstalled;
 
         /// <summary>
         /// Adds the specified log event to the buffer.
@@ -203,22 +202,16 @@ namespace NLog.Web.Targets.Wrappers
         /// <param name="logEvent">The log event.</param>
         protected override void WriteAsyncThreadSafe(AsyncLogEventInfo logEvent)
         {
-            if (!LogEventProcessed)
+            if (!_verifiedMiddlewareInstalled)
             {
-                lock (LogEventProcessedLock)
+                _verifiedMiddlewareInstalled = true;
+                if (!MiddlewareInstalled)
                 {
-                    if (!LogEventProcessed)
-                    {
-                        LogEventProcessed = true;
-                        if (!MiddlewareInstalled)
-                        {
 #if ASP_NET_CORE
-                            InternalLogger.Info("NLogBufferingTargetWrapperMiddleware is not yet initialized, which is required by AspNetBufferingWrapper.");
+                    InternalLogger.Info("NLogBufferingTargetWrapperMiddleware is not yet initialized, which is required by AspNetBufferingWrapper.");
 #else
-                            InternalLogger.Info("NLogHttpModule is not yet initialized, which is required by AspNetBufferingWrapper.");
+                    InternalLogger.Info("NLogHttpModule is not yet initialized, which is required by AspNetBufferingWrapper.");
 #endif
-                        }
-                    }
                 }
             }
 
