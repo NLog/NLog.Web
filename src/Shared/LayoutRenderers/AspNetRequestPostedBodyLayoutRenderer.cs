@@ -25,12 +25,6 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         internal static readonly object NLogPostedRequestBodyKey = new object();
 
-        /// <inheritdoc />
-        protected override void InitializeLayoutRenderer()
-        {
-            base.InitializeLayoutRenderer();
-        }
-
         private bool _verifiedMiddlewareInstalled;
 
         /// <inheritdoc/>
