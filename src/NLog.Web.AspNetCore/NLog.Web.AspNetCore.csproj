@@ -16,10 +16,10 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- NLogRequestPostedBodyMiddleware - Fixed handling of Stream.Position (#962) (@snakefoot)
-- NLogRequestPostedBodyMiddleware - Fixed handling of Stream.CanSeek (#958) (@snakefoot)
-- Updated to NLog.Extensions.Logging v5.3.2 (#964) (@snakefoot)
-- Updated to NLog.Extensions.Logging v5.3.1 (#959) (@snakefoot)
+- Extended AspNetUserClaimLayoutRenderer to handle multi-values (#975) (@bakgerman)
+- Better diagnostics when missing HttpModule or MiddleWare (#979) (@bakgerman)
+- Updated XML docs for LoadConfigurationFromAppSettings (#973) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.3.3 (#978) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
