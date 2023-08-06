@@ -4,6 +4,19 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.3 (2023/08/06)
+
+- **NLog.Web.AspNetCore**
+  - [#975](https://github.com/NLog/NLog.Web/pull/975) Extended AspNetUserClaimLayoutRenderer to handle multi-values (#975) (@bakgerman)
+  - [#979](https://github.com/NLog/NLog.Web/pull/979) Better diagnostics when missing HttpModule or MiddleWare (#979) (@bakgerman)
+  - [#973](https://github.com/NLog/NLog.Web/pull/973) Updated XML docs for LoadConfigurationFromAppSettings (#973) (@snakefoot)
+  - [#978](https://github.com/NLog/NLog.Web/pull/978) Updated dependency NLog.Extensions.Logging v5.3.3 (#978) (@snakefoot)
+
+- **NLog.Web**
+  - [#975](https://github.com/NLog/NLog.Web/pull/975) Extended AspNetUserClaimLayoutRenderer to handle multi-values (#975) (@bakgerman)
+  - [#979](https://github.com/NLog/NLog.Web/pull/979) Better diagnostics when missing HttpModule or MiddleWare (#979) (@bakgerman)
+  - [#978](https://github.com/NLog/NLog.Web/pull/978) Updated dependency NLog v5.2.3 (#978) (@snakefoot)
+
 ### Version 5.3.2 (2023/07/04)
 
 - **NLog.Web.AspNetCore**
