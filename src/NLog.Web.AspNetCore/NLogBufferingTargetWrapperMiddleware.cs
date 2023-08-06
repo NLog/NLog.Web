@@ -29,6 +29,8 @@ namespace NLog.Web
         public NLogBufferingTargetWrapperMiddleware(RequestDelegate next)
         {
             _next = next;
+
+            AspNetBufferingTargetWrapper.MiddlewareInstalled = true;
         }
 
         /// <summary>

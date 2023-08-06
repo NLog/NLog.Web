@@ -42,6 +42,8 @@ namespace NLog.Web
         {
             _next = next;
             _options = options ?? NLogRequestPostedBodyMiddlewareOptions.Default;
+
+            AspNetRequestPostedBodyLayoutRenderer.MiddlewareInstalled = true;
         }
 
         /// <summary>

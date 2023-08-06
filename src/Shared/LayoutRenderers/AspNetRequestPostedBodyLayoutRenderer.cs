@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Common;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 #else
@@ -17,14 +18,31 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-posted-body")]
     public class AspNetRequestPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
+        internal static bool MiddlewareInstalled;
+
         /// <summary>
         /// The object for the key in HttpContext.Items for the POST request body
         /// </summary>
         internal static readonly object NLogPostedRequestBodyKey = new object();
 
+        private bool _verifiedMiddlewareInstalled;
+
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
+            if (!_verifiedMiddlewareInstalled)
+            {
+                _verifiedMiddlewareInstalled = true;
+                if (!MiddlewareInstalled)
+                {
+#if ASP_NET_CORE
+                    InternalLogger.Info("NLogRequestPostedBodyMiddleware is not yet initialized, which is required by aspnet-request-posted-body.");
+#else
+                    InternalLogger.Info("NLogRequestPostedBodyModule is not yet initialized, which is required by aspnet-request-posted-body.");
+#endif
+                }
+            }
+
             var items = HttpContextAccessor.HttpContext?.Items;
             if (items == null || items.Count == 0)
             {
