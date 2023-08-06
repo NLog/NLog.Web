@@ -74,7 +74,7 @@ namespace NLog.Web.Targets.Wrappers
     [Target("AspNetBufferingWrapper", IsWrapper = true)]
     public class AspNetBufferingTargetWrapper : WrapperTargetBase
     {
-        internal static bool MiddlewareInstalled;
+        internal static bool MiddlewareInstalled { get; set; }
 
         private static readonly object dataSlot = new object();
         private int _bufferGrowLimit;

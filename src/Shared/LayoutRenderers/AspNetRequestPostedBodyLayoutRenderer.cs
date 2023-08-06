@@ -18,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-posted-body")]
     public class AspNetRequestPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
-        internal static bool MiddlewareInstalled;
+        internal static bool MiddlewareInstalled { get; set; }
 
         /// <summary>
         /// The object for the key in HttpContext.Items for the POST request body
