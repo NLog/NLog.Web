@@ -31,9 +31,9 @@ namespace NLog.Web.LayoutRenderers
             if (!MiddlewareInstalled)
             {
 #if ASP_NET_CORE
-                InternalLogger.Warn("NLogRequestPostedBodyMiddleware must be installed to use aspnet-request-posted-body in a layout.");
+                InternalLogger.Info("NLogRequestPostedBodyMiddleware is not yet initialized, which is required by aspnet-request-posted-body.");
 #else
-                InternalLogger.Warn("NLogRequestPostedBodyModule must be installed to use aspnet-request-posted-body in a layout.");
+                InternalLogger.Info("NLogRequestPostedBodyModule is not yet initialized, which is required by aspnet-request-posted-body.");
 #endif
             }
 

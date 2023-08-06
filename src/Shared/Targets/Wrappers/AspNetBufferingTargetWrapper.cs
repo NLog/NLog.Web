@@ -184,9 +184,9 @@ namespace NLog.Web.Targets.Wrappers
             if (!MiddlewareInstalled)
             {
 #if ASP_NET_CORE
-                InternalLogger.Warn("NLogBufferingTargetWrapperMiddleware must be installed to use AspNetBufferingWrapper target in the NLog.config.");
+                InternalLogger.Info("NLogBufferingTargetWrapperMiddleware is not yet initialized, which is required by AspNetBufferingWrapper.");
 #else
-                InternalLogger.Warn("NLogHttpModule must be installed to use AspNetBufferingWrapper target in the NLog.config.");
+                InternalLogger.Info("NLogHttpModule is not yet initialized, which is required by AspNetBufferingWrapper.");
 #endif
             }
 
