@@ -27,7 +27,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void SimpleTest()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a"
             };
@@ -38,7 +38,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void SimpleTest2()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a.b"
             };
@@ -49,7 +49,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NestedProps()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a.b",
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -65,7 +65,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NestedPropsObjectPath()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a",
                 ObjectPath = "b",
@@ -79,7 +79,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NestedProps2()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a.b.c",
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -95,7 +95,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NestedPropsObjectPath2()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a",
                 ObjectPath = "b.c"
@@ -109,7 +109,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NestedProps3()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "a.b..c",
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -125,7 +125,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void EmptyPath()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "",
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -141,7 +141,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void EmptyVarname()
         {
-            var appSettingLayoutRenderer = new AspNetSessionValueLayoutRenderer()
+            var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
                 Item = "",
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -159,7 +159,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             Layout layout = null;
 
-            var logFactory = new LogFactory().Setup().SetupExtensions(ext => ext.RegisterLayoutRenderer<AspNetSessionValueLayoutRenderer>("aspnet-session")).LoadConfiguration(c =>
+            var logFactory = new LogFactory().Setup().SetupExtensions(ext => ext.RegisterLayoutRenderer<AspNetSessionItemLayoutRenderer>("aspnet-session")).LoadConfiguration(c =>
             {
                 layout = "${aspnet-session:a.b:culture=en-GB:evaluateAsNestedProperties=true}";
             });

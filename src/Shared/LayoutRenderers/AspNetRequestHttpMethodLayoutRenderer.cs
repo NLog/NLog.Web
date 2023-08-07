@@ -18,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Method-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-method")]
-    public class AspNetRequestHttpMethodRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestHttpMethodLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)

@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-url")]
-    public class AspNetRequestUrlRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestUrlLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// A flags enumeration that controls which of the five portions of the URL are logged.

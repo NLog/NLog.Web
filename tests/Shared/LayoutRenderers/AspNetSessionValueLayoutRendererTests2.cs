@@ -20,7 +20,7 @@ namespace NLog.Web.Tests.LayoutRenderers
     ///
     /// //TODO combine with AspNetSessionValueLayoutRendererTests
     /// </summary>
-    public class AspNetSessionValueLayoutRendererTests2 : LayoutRenderersTestBase<AspNetSessionValueLayoutRenderer>
+    public class AspNetSessionValueLayoutRendererTests2 : LayoutRenderersTestBase<AspNetSessionItemLayoutRenderer>
     {
         protected override void NullRendersEmptyString()
         {
@@ -83,7 +83,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Empty(result);
         }
 
-        private static (AspNetSessionValueLayoutRenderer, HttpContext) CreateRenderer(bool throwsError = false)
+        private static (AspNetSessionItemLayoutRenderer, HttpContext) CreateRenderer(bool throwsError = false)
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 

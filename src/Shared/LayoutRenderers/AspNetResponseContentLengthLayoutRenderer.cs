@@ -12,7 +12,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-ContentLength-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-response-contentlength")]
-    public class AspNetResponseContentLength : AspNetLayoutRendererBase
+    public class AspNetResponseContentLengthLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)

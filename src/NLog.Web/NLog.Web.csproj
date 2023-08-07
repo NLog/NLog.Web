@@ -81,4 +81,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <Compile Include="..\Shared\**\*.cs" />
     <None Include="NLog.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
 </Project>

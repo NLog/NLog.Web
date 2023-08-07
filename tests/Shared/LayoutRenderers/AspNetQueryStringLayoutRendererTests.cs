@@ -320,7 +320,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             return new Tuple<string, string[]>(key, values);
         }
 
-        private AspNetQueryStringLayoutRenderer CreateAndMockRenderer(params Tuple<string, string[]>[] pairs)
+        private AspNetRequestQueryStringLayoutRenderer CreateAndMockRenderer(params Tuple<string, string[]>[] pairs)
         {
 #if !ASP_NET_CORE
             var httpContext = Substitute.For<HttpContextBase>();
@@ -344,7 +344,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Request.QueryString = pairCollection.ToQueryString();
 #endif
 
-            var renderer = new AspNetQueryStringLayoutRenderer();
+            var renderer = new AspNetRequestQueryStringLayoutRenderer();
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             return renderer;
         }

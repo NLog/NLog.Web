@@ -17,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-MVC-Action-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-mvc-action")]
-    public class AspNetMvcActionRenderer : AspNetLayoutRendererBase
+    public class AspNetMvcActionLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)

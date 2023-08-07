@@ -15,7 +15,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetItemValueLayoutRendererTests : LayoutRenderersTestBase<AspNetItemValueLayoutRenderer>
+    public class AspNetItemValueLayoutRendererTests : LayoutRenderersTestBase<AspNetHttpContextItemValueLayoutRenderer>
     {
         protected override void NullRendersEmptyString()
         {

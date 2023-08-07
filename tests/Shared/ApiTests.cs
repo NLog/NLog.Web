@@ -226,25 +226,10 @@
         public void ValidateLayoutRendererTypeAlias()
         {
             // These class-names should be repaired with next major version bump
-            // Do NOT add more incorrect class-names to this exlusion-list
+            // Do NOT add more incorrect class-names to this exclusion-list
             HashSet<string> oldFaultyClassNames = new HashSet<string>()
             {
-                "AspNetApplicationValueLayoutRenderer",
-                "AspNetItemValueLayoutRenderer",
-                "AspNetMvcActionRenderer",
-                "AspNetMvcControllerRenderer",
-                "AspNetRequestContentLength",
-                "AspNetRequestHttpMethodRenderer",
-                "AspNetQueryStringLayoutRenderer",
-                "AspNetRequestReferrerRenderer",
-                "AspNetRequestRouteParametersRenderer",
-                "AspNetRequestUrlRenderer",
-                "AspNetRequestUserAgent",
-                "AspNetRequestValueLayoutRenderer",
-                "AspNetResponseContentLength",
-                "AspNetResponseStatusCodeRenderer",
-                "AspNetSessionValueLayoutRenderer",
-                "IISInstanceNameLayoutRenderer",
+                
             };
 
             foreach (Type type in allTypes)

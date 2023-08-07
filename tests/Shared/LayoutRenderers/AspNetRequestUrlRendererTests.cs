@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUrlRendererTests : LayoutRenderersTestBase<AspNetRequestUrlRenderer>
+    public class AspNetRequestUrlRendererTests : LayoutRenderersTestBase<AspNetRequestUrlLayoutRenderer>
     {
         [Fact]
         public void UrlPresentRenderNonEmpty_Default()
@@ -176,7 +176,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 #endif
 
-        private static AspNetRequestUrlRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "", string rawTarget = null)
+        private static AspNetRequestUrlLayoutRenderer CreateRenderer(string hostBase, string queryString = "", string scheme = "http", string page = "/", string pathBase = "", string rawTarget = null)
         {
             var (renderer, httpContext) = CreateWithHttpContext();
 
