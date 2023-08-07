@@ -57,7 +57,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHasPostedBodyLayoutRenderer>("aspnet-request-has-posted-body");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer>("aspnet-request-headers");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHostLayoutRenderer>("aspnet-request-host");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHttpMethodLayoutRenderer>("aspnet-request-method");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestMethodLayoutRenderer>("aspnet-request-method");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer>("aspnet-request-ip");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestIsWebSocketLayoutRenderer>("aspnet-request-is-web-socket");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestLocalIpLayoutRenderer>("aspnet-request-local-ip");
@@ -65,7 +65,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestPostedBodyLayoutRenderer>("aspnet-request-posted-body");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestReferrerLayoutRenderer>("aspnet-request-referrer");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestRemotePortLayoutRenderer>("aspnet-request-remote-port");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestRouteParametersRenderer>("aspnet-request-routeparameters");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestRouteParametersLayoutRenderer>("aspnet-request-routeparameters");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer>("aspnet-request-servervariable");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer>("aspnet-request-url");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestUserAgentLayoutRenderer>("aspnet-request-useragent");
