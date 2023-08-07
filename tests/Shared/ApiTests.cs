@@ -225,13 +225,6 @@
         [Fact]
         public void ValidateLayoutRendererTypeAlias()
         {
-            // These class-names should be repaired with next major version bump
-            // Do NOT add more incorrect class-names to this exclusion-list
-            HashSet<string> oldFaultyClassNames = new HashSet<string>()
-            {
-                
-            };
-
             foreach (Type type in allTypes)
             {
                 if (type.IsSubclassOf(typeof(LayoutRenderer)))
@@ -247,14 +240,9 @@
                     else
                     {
                         Assert.False(type.IsAbstract, $"{type} with LayoutRendererAttribute cannot be abstract");
-
-                        if (!oldFaultyClassNames.Contains(type.Name))
-                        {
-                            var typeAlias = layoutRendererAttributes.First().Name.Replace("-", "");
-                            Assert.Equal(typeAlias + "LayoutRenderer", type.Name, StringComparer.OrdinalIgnoreCase);
-                        }
+                        var typeAlias = layoutRendererAttributes.First().Name.Replace("-", "");
+                        Assert.Equal(typeAlias + "LayoutRenderer", type.Name, StringComparer.OrdinalIgnoreCase);
                     }
-
                     Assert.Equal("NLog.Web.LayoutRenderers", type.Namespace);
                 }
             }
