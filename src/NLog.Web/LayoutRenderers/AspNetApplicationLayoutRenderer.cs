@@ -31,7 +31,7 @@ namespace NLog.Web.LayoutRenderers
     /// </example>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetApplication-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-application")]
-    public class AspNetApplicationValueLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetApplicationLayoutRenderer : AspNetLayoutRendererBase
     {
         private readonly NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper _objectPathRenderer = new NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper();
 

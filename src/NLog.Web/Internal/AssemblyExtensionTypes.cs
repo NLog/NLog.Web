@@ -42,7 +42,7 @@ namespace NLog.Web.Internal
         {
             #pragma warning disable CS0618 // Type or member is obsolete
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-appbasepath");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetApplicationValueLayoutRenderer>("aspnet-application");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetApplicationLayoutRenderer>("aspnet-application");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemValueLayoutRenderer>("aspnet-httpcontext-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemValueLayoutRenderer>("aspnet-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcActionLayoutRenderer>("aspnet-mvc-action");

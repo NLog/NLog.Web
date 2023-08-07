@@ -15,7 +15,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NullHttpContextRendersEmptyString()
         {
-            var renderer = new AspNetApplicationValueLayoutRenderer();
+            var renderer = new AspNetApplicationLayoutRenderer();
             renderer.Item = string.Empty;
 
             string result = renderer.Render(new LogEventInfo());
@@ -31,7 +31,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var httpContext = Substitute.For<HttpContextBase>();
 
-            var renderer = new AspNetApplicationValueLayoutRenderer();
+            var renderer = new AspNetApplicationLayoutRenderer();
             renderer.Item = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
 
@@ -47,7 +47,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Application["key"].Returns(expectedValue);
 
             var culture = CultureInfo.CurrentUICulture;
-            var renderer = new AspNetApplicationValueLayoutRenderer();
+            var renderer = new AspNetApplicationLayoutRenderer();
             renderer.Item = "key";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
             renderer.Culture = culture;
@@ -65,7 +65,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var httpContext = Substitute.For<HttpContextBase>();
             httpContext.Application["key"].Returns(Tuple.Create(expectedValue, 1));
 
-            var renderer = new AspNetApplicationValueLayoutRenderer();
+            var renderer = new AspNetApplicationLayoutRenderer();
             renderer.Item = "key";
             renderer.ObjectPath = "Item1";
             renderer.HttpContextAccessor = new FakeHttpContextAccessor(httpContext);
