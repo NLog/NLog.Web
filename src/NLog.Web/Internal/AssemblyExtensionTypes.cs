@@ -76,7 +76,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer>("aspnet-response-cookie");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseHasStartedLayoutRenderer>("aspnet-response-has-started");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer>("aspnet-response-headers");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseStatusCodeRenderer>("aspnet-response-statuscode");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseStatusCodeLayoutRenderer>("aspnet-response-statuscode");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetSessionIdLayoutRenderer>("aspnet-sessionid");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer>("aspnet-session-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer>("aspnet-session");
