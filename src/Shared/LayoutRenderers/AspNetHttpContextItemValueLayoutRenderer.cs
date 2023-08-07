@@ -34,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-HttpContext-Item-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-httpcontext-item")]
     [LayoutRenderer("aspnet-item")]
-    public class AspNetHttpContextItemValueLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetHttpContextItemLayoutRenderer : AspNetLayoutRendererBase
     {
         private readonly NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper _objectPathRenderer = new NLog.LayoutRenderers.Wrappers.ObjectPathRendererWrapper();
 

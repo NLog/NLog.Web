@@ -43,8 +43,8 @@ namespace NLog.Web.Internal
             #pragma warning disable CS0618 // Type or member is obsolete
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-appbasepath");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer>("aspnet-environment");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemValueLayoutRenderer>("aspnet-httpcontext-item");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemValueLayoutRenderer>("aspnet-item");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer>("aspnet-httpcontext-item");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer>("aspnet-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcActionLayoutRenderer>("aspnet-mvc-action");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcControllerLayoutRenderer>("aspnet-mvc-controller");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer>("aspnet-request-querystring");
