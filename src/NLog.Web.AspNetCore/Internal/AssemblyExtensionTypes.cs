@@ -71,7 +71,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestTrackingConsentLayoutRenderer>("aspnet-request-tracking-consent");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer>("aspnet-request-url");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestUserAgentLayoutRenderer>("aspnet-request-useragent");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestValueLayoutRenderer>("aspnet-request");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer>("aspnet-request");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestWebSocketRequestedProtocolsLayoutRenderer>("aspnet-request-web-socket-requested-protocols");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseContentLengthLayoutRenderer>("aspnet-response-contentlength");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseContentTypeLayoutRenderer>("aspnet-response-contenttype");

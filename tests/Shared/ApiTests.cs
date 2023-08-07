@@ -16,7 +16,7 @@
     public class ApiTests
     {
         private readonly Type[] allTypes;
-        private readonly Assembly nlogWebAssembly = typeof(AspNetRequestValueLayoutRenderer).Assembly;
+        private readonly Assembly nlogWebAssembly = typeof(AspNetRequestLayoutRenderer).Assembly;
         private readonly Dictionary<Type, int> typeUsageCount = new Dictionary<Type, int>();
 
         public ApiTests()
