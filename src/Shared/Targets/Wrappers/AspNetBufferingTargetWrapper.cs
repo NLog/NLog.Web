@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 #if !ASP_NET_CORE
@@ -76,7 +75,7 @@ namespace NLog.Web.Targets.Wrappers
     {
         internal static bool MiddlewareInstalled { get; set; }
 
-        private static readonly object dataSlot = new object();
+        private static readonly object DataSlot = new object();
         private int _bufferGrowLimit;
 
         /// <summary>
@@ -163,32 +162,7 @@ namespace NLog.Web.Targets.Wrappers
             {
                 InternalLogger.Debug("{0}: HttpContextAccessor not available", this);
             }
-
-#if !ASP_NET_CORE
-            if (httpContextAccessor?.HttpContext != null)
-            {
-                OnBeginRequest(HttpContext.Current);
-            }
-
-            // Prevent double subscribe
-            NLogHttpModule.BeginRequest -= OnBeginRequestHandler;
-            NLogHttpModule.EndRequest -= OnEndRequestHandler;
-
-            NLogHttpModule.BeginRequest += OnBeginRequestHandler;
-            NLogHttpModule.EndRequest += OnEndRequestHandler;
-#endif
             base.InitializeTarget();
-        }
-
-        /// <inheritdoc/>
-        protected override void CloseTarget()
-        {
-#if !ASP_NET_CORE
-            NLogHttpModule.BeginRequest -= OnBeginRequestHandler;
-            NLogHttpModule.EndRequest -= OnEndRequestHandler;
-#endif
-
-            base.CloseTarget();
         }
 
         private bool _verifiedMiddlewareInstalled;
@@ -253,12 +227,12 @@ namespace NLog.Web.Targets.Wrappers
 
         private static TargetBufferListNode? GetTargetBufferList(HttpContext context)
         {
-            return context?.Items?[dataSlot] as TargetBufferListNode;
+            return context?.Items?[DataSlot] as TargetBufferListNode;
         }
 
         private static void SetTargetBufferList(HttpContext context, TargetBufferListNode? newEmptyList)
         {
-            context.Items[dataSlot] = newEmptyList;
+            context.Items[DataSlot] = newEmptyList;
         }
 
         private sealed class TargetBufferListNode
@@ -358,17 +332,5 @@ namespace NLog.Web.Targets.Wrappers
                 InternalLogger.Error(ex, "AspNetBufferingWrapper Failed to flush Request Buffer");
             }
         }
-
-#if !ASP_NET_CORE
-        private static void OnBeginRequestHandler(object sender, EventArgs e)
-        {
-            OnBeginRequest(HttpContext.Current);
-        }
-
-        private static void OnEndRequestHandler(object sender, EventArgs e)
-        {
-            OnEndRequest(HttpContext.Current);
-        }
-#endif
     }
 }
