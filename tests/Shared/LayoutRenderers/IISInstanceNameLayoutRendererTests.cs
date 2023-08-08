@@ -15,7 +15,7 @@ using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class IISInstanceNameLayoutRendererTests : TestBase
+    public class IISSiteNameLayoutRendererTests : TestBase
     {
         [Fact]
         public void SuccessTest()

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestRouteParametersRendererTests : LayoutRenderersTestBase<AspNetRequestRouteParametersLayoutRenderer>
+    public class AspNetRequestRouteParametersLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestRouteParametersLayoutRenderer>
     {
 #if ASP_NET_CORE
         [Fact]

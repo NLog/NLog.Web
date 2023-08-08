@@ -22,7 +22,7 @@ using NSubstitute;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetSessionValueLayoutRendererTests : TestInvolvingAspNetHttpContext
+    public class AspNetSessionItemLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
         [Fact]
         public void SimpleTest()

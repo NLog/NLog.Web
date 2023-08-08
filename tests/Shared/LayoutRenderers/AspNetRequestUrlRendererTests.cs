@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestUrlRendererTests : LayoutRenderersTestBase<AspNetRequestUrlLayoutRenderer>
+    public class AspNetRequestUrlLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestUrlLayoutRenderer>
     {
         [Fact]
         public void UrlPresentRenderNonEmpty_Default()

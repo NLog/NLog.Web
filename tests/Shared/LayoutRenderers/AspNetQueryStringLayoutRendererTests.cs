@@ -21,7 +21,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetQueryStringLayoutRendererTests : TestInvolvingAspNetHttpContext
+    public class AspNetRequestQueryStringLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
         [Fact]
         public void NullKeyRendersEmptyString()

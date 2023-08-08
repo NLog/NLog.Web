@@ -10,7 +10,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetApplicationValueLayoutRendererTests : TestBase
+    public class AspNetApplicationLayoutRendererTests : TestBase
     {
         [Fact]
         public void NullHttpContextRendersEmptyString()
