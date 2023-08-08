@@ -20,7 +20,7 @@ namespace NLog.Web.Tests.LayoutRenderers
     ///
     /// //TODO combine with AspNetSessionValueLayoutRendererTests
     /// </summary>
-    public class AspNetSessionValueLayoutRendererTests2 : LayoutRenderersTestBase<AspNetSessionItemLayoutRenderer>
+    public class AspNetSessionItemLayoutRendererTests2 : LayoutRenderersTestBase<AspNetSessionItemLayoutRenderer>
     {
         protected override void NullRendersEmptyString()
         {
