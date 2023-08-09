@@ -34,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
         public TlsHandshakeProperty Property { get; set; } = TlsHandshakeProperty.Protocol;
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var tlsHandshake = HttpContextAccessor.HttpContext.TryGetFeature<ITlsHandshakeFeature>();
             if (tlsHandshake is null)

@@ -16,7 +16,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetSessionIdLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
 #if ASP_NET_CORE
             // Because session.get / session.getstring are also creating log messages in some cases,

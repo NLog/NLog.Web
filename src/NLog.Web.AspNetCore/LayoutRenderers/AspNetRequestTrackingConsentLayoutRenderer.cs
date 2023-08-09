@@ -28,7 +28,7 @@ namespace NLog.Web.LayoutRenderers
         public TrackingConsentProperty Property { get; set; } = TrackingConsentProperty.CanTrack;
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var trackingConsent = HttpContextAccessor.HttpContext.TryGetFeature<ITrackingConsentFeature>();
             switch (Property)

@@ -18,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestBidirectionalStreamLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var upgradeFeature = HttpContextAccessor.HttpContext.TryGetFeature<IHttpUpgradeFeature>();
             builder.Append(upgradeFeature?.IsUpgradableRequest == true ? '1': '0');

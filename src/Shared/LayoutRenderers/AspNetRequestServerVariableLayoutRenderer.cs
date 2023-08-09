@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
         public string Item { get; set; }
 
         /// <inheritdoc />
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             if (Item != null)
             {

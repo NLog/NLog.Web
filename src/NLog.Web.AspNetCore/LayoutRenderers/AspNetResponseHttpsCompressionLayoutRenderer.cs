@@ -28,7 +28,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetResponseHttpsCompressionLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var features = HttpContextAccessor.HttpContext.TryGetFeature<IHttpsCompressionFeature>();
             var compressionMode = features?.Mode ?? HttpsCompressionMode.Default;

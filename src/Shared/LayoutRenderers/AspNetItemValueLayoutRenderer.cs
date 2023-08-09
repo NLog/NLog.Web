@@ -86,7 +86,7 @@ namespace NLog.Web.LayoutRenderers
         public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var item = Item;
             if (string.IsNullOrEmpty(item))

@@ -28,7 +28,7 @@ namespace NLog.Web.LayoutRenderers
         private bool _verifiedMiddlewareInstalled;
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             if (!_verifiedMiddlewareInstalled)
             {

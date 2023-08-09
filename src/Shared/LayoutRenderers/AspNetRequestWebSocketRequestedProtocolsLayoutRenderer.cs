@@ -18,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestWebSocketRequestedProtocolsLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var protocolValues = ResolveWebSocketProtocols();
             if (protocolValues?.Count > 0)

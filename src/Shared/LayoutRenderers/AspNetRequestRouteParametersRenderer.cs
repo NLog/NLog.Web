@@ -42,7 +42,7 @@ namespace NLog.Web.LayoutRenderers
         public List<string> RouteParameterKeys { get => Items; set => Items = value; }
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
             if (context is null)

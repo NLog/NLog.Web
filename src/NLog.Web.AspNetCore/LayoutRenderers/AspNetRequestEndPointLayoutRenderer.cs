@@ -18,7 +18,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestEndPointLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var endPoint = HttpContextAccessor.HttpContext.TryGetFeature<Microsoft.AspNetCore.Http.Features.IEndpointFeature>()?.Endpoint;
             builder.Append(endPoint?.DisplayName);

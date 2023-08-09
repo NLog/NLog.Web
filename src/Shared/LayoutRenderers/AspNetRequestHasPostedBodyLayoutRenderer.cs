@@ -27,7 +27,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestHasPostedBodyLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             builder.Append(CanHaveBody() ? '1' : '0');
         }

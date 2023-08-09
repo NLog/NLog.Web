@@ -15,7 +15,7 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestConnectionIdLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var id = HttpContextAccessor.HttpContext.TryGetConnection()?.Id;
             if(!string.IsNullOrEmpty(id))
