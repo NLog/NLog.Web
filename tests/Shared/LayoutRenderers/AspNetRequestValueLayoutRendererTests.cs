@@ -16,6 +16,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
 using System.Collections.Generic;
+using System.Net.Http;
 
 
 namespace NLog.Web.Tests.LayoutRenderers
@@ -26,6 +27,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullHttpContextRendersEmptyString()
         {
             var renderer = new AspNetRequestValueLayoutRenderer();
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor(null);
 
             string result = renderer.Render(new LogEventInfo());
 
