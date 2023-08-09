@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var endPoint = HttpContextAccessor.HttpContext.TryGetFeature<Microsoft.AspNetCore.Http.Features.IEndpointFeature>()?.Endpoint;
+            var endPoint = HttpContextAccessor.HttpContext?.TryGetFeature<Microsoft.AspNetCore.Http.Features.IEndpointFeature>()?.Endpoint;
             builder.Append(endPoint?.DisplayName);
         }
     }

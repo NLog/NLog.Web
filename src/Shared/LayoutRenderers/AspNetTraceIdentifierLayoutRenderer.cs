@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
             if (IgnoreActivityId)
                 return httpContext?.TraceIdentifier;
             else
-                return System.Diagnostics.Activity.Current?.Id ?? httpContext.TraceIdentifier;
+                return System.Diagnostics.Activity.Current?.Id ?? httpContext?.TraceIdentifier;
         }
 #elif ASP_NET_CORE
         private string LookupTraceIdentifier(HttpContext httpContext)
@@ -54,7 +54,7 @@ namespace NLog.Web.LayoutRenderers
             IServiceProvider serviceProvider = httpContext;
             if (serviceProvider != null)
             {
-                var workerRequest = (System.Web.HttpWorkerRequest)serviceProvider.GetService(typeof(System.Web.HttpWorkerRequest));
+                var workerRequest = (System.Web.HttpWorkerRequest)serviceProvider?.GetService(typeof(System.Web.HttpWorkerRequest));
                 if (workerRequest != null)
                 {
                     Guid requestIdGuid = workerRequest.RequestTraceIdentifier;
