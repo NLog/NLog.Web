@@ -35,10 +35,10 @@ namespace NLog.Web.LayoutRenderers
         private bool CanHaveBody()
         {
 #if NET5_0_OR_GREATER
-            var requestFeature = HttpContextAccessor.HttpContext?.TryGetFeature<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>();
+            var requestFeature = HttpContextAccessor?.HttpContext?.TryGetFeature<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>();
             return requestFeature?.CanHaveBody == true;
 #else
-            var httpRequest = HttpContextAccessor.HttpContext?.TryGetRequest();
+            var httpRequest = HttpContextAccessor?.HttpContext?.TryGetRequest();
             return httpRequest?.ContentLength > 0L;
 #endif
         }

@@ -27,7 +27,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var transportFeature = HttpContextAccessor.HttpContext?.TryGetFeature<IHttpTransportFeature>();
+            var transportFeature = HttpContextAccessor?.HttpContext?.TryGetFeature<IHttpTransportFeature>();
             var value = transportFeature?.TransportType ?? Microsoft.AspNetCore.Http.Connections.HttpTransportType.None;
             if (value != Microsoft.AspNetCore.Http.Connections.HttpTransportType.None)
                 builder.Append(value);

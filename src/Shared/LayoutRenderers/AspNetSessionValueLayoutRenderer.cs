@@ -111,7 +111,7 @@ namespace NLog.Web.LayoutRenderers
             if (string.IsNullOrEmpty(item))
                 return;
 
-            var context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor?.HttpContext;
             if (context is null)
                 return;
 

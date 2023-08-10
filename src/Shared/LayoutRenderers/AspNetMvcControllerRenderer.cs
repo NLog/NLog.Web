@@ -24,7 +24,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var key = "controller";
 
-            var context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor?.HttpContext;
 
 #if !ASP_NET_CORE
             object controllerValue = null;

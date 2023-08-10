@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var features = HttpContextAccessor.HttpContext?.TryGetFeature<IHttpsCompressionFeature>();
+            var features = HttpContextAccessor?.HttpContext?.TryGetFeature<IHttpsCompressionFeature>();
             var compressionMode = features?.Mode ?? HttpsCompressionMode.Default;
             builder.Append(compressionMode);
         }

@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var upgradeFeature = HttpContextAccessor.HttpContext?.TryGetFeature<IHttpUpgradeFeature>();
+            var upgradeFeature = HttpContextAccessor?.HttpContext?.TryGetFeature<IHttpUpgradeFeature>();
             builder.Append(upgradeFeature?.IsUpgradableRequest == true ? '1': '0');
         }
     }

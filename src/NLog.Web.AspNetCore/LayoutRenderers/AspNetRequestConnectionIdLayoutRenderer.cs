@@ -17,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var id = HttpContextAccessor.HttpContext?.TryGetConnection()?.Id;
+            var id = HttpContextAccessor?.HttpContext?.TryGetConnection()?.Id;
             if(!string.IsNullOrEmpty(id))
             {
                 builder.Append(id);

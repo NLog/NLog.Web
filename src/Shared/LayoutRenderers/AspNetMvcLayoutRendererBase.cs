@@ -17,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
+            var context = HttpContextAccessor?.HttpContext;
             if (context == null)
             {
                 return;

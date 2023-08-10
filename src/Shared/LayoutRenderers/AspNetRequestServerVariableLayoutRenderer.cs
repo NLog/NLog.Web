@@ -34,7 +34,7 @@ namespace NLog.Web.LayoutRenderers
         {
             if (Item != null)
             {
-                builder.Append(LookupItemValue(Item, HttpContextAccessor.HttpContext));
+                builder.Append(LookupItemValue(Item, HttpContextAccessor?.HttpContext));
             }
         }
 
