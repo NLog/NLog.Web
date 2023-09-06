@@ -16,10 +16,7 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Extended AspNetUserClaimLayoutRenderer to handle multi-values (#975) (@bakgerman)
-- Better diagnostics when missing HttpModule or MiddleWare (#979) (@bakgerman)
-- Updated XML docs for LoadConfigurationFromAppSettings (#973) (@snakefoot)
-- Updated dependency NLog.Extensions.Logging v5.3.3 (#978) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.3.4 (#983) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -87,7 +84,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.3" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
