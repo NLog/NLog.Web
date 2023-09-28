@@ -134,7 +134,7 @@ namespace NLog.Web.LayoutRenderers
             {
 #endif
 
-                var contextSession = context?.TryGetSession();
+                var contextSession = context.TryGetSession();
                 if (contextSession == null)
                 {
                     return;

@@ -75,7 +75,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
             var formKeys = httpRequest?.Form?.Keys;
 #else
-            var formKeys = httpRequest?.HasFormContentType == true ? httpRequest?.Form?.Keys : null;
+            var formKeys = httpRequest?.HasFormContentType == true ? httpRequest.Form?.Keys : null;
 #endif
             if (formKeys?.Count > 0)
             {
