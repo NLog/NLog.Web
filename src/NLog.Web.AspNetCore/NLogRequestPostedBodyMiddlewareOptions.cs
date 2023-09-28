@@ -70,7 +70,7 @@ namespace NLog.Web
 
             if (!context.HasAllowedContentType(AllowContentTypes))
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentType={0}", context?.Request?.ContentType);
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentType={0}", context.Request.ContentType);
                 return false;
             }
 

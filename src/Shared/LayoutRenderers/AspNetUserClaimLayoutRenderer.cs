@@ -70,10 +70,7 @@ namespace NLog.Web.LayoutRenderers
                 else
                 {
                     var claim = GetClaim(claimsPrincipal, ClaimType);
-                    if (claim != null)
-                    {
-                        builder.Append(claim?.Value);
-                    }
+                    builder.Append(claim?.Value);
                 }
             }
             catch (ObjectDisposedException ex)

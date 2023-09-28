@@ -94,8 +94,8 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
-            var context = HttpContextAccessor.HttpContext;
-            if (context is null)
+            var httpContext = HttpContextAccessor.HttpContext;
+            if (httpContext is null)
             {
                 return;
             }
@@ -105,14 +105,14 @@ namespace NLog.Web.LayoutRenderers
 #pragma warning disable CS0618 // Type or member is obsolete
             if (EvaluateAsNestedProperties)
             {
-                value = PropertyReader.GetValue(item, context?.Items, (items, key) => LookupItemValue(items, key), true);
+                value = PropertyReader.GetValue(item, httpContext.Items, (items, key) => LookupItemValue(items, key), true);
                 if (value is null)
                     return;
             }
 #pragma warning restore CS0618 // Type or member is obsolete
             else
             {
-                value = LookupItemValue(context?.Items, item);
+                value = LookupItemValue(httpContext.Items, item);
                 if (value is null)
                     return;
 
