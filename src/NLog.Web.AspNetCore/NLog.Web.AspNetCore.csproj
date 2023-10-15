@@ -84,7 +84,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
     <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
