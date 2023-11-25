@@ -3,10 +3,8 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Routing;
-using System.Web;
 #else
 using Microsoft.AspNetCore.Routing;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 #endif
 
 namespace NLog.Web.LayoutRenderers

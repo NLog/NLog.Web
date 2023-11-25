@@ -1,8 +1,6 @@
 using System;
 using System.Text;
 #if !ASP_NET_CORE
-using NLog.Web.Internal;
-using System.Web.Routing;
 using System.Web;
 #else
 using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
