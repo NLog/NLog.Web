@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net452;net461</TargetFrameworks>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <AssemblyTitle>NLog.Web.Tests</AssemblyTitle>
-    <Product>NLog.Web.Tests</Product>
-    <Copyright>Copyright ©  2015-2019</Copyright>
     <Version>1.2.3.2</Version>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
     <FileVersion>1.2.3.1</FileVersion>
+    <InformationalVersion>1.2.3.2</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <IsPackable>false</IsPackable>
     <DebugType>full</DebugType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../NLog.snk</AssemblyOriginatorKeyFile>

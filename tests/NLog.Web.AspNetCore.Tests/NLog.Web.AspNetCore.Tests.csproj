@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net461;net6.0</TargetFrameworks>
-    <AssemblyName>NLog.Web.AspNetCore.Tests</AssemblyName>
+    <Version>1.2.3.2</Version>
     <AssemblyVersion>1.2.3.0</AssemblyVersion>
     <FileVersion>1.2.3.1</FileVersion>
     <InformationalVersion>1.2.3.2</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <IsPackable>false</IsPackable>
     <DebugType Condition=" '$(TargetFramework)' == 'net461' ">Full</DebugType>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../NLog.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>NLog.Web.Tests</RootNamespace>

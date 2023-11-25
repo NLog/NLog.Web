@@ -3,9 +3,7 @@ using NLog.Config;
 using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Routing;
-using System.Web;
 #else
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Routing;
 #endif
 
@@ -27,7 +25,6 @@ namespace NLog.Web.LayoutRenderers
             var key = "controller";
 
             var context = HttpContextAccessor.HttpContext;
-
 
 #if !ASP_NET_CORE
             object controllerValue = null;
