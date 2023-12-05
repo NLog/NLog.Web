@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp3.1;net5.0;net6.0;net8.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog LayoutRenderers to enrich logging output with details from HttpContext.
@@ -35,13 +35,69 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <RootNamespace>NLog.Web</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyTitle>$(Title)</AssemblyTitle>
     <!-- EmbedUntrackedSources for deterministic build -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <IsTrimmable>true</IsTrimmable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Title>$(AssemblyName) - .NET Framework 4.6.1</Title>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+    <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Title>$(AssemblyName) - .NET Standard 2.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <Title>$(AssemblyName) - .NET Core 3.1</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <Title>$(AssemblyName) - .NET 5.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <Title>$(AssemblyName) - .NET 6.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <Title>$(AssemblyName) - .NET 8.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' and '$(TargetFramework)' != 'net461' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
+    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.22" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Shared\**\*.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Update="Internal\AssemblyExtensionTypes.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -60,57 +116,5 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Title>ASP.NET Core 2 integration for NLog - .NET Framework 4.6+</Title>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
-    <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Title>ASP.NET Core 2 integration for NLog - .NET Standard 2</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-    <Title>ASP.NET Core 3 integration for NLog - .NET Core 3.1</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
-    <Title>ASP.NET Core 5 integration for NLog - .NET 5.0</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <Title>ASP.NET Core 6 integration for NLog - .NET 6.0</Title>
-    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461' ">
-    <!-- Fixed to 2.1.0 as 2.1 is Long Term Supported (LTS) and only supported version for .NET Framework 4.6.1 -->
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.22" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="4.5.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Shared\**\*.cs" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="ILLink.Descriptors.xml">
-      <LogicalName>ILLink.Descriptors.xml</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
 </Project>
