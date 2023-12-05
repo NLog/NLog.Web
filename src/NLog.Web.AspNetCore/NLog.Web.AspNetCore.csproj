@@ -35,56 +35,41 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <RootNamespace>NLog.Web</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyTitle>$(Title)</AssemblyTitle>
     <!-- EmbedUntrackedSources for deterministic build -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <IsTrimmable>true</IsTrimmable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-  <ItemGroup>
-    <None Update="Internal\AssemblyExtensionTypes.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyExtensionTypes.cs</LastGenOutput>
-    </None>
-    <Compile Update="Internal\AssemblyExtensionTypes.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AssemblyExtensionTypes.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
-    <None Include="README.md" Pack="true" PackagePath="" />
-  </ItemGroup>
-  <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
-    <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
-  </Target>
+
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Title>NLog.Web ASP.NET Core extensions - .NET 4.6.1</Title>
+    <Title>$(AssemblyName) - .NET Framework 4.6.1</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Title>NLog.Web ASP.NET Core extensions - .NET Standard 2.0</Title>
+    <Title>$(AssemblyName) - .NET Standard 2.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-    <Title>NLog.Web ASP.NET Core extensions - .NET Core 3.1</Title>
+    <Title>$(AssemblyName) - .NET Core 3.1</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
-    <Title>NLog.Web ASP.NET Core extensions - .NET 5.0</Title>
+    <Title>$(AssemblyName) - .NET 5.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <Title>NLog.Web ASP.NET Core extensions - .NET 6.0</Title>
+    <Title>$(AssemblyName) - .NET 6.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
-    <Title>NLog.Web ASP.NET Core extensions - .NET 8.0</Title>
+    <Title>$(AssemblyName) - .NET 8.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
@@ -104,12 +89,32 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Shared\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="ILLink.Descriptors.xml">
       <LogicalName>ILLink.Descriptors.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Shared\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Internal\AssemblyExtensionTypes.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyExtensionTypes.cs</LastGenOutput>
+    </None>
+    <Compile Update="Internal\AssemblyExtensionTypes.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssemblyExtensionTypes.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
+    <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
+  </Target>
+
 </Project>
