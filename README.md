@@ -44,7 +44,7 @@ For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https
 The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package supports the platforms:
 
 - For ASP.NET Core - .NET 5, 6, 7 and 8
-- For ASP.NET Core - .NET Core 3
+- For ASP.NET Core - .NET Core 3.1
 - For ASP.NET Core 2.1 .NET Standard 2.0 for .NET 4.6.1
 
 ℹ️  Missing the trace and debug logs? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-6%3F)
