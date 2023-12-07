@@ -55,6 +55,7 @@ namespace NLog.Web
             var config = builder.Build();
             if (!string.IsNullOrEmpty(nlogConfigSection) && config.GetSection(nlogConfigSection)?.GetChildren().Any() == true)
             {
+                // "NLog"-section in appsettings.json has first priority
                 return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config)).LoadConfigurationFromSection(config, nlogConfigSection);
             }
             else
@@ -66,9 +67,21 @@ namespace NLog.Web
                     if (!string.IsNullOrEmpty(environment))
                     {
                         setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, $"nlog.{environment}.config"), optional: true);
+                        setupBuilder.LoadConfiguration(config =>
+                        {
+                            if (!IsLoggingConfigurationLoaded(config.Configuration))
+                            {
+                                // Fallback when environment-specific NLog config could not load
+                                var nlogConfigFilePath = Path.Combine(basePath, "nlog.config");
+                                if (File.Exists(nlogConfigFilePath))
+                                    config.Configuration = new XmlLoggingConfiguration(nlogConfigFilePath, config.LogFactory);
+                            }
+                        });
                     }
-
-                    setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, "nlog.config"), optional: true);
+                    else
+                    {
+                        setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, "nlog.config"), optional: true);
+                    }
                 }
                 else if (!string.IsNullOrEmpty(environment))
                 {
@@ -77,6 +90,11 @@ namespace NLog.Web
 
                 return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
             }
+        }
+
+        private static bool IsLoggingConfigurationLoaded(LoggingConfiguration cfg)
+        {
+            return cfg?.LoggingRules?.Count > 0 && cfg?.AllTargets?.Count > 0;
         }
 
         private static string GetAspNetCoreEnvironment(string variableName)
