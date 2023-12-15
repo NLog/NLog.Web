@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -23,11 +24,14 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-user-claim")]
     public class AspNetUserClaimLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
+        private static readonly string[] wellKnownAuthorities = { "schemas.microsoft.com", "schemas.xmlsoap.org" };
+
         /// <summary>
         /// Key to lookup using <see cref="ClaimsIdentity.FindFirst(string)"/> with fallback to <see cref="ClaimsPrincipal.FindFirst(string)"/>
         /// </summary>
         /// <remarks>
         /// When value is prefixed with "ClaimTypes." (Remember dot) then ít will lookup in well-known claim types from <see cref="ClaimTypes"/>. Ex. ClaimsTypes.Name
+        /// When value is prefixed wirh "CustomClaim." (Remember dot) then you need to specify the full claim path formatted as below: scheme.host.path Ex. http.schemas.mycompany.com/identity/claim/myclaim
         /// If this is null or empty then all claim types are rendered
         /// </remarks>
         [DefaultParameter]
@@ -45,6 +49,12 @@ namespace NLog.Web.LayoutRenderers
                 {
                     ClaimType = claimTypesField.GetValue(null) as string ?? ClaimType.Trim();
                 }
+            }
+            else if (ClaimType?.Trim().StartsWith("CustomClaim.", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                var customClaim = ClaimType.Substring(ClaimType.IndexOf('.') + 1).Trim();
+
+                ClaimType = ToFullyQualifiedPath(customClaim);
             }
 
             base.InitializeLayoutRenderer();
@@ -103,6 +113,19 @@ namespace NLog.Web.LayoutRenderers
                         ?? claimsPrincipal.FindFirst(claimType)
 #endif
                 ;
+        }
+
+        private static string ToFullyQualifiedPath(string customClaim)
+        {
+            if (!customClaim.StartsWith("http") && !customClaim.StartsWith("https"))
+            {
+                return string.Empty;
+            }
+
+            var regex = new Regex(Regex.Escape("."));	
+            var fullPath = regex.Replace(customClaim, "://", 1);
+
+            return Uri.TryCreate(fullPath, UriKind.Absolute, out var uriResult) ? uriResult.ToString() : string.Empty;
         }
     }
 }

@@ -96,6 +96,26 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void CustomClaimFullyQualifiedRendersValue()
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.ClaimType = "CustomClaim.http.schemas.mycompany.com/identity/claims/myOwnName";
+
+            var expectedResult = "myOwnValue";
+            var expectedPath = "http://schemas.mycompany.com/identity/claims/myOwnName";
+            var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
+            identity.FindFirst(expectedPath).Returns(new System.Security.Claims.Claim(expectedPath, expectedResult));
+            httpContext.User.Identity.Returns(identity);
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
 
