@@ -24,8 +24,6 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-user-claim")]
     public class AspNetUserClaimLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
-        private static readonly string[] wellKnownAuthorities = { "schemas.microsoft.com", "schemas.xmlsoap.org" };
-
         /// <summary>
         /// Key to lookup using <see cref="ClaimsIdentity.FindFirst(string)"/> with fallback to <see cref="ClaimsPrincipal.FindFirst(string)"/>
         /// </summary>
