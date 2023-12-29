@@ -15,8 +15,8 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Added target platform for NET 8.0 (#1010) (@snakefoot)
-- Updated dependency NLog.Extensions.Logging v5.3.7 (#1011) (@snakefoot)
+- UseNLog includes EnvironmentName when loading NLog config (#1012) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.3.8 (#1020) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -73,7 +73,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.7" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   
