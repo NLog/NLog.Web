@@ -4,6 +4,15 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.8 (2023/12/29)
+
+- **NLog.Web.AspNetCore**
+  - [#1012](https://github.com/NLog/NLog.Web/pull/1012) UseNLog includes EnvironmentName when loading NLog config (#1012) (@snakefoot)
+  - [#1020](https://github.com/NLog/NLog.Web/pull/1020) Updated dependency NLog.Extensions.Logging v5.3.8 (#1020) (@snakefoot)
+
+- **NLog.Web**
+  - [#1020](https://github.com/NLog/NLog.Web/pull/1020) Updated dependency NLog v5.2.8 (#1020) (@snakefoot)
+
 ### Version 5.3.7 (2023/12/06)
 
 - **NLog.Web.AspNetCore**
