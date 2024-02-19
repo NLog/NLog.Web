@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using NLog.Config;
 
 namespace NLog.Web
@@ -10,7 +9,7 @@ namespace NLog.Web
     /// <remarks>
     /// It is now recommended to use NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     /// </remarks>
-    [Obsolete("Use LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
+    [Obsolete("Use NLog.LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
     public static class NLogBuilder
     {
         /// <summary>
@@ -21,7 +20,7 @@ namespace NLog.Web
         /// </remarks>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
+        [Obsolete("Use NLog.LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
         public static LogFactory ConfigureNLog(string configFileName)
         {
             return LogManager.Setup().RegisterNLogWeb().LoadConfigurationFromFile(configFileName, optional: false).LogFactory;
@@ -35,7 +34,7 @@ namespace NLog.Web
         /// </remarks>
         /// <param name="configuration">Config for NLog</param>
         /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
+        [Obsolete("Use NLog.LogManager.Setup().LoadConfigurationFromAppSettings() instead. Marked obsolete with NLog.Web 5.3")]
         public static LogFactory ConfigureNLog(LoggingConfiguration configuration)
         {
             return LogManager.Setup().RegisterNLogWeb().LoadConfiguration(configuration).LogFactory;

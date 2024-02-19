@@ -31,7 +31,7 @@ namespace NLog.Web.Tests
             }, loggerFactory: loggerFactory);
 
             // Act
-            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+            middlewareInstance.Invoke(defaultContext).Wait(5000);
 
             // Assert
             Assert.Single(testTarget.Logs);
@@ -61,7 +61,7 @@ namespace NLog.Web.Tests
             }, loggerFactory: loggerFactory, options: options);
 
             // Act
-            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+            middlewareInstance.Invoke(defaultContext).Wait(5000);
 
             // Assert
             Assert.Single(testTarget.Logs);
@@ -90,7 +90,7 @@ namespace NLog.Web.Tests
             }, loggerFactory: loggerFactory);
 
             // Act
-            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+            middlewareInstance.Invoke(defaultContext).Wait(5000);
 
             // Assert
             Assert.Single(testTarget.Logs);
