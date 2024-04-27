@@ -23,7 +23,7 @@
     <ProjectReference Include="..\..\src\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

@@ -16,10 +16,9 @@ Providing features like:
 
 Supported platforms:
 
-- For ASP.NET Core 6, .NET 6
-- For ASP.NET Core 5, .NET 5
-- For ASP.NET Core 3, .NET Core 3.1
-- For ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.1+
+- ASP.NET Core 5, 6, 7 and 8
+- ASP.NET Core 3.1
+- ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.1+
 
 Registration of NLog.Web.AspNetCore in the NLog.config file:
 
@@ -35,7 +34,7 @@ Registration of NLog.Web.AspNetCore can also be performed with fluent setup:
 NLog.LogManager.Setup().LoadConfigurationFromAppSettings();
 ```
 
-Useful Links
+Useful Links:
 
 - [Home Page](https://nlog-project.org/)
 - [Change Log](https://github.com/NLog/NLog.Web/releases)

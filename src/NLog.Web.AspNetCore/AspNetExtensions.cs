@@ -337,8 +337,6 @@ namespace NLog.Web
 
         private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, IHostEnvironment, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         {
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-
             options = options ?? NLogAspNetCoreOptions.Default;
             options.Configure(hostConfiguration?.GetSection("Logging:NLog"));
 
@@ -449,7 +447,9 @@ namespace NLog.Web
         private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration, LogFactory logFactory)
         {
             configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
-            logFactory.Setup().SetupExtensions(ext => ext.RegisterConfigSettings(configuration).RegisterNLogWeb(serviceProvider));
+            logFactory.Setup()
+                .SetupExtensions(ext => ext.RegisterConfigSettings(configuration).RegisterNLogWeb(serviceProvider))
+                .SetupLogFactory(ext => ext.AddCallSiteHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly));
             return configuration;
         }
 
