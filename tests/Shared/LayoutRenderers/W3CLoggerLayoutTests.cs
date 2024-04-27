@@ -53,6 +53,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedBody, body);
         }
 /*
+
 #if NET6_0_OR_GREATER
         [Fact(Skip = "Mock not working")]
 #else
