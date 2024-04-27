@@ -32,7 +32,7 @@ Registration of NLog.Web can also be performed with fluent setup:
 NLog.LogManager.Setup().RegisterNLogWeb();
 ```
 
-Useful Links
+Useful Links:
 
 - [Home Page](https://nlog-project.org/)
 - [Change Log](https://github.com/NLog/NLog.Web/releases)
