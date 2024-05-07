@@ -43,7 +43,7 @@ namespace NLog.Web.Tests
 
             Assert.NotNull(loggerFact);
 
-            var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}");
+            var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}|${callsite}");
 
             LogManager.Setup().RegisterNLogWeb(serviceProvider: webhost.Services).LoadConfiguration(configuration);
 
@@ -54,7 +54,7 @@ namespace NLog.Web.Tests
             var logged = target.Logs;
 
             Assert.Single(logged);
-            Assert.Equal("logger1|error1", logged.First());
+            Assert.Equal($"logger1|error1|{GetType()}.{nameof(UseNLogShouldLogTest)}", logged.First());
         }
 
         [Fact]
