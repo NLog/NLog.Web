@@ -27,24 +27,11 @@ namespace NLog.Web
         public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
-            basePath = basePath ?? GetAspNetCoreEnvironment("ASPNETCORE_CONTENTROOT") ?? GetAspNetCoreEnvironment("DOTNET_CONTENTROOT");
-
-            var currentBasePath = basePath;
-            if (currentBasePath is null)
-            {
-                currentBasePath = Environment.CurrentDirectory;
-
-                var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                var normalizeAppDir = Path.GetFullPath(AppContext.BaseDirectory).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                if (string.IsNullOrWhiteSpace(normalizeCurDir) || normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    currentBasePath = AppContext.BaseDirectory; // Avoid using Windows-System32 as current directory
-                }
-            }
+            basePath = basePath ?? GetAspNetCoreEnvironment("ASPNETCORE_CONTENTROOT") ?? GetAspNetCoreEnvironment("DOTNET_CONTENTROOT") ?? ResolveCurrentAppDirectory();
 
             var builder = new ConfigurationBuilder()
                 // Host Configuration
-                .SetBasePath(currentBasePath)
+                .SetBasePath(basePath)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .AddEnvironmentVariables(prefix: "DOTNET_")
                 // App Configuration
@@ -90,6 +77,20 @@ namespace NLog.Web
 
                 return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
             }
+        }
+
+        private static string ResolveCurrentAppDirectory()
+        {
+            var currentBasePath = Environment.CurrentDirectory;
+
+            var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            var normalizeAppDir = Path.GetFullPath(AppContext.BaseDirectory).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            if (string.IsNullOrWhiteSpace(normalizeCurDir) || !normalizeCurDir.StartsWith(normalizeAppDir, StringComparison.OrdinalIgnoreCase))
+            {
+                currentBasePath = AppContext.BaseDirectory; // Avoid using Windows-System32 as current directory
+            }
+
+            return currentBasePath;
         }
 
         private static bool IsLoggingConfigurationLoaded(LoggingConfiguration cfg)

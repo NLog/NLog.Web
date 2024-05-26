@@ -102,7 +102,7 @@ namespace NLog.Web.LayoutRenderers
                 var currentBasePath = Environment.CurrentDirectory;
                 var normalizeCurDir = Path.GetFullPath(currentBasePath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 var normalizeAppDir = Path.GetFullPath(currentAppPath).TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                if (string.IsNullOrEmpty(normalizeCurDir) || normalizeAppDir.IndexOf(normalizeCurDir, StringComparison.OrdinalIgnoreCase) != 0)
+                if (string.IsNullOrEmpty(normalizeCurDir) || !normalizeCurDir.StartsWith(normalizeAppDir, StringComparison.OrdinalIgnoreCase))
                 {
                     currentBasePath = currentAppPath; // Avoid using Windows-System32 as current directory
                 }
