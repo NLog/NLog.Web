@@ -127,7 +127,7 @@ namespace NLog.Web.Tests
             {
                 try
                 {
-                    middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+                    middlewareInstance.Invoke(defaultContext).GetAwaiter().GetResult();
                 }
                 catch
                 {

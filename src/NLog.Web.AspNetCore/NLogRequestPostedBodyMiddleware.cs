@@ -60,7 +60,7 @@ namespace NLog.Web
                     // This is required, otherwise reading the request will destructively read the request
                     context.Request.EnableBuffering();
 
-                    var requestBody = await ReadPostedBodyFromStream(context.Request.Body).ConfigureAwait(false);
+                    var requestBody = await ReadPostedBodyFromStream(context.Request.Body); // NOSONAR
                     if (!string.IsNullOrEmpty(requestBody))
                     {
                         context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
