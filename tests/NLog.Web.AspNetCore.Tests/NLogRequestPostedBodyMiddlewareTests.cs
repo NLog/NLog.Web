@@ -147,7 +147,7 @@ namespace NLog.Web.Tests
 
             // Act
             var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareOptions.Default);
-            middlewareInstance.Invoke(defaultContext).ConfigureAwait(false).GetAwaiter().GetResult();
+            middlewareInstance.Invoke(defaultContext).GetAwaiter().GetResult();
 
             // Assert
             Assert.NotNull(defaultContext.Items);

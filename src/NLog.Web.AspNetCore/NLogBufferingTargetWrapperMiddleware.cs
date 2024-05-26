@@ -45,7 +45,7 @@ namespace NLog.Web
                 AspNetBufferingTargetWrapper.OnBeginRequest(context);
 
                 // Execute the next class in the HTTP pipeline, this can be the next middleware or the actual handler
-                await _next(context).ConfigureAwait(false);
+                await _next(context);   // NOSONAR
             }
             finally
             {
