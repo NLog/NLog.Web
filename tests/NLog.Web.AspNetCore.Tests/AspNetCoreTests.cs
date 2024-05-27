@@ -163,6 +163,53 @@ namespace NLog.Web.Tests
                 }
             }
         }
+
+        [Fact]
+        public void LoadConfigurationFromAppSettingsShouldLogTest3()
+        {
+            var orgCurrentDirectory = Environment.CurrentDirectory;
+
+            var contentPath = System.IO.Path.Combine(AppContext.BaseDirectory, nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var appSettings = System.IO.Path.Combine(contentPath, "appsettings.json");
+
+            try
+            {
+                // Arrange
+                System.IO.Directory.CreateDirectory(contentPath);
+                Environment.CurrentDirectory = contentPath;
+                System.IO.File.AppendAllText(appSettings, @"{
+                  ""basepath"": """ + contentPath + @"""
+                }");
+
+                System.IO.File.AppendAllText(System.IO.Path.Combine(contentPath, "nlog.config"), @"<nlog>
+                    <targets>
+                        <target type=""file"" name=""logfile"" layout=""${message}"" fileName=""${configsetting:basepath}/hello.txt"" />
+                    </targets>
+                    <rules>
+                        <logger name=""*"" minLevel=""Debug"" writeTo=""logfile"" />
+                    </rules>
+                </nlog>");
+
+                // Act
+                var logFactory = new LogFactory();
+                var logger = logFactory.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+                logger.Info("Hello World");
+
+                // Assert
+                logFactory.Dispose();
+                var fileOutput = System.IO.File.ReadAllText(System.IO.Path.Combine(contentPath, "hello.txt"));
+                Assert.Contains("Hello World", fileOutput);
+            }
+            finally
+            {
+                Environment.CurrentDirectory = orgCurrentDirectory;
+
+                if (System.IO.Directory.Exists(contentPath))
+                {
+                    System.IO.Directory.Delete(contentPath, true);
+                }
+            }
+        }
 #endif
 
         private static LoggingConfiguration CreateConfigWithMemoryTarget(out MemoryTarget target, Layout layout)
