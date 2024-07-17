@@ -23,7 +23,7 @@ steps:
     restoreSolution: '$(solution)'
     verbosityRestore: Quiet
 
-- task: SonarCloudPrepare@1
+- task: SonarCloudPrepare@2
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
     SonarCloud: Sonarcloud
@@ -73,10 +73,10 @@ steps:
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
 
-- task: SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@2
   displayName: 'Run Code Analysis'
 
-- task: SonarCloudPublish@1
+- task: SonarCloudPublish@2
   displayName: 'Publish Quality Gate Result'
 
 - task: PublishBuildArtifacts@1
