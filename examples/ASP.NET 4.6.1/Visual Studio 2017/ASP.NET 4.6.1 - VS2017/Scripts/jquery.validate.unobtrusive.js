@@ -1,26 +1,23 @@
-/* NUGET: BEGIN LICENSE TEXT
- *
- * Microsoft grants you the right to use these script files for the sole
- * purpose of either: (i) interacting through your browser with the Microsoft
- * website or online service, subject to the applicable licensing or use
- * terms; or (ii) using the files as included with a Microsoft product subject
- * to that product's license terms. Microsoft reserves all other rights to the
- * files not expressly granted by Microsoft, whether by implication, estoppel
- * or otherwise. Insofar as a script file is dual licensed under GPL,
- * Microsoft neither took the code under GPL nor distributes it thereunder but
- * under the terms set out in this paragraph. All notices and licenses
- * below are for informational purposes only.
- *
- * NUGET: END LICENSE TEXT */
-/*!
-** Unobtrusive validation support library for jQuery and jQuery Validate
-** Copyright (C) Microsoft Corporation. All rights reserved.
-*/
+// Unobtrusive validation support library for jQuery and jQuery Validate
+// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// @version v3.2.11
 
 /*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: false */
 /*global document: false, jQuery: false */
 
-(function ($) {
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define("jquery.validate.unobtrusive", ['jquery-validation'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS-like environments that support module.exports     
+        module.exports = factory(require('jquery-validation'));
+    } else {
+        // Browser global
+        jQuery.validator.unobtrusive = factory(jQuery);
+    }
+}(function ($) {
     var $jQval = $.validator,
         adapters,
         data_validation = "unobtrusiveValidation";
@@ -84,11 +81,12 @@
     }
 
     function onSuccess(error) {  // 'this' is the form element
-        var container = error.data("unobtrusiveContainer"),
-            replaceAttrValue = container.attr("data-valmsg-replace"),
-            replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
+        var container = error.data("unobtrusiveContainer");
 
         if (container) {
+            var replaceAttrValue = container.attr("data-valmsg-replace"),
+                replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
+
             container.addClass("field-validation-valid").removeClass("field-validation-error");
             error.removeData("unobtrusiveContainer");
 
@@ -99,8 +97,19 @@
     }
 
     function onReset(event) {  // 'this' is the form element
-        var $form = $(this);
-        $form.data("validator").resetForm();
+        var $form = $(this),
+            key = '__jquery_unobtrusive_validation_form_reset';
+        if ($form.data(key)) {
+            return;
+        }
+        // Set a flag that indicates we're currently resetting the form.
+        $form.data(key, true);
+        try {
+            $form.data("validator").resetForm();
+        } finally {
+            $form.removeData(key);
+        }
+
         $form.find(".validation-summary-errors")
             .addClass("validation-summary-valid")
             .removeClass("validation-summary-errors");
@@ -109,29 +118,43 @@
             .removeClass("field-validation-error")
             .removeData("unobtrusiveContainer")
             .find(">*")  // If we were using valmsg-replace, get the underlying error
-                .removeData("unobtrusiveContainer");
+            .removeData("unobtrusiveContainer");
     }
 
     function validationInfo(form) {
         var $form = $(form),
             result = $form.data(data_validation),
-            onResetProxy = $.proxy(onReset, form);
+            onResetProxy = $.proxy(onReset, form),
+            defaultOptions = $jQval.unobtrusive.options || {},
+            execInContext = function (name, args) {
+                var func = defaultOptions[name];
+                func && $.isFunction(func) && func.apply(form, args);
+            };
 
         if (!result) {
             result = {
                 options: {  // options structure passed to jQuery Validate's validate() method
-                    errorClass: "input-validation-error",
-                    errorElement: "span",
-                    errorPlacement: $.proxy(onError, form),
-                    invalidHandler: $.proxy(onErrors, form),
+                    errorClass: defaultOptions.errorClass || "input-validation-error",
+                    errorElement: defaultOptions.errorElement || "span",
+                    errorPlacement: function () {
+                        onError.apply(form, arguments);
+                        execInContext("errorPlacement", arguments);
+                    },
+                    invalidHandler: function () {
+                        onErrors.apply(form, arguments);
+                        execInContext("invalidHandler", arguments);
+                    },
                     messages: {},
                     rules: {},
-                    success: $.proxy(onSuccess, form)
+                    success: function () {
+                        onSuccess.apply(form, arguments);
+                        execInContext("success", arguments);
+                    }
                 },
                 attachValidation: function () {
                     $form
-                        .unbind("reset." + data_validation, onResetProxy)
-                        .bind("reset." + data_validation, onResetProxy)
+                        .off("reset." + data_validation, onResetProxy)
+                        .on("reset." + data_validation, onResetProxy)
                         .validate(this.options);
                 },
                 validate: function () {  // a validation function that is called by unobtrusive Ajax
@@ -206,15 +229,17 @@
             /// attribute values.
             /// </summary>
             /// <param name="selector" type="String">Any valid jQuery selector.</param>
-            var $forms = $(selector)
-                .parents("form")
-                .andSelf()
-                .add($(selector).find("form"))
-                .filter("form");
 
-            // :input is a psuedoselector provided by jQuery which selects input and input-like elements
-            // combining :input with other selectors significantly decreases performance.
-            $(selector).find(":input").filter("[data-val=true]").each(function () {
+            // $forms includes all forms in selector's DOM hierarchy (parent, children and self) that have at least one
+            // element with data-val=true
+            var $selector = $(selector),
+                $forms = $selector.parents()
+                    .addBack()
+                    .filter("form")
+                    .add($selector.find("form"))
+                    .has("[data-val=true]");
+
+            $selector.find("[data-val=true]").each(function () {
                 $jQval.unobtrusive.parseElement(this, true);
             });
 
@@ -370,7 +395,15 @@
         $.each(splitAndTrim(options.params.additionalfields || options.element.name), function (i, fieldName) {
             var paramName = appendModelPrefix(fieldName, prefix);
             value.data[paramName] = function () {
-                return $(options.form).find(":input").filter("[name='" + escapeAttributeValue(paramName) + "']").val();
+                var field = $(options.form).find(":input").filter("[name='" + escapeAttributeValue(paramName) + "']");
+                // For checkboxes and radio buttons, only pick up values from checked fields.
+                if (field.is(":checkbox")) {
+                    return field.filter(":checked").val() || field.filter(":hidden").val() || '';
+                }
+                else if (field.is(":radio")) {
+                    return field.filter(":checked").val() || '';
+                }
+                return field.val();
             };
         });
 
@@ -387,8 +420,13 @@
             setValidationValues(options, "regex", options.params.regex);
         }
     });
+    adapters.add("fileextensions", ["extensions"], function (options) {
+        setValidationValues(options, "extension", options.params.extensions);
+    });
 
     $(function () {
         $jQval.unobtrusive.parse(document);
     });
-}(jQuery));
+
+    return $jQval.unobtrusive;
+}));

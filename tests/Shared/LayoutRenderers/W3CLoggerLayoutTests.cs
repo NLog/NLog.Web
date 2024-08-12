@@ -27,12 +27,13 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void W3CLoggerLayoutNoContextTest()
         {
-            var httpContextEmpty = SetupHttpAccessorWithHttpContext(null);
+            var serviceProviderMock = SetupHttpAccessorWithHttpContext(null);
 
             NLog.Time.TimeSource.Current = new Time.AccurateUtcTimeSource();
 
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
+                builder.LogFactory.ServiceRepository.RegisterService(typeof(IServiceProvider), serviceProviderMock);
                 var layout = new NLog.Web.Layouts.W3CExtendedLogLayout();
                 var target = new NLog.Targets.MemoryTarget() { Name = "Debug", Layout = layout };
                 builder.Configuration.AddRuleForAllLevels(target);
@@ -52,21 +53,17 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedHeader, header);
             Assert.Equal(expectedBody, body);
         }
-/*
 
-#if NET6_0_OR_GREATER
-        [Fact(Skip = "Mock not working")]
-#else
         [Fact]
-#endif
         public void W3CLoggerLayoutWithContextTest()
         {
-            var httpContextMock = SetupHttpAccessorWithHttpContext("nlog-project.org:80", "http", "/Test.asp", "?t=1");
+            var serviceProviderMock = SetupHttpAccessorWithHttpContext("nlog-project.org:80", "http", "/Test.asp", "?t=1");
 
             NLog.Time.TimeSource.Current = new Time.AccurateUtcTimeSource();
 
             var logFactory = new NLog.LogFactory().Setup().SetupExtensions(ext => ext.RegisterAssembly(typeof(NLog.Web.Layouts.W3CExtendedLogLayout).Assembly)).LoadConfiguration(builder =>
             {
+                builder.LogFactory.ServiceRepository.RegisterService(typeof(IServiceProvider), serviceProviderMock);
                 var layout = new NLog.Web.Layouts.W3CExtendedLogLayout();
                 var target = new NLog.Targets.MemoryTarget() { Name = "Debug", Layout = layout };
                 builder.Configuration.AddRuleForAllLevels(target);
@@ -86,19 +83,19 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedHeader, header);
             Assert.Equal(expectedBody, body);
         }
-*/
+
         private static
 #if ASP_NET_CORE
-            HttpContext
+            IServiceProvider
 #else
-            HttpContextBase
+            IServiceProvider
 #endif
             SetupHttpAccessorWithHttpContext(string hostBase, string scheme = "http", string page = "/", string queryString = "", string userAgent = "Mozilla")
         {
             var httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
+            var serviceProviderMock = Substitute.For<IServiceProvider>();
 
 #if ASP_NET_CORE
-            var serviceProviderMock = Substitute.For<IServiceProvider>();
             serviceProviderMock.GetService(typeof(IHttpContextAccessor)).Returns(httpContextAccessorMock);
             var httpContext = Substitute.For<HttpContext>();
             ServiceLocator.ServiceProvider = serviceProviderMock;
@@ -127,7 +124,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
 
             httpContextAccessorMock.HttpContext.Returns(httpContext);
-            return httpContext;
+            return serviceProviderMock;
         }
     }
 }
