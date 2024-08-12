@@ -15,7 +15,7 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Updated dependency NLog.Extensions.Logging v5.3.11 (#1037) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.3.12 (#1051) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
