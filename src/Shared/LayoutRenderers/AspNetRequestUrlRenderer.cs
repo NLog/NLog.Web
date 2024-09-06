@@ -4,6 +4,8 @@ using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 using NLog.Common;
 using NLog.Web.Enums;
+using NLog.Config;
+
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -34,6 +36,7 @@ namespace NLog.Web.LayoutRenderers
         /// A flags enumeration that controls which of the five portions of the URL are logged.
         /// Defaults to scheme://host/path, port and query string are by default not logged.
         /// </summary>
+        [DefaultParameter]
         public AspNetRequestUrlProperty Properties { get; set; } = AspNetRequestUrlProperty.Default;
 
         /// <summary>
