@@ -15,7 +15,8 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Updated dependency NLog.Extensions.Logging v5.3.12 (#1051) (@snakefoot)
+- AspNetRequestUrlRenderer - Mark Properties-option as DefaultParameter (#1053) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.3.13 (#1054) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
@@ -72,7 +73,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.12" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.13" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   

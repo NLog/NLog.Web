@@ -4,6 +4,16 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.13 (2024/09/12)
+
+- **NLog.Web.AspNetCore**
+  - [#1053](https://github.com/NLog/NLog.Web/pull/1053) AspNetRequestUrlRenderer - Mark Properties-option as DefaultParameter (#1053) (@snakefoot)
+  - [#1054](https://github.com/NLog/NLog.Web/pull/1054) Updated dependency NLog.Extensions.Logging v5.3.13 (#1054) (@snakefoot)
+
+- **NLog.Web**
+  - [#1053](https://github.com/NLog/NLog.Web/pull/1053) AspNetRequestUrlRenderer - Mark Properties-option as DefaultParameter (#1053) (@snakefoot)
+  - [#1054](https://github.com/NLog/NLog.Web/pull/1054) Updated dependency NLog v5.3.4 (#1054) (@snakefoot)
+
 ### Version 5.3.12 (2024/08/12)
 
 - **NLog.Web.AspNetCore**
