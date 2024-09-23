@@ -15,8 +15,8 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- AspNetRequestUrlRenderer - Mark Properties-option as DefaultParameter (#1053) (@snakefoot)
-- Updated dependency NLog.Extensions.Logging v5.3.13 (#1054) (@snakefoot)
+- UseNLog should fallback after checking ContentRoot for NLog.config (#1055) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.3.14 (#1055) (@snakefoot)
 
 List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 

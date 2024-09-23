@@ -60,8 +60,7 @@ namespace NLog.Web
                             {
                                 // Fallback when environment-specific NLog config could not load
                                 var nlogConfigFilePath = Path.Combine(basePath, "nlog.config");
-                                if (File.Exists(nlogConfigFilePath))
-                                    config.Configuration = new XmlLoggingConfiguration(nlogConfigFilePath, config.LogFactory);
+                                config.Configuration = File.Exists(nlogConfigFilePath) ? new XmlLoggingConfiguration(nlogConfigFilePath, config.LogFactory) : null;
                             }
                         });
                     }

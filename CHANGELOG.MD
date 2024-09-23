@@ -4,6 +4,12 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.3.14 (2024/09/23)
+
+- **NLog.Web.AspNetCore**
+  - [#1055](https://github.com/NLog/NLog.Web/pull/1055) UseNLog should fallback after checking ContentRoot for NLog.config (#1055) (@snakefoot)
+  - [#1055](https://github.com/NLog/NLog.Web/pull/1055) Updated dependency NLog.Extensions.Logging v5.3.14 (#1055) (@snakefoot)
+
 ### Version 5.3.13 (2024/09/12)
 
 - **NLog.Web.AspNetCore**
