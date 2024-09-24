@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,27 +17,23 @@ using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace NLog.Web.Tests
 {
-    public class AspNetCoreTests : TestBase, IDisposable
+    public sealed class AspNetCoreTests : TestBase, IDisposable
     {
-        #region IDisposable
-
-        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
             LogManager.Configuration = null;
-            GC.SuppressFinalize(this);
         }
-
-        #endregion
 
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public void UseNLogShouldLogTest(bool useNLogWeb)
         {
+            LogManager.Configuration = null;
+
             var webhost = useNLogWeb ? CreateWebHost() : CreateWebHostAddNLogWeb();
 
-            var loggerFact = GetLoggerFactory(webhost);
+            var loggerFact = GetLoggerFactory(webhost.Services);
 
             Assert.NotNull(loggerFact);
 
@@ -60,6 +54,8 @@ namespace NLog.Web.Tests
         [Fact]
         public void UseNLog_ReplaceLoggerFactory()
         {
+            LogManager.Configuration = null;
+
             var webhost = CreateWebHost(new NLogAspNetCoreOptions() { ReplaceLoggerFactory = true });
 
             // Act
@@ -72,6 +68,50 @@ namespace NLog.Web.Tests
         }
 
 #if NETCOREAPP3_0_OR_GREATER
+        [Fact]
+        public void UseNLogContentRootTest()
+        {
+            LogManager.Configuration = null;
+
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var orgPath = System.IO.Directory.GetCurrentDirectory();
+
+            try
+            {
+                System.IO.Directory.CreateDirectory(tempPath);
+                System.IO.Directory.SetCurrentDirectory(tempPath);
+
+                using var webhost = CreateWebHost();
+
+                var hostEnvironment = webhost.Services.GetRequiredService<Microsoft.Extensions.Hosting.IHostEnvironment>();
+                Assert.NotNull(hostEnvironment.ContentRootPath);
+
+                var loggerFact = GetLoggerFactory(webhost.Services);
+
+                Assert.NotNull(loggerFact);
+
+                Assert.Null(LogManager.Configuration);  // Scanned ContentRoot without assigning any default config
+
+                var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}|${callsite}");
+
+                LogManager.Setup().RegisterNLogWeb(serviceProvider: webhost.Services).LoadConfiguration(configuration);
+
+                var logger = loggerFact.CreateLogger("logger1");
+
+                logger.LogError("error1");
+
+                var logged = target.Logs;
+
+                Assert.Single(logged);
+                Assert.Equal($"logger1|error1|{GetType()}.{nameof(UseNLogContentRootTest)}", logged.First());
+            }
+            finally
+            {
+                System.IO.Directory.SetCurrentDirectory(orgPath);
+                System.IO.Directory.Delete(tempPath);
+            }
+        }
+
         [Fact]
         public void LoadConfigurationFromAppSettingsShouldLogTest()
         {
@@ -238,7 +278,7 @@ namespace NLog.Web.Tests
                 var httpContext = webhost.Services.GetService<IHttpContextAccessor>().HttpContext = new DefaultHttpContext();
                 httpContext.Items["key1"] = "value1";
 
-                var loggerFact = GetLoggerFactory(webhost);
+                var loggerFact = GetLoggerFactory(webhost.Services);
 
                 var logger = loggerFact.CreateLogger("logger1");
 
@@ -361,9 +401,9 @@ namespace NLog.Web.Tests
                 .Build();
         }
 
-        private static ILoggerFactory GetLoggerFactory(IWebHost webhost)
+        private static ILoggerFactory GetLoggerFactory(IServiceProvider serviceProvider)
         {
-            return webhost.Services.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
+            return serviceProvider.GetService<Microsoft.Extensions.Logging.ILoggerFactory>();
         }
     }
 }
