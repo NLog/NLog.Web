@@ -81,16 +81,18 @@ namespace NLog.Web.Tests
                 System.IO.Directory.CreateDirectory(tempPath);
                 System.IO.Directory.SetCurrentDirectory(tempPath);
 
+                var configChanged = false;
+
+                LogManager.ConfigurationChanged += (args, sender) => configChanged = true;
+
                 using var webhost = CreateWebHost();
 
                 var hostEnvironment = webhost.Services.GetRequiredService<Microsoft.Extensions.Hosting.IHostEnvironment>();
                 Assert.NotNull(hostEnvironment.ContentRootPath);
+                Assert.False(configChanged);    // Scanned ContentRoot without assigning any default config
 
                 var loggerFact = GetLoggerFactory(webhost.Services);
-
                 Assert.NotNull(loggerFact);
-
-                Assert.Null(LogManager.Configuration);  // Scanned ContentRoot without assigning any default config
 
                 var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}|${callsite}");
 
