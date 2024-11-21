@@ -14,6 +14,7 @@ using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
+using System.IO;
 
 namespace NLog.Web.Tests
 {
@@ -250,6 +251,31 @@ namespace NLog.Web.Tests
                 {
                     System.IO.Directory.Delete(contentPath, true);
                 }
+            }
+        }
+
+        [Fact]
+        public void LoadConfigurationFromAppSettingsUNC()
+        {
+            // Arrange
+            var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
+            var UNCtempPath = @"\\?\" + tempPath.Replace('/', '\\');
+            Directory.CreateDirectory(tempPath);
+
+            try
+            {
+                // Act
+                var logFactory = new LogFactory();
+
+                // Asssert
+                Assert.Throws<UriFormatException>(() => new Uri(UNCtempPath));
+
+                var logger = logFactory.Setup().LoadConfigurationFromAppSettings(basePath: UNCtempPath).GetCurrentClassLogger();
+                logger.Info("Hello World");
+            }
+            finally
+            {
+                Directory.Delete(tempPath);
             }
         }
 #endif

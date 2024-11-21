@@ -45,37 +45,44 @@ namespace NLog.Web
                 // "NLog"-section in appsettings.json has first priority
                 return setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config)).LoadConfigurationFromSection(config, nlogConfigSection);
             }
-            else
+
+            setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config));
+
+            var nlogConfigFile = ResolveEnvironmentNLogConfigFile(basePath, environment);
+            if (!string.IsNullOrEmpty(nlogConfigFile))
             {
-                setupBuilder.SetupExtensions(e => e.RegisterNLogWeb().RegisterConfigSettings(config));
-
-                if (!string.IsNullOrEmpty(basePath))
-                {
-                    if (!string.IsNullOrEmpty(environment))
-                    {
-                        setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, $"nlog.{environment}.config"), optional: true);
-                        setupBuilder.LoadConfiguration(config =>
-                        {
-                            if (!IsLoggingConfigurationLoaded(config.Configuration))
-                            {
-                                // Fallback when environment-specific NLog config could not load
-                                var nlogConfigFilePath = Path.Combine(basePath, "nlog.config");
-                                config.Configuration = File.Exists(nlogConfigFilePath) ? new XmlLoggingConfiguration(nlogConfigFilePath, config.LogFactory) : null;
-                            }
-                        });
-                    }
-                    else
-                    {
-                        setupBuilder.LoadConfigurationFromFile(Path.Combine(basePath, "nlog.config"), optional: true);
-                    }
-                }
-                else if (!string.IsNullOrEmpty(environment))
-                {
-                    setupBuilder.LoadConfigurationFromFile($"nlog.{environment}.config", optional: true);
-                }
-
-                return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
+                return setupBuilder.LoadConfigurationFromFile(nlogConfigFile, optional: true);
             }
+
+            return setupBuilder.LoadConfigurationFromFile();    // No effect, if config already loaded
+        }
+
+        private static string ResolveEnvironmentNLogConfigFile(string basePath, string environmentName)
+        {
+            if (!string.IsNullOrWhiteSpace(basePath))
+            {
+                if (!string.IsNullOrWhiteSpace(environmentName))
+                {
+                    var nlogConfigEnvFilePath = Path.Combine(basePath, $"nlog.{environmentName}.config");
+                    if (File.Exists(nlogConfigEnvFilePath))
+                        return Path.GetFullPath(nlogConfigEnvFilePath);
+                    nlogConfigEnvFilePath = Path.Combine(basePath, $"NLog.{environmentName}.config");
+                    if (File.Exists(nlogConfigEnvFilePath))
+                        return Path.GetFullPath(nlogConfigEnvFilePath);
+                }
+
+                var nlogConfigFilePath = Path.Combine(basePath, "nlog.config");
+                if (File.Exists(nlogConfigFilePath))
+                    return Path.GetFullPath(nlogConfigFilePath);
+                nlogConfigFilePath = Path.Combine(basePath, "NLog.config");
+                if (File.Exists(nlogConfigFilePath))
+                    return Path.GetFullPath(nlogConfigFilePath);
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentName))
+                return $"nlog.{environmentName}.config";
+
+            return null;
         }
 
         private static string ResolveCurrentAppDirectory()
@@ -90,11 +97,6 @@ namespace NLog.Web
             }
 
             return currentBasePath;
-        }
-
-        private static bool IsLoggingConfigurationLoaded(LoggingConfiguration cfg)
-        {
-            return cfg?.LoggingRules?.Count > 0 && cfg?.AllTargets?.Count > 0;
         }
 
         private static string GetAspNetCoreEnvironment(string variableName)
