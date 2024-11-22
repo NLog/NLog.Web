@@ -79,7 +79,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-#if NET46
+#if !ASP_NET_CORE
         private static IEnumerable<KeyValuePair<string, string>> GetAllClaims(System.Security.Principal.IPrincipal claimsPrincipal)
         {
               return GetAllClaims(claimsPrincipal as ClaimsPrincipal);
@@ -91,16 +91,17 @@ namespace NLog.Web.LayoutRenderers
                        new KeyValuePair<string, string>(claim.Type, claim.Value)) ??
                    System.Linq.Enumerable.Empty<KeyValuePair<string, string>>();
         }
-#if NET46
-        private static Claim GetClaim(System.Security.Principal.IPrincipal claimsPrincipal, string claimType)
-#else
+
+#if ASP_NET_CORE
         private static Claim GetClaim(ClaimsPrincipal claimsPrincipal, string claimType)
+#else
+        private static Claim GetClaim(System.Security.Principal.IPrincipal claimsPrincipal, string claimType)
 #endif
         {
             var claimsIdentity = claimsPrincipal.Identity as ClaimsIdentity;    // Prioritize primary identity
             return claimsIdentity?.FindFirst(claimType)
 #if ASP_NET_CORE
-                        ?? claimsPrincipal.FindFirst(claimType)
+                ?? claimsPrincipal.FindFirst(claimType)
 #endif
                 ;
         }
