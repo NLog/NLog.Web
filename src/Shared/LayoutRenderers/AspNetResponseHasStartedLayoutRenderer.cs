@@ -20,7 +20,7 @@ namespace NLog.Web.LayoutRenderers
             var response = HttpContextAccessor.HttpContext.TryGetResponse();
 #if ASP_NET_CORE
             builder.Append(response?.HasStarted == true ? '1' : '0');
-#elif NET46
+#elif NET46_OR_GREATER
             builder.Append(response?.HeadersWritten == true ? '1' : '0');
 #endif
         }

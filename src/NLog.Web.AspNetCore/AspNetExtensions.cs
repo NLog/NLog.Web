@@ -446,13 +446,6 @@ namespace NLog.Web
             return null;
         }
 
-        private static LoggingConfiguration LoadXmlLoggingConfigurationFromPath(string contentRootPath, string nlogConfigFileName, LogFactory logFactory)
-        {
-            var standardPath = System.IO.Path.Combine(contentRootPath, nlogConfigFileName);
-            return System.IO.File.Exists(standardPath) ?
-                new XmlLoggingConfiguration(standardPath, logFactory) : null;
-        }
-
         private static bool IsLoggingConfigurationLoaded(LoggingConfiguration cfg)
         {
             return cfg?.LoggingRules?.Count > 0 && cfg?.AllTargets?.Count > 0;
