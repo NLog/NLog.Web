@@ -2,11 +2,10 @@
 
 # NLog.Web (ASP.NET & ASP.NET Core) 
 
-[![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)
-<!--[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore)-->
-
-[![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web)
-<!--[![NuGet Pre Release](https://img.shields.io/nuget/vpre/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web) -->
+|  Nuget-package  | Description  | Supported Platforms |
+|:----------------|:-------------|:--------------------|
+| [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore) | Supports ASP.NET applicaction for new .NET Core platforms | .NET 5, 6, 7, 8 and 9 |
+| [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web) | Supports classic ASP.NET MVC applications for .NET Framework | .NET Framework 3.5 - 4.8 | 
 
 [![Build status](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=ncloc)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
@@ -28,7 +27,7 @@ These packages are extensions to [NLog](https://github.com/NLog/NLog/), and prov
 - [Blog posts for how to get started with ASP.NET Core and NLog](https://github.com/damienbod/AspNetCoreNlog)
 
 ### Config
-- All config options: [nlog-project.org/config](https://nlog-project.org/config)
+- All config options: [nlog-project.org/config](https://nlog-project.org/config) and available [Layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
 
 ### Troubleshooting
 - [Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
@@ -40,15 +39,7 @@ These packages are extensions to [NLog](https://github.com/NLog/NLog/), and prov
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
 ## ASP.NET Core
-The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package supports the platforms:
-
-- For ASP.NET Core - .NET 5, 6, 7 and 8
-- For ASP.NET Core - .NET Core 3.1
-- For ASP.NET Core 2.1 .NET Standard 2.0 for .NET 4.6.1
-
-ℹ️  Missing the trace and debug logs? [Check your appsettings.json](https://github.com/NLog/NLog.Web/wiki/Missing-trace%5Cdebug-logs-in-ASP.NET-Core-6%3F)
-
-Use the NLog.Web.AspNetCore package
+The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package works with the new ASP.NET Core platforms
 
 - [Supported layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
 
@@ -58,8 +49,8 @@ The [NLog.Web](https://www.nuget.org/packages/NLog.Web)-package works with class
 
 - [Supported targets for ASP.NET](https://nlog-project.org/config/?tab=targets&search=package:nlog.web)
 - [Supported layout renderers for ASP.NET](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web) 
-- NLog 5.0 requires that NLog.config must include NLog.Web in extensions:
 
+NLog 5.0 requires that NLog.config must include NLog.Web in extensions:
 ```xml
   <!-- enable ASP.NET layout renderers -->
   <extensions>
