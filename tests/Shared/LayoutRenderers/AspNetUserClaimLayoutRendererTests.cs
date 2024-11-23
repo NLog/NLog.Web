@@ -70,6 +70,27 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Equal(expectedResult, result);
         }
 
+        [Theory]
+        [InlineData("ClaimType.ObjectId", "oid")]
+        [InlineData("ClaimType.TenantId", "tid")]
+        [InlineData("ClaimType.AppId", "azp")]
+        public void UserClaimTypeNameRendersAzureClaims(string claimType, string claimId)
+        {
+            // Arrange
+            var (renderer, httpContext) = CreateWithHttpContext();
+            renderer.ClaimType = claimType;
+
+            var identity = Substitute.For<System.Security.Claims.ClaimsIdentity>();
+            identity.FindFirst(claimId).Returns(new System.Security.Claims.Claim(claimId, claimType));
+            httpContext.User.Identity.Returns(identity);
+
+            // Act
+            string result = renderer.Render(new LogEventInfo());
+
+            // Assert
+            Assert.Equal(claimType, result);
+        }
+
         [Fact]
         public void AllRendersAllValue()
         {
