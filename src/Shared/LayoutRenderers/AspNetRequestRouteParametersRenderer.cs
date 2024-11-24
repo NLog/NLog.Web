@@ -45,10 +45,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
-            if (context == null)
-            {
+            if (context is null)
                 return;
-            }
 
             var pairs = GetPairs(context, Items);
             if (pairs != null)

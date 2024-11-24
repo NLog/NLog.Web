@@ -38,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void InitializeLayoutRenderer()
         {
-            if (DurationMsFormat == null && string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, CultureInfo.InvariantCulture))
+            if (DurationMsFormat is null && string.IsNullOrEmpty(Format) && ReferenceEquals(Culture, CultureInfo.InvariantCulture))
             {
                 System.Threading.Interlocked.CompareExchange(ref DurationMsFormat, Enumerable.Range(0, 1000).Select(i => i.ToString(CultureInfo.InvariantCulture)).ToArray(), null);
             }
@@ -64,10 +64,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var context = HttpContextAccessor.HttpContext;
-            if (context == null)
-            {
+            if (context is null)
                 return;
-            }
 
 #if ASP_NET_CORE && !NETCOREAPP3_0_OR_GREATER
             _scopeTiming?.Render(logEvent, builder);

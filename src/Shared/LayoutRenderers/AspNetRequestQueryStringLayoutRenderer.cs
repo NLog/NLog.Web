@@ -63,17 +63,15 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (httpRequest == null)
-            {
+            if (httpRequest is null)
                 return;
-            }
 
 #if !ASP_NET_CORE
             var queryStrings = httpRequest.QueryString;
 #else
             var queryStrings = httpRequest.Query;
 #endif
-            if (queryStrings == null || queryStrings.Count == 0)
+            if (queryStrings is null || queryStrings.Count == 0)
                 return;
 
             var queryStringKeys = Items?.Count > 0 ? Items :
@@ -82,7 +80,7 @@ namespace NLog.Web.LayoutRenderers
 #else
                 queryStrings.Keys;
 #endif
-            bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;
+            bool checkForExclude = (Items is null || Items.Count == 0) && Exclude?.Count > 0;
             var pairs = GetQueryStringValues(queryStrings, queryStringKeys, checkForExclude, Exclude);
             SerializePairs(pairs, builder, logEvent);
         }

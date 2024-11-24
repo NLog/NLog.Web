@@ -120,10 +120,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
-            if (httpRequest == null)
-            {
+            if (httpRequest is null)
                 return;
-            }
 
             try
             {
@@ -140,10 +138,8 @@ namespace NLog.Web.LayoutRenderers
         private void RenderUrl(HttpRequestBase httpRequest, StringBuilder builder)
         {
             var url = httpRequest.Url;
-            if (url == null)
-            {
+            if (url is null)
                 return;
-            }
 
             if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
                 !string.IsNullOrEmpty(url.Scheme))

@@ -20,44 +20,23 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            // Not available on .NET 3.5
+            var protocolValues = ResolveWebSocketProtocols();
+            if (protocolValues?.Count > 0)
+            {
+                SerializeValues(protocolValues, builder, logEvent);
+            }
+        }
+
+        System.Collections.Generic.IList<string> ResolveWebSocketProtocols()
+        {
 #if ASP_NET_CORE
             var websockets = HttpContextAccessor.HttpContext.TryGetWebSocket();
-            if (websockets == null)
-            {
-                return;
-            }
-
-            if (websockets.WebSocketRequestedProtocols == null)
-            {
-                return;
-            }
-
-            if (websockets.WebSocketRequestedProtocols.Count == 0)
-            {
-                return;
-            }
-
-            SerializeValues(websockets.WebSocketRequestedProtocols, builder, logEvent);
-
+            return websockets?.WebSocketRequestedProtocols;
 #elif NET46_OR_GREATER
             var httpContext = HttpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                return;
-            }
-
-            if (httpContext.WebSocketRequestedProtocols == null)
-            {
-                return;
-            }
-
-            if (httpContext.WebSocketRequestedProtocols.Count == 0)
-            {
-                return;
-            }
-
-            SerializeValues(httpContext.WebSocketRequestedProtocols, builder, logEvent);
+            return httpContext?.WebSocketRequestedProtocols;
+#else
+            return null;    // Not available on .NET 3.5
 #endif
         }
     }

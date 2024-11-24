@@ -82,10 +82,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
-            if (httpResponse == null)
-            {
+            if (httpResponse is null)
                 return;
-            }
 
             var cookies = GetCookies(httpResponse);
             if (cookies.Count > 0)

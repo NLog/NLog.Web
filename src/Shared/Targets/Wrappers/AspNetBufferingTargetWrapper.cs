@@ -238,10 +238,8 @@ namespace NLog.Web.Targets.Wrappers
 #else
                 var context = HttpContext.Current;
 #endif
-                if (context == null)
-                {
+                if (context is null)
                     return null;
-                }
 
                 var targetBufferList = GetTargetBufferList(context);
                 return targetBufferList?.GetRequestBuffer(this);
@@ -302,27 +300,25 @@ namespace NLog.Web.Targets.Wrappers
 
             private bool NodeForTarget(AspNetBufferingTargetWrapper target)
             {
-                if (_target is null && Interlocked.CompareExchange(ref _target, target, null) == null)
+                if (_target is null && Interlocked.CompareExchange(ref _target, target, null) is null)
                     return true;
 
                 return ReferenceEquals(_target, target);
             }
         }
 
-        internal static void OnBeginRequest(HttpContext context)
+        internal static void OnBeginRequest(HttpContext httpContext)
         {
             try
             {
-                if (context == null)
-                {
+                if (httpContext is null)
                     return;
-                }
 
-                var targetBufferList = GetTargetBufferList(context);
+                var targetBufferList = GetTargetBufferList(httpContext);
                 if (targetBufferList is null)
                 {
                     InternalLogger.Trace("AspNetBufferingWrapper Request Buffer Initializing");
-                    SetTargetBufferList(context, new TargetBufferListNode());
+                    SetTargetBufferList(httpContext, new TargetBufferListNode());
                 }
             }
             catch (Exception ex)

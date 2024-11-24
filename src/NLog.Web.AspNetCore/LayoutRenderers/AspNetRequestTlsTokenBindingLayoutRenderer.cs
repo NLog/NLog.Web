@@ -42,9 +42,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var tlsTokenBinding = HttpContextAccessor.HttpContext.TryGetFeature<ITlsTokenBindingFeature>();
             if (tlsTokenBinding is null)
-            {
                 return;
-            }
 
             switch (Property)
             {

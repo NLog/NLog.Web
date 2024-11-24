@@ -62,18 +62,16 @@ namespace NLog.Web.LayoutRenderers
         {
             var httpContext = HttpContextAccessor.HttpContext;
 
-            var request = httpContext.TryGetRequest();
-            if (request == null)
-            {
+            var httpRequest = httpContext.TryGetRequest();
+            if (httpRequest is null)
                 return;
-            }
 
-            var ip = CheckForwardedForHeader && ForwardedForHeader != null ? TryLookupForwardHeader(request, logEvent) : string.Empty;
+            var ip = CheckForwardedForHeader && ForwardedForHeader != null ? TryLookupForwardHeader(httpRequest, logEvent) : string.Empty;
 
             if (string.IsNullOrEmpty(ip))
             {
 #if !ASP_NET_CORE
-                ip = request.ServerVariables?["REMOTE_ADDR"];
+                ip = httpRequest.ServerVariables?["REMOTE_ADDR"];
 #else
                 ip = httpContext.Connection?.RemoteIpAddress?.ToString();
 #endif

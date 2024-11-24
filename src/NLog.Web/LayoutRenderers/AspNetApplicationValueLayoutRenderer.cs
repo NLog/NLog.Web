@@ -72,21 +72,15 @@ namespace NLog.Web.LayoutRenderers
         {
             var item = Item;
             if (item is null)
-            {
                 return;
-            }
 
             var application = HttpContextAccessor.HttpContext.Application;
             if (application is null)
-            {
                 return;
-            }
 
             var value = application[item];
             if (value is null)
-            {
                 return;
-            }
 
             if (!(ObjectPath is null))
             {

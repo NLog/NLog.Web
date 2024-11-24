@@ -109,15 +109,11 @@ namespace NLog.Web.LayoutRenderers
         {
             var item = Item;
             if (string.IsNullOrEmpty(item))
-            {
                 return;
-            }
 
             var context = HttpContextAccessor.HttpContext;
             if (context is null)
-            {
                 return;
-            }
 
 #if ASP_NET_CORE
             // Because session.get / session.getstring are also creating log messages in some cases,
@@ -135,10 +131,8 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
                 var contextSession = context.TryGetSession();
-                if (contextSession == null)
-                {
+                if (contextSession is null)
                     return;
-                }
 
                 object value = null;
 

@@ -14,7 +14,7 @@ namespace NLog.Web.Internal
 #if ASP_NET_CORE
         internal static IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, List<string> itemNames, ISet<string> excludeNames)
         {
-            bool checkForExclude = (itemNames == null || itemNames.Count == 0) && excludeNames?.Count > 0;
+            bool checkForExclude = (itemNames is null || itemNames.Count == 0) && excludeNames?.Count > 0;
             var headerNames = itemNames?.Count > 0 ? itemNames : headers.Keys;
             foreach (var headerName in headerNames)
             {
@@ -32,7 +32,7 @@ namespace NLog.Web.Internal
 #else
         internal static IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, List<string> itemNames, HashSet<string> excludeNames)
         {
-            bool checkForExclude = (itemNames == null || itemNames.Count == 0) && excludeNames?.Count > 0;
+            bool checkForExclude = (itemNames is null || itemNames.Count == 0) && excludeNames?.Count > 0;
             var headerNames = itemNames?.Count > 0 ? itemNames : headers.Keys.Cast<string>();
             foreach (var headerName in headerNames)
             {
@@ -40,10 +40,8 @@ namespace NLog.Web.Internal
                     continue;
 
                 var headerValue = headers[headerName];
-                if (headerValue == null)
-                {
+                if (headerValue is null)
                     continue;
-                }
 
                 yield return new KeyValuePair<string, string>(headerName, headerValue);
             }

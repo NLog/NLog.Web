@@ -37,7 +37,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var assembly = base.GetAssembly();
 #if !ASP_NET_CORE
-            if (assembly == null)
+            if (assembly is null)
             {
                 assembly = GetAspNetEntryAssembly();
             }

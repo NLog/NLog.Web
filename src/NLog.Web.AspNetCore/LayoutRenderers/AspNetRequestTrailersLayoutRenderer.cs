@@ -52,14 +52,10 @@ namespace NLog.Web.LayoutRenderers
         {
             var httpRequestTrailers = HttpContextAccessor.HttpContext.TryGetFeature<IHttpRequestTrailersFeature>();
             if (httpRequestTrailers is null)
-            {
                 return;
-            }
 
-            if(!httpRequestTrailers.Available)
-            {
+            if (!httpRequestTrailers.Available)
                 return;
-            }
 
             var trailers = httpRequestTrailers.Trailers;
             if (trailers?.Count > 0)

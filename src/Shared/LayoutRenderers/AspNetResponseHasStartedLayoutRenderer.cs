@@ -17,11 +17,11 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var response = HttpContextAccessor.HttpContext.TryGetResponse();
+            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
 #if ASP_NET_CORE
-            builder.Append(response?.HasStarted == true ? '1' : '0');
+            builder.Append(httpResponse?.HasStarted == true ? '1' : '0');
 #elif NET46_OR_GREATER
-            builder.Append(response?.HeadersWritten == true ? '1' : '0');
+            builder.Append(httpResponse?.HeadersWritten == true ? '1' : '0');
 #endif
         }
     }
