@@ -18,11 +18,11 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var request = HttpContextAccessor.HttpContext.TryGetRequest();
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
 #if ASP_NET_CORE
-            var host = request?.Host.ToString();
+            var host = httpRequest?.Host.ToString();
 #else
-            var host = request?.UserHostName?.ToString();
+            var host = httpRequest?.UserHostName?.ToString();
 #endif
             builder.Append(host);
         }

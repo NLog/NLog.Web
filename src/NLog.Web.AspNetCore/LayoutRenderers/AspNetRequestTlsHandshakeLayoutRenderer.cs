@@ -38,9 +38,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var tlsHandshake = HttpContextAccessor.HttpContext.TryGetFeature<ITlsHandshakeFeature>();
             if (tlsHandshake is null)
-            {
                 return;
-            }
 
             switch (Property)
             {

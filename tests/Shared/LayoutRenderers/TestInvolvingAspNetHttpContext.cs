@@ -45,7 +45,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         protected virtual HttpRequest SetUpHttpRequest(Uri uri = null)
         {
-            if (uri == null)
+            if (uri is null)
                 uri = DefaultTestUri;
             return new HttpRequest("", uri.AbsoluteUri, uri.Query);
         }

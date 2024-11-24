@@ -26,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
             try
             {
                 var identity = HttpContextAccessor.HttpContext.User?.Identity;
-                if (identity == null)
+                if (identity is null)
                 {
                     InternalLogger.Debug("aspnet-user-authtype - HttpContext User Identity is null");
                     return;

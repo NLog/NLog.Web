@@ -107,19 +107,13 @@ namespace NLog.Web.Internal
         internal static string GetString(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))
-            {
                 return null;
-            }
 
-            if (data == null)
-            {
+            if (data is null)
                 return null;
-            }
 
             if (data.Length == 0)
-            {
                 return string.Empty;
-            }
 
             return Encoding.UTF8.GetString(data);
         }
@@ -127,14 +121,11 @@ namespace NLog.Web.Internal
         public static int? GetInt32(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))
-            {
                 return null;
-            }
 
-            if (data == null || data.Length < 4)
-            {
+            if (data is null || data.Length < 4)
                 return null;
-            }
+
             return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
         }
 #endif
@@ -143,7 +134,7 @@ namespace NLog.Web.Internal
         internal static HttpSessionStateBase TryGetSession(this HttpContextBase context)
         {
             var session = context?.Session;
-            if (session == null)
+            if (session is null)
                 InternalLogger.Debug("HttpContext Session Lookup returned null");
             return session;
         }

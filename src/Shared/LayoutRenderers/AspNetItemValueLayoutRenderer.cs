@@ -90,15 +90,11 @@ namespace NLog.Web.LayoutRenderers
         {
             var item = Item;
             if (string.IsNullOrEmpty(item))
-            {
                 return;
-            }
 
             var httpContext = HttpContextAccessor.HttpContext;
             if (httpContext is null)
-            {
                 return;
-            }
 
             object value = null;
 

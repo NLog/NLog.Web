@@ -80,16 +80,16 @@ namespace NLog.Web
 
         private bool IsSlowHttpRequest(HttpContext httpContext)
         {
-            if (httpContext != null)
+            if (httpContext is null)
+                return false;
+            
+            var timestamp = httpContext.Timestamp;
+            if (timestamp > DateTime.MinValue)
             {
-                var timestamp = httpContext.Timestamp;
-                if (timestamp > DateTime.MinValue)
+                var currentDuration = DateTime.UtcNow - timestamp.ToUniversalTime();
+                if (currentDuration > _durationThresholdMs)
                 {
-                    var currentDuration = DateTime.UtcNow - timestamp.ToUniversalTime();
-                    if (currentDuration > _durationThresholdMs)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 

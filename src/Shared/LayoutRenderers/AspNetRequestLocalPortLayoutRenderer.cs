@@ -25,18 +25,15 @@ namespace NLog.Web.LayoutRenderers
             var httpContext = HttpContextAccessor.HttpContext;
 #if ASP_NET_CORE
             var connection = httpContext.TryGetConnection();
-            if (connection == null)
-            {
+            if (connection is null)
                 return;
-            }
 
             builder.Append(connection.LocalPort);
 #else
             var request = httpContext.TryGetRequest();
-            if (request == null)
-            {
+            if (request is null)
                 return;
-            }
+
             builder.Append(request.ServerVariables?["LOCAL_PORT"]);
 #endif
         }

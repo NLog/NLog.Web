@@ -36,11 +36,8 @@ namespace NLog.Web.Targets
         protected override void Write(LogEventInfo logEvent)
         {
             HttpContext context = HttpContext.Current;
-
-            if (context == null)
-            {
+            if (context is null)
                 return;
-            }
 
             if (logEvent.Level >= LogLevel.Warn)
             {

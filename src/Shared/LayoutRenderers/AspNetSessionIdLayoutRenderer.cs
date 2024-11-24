@@ -33,9 +33,8 @@ namespace NLog.Web.LayoutRenderers
             {
 #endif
                 var contextSession = HttpContextAccessor.HttpContext.TryGetSession();
-                if (contextSession == null)
+                if (contextSession is null)
                     return;
-
 
 #if !ASP_NET_CORE
                 builder.Append(contextSession.SessionID);

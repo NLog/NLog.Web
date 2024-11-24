@@ -44,10 +44,8 @@ namespace NLog.Web.LayoutRenderers
             }
 
             var items = HttpContextAccessor.HttpContext?.Items;
-            if (items == null || items.Count == 0)
-            {
+            if (items is null || items.Count == 0)
                 return;
-            }
 
 #if !ASP_NET_CORE
             if (items.Contains(NLogPostedRequestBodyKey))

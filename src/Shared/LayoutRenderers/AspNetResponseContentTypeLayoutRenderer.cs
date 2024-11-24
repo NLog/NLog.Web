@@ -18,13 +18,11 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var response = HttpContextAccessor.HttpContext.TryGetResponse();
-            if (response == null)
-            {
+            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
+            if (httpResponse is null)
                 return;
-            }
 
-            var contentType = response.ContentType;
+            var contentType = httpResponse.ContentType;
             if (!string.IsNullOrEmpty(contentType))
             {
                 builder.Append(contentType);

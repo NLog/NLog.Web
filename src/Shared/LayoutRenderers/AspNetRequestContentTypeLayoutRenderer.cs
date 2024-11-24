@@ -18,8 +18,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var request = HttpContextAccessor.HttpContext.TryGetRequest();
-            var contentType = request?.ContentType;
+            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+            var contentType = httpRequest?.ContentType;
             builder.Append(contentType);
         }
     }
