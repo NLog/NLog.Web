@@ -4,6 +4,18 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.4 (2025/02/02)
+
+- **NLog.Web.AspNetCore**
+  - [#1069](https://github.com/NLog/NLog.Web/pull/1069) AspNetUserClaimLayoutRenderer - Extended with Azure Claims ObjectId + TenantId + AppId (#1069) (@snakefoot)
+  - [#1070](https://github.com/NLog/NLog.Web/pull/1070) Micro optimization by using is null (#1070) (@snakefoot)
+  - [#1072](https://github.com/NLog/NLog.Web/pull/1072) Updated dependency NLog.Extensions.Logging v5.4 (#1072) (@snakefoot)
+
+- **NLog.Web**
+  - [#1069](https://github.com/NLog/NLog.Web/pull/1069) AspNetUserClaimLayoutRenderer - Extended with Azure Claims ObjectId + TenantId + AppId (#1069) (@snakefoot)
+  - [#1070](https://github.com/NLog/NLog.Web/pull/1070) Micro optimization by using is null (#1070) (@snakefoot)
+  - [#1072](https://github.com/NLog/NLog.Web/pull/1072) Updated dependency NLog v5.4 (#1072) (@snakefoot)
+
 ### Version 5.3.15 (2024/11/21)
 
 - **NLog.Web.AspNetCore**
