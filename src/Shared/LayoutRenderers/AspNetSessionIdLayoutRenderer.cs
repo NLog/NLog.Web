@@ -32,14 +32,14 @@ namespace NLog.Web.LayoutRenderers
 #else
             {
 #endif
-                var contextSession = HttpContextAccessor.HttpContext.TryGetSession();
-                if (contextSession is null)
+                var userSession = HttpContextAccessor?.HttpContext.TryGetSession();
+                if (userSession is null)
                     return;
 
 #if !ASP_NET_CORE
-                builder.Append(contextSession.SessionID);
+                builder.Append(userSession.SessionID);
 #else
-                builder.Append(contextSession.Id);
+                builder.Append(userSession.Id);
 #endif
             }
         }

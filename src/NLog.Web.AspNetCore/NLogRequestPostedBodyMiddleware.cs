@@ -38,7 +38,7 @@ namespace NLog.Web
         /// }
         /// </code>
         /// </remarks>
-        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions options = default)
+        public NLogRequestPostedBodyMiddleware(RequestDelegate next, NLogRequestPostedBodyMiddlewareOptions? options = null)
         {
             _next = next;
             _options = options ?? NLogRequestPostedBodyMiddlewareOptions.Default;
@@ -129,7 +129,7 @@ namespace NLog.Web
                 return string.Empty;
             }
 
-            string responseText = null;
+            string responseText = string.Empty;
 
             // Save away the original stream position
             var originalPosition = stream.Position;

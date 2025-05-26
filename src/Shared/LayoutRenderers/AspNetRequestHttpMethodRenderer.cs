@@ -23,13 +23,12 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+            var httpRequest = HttpContextAccessor?.HttpContext.TryGetRequest();
 
-            string httpMethod;
 #if !ASP_NET_CORE
-            httpMethod = httpRequest?.HttpMethod;
+            var httpMethod = httpRequest?.HttpMethod;
 #else
-            httpMethod = httpRequest?.Method;
+            var httpMethod = httpRequest?.Method;
 #endif
             builder.Append(httpMethod);
         }

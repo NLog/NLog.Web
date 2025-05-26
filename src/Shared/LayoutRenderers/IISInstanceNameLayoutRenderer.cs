@@ -42,13 +42,13 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
-        internal IHostEnvironment HostEnvironment
+        internal IHostEnvironment? HostEnvironment
         {
             get => _hostEnvironment ?? (_hostEnvironment = ResolveHostEnvironment());
             set => _hostEnvironment = value;
         }
-        private IHostEnvironment _hostEnvironment;
-        private string _instanceName;
+        private IHostEnvironment? _hostEnvironment;
+        private string? _instanceName;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -57,7 +57,7 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(instanceName);
         }
 
-        private IHostEnvironment ResolveHostEnvironment()
+        private IHostEnvironment? ResolveHostEnvironment()
         {
 #if ASP_NET_CORE
             return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
@@ -66,7 +66,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
         }
 
-        private string ResolveInstanceName()
+        private string? ResolveInstanceName()
         {
 #if ASP_NET_CORE
             var instanceName = HostEnvironment?.ApplicationName;

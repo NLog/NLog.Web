@@ -24,7 +24,7 @@ namespace NLog.Web
         /// <param name="nlogConfigSection">Override configuration-section-name to resolve NLog-configuration</param>
         /// <param name="optional">Override optional with AddJsonFile</param>
         /// <param name="reloadOnChange">Override reloadOnChange with AddJsonFile. Required for "autoReload":true to work.</param>
-        public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string basePath = null, string environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
+        public static ISetupBuilder LoadConfigurationFromAppSettings(this ISetupBuilder setupBuilder, string? basePath = null, string? environment = null, string nlogConfigSection = "NLog", bool optional = true, bool reloadOnChange = false)
         {
             environment = environment ?? GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT") ?? "Production";
             basePath = basePath ?? GetAspNetCoreEnvironment("ASPNETCORE_CONTENTROOT") ?? GetAspNetCoreEnvironment("DOTNET_CONTENTROOT") ?? ResolveCurrentAppDirectory();
@@ -82,7 +82,7 @@ namespace NLog.Web
             if (!string.IsNullOrWhiteSpace(environmentName))
                 return $"nlog.{environmentName}.config";
 
-            return null;
+            return string.Empty;
         }
 
         private static string ResolveCurrentAppDirectory()
@@ -99,7 +99,7 @@ namespace NLog.Web
             return currentBasePath;
         }
 
-        private static string GetAspNetCoreEnvironment(string variableName)
+        private static string? GetAspNetCoreEnvironment(string variableName)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace NLog.Web
         /// <remarks>
         /// If not providing <paramref name="serviceProvider"/>, then output from aspnet-layoutrenderers will remain empty
         /// </remarks>
-        public static ISetupBuilder RegisterNLogWeb(this ISetupBuilder setupBuilder, IConfiguration configuration = null, IServiceProvider serviceProvider = null)
+        public static ISetupBuilder RegisterNLogWeb(this ISetupBuilder setupBuilder, IConfiguration? configuration = null, IServiceProvider? serviceProvider = null)
         {
             setupBuilder.SetupExtensions(e => e.RegisterNLogWeb(serviceProvider));
 

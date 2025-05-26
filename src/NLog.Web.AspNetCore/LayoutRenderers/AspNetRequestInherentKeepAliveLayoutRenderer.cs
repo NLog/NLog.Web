@@ -26,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var connectionFeature = HttpContextAccessor.HttpContext.TryGetFeature<IConnectionInherentKeepAliveFeature>();
+            var connectionFeature = HttpContextAccessor?.HttpContext.TryGetFeature<IConnectionInherentKeepAliveFeature>();
             var value = connectionFeature?.HasInherentKeepAlive ?? false;
             builder.Append(value ? '1' : '0');
         }

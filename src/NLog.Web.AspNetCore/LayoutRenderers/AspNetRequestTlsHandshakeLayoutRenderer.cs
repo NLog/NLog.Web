@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var tlsHandshake = HttpContextAccessor.HttpContext.TryGetFeature<ITlsHandshakeFeature>();
+            var tlsHandshake = HttpContextAccessor?.HttpContext.TryGetFeature<ITlsHandshakeFeature>();
             if (tlsHandshake is null)
                 return;
 

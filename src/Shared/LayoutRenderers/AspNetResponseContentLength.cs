@@ -17,12 +17,12 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
+            var httpResponse = HttpContextAccessor?.HttpContext.TryGetResponse();
             if (httpResponse is null)
                 return;
 
 #if ASP_NET_CORE
-            var contentLength = httpResponse.ContentLength;
+            var contentLength = httpResponse.ContentLength ?? 0L;
 #else
             var contentLength = httpResponse.OutputStream?.Length ?? 0L;
 #endif

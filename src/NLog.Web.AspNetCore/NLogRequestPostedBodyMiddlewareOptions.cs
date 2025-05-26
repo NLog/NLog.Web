@@ -61,8 +61,15 @@ namespace NLog.Web
         /// </summary>
         private bool DefaultCapture(HttpContext context)
         {
-            var contentLength = context?.Request?.ContentLength ?? 0;
-            if (contentLength <= 0 || contentLength > MaxContentLength)
+            var httpRequest = context?.Request;
+            if (httpRequest is null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request is null");
+                return false;
+            }
+
+            var contentLength = httpRequest.ContentLength;
+            if (!(contentLength > 0L) || contentLength > MaxContentLength)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentLength={0}", contentLength);
                 return false;
@@ -70,7 +77,7 @@ namespace NLog.Web
 
             if (!context.HasAllowedContentType(AllowContentTypes))
             {
-                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentType={0}", context.Request.ContentType);
+                InternalLogger.Debug("NLogRequestPostedBodyMiddleware: HttpContext.Request.ContentType={0}", httpRequest.ContentType);
                 return false;
             }
 

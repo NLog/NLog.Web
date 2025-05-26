@@ -83,7 +83,6 @@ namespace NLog.Web.Targets.Wrappers
         /// Initializes a new instance of the <see cref="AspNetBufferingTargetWrapper" /> class.
         /// </summary>
         public AspNetBufferingTargetWrapper()
-            : this(null)
         {
         }
 
@@ -113,7 +112,7 @@ namespace NLog.Web.Targets.Wrappers
         /// </summary>
         /// <docgen category='Buffering Options' order='100' />
         [DefaultValue(100)]
-        public int BufferSize { get; set; }
+        public int BufferSize { get; set; } = 100;
 
         /// <summary>
         /// Gets or sets a value indicating whether buffer should grow as needed.
@@ -125,7 +124,7 @@ namespace NLog.Web.Targets.Wrappers
         /// </remarks>
         /// <docgen category='Buffering Options' order='100' />
         [DefaultValue(false)]
-        public bool GrowBufferAsNeeded { get; set; }
+        public bool GrowBufferAsNeeded { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the maximum number of log events that the buffer can keep.
@@ -142,14 +141,14 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        internal IHttpContextAccessor HttpContextAccessor
+        internal IHttpContextAccessor? HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor());
             set => _httpContextAccessor = value;
         }
-        private IHttpContextAccessor _httpContextAccessor;
+        private IHttpContextAccessor? _httpContextAccessor;
 
-        private IHttpContextAccessor RetrieveHttpContextAccessor()
+        private IHttpContextAccessor? RetrieveHttpContextAccessor()
         {
 #if ASP_NET_CORE
             return ServiceLocator.ResolveService<IHttpContextAccessor>(ResolveService<IServiceProvider>(), LoggingConfiguration);
@@ -229,7 +228,7 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        private NLog.Web.Internal.LogEventInfoBuffer GetRequestBuffer()
+        private NLog.Web.Internal.LogEventInfoBuffer? GetRequestBuffer()
         {
             try
             {
@@ -254,25 +253,25 @@ namespace NLog.Web.Targets.Wrappers
             }
         }
 
-        private static TargetBufferListNode GetTargetBufferList(HttpContext context)
+        private static TargetBufferListNode? GetTargetBufferList(HttpContext context)
         {
             return context?.Items?[dataSlot] as TargetBufferListNode;
         }
 
-        private static void SetTargetBufferList(HttpContext context, TargetBufferListNode newEmptyList)
+        private static void SetTargetBufferList(HttpContext context, TargetBufferListNode? newEmptyList)
         {
             context.Items[dataSlot] = newEmptyList;
         }
 
         private sealed class TargetBufferListNode
         {
-            public AspNetBufferingTargetWrapper Target => _target;
-            public Internal.LogEventInfoBuffer RequestBuffer => _requestBuffer;
-            public TargetBufferListNode NextNode => _nextNode;
+            public AspNetBufferingTargetWrapper? Target => _target;
+            public Internal.LogEventInfoBuffer? RequestBuffer => _requestBuffer;
+            public TargetBufferListNode? NextNode => _nextNode;
 
-            private AspNetBufferingTargetWrapper _target;
-            private Internal.LogEventInfoBuffer _requestBuffer;
-            private TargetBufferListNode _nextNode;
+            private AspNetBufferingTargetWrapper? _target;
+            private Internal.LogEventInfoBuffer? _requestBuffer;
+            private TargetBufferListNode? _nextNode;
 
             public Internal.LogEventInfoBuffer GetRequestBuffer(AspNetBufferingTargetWrapper target)
             {
