@@ -10,10 +10,9 @@ namespace NLog.Web
 
         internal static void AppendFormattedValue(this StringBuilder destination, object value, string format, IFormatProvider formatProvider, IValueFormatter valueFormatter)
         {
-            string stringValue = value as string;
-            if (stringValue != null && string.IsNullOrEmpty(format))
+            if (value is string stringValue && string.IsNullOrEmpty(format))
             {
-                destination.Append(value);  // Avoid automatic quotes
+                destination.Append(stringValue);  // Avoid automatic quotes
             }
             else if (FormatAsJson.Equals(format))
             {

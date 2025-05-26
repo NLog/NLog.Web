@@ -55,8 +55,8 @@ namespace NLog.Web.LayoutRenderers
             if (trailers?.Count > 0)
             {
                 bool checkForExclude = (Items == null || Items.Count == 0) && Exclude?.Count > 0;
-                var headerValues = GetTrailerValues(trailers, checkForExclude);
-                SerializePairs(headerValues, builder, logEvent);
+                var trailerValues = GetTrailerValues(trailers, checkForExclude);
+                SerializePairs(trailerValues, builder, logEvent);
             }
         }
 

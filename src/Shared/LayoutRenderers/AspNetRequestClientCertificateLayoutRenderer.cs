@@ -29,10 +29,10 @@ namespace NLog.Web.LayoutRenderers
         {
             var httpContext = HttpContextAccessor.HttpContext;
 #if ASP_NET_CORE
-            var connection = httpContext.Connection;
+            var connection = httpContext?.Connection;
             builder.Append(connection?.ClientCertificate?.ToString(Verbose));
 #else
-            var certificate = httpContext.Request.ClientCertificate?.Certificate;
+            var certificate = httpContext?.Request?.ClientCertificate?.Certificate;
             if (certificate?.Length > 0)
             {
                 // Convert to an X509Certificate2, which does have the proper overridden ToString() method.
