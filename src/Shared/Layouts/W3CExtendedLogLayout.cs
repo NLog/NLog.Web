@@ -73,6 +73,12 @@ namespace NLog.Web.Layouts
             }
 
             base.InitializeLayout();
+
+            foreach (var field in Fields)
+            {
+                if (string.IsNullOrEmpty(field.Name))
+                    throw new NLogConfigurationException("W3CExtendedLogLayout: Contains invalid Field with unassigned Name-property");
+            }
         }
 
         private void RenderHeader(LogEventInfo logEvent, StringBuilder sb)

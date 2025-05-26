@@ -15,9 +15,9 @@ namespace NLog.Web.DependencyInjection
         /// <summary>
         /// The current service provider for reading ASP.NET Core session, request etc.
         /// </summary>
-        public static IServiceProvider ServiceProvider { get; set; }
+        public static IServiceProvider? ServiceProvider { get; set; }
 
-        internal static TService ResolveService<TService>(IServiceProvider serviceProvider, NLog.Config.LoggingConfiguration loggingConfiguration) where TService : class
+        internal static TService? ResolveService<TService>(IServiceProvider? serviceProvider, NLog.Config.LoggingConfiguration? loggingConfiguration) where TService : class
         {
             if (serviceProvider is null || ReferenceEquals(serviceProvider, loggingConfiguration?.LogFactory?.ServiceRepository ?? NLog.LogManager.LogFactory.ServiceRepository))
             {
@@ -45,7 +45,7 @@ namespace NLog.Web.DependencyInjection
             }
         }
 
-        internal static TService ResolveServiceFallback<TService>(IServiceProvider serviceProvider, Exception exception) where TService : class
+        internal static TService? ResolveServiceFallback<TService>(IServiceProvider? serviceProvider, Exception? exception) where TService : class
         {
             if (ServiceProvider is null)
             {

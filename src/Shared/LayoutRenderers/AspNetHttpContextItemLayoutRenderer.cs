@@ -43,8 +43,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
-        [RequiredParameter]
-        public string Item { get; set; }
+        public string Item { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the object-property-navigation-path for lookup of nested property.
@@ -65,25 +64,16 @@ namespace NLog.Web.LayoutRenderers
         public string Variable { get => Item; set => Item = value; }
 
         /// <summary>
-        /// Gets or sets whether the Item string with a dot are evaluated as properties or not
-        /// If ObjectPath is not null, the Item should have no dot notation and nested properties will be automatically
-        /// invoked since ObjectPath is set
-        /// </summary>
-        /// <docgen category='Rendering Options' order='10' />
-        [Obsolete("Instead use ObjectPath-property. Marked obsolete with NLog.Web 5.2")]
-        public bool EvaluateAsNestedProperties { get; set; }
-
-        /// <summary>
         /// Format string for conversion from object to string.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+        public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -96,27 +86,14 @@ namespace NLog.Web.LayoutRenderers
             if (httpContext is null)
                 return;
 
-            object value = null;
+            var value = LookupItemValue(httpContext.Items, item);
+            if (value is null)
+                return;
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (EvaluateAsNestedProperties)
+            if (!string.IsNullOrEmpty(ObjectPath))
             {
-                value = PropertyReader.GetValue(item, httpContext.Items, (items, key) => LookupItemValue(items, key), true);
-                if (value is null)
+                if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
                     return;
-            }
-#pragma warning restore CS0618 // Type or member is obsolete
-            else
-            {
-                value = LookupItemValue(httpContext.Items, item);
-                if (value is null)
-                    return;
-
-                if (ObjectPath != null)
-                {
-                    if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
-                        return;
-                }
             }
 
             var formatProvider = GetFormatProvider(logEvent, Culture);
@@ -124,12 +101,12 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-        private static object LookupItemValue(System.Collections.IDictionary items, string key)
+        private static object? LookupItemValue(System.Collections.IDictionary items, string key)
         {
             return items?.Count > 0 && items.Contains(key) ? items[key] : null;
         }
 #else
-        private static object LookupItemValue(IDictionary<object, object> items, string key)
+        private static object? LookupItemValue(IDictionary<object, object?> items, string key)
         {
             return items != null && items.TryGetValue(key, out var itemValue) ? itemValue : null;
         }

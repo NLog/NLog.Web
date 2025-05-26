@@ -38,7 +38,7 @@ namespace NLog.Web.LayoutRenderers
         /// Separator between objects, like cookies. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
         /// <remarks>Render with <see cref="GetRenderedObjectSeparator" /></remarks>
-        public string ObjectSeparator { get => _objectSeparatorLayout?.OriginalText; set => _objectSeparatorLayout = new SimpleLayout(value ?? ""); }
+        public string ObjectSeparator { get => _objectSeparatorLayout.OriginalText; set => _objectSeparatorLayout = new SimpleLayout(value ?? ""); }
         private SimpleLayout _objectSeparatorLayout = new SimpleLayout(";");
 
         /// <summary>
@@ -46,14 +46,14 @@ namespace NLog.Web.LayoutRenderers
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
         [DefaultParameter]
-        public List<string> Items { get; set; }
+        public List<string>? Items { get; set; }
 
         /// <summary>
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
         [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
-        public List<string> CookieNames { get => Items; set => Items = value; }
+        public List<string>? CookieNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Render all of the cookie properties, such as Daom and Path, not merely Name and Value
@@ -112,7 +112,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Append the quoted name and value separated by a colon
         /// </summary>
-        private static bool AppendJsonProperty(StringBuilder builder, string name, string value, bool includePropertySeparator)
+        private static bool AppendJsonProperty(StringBuilder builder, string name, string? value, bool includePropertySeparator)
         {
             if (!string.IsNullOrEmpty(value))
             {
@@ -135,7 +135,7 @@ namespace NLog.Web.LayoutRenderers
         private static bool AppendFlatProperty(
             StringBuilder builder,
             string name,
-            string value,
+            string? value,
             string valueSeparator,
             string itemSeparator)
         {
@@ -162,7 +162,7 @@ namespace NLog.Web.LayoutRenderers
             return response.Cookies;
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies)
+        private IEnumerable<KeyValuePair<string, string?>> GetCookieValues(HttpCookieCollection cookies)
         {
             var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
             return HttpCookieCollectionValues.GetCookieValues(cookies, Items, Exclude, expandMultiValue);
@@ -280,7 +280,7 @@ namespace NLog.Web.LayoutRenderers
                 return Array.Empty<SetCookieHeaderValue>();
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IList<SetCookieHeaderValue> cookies)
+        private IEnumerable<KeyValuePair<string, string?>> GetCookieValues(IList<SetCookieHeaderValue> cookies)
         {
             if (Items?.Count > 0)
             {
@@ -304,7 +304,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetCookieNameValues(IList<SetCookieHeaderValue> cookies, List<string> cookieNames)
+        private static IEnumerable<KeyValuePair<string, string?>> GetCookieNameValues(IList<SetCookieHeaderValue> cookies, List<string> cookieNames)
         {
             foreach (var needle in cookieNames)
             {
@@ -314,23 +314,23 @@ namespace NLog.Web.LayoutRenderers
                     var cookieName = cookie.Name.ToString();
                     if (string.Equals(needle, cookieName, StringComparison.OrdinalIgnoreCase))
                     {
-                        yield return new KeyValuePair<string, string>(cookieName, cookie.Value.ToString());
+                        yield return new KeyValuePair<string, string?>(cookieName, cookie.Value.ToString());
                     }
                 }
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetCookieAllValues(IList<SetCookieHeaderValue> cookies, ICollection<string> excludeNames)
+        private static IEnumerable<KeyValuePair<string, string?>> GetCookieAllValues(IList<SetCookieHeaderValue> cookies, ICollection<string> excludeNames)
         {
-            bool checkForExclude = excludeNames?.Count > 0;
+            var checkForExclude = excludeNames?.Count > 0 ? excludeNames : null;
             for (int i = 0; i < cookies.Count; ++i)
             {
                 var cookie = cookies[i];
                 var cookieName = cookie.Name.ToString();
-                if (checkForExclude && excludeNames.Contains(cookieName))
+                if (checkForExclude?.Contains(cookieName) == true)
                     continue;
 
-                yield return new KeyValuePair<string, string>(cookieName, cookie.Value.ToString());
+                yield return new KeyValuePair<string, string?>(cookieName, cookie.Value.ToString());
             }
         }
 
@@ -352,12 +352,12 @@ namespace NLog.Web.LayoutRenderers
 
         private static IEnumerable<SetCookieHeaderValue> GetCookieVerboseAllValues(IList<SetCookieHeaderValue> cookies, ICollection<string> excludeNames)
         {
-            bool checkForExclude = excludeNames?.Count > 0;
+            var checkForExclude = excludeNames?.Count > 0 ? excludeNames : null;
             for (int i = 0; i < cookies.Count; ++i)
             {
                 var cookie = cookies[i];
                 var cookieName = cookie.Name.ToString();
-                if (checkForExclude && excludeNames.Contains(cookieName))
+                if (checkForExclude?.Contains(cookieName) == true)
                     continue;
 
                 yield return cookie;

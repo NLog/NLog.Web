@@ -39,9 +39,8 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the item variable name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        [RequiredParameter]
         [DefaultParameter]
-        public string Item { get; set; }
+        public string Item { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the variable name.
@@ -59,13 +58,13 @@ namespace NLog.Web.LayoutRenderers
         /// Format string for conversion from object to string.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+        public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -82,7 +81,7 @@ namespace NLog.Web.LayoutRenderers
             if (value is null)
                 return;
 
-            if (!(ObjectPath is null))
+            if (!string.IsNullOrEmpty(ObjectPath))
             {
                 if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
                     return;

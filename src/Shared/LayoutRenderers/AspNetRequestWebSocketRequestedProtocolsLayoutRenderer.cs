@@ -27,7 +27,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        System.Collections.Generic.IList<string> ResolveWebSocketProtocols()
+        System.Collections.Generic.IList<string>? ResolveWebSocketProtocols()
         {
 #if ASP_NET_CORE
             var websockets = HttpContextAccessor?.HttpContext.TryGetWebSocket();

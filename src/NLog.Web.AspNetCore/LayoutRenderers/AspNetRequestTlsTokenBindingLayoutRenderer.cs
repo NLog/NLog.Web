@@ -70,7 +70,7 @@ namespace NLog.Web.LayoutRenderers
                 }
             }
 
-            return null;
+            return string.Empty;
         }
     }
 }

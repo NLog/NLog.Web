@@ -25,9 +25,8 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
-        [RequiredParameter]
         [DefaultParameter]
-        public string Item { get; set; }
+        public string Item { get; set; } = string.Empty;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -39,13 +38,13 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-        private static string LookupItemValue(string key, HttpContextBase httpContext)
+        private static string? LookupItemValue(string key, HttpContextBase? httpContext)
         {
             return httpContext?.TryGetRequest()?.ServerVariables?[key];
         }
 
 #elif NETCOREAPP3_0_OR_GREATER
-        private static string LookupItemValue(string key, HttpContext httpContext)
+        private static string? LookupItemValue(string key, HttpContext? httpContext)
         {
             return httpContext.TryGetFeature<IServerVariablesFeature>()?[key];
         }

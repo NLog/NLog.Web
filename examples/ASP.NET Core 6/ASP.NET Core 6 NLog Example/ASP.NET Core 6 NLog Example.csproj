@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog" Version="6.0.0-rc1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\src\NLog.Web.AspNetCore\NLog.Web.AspNetCore.csproj" />
   </ItemGroup>
 

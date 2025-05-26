@@ -32,14 +32,14 @@ namespace NLog.Web.LayoutRenderers
         /// If <c>null</c> or empty array, all trailers will be rendered.
         /// </summary>
         [DefaultParameter]
-        public List<string> Items { get; set; }
+        public List<string>? Items { get; set; }
 
         /// <summary>
         /// Trailer names to be rendered.
         /// If <c>null</c> or empty array, all trailers will be rendered.
         /// </summary>
         [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
-        public List<string> TrailerNames { get => Items; set => Items = value; }
+        public List<string>? TrailerNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
@@ -66,7 +66,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetTrailerValues(IHeaderDictionary trailers, bool checkForExclude)
+        private IEnumerable<KeyValuePair<string, string?>> GetTrailerValues(IHeaderDictionary trailers, bool checkForExclude)
         {
             var trailerNames = Items?.Count > 0 ? Items : trailers.Keys;
             foreach (var trailerName in trailerNames)
@@ -74,12 +74,8 @@ namespace NLog.Web.LayoutRenderers
                 if (checkForExclude && Exclude.Contains(trailerName))
                     continue;
 
-                if (!trailers.TryGetValue(trailerName, out var trailerValue))
-                {
-                    continue;
-                }
-
-                yield return new KeyValuePair<string, string>(trailerName, trailerValue);
+                if (trailers.TryGetValue(trailerName, out var trailerValue))
+                    yield return new KeyValuePair<string, string?>(trailerName, trailerValue);
             }
         }
     }

@@ -20,26 +20,22 @@ namespace NLog.Web.LayoutRenderers
     public abstract class AspNetLayoutRendererBase : LayoutRenderer
     {
         /// <summary>
-        /// Context for DI
-        /// </summary>
-        private IHttpContextAccessor _httpContextAccessor;
-
-        /// <summary>
         /// Provides access to the current request HttpContext.
         /// </summary>
         /// <returns>HttpContextAccessor or <c>null</c></returns>
         [NLogConfigurationIgnoreProperty]
-        public IHttpContextAccessor HttpContextAccessor
+        public IHttpContextAccessor? HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _httpContextAccessor = value;
         }
+        private IHttpContextAccessor? _httpContextAccessor;
 
 #if !ASP_NET_CORE
         internal static IHttpContextAccessor DefaultHttpContextAccessor { get; set; } = new DefaultHttpContextAccessor();
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration) => DefaultHttpContextAccessor;
+        internal static IHttpContextAccessor? RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration? loggingConfiguration) => DefaultHttpContextAccessor;
 #else
-        internal static IHttpContextAccessor RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration loggingConfiguration)
+        internal static IHttpContextAccessor? RetrieveHttpContextAccessor(IServiceProvider serviceProvider, LoggingConfiguration? loggingConfiguration)
         {
             return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
         }
@@ -86,7 +82,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="name">Name of the layout renderer - without ${}.</param>
         /// <param name="func">Callback that returns the value for the layout renderer.</param>
         [Obsolete("Instead use LogManager.Setup().SetupExtensions(). Marked obsolete with NLog v5.2")]
-        public static void Register(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func)
+        public static void Register(string name, Func<LogEventInfo, HttpContextBase?, LoggingConfiguration?, object?> func)
         {
             var renderer = new NLogWebFuncLayoutRenderer(name, func);
             Register(renderer);

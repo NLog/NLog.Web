@@ -42,14 +42,14 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
-        internal IHostEnvironment HostEnvironment
+        internal IHostEnvironment? HostEnvironment
         {
             get => _hostEnvironment ?? (_hostEnvironment = ResolveHostEnvironment());
             set => _hostEnvironment = value;
         }
-        private IHostEnvironment _hostEnvironment;
-        private string _contentRootPath;
-        private static string _currentAppPath;
+        private IHostEnvironment? _hostEnvironment;
+        private string? _contentRootPath;
+        private static string? _currentAppPath;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -58,7 +58,7 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(contentRootPath ?? ResolveCurrentAppDirectory());
         }
 
-        private IHostEnvironment ResolveHostEnvironment()
+        private IHostEnvironment? ResolveHostEnvironment()
         {
 #if ASP_NET_CORE
             return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
@@ -67,7 +67,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
         }
 
-        private string ResolveContentRootPath()
+        private string? ResolveContentRootPath()
         {
 #if ASP_NET_CORE
             var contentRootPath = HostEnvironment?.ContentRootPath;
@@ -81,12 +81,12 @@ namespace NLog.Web.LayoutRenderers
             return TrimEndDirectorySeparator(contentRootPath);
         }
 
-        private static string TrimEndDirectorySeparator(string directoryPath)
+        private static string? TrimEndDirectorySeparator(string? directoryPath)
         {
-            return string.IsNullOrEmpty(directoryPath) ? null : directoryPath.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
+            return (directoryPath is null ||string.IsNullOrEmpty(directoryPath)) ? null : directoryPath.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
         }
 
-        private static string ResolveCurrentAppDirectory()
+        private static string? ResolveCurrentAppDirectory()
         {
             if (!string.IsNullOrEmpty(_currentAppPath))
                 return _currentAppPath;
@@ -131,7 +131,7 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if ASP_NET_CORE
-        private static string GetAspNetCoreEnvironment(string variableName)
+        private static string? GetAspNetCoreEnvironment(string variableName)
         {
             try
             {

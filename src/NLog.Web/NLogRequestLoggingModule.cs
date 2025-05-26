@@ -44,9 +44,9 @@ namespace NLog.Web
             context.EndRequest += (sender, args) => OnEndRequest((sender as HttpApplication)?.Context);
         }
 
-        internal void OnEndRequest(HttpContext context)
+        internal void OnEndRequest(HttpContext? context)
         {
-            Exception exception = null;
+            Exception? exception = null;
             int statusCode = 0;
 
             try
@@ -78,7 +78,7 @@ namespace NLog.Web
             // Nothing here to do
         }
 
-        private bool IsSlowHttpRequest(HttpContext httpContext)
+        private bool IsSlowHttpRequest(HttpContext? httpContext)
         {
             if (httpContext is null)
                 return false;
@@ -96,12 +96,12 @@ namespace NLog.Web
             return false;
         }
 
-        private bool IsExcludedHttpRequest(HttpContext httpContext)
+        private bool IsExcludedHttpRequest(HttpContext? httpContext)
         {
             if (ExcludeRequestPaths.Count > 0)
             {
-                var requestPath = httpContext.Request?.Url?.AbsolutePath;
-                if (string.IsNullOrEmpty(requestPath))
+                var requestPath = httpContext?.Request?.Url?.AbsolutePath;
+                if (requestPath is null || string.IsNullOrEmpty(requestPath))
                 {
                     return false;
                 }

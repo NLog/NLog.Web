@@ -16,14 +16,14 @@ namespace NLog.Web.LayoutRenderers
         /// Separator between key/value pair, and the next pair. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
         /// <remarks>Render with <see cref="GetRenderedItemSeparator" /></remarks>
-        public string ItemSeparator { get => _itemSeparatorLayout?.OriginalText; set => _itemSeparatorLayout = new SimpleLayout(value ?? ""); }
+        public string ItemSeparator { get => _itemSeparatorLayout.OriginalText; set => _itemSeparatorLayout = new SimpleLayout(value ?? ""); }
         private SimpleLayout _itemSeparatorLayout = new SimpleLayout(",");
 
         /// <summary>
         /// Separator between value and key. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
         /// <remarks>Render with <see cref="GetRenderedValueSeparator" /></remarks>
-        public string ValueSeparator { get => _valueSeparatorLayout?.OriginalText; set => _valueSeparatorLayout = new SimpleLayout(value ?? ""); }
+        public string ValueSeparator { get => _valueSeparatorLayout.OriginalText; set => _valueSeparatorLayout = new SimpleLayout(value ?? ""); }
         private SimpleLayout _valueSeparatorLayout = new SimpleLayout("=");
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace NLog.Web.LayoutRenderers
         /// <param name="pairs">The key/value pairs.</param>
         /// <param name="builder">Add to this builder.</param>
         /// <param name="logEvent">Log event for rendering separators.</param>
-        protected void SerializePairs(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder, LogEventInfo logEvent)
+        protected void SerializePairs(IEnumerable<KeyValuePair<string, string?>> pairs, StringBuilder builder, LogEventInfo logEvent)
         {
             switch (OutputFormat)
             {
@@ -77,7 +77,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializePairsJson(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder)
+        private void SerializePairsJson(IEnumerable<KeyValuePair<string, string?>> pairs, StringBuilder builder)
         {
             var firstItem = true;
 
@@ -116,9 +116,9 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializePairJson(StringBuilder builder, KeyValuePair<string, string> kpv)
+        private void SerializePairJson(StringBuilder builder, KeyValuePair<string, string?> kpv)
         {
-            var key = kpv.Key;
+            var key = kpv.Key ?? string.Empty;
             var value = kpv.Value;
 
             if (!ValuesOnly)
@@ -129,7 +129,7 @@ namespace NLog.Web.LayoutRenderers
                     builder.Append('{');
                 }
 
-                key = key?.Replace('"', '_');    // Ensure valid JSON String-Property-Key
+                key = key.Replace('"', '_');    // Ensure valid JSON String-Property-Key
 
                 builder.Append('"');
                 AppendPropertyKey(builder, key);
@@ -146,7 +146,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string>> pairs, StringBuilder builder,
+        private void SerializePairsFlat(IEnumerable<KeyValuePair<string, string?>> pairs, StringBuilder builder,
             LogEventInfo logEvent)
         {
             var itemSeparator = GetRenderedItemSeparator(logEvent);
@@ -276,10 +276,10 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="value"></param>
-        internal static void AppendQuoted(StringBuilder builder, string value)
+        internal static void AppendQuoted(StringBuilder builder, string? value)
         {
             builder.Append('"');
-            if (!string.IsNullOrEmpty(value) && value.Contains('"'))
+            if (value?.Contains('"') == true)
             {
                 builder.Append(value.Replace("\"", "\\\""));
             }

@@ -71,11 +71,13 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var httpRequest = HttpContextAccessor?.HttpContext.TryGetRequest();
+            if (httpRequest is null)
+                return;
 
 #if !ASP_NET_CORE
-            var formKeys = httpRequest?.Form?.Keys;
+            var formKeys = httpRequest.Form?.Keys;
 #else
-            var formKeys = httpRequest?.HasFormContentType == true ? httpRequest.Form?.Keys : null;
+            var formKeys = httpRequest.HasFormContentType ? httpRequest.Form?.Keys : null;
 #endif
             if (formKeys?.Count > 0)
             {
@@ -84,7 +86,7 @@ namespace NLog.Web.LayoutRenderers
             }
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetFormDataValues(
+        private IEnumerable<KeyValuePair<string, string?>> GetFormDataValues(
 #if !ASP_NET_CORE
             System.Collections.Specialized.NameValueCollection.KeysCollection formKeys,
             System.Web.HttpRequestBase httpRequest
@@ -94,19 +96,19 @@ namespace NLog.Web.LayoutRenderers
 #endif
         )
         {
-            bool checkForInclude = Items?.Count > 0;
-            bool checkForExclude = !checkForInclude && Exclude?.Count > 0;
+            var checkForInclude = Items?.Count > 0 ? Items : null;
+            var checkForExclude = (Exclude?.Count > 0 && checkForInclude is null) ? Exclude : null;
 
             // ReSharper disable once SuggestVarOrType_BuiltInTypes
             foreach (string key in formKeys)
             {
-                if (checkForInclude && !Items.Contains(key))
+                if (checkForInclude?.Contains(key) == false)
                     continue;
 
-                if (checkForExclude && Exclude.Contains(key))
+                if (checkForExclude?.Contains(key) == true)
                     continue;
 
-                yield return new KeyValuePair<string, string>(key, httpRequest.Form[key]);
+                yield return new KeyValuePair<string, string?>(key, httpRequest.Form[key]);
             }
         }
     }

@@ -28,14 +28,14 @@ namespace NLog.Web.LayoutRenderers
         /// If <c>null</c> or empty array, all headers will be rendered.
         /// </summary>
         [DefaultParameter]
-        public List<string> Items { get; set; }
+        public List<string>? Items { get; set; }
 
         /// <summary>
         /// Header names to be rendered.
         /// If <c>null</c> or empty array, all headers will be rendered.
         /// </summary>
         [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
-        public List<string> HeaderNames { get => Items; set => Items = value; }
+        public List<string>? HeaderNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.

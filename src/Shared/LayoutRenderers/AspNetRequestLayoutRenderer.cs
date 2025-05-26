@@ -33,39 +33,39 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
-        public string Item { get; set; }
+        public string? Item { get; set; }
 
         /// <summary>
         /// Gets or sets the QueryString variable to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string QueryString { get; set; }
+        public string? QueryString { get; set; }
 
         /// <summary>
         /// Gets or sets the form variable to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Form { get; set; }
+        public string? Form { get; set; }
 
         /// <summary>
         /// Gets or sets the cookie to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Cookie { get; set; }
+        public string? Cookie { get; set; }
 
 #if !ASP_NET_CORE || NETCOREAPP3_0_OR_GREATER
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string ServerVariable { get; set; }
+        public string? ServerVariable { get; set; }
 #endif
 
         /// <summary>
         /// Gets or sets the Headers item to be rendered.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Header { get; set; }
+        public string? Header { get; set; }
 
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -106,42 +106,42 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-        private static string LookupQueryString(string key, HttpRequestBase httpRequest)
+        private static string? LookupQueryString(string key, HttpRequestBase httpRequest)
         {
             var collection = httpRequest.QueryString;
             return collection?.Count > 0 ? collection[key] : null;
         }
 
-        private static string LookupFormValue(string key, HttpRequestBase httpRequest)
+        private static string? LookupFormValue(string key, HttpRequestBase httpRequest)
         {
             var collection = httpRequest.Form;
             return collection?.Count > 0 ? collection[key] : null;
         }
 
-        private static string LookupCookieValue(string key, HttpRequestBase httpRequest)
+        private static string? LookupCookieValue(string key, HttpRequestBase httpRequest)
         {
             var cookieCollection = httpRequest.Cookies;
             return cookieCollection?.Count > 0 ? cookieCollection[key]?.Value : null;
         }
 
-        private static string LookupHeaderValue(string key, HttpRequestBase httpRequest)
+        private static string? LookupHeaderValue(string key, HttpRequestBase httpRequest)
         {
             var collection = httpRequest.Headers;
             return collection?.Count > 0 ? collection[key] : null;
         }
 
-        private static string LookupItemValue(string key, HttpRequestBase httpRequest)
+        private static string? LookupItemValue(string key, HttpRequestBase httpRequest)
         {
             return httpRequest[key];
         }
 
-        private static string LookupServerVariableValue(string key, HttpRequestBase httpRequest)
+        private static string? LookupServerVariableValue(string key, HttpRequestBase httpRequest)
         {
             var collection = httpRequest.ServerVariables;
             return collection?.Count > 0 ? collection[key] : null;
         }
 #else
-        private static string LookupQueryString(string key, HttpRequest httpRequest)
+        private static string? LookupQueryString(string key, HttpRequest httpRequest)
         {
             var query = httpRequest.Query;
             if (query != null && query.TryGetValue(key, out var queryValue))
@@ -152,7 +152,7 @@ namespace NLog.Web.LayoutRenderers
             return null;
         }
 
-        private static string LookupFormValue(string key, HttpRequest httpRequest)
+        private static string? LookupFormValue(string key, HttpRequest httpRequest)
         {
             if (httpRequest.HasFormContentType)
             {
@@ -166,10 +166,9 @@ namespace NLog.Web.LayoutRenderers
             return null;
         }
 
-        private static string LookupCookieValue(string key, HttpRequest httpRequest)
+        private static string? LookupCookieValue(string key, HttpRequest httpRequest)
         {
-            string cookieValue = null;
-            if (httpRequest.Cookies?.TryGetValue(key, out cookieValue) ?? false)
+            if (httpRequest.Cookies?.TryGetValue(key, out var cookieValue) ?? false)
             {
                 return cookieValue;
             }
@@ -177,7 +176,7 @@ namespace NLog.Web.LayoutRenderers
             return null;
         }
 
-        private static string LookupHeaderValue(string key, HttpRequest httpRequest)
+        private static string? LookupHeaderValue(string key, HttpRequest httpRequest)
         {
             var headers = httpRequest.Headers;
             if (headers != null && headers.TryGetValue(key, out var headerValue))
@@ -188,10 +187,9 @@ namespace NLog.Web.LayoutRenderers
             return null;
         }
 
-        private static string LookupItemValue(string key, HttpRequest httpRequest)
+        private static string? LookupItemValue(string key, HttpRequest httpRequest)
         {
-            object itemValue = null;
-            if (httpRequest.HttpContext.Items?.TryGetValue(key, out itemValue) ?? false)
+            if (httpRequest.HttpContext.Items?.TryGetValue(key, out var itemValue) ?? false)
             {
                 return itemValue?.ToString();
             }
@@ -201,7 +199,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
 #if NETCOREAPP3_0_OR_GREATER
-        private static string LookupServerVariableValue(string key, HttpRequest httpRequest)
+        private static string? LookupServerVariableValue(string key, HttpRequest httpRequest)
         {
             return httpRequest?.HttpContext.TryGetFeature<IServerVariablesFeature>()?[key];
         }

@@ -17,7 +17,7 @@ namespace NLog.Web.Internal
     internal static class HttpContextExtensions
     {
 #if !ASP_NET_CORE
-        internal static bool HasActiveHttpContext(this IHttpContextAccessor httpContextAccessor)
+        internal static bool HasActiveHttpContext(this IHttpContextAccessor? httpContextAccessor)
         {
             if (httpContextAccessor is DefaultHttpContextAccessor defaultHttpContextAccessor)
                 return defaultHttpContextAccessor.HasActiveHttpContext();    // Skip allocating HttpContextWrapper
@@ -25,7 +25,7 @@ namespace NLog.Web.Internal
                 return httpContextAccessor?.HttpContext != null;
         }
 
-        internal static HttpRequestBase TryGetRequest(this HttpContextBase context)
+        internal static HttpRequestBase? TryGetRequest(this HttpContextBase? context)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace NLog.Web.Internal
             }
         }
 
-        internal static HttpResponseBase TryGetResponse(this HttpContextBase context)
+        internal static HttpResponseBase? TryGetResponse(this HttpContextBase? context)
         {
             try
             {
@@ -57,12 +57,12 @@ namespace NLog.Web.Internal
             }
         }
 #else
-        internal static bool HasActiveHttpContext(this IHttpContextAccessor httpContextAccessor)
+        internal static bool HasActiveHttpContext(this IHttpContextAccessor? httpContextAccessor)
         {
             return httpContextAccessor?.HttpContext != null;
         }
 
-        internal static WebSocketManager TryGetWebSocket(this HttpContext context)
+        internal static WebSocketManager? TryGetWebSocket(this HttpContext? context)
         {
             var websocket = context?.WebSockets;
             if (websocket is null)
@@ -70,7 +70,7 @@ namespace NLog.Web.Internal
             return websocket;
         }
 
-        internal static ConnectionInfo TryGetConnection(this HttpContext context)
+        internal static ConnectionInfo? TryGetConnection(this HttpContext? context)
         {
             var connection = context?.Connection;
             if (connection is null)
@@ -78,7 +78,7 @@ namespace NLog.Web.Internal
             return connection;
         }
 
-        internal static HttpRequest TryGetRequest(this HttpContext context)
+        internal static HttpRequest? TryGetRequest(this HttpContext? context)
         {
             var request = context?.Request;
             if (request is null)
@@ -86,7 +86,7 @@ namespace NLog.Web.Internal
             return request;
         }
 
-        internal static HttpResponse TryGetResponse(this HttpContext context)
+        internal static HttpResponse? TryGetResponse(this HttpContext? context)
         {
             var response = context?.Response;
             if (response is null)
@@ -94,7 +94,7 @@ namespace NLog.Web.Internal
             return response;
         }
 
-        internal static T TryGetFeature<T>(this HttpContext context) where T : class
+        internal static T? TryGetFeature<T>(this HttpContext? context) where T : class
         {
             var feature = context?.Features?.Get<T>();
             if (feature is null)
@@ -104,7 +104,7 @@ namespace NLog.Web.Internal
 #endif
 
 #if ASP_NET_CORE && !NETCOREAPP3_0_OR_GREATER
-        internal static string GetString(this ISession session, string key)
+        internal static string? GetString(this ISession session, string key)
         {
             if (!session.TryGetValue(key, out var data))
                 return null;
@@ -131,7 +131,7 @@ namespace NLog.Web.Internal
 #endif
 
 #if !ASP_NET_CORE
-        internal static HttpSessionStateBase TryGetSession(this HttpContextBase context)
+        internal static HttpSessionStateBase? TryGetSession(this HttpContextBase? context)
         {
             var session = context?.Session;
             if (session is null)
@@ -139,7 +139,7 @@ namespace NLog.Web.Internal
             return session;
         }
 #else
-        internal static ISession TryGetSession(this HttpContext context)
+        internal static ISession? TryGetSession(this HttpContext? context)
         {
             try
             {
@@ -168,12 +168,12 @@ namespace NLog.Web.Internal
         }
 #endif
 
-        internal static bool HasAllowedContentType(this HttpContext context, IList<KeyValuePair<string, string>> allowContentTypes)
+        internal static bool HasAllowedContentType(this HttpContext? context, IList<KeyValuePair<string, string>> allowContentTypes)
         {
             if (allowContentTypes?.Count > 0)
             {
                 var contentType = context?.Request?.ContentType;
-                if (string.IsNullOrEmpty(contentType))
+                if (contentType is null || string.IsNullOrEmpty(contentType))
                     return true;
 
                 for (int i = 0; i < allowContentTypes.Count; ++i)

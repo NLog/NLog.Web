@@ -18,7 +18,7 @@ namespace NLog.Web.Layouts
         /// Initializes a new instance of the <see cref="W3CExtendedLogField" /> class.
         /// </summary>
         public W3CExtendedLogField()
-            : this(null, null)
+            : this(string.Empty, Layout.Empty)
         {
         }
 
@@ -44,14 +44,12 @@ namespace NLog.Web.Layouts
         ///  * sc- = server to client response details<br/>
         /// </remarks>
         /// <docgen category='W3C Field Options' order='10' />
-        [RequiredParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the layout of the field.
         /// </summary>
         /// <docgen category='W3C Field Options' order='10' />
-        [RequiredParameter]
         public Layout Layout { get; set; }
     }
 }

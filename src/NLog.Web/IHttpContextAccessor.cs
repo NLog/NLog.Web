@@ -12,6 +12,6 @@ namespace NLog.Web
         /// <summary>
         /// HttpContext associated with the current request
         /// </summary>
-        HttpContextBase HttpContext { get; }
+        HttpContextBase? HttpContext { get; }
     }
 }

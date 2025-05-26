@@ -111,7 +111,7 @@ namespace NLog.Web.LayoutRenderers
                 if (addresses.Length > 0)
                 {
                     var position = CalculatePosition(addresses);
-                    return addresses[position]?.Trim();
+                    return addresses[position]?.Trim() ?? string.Empty;
                 }
             }
 
@@ -127,7 +127,7 @@ namespace NLog.Web.LayoutRenderers
                 if (forwardedHeaders.Length > 0)
                 {
                     var position = CalculatePosition(forwardedHeaders);
-                    return forwardedHeaders[position]?.Trim();
+                    return forwardedHeaders[position]?.Trim() ?? string.Empty;
                 }
             }
 
