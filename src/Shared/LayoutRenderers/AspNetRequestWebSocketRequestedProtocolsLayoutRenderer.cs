@@ -30,10 +30,10 @@ namespace NLog.Web.LayoutRenderers
         System.Collections.Generic.IList<string> ResolveWebSocketProtocols()
         {
 #if ASP_NET_CORE
-            var websockets = HttpContextAccessor.HttpContext.TryGetWebSocket();
+            var websockets = HttpContextAccessor?.HttpContext.TryGetWebSocket();
             return websockets?.WebSocketRequestedProtocols;
 #elif NET46_OR_GREATER
-            var httpContext = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
             return httpContext?.WebSocketRequestedProtocols;
 #else
             return null;    // Not available on .NET 3.5

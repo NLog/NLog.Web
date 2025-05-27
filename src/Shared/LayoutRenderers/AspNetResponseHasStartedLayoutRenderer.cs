@@ -17,7 +17,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
+            var httpResponse = HttpContextAccessor?.HttpContext.TryGetResponse();
 #if ASP_NET_CORE
             builder.Append(httpResponse?.HasStarted == true ? '1' : '0');
 #elif NET46_OR_GREATER

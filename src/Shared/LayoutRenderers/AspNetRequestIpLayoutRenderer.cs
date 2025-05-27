@@ -73,7 +73,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
                 ip = httpRequest.ServerVariables?["REMOTE_ADDR"];
 #else
-                ip = httpContext.Connection?.RemoteIpAddress?.ToString();
+                ip = httpContext?.Connection?.RemoteIpAddress?.ToString();
 #endif
             }
 

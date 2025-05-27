@@ -54,7 +54,7 @@ namespace NLog.Web.LayoutRenderers
             IServiceProvider serviceProvider = httpContext;
             if (serviceProvider != null)
             {
-                var workerRequest = (System.Web.HttpWorkerRequest)serviceProvider?.GetService(typeof(System.Web.HttpWorkerRequest));
+                var workerRequest = (System.Web.HttpWorkerRequest)serviceProvider.GetService(typeof(System.Web.HttpWorkerRequest));
                 if (workerRequest != null)
                 {
                     Guid requestIdGuid = workerRequest.RequestTraceIdentifier;

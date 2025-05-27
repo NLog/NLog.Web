@@ -32,7 +32,7 @@ namespace NLog.Web.LayoutRenderers
 #else
             {
 #endif
-                var contextSession = HttpContextAccessor.HttpContext.TryGetSession();
+                var contextSession = HttpContextAccessor?.HttpContext.TryGetSession();
                 if (contextSession is null)
                     return;
 

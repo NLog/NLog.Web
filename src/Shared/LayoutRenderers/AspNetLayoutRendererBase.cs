@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -45,6 +44,35 @@ namespace NLog.Web.LayoutRenderers
             return ServiceLocator.ResolveService<IHttpContextAccessor>(serviceProvider, loggingConfiguration);
         }
 #endif
+
+        /// <inheritdoc />
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
+        {
+            if (!HttpContextAccessor.HasActiveHttpContext())
+            {
+                InternalLogger.Debug("No available HttpContext, because outside valid request context. Logger: {0}", logEvent.LoggerName);
+                return;
+            }
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            DoAppend(builder, logEvent);
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
+
+        /// <summary>
+        /// Renders the value of layout renderer in the context of the specified log event into <see cref="StringBuilder" />.
+        /// </summary>
+        /// <remarks>
+        /// Won't be called if <see cref="HttpContextAccessor" /> of <see cref="IHttpContextAccessor.HttpContext" /> is <c>null</c>.
+        /// </remarks>
+        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
+        /// <param name="logEvent">Logging event.</param>
+        [Obsolete("Instead override Append-method, and manual handle when HttpContextAccessor has no valid HttpContext. Marked obsolete with NLog v6.0")]
+        protected virtual void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        {
+            // SONAR: Nothing here in obsolete method
+        }
+
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()
         {

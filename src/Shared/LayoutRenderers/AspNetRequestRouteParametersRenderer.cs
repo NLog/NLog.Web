@@ -44,11 +44,11 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-            if (context is null)
+            var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext is null)
                 return;
 
-            var pairs = GetPairs(context, Items);
+            var pairs = GetPairs(httpContext, Items);
             if (pairs != null)
             {
                 SerializePairs(pairs, builder, logEvent);

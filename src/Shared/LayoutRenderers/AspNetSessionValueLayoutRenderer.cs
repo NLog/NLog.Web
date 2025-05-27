@@ -111,8 +111,8 @@ namespace NLog.Web.LayoutRenderers
             if (string.IsNullOrEmpty(item))
                 return;
 
-            var context = HttpContextAccessor?.HttpContext;
-            if (context is null)
+            var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext is null)
                 return;
 
 #if ASP_NET_CORE
@@ -130,7 +130,7 @@ namespace NLog.Web.LayoutRenderers
             {
 #endif
 
-                var contextSession = context.TryGetSession();
+                var contextSession = httpContext.TryGetSession();
                 if (contextSession is null)
                     return;
 

@@ -92,7 +92,7 @@ namespace NLog.Web.LayoutRenderers
             if (string.IsNullOrEmpty(item))
                 return;
 
-            var httpContext = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
             if (httpContext is null)
                 return;
 

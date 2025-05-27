@@ -64,10 +64,10 @@ namespace NLog.Web.Tests.LayoutRenderers
             if (nullContext)
                 return null;
 
-            var context = new DefaultHttpContext();
-            var httpRequest = SetUpHttpRequest(context);
-            var httpResponse = SetUpHttpResponse(context);
-            return context;
+            var httpContext = new DefaultHttpContext();
+            var httpRequest = SetUpHttpRequest(httpContext);
+            var httpResponse = SetUpHttpResponse(httpContext);
+            return httpContext;
         }
 
         protected virtual HttpRequest SetUpHttpRequest(HttpContext context)

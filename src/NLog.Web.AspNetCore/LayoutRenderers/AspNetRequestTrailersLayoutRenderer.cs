@@ -50,7 +50,7 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequestTrailers = HttpContextAccessor?.HttpContext?.TryGetFeature<IHttpRequestTrailersFeature>();
+            var httpRequestTrailers = HttpContextAccessor?.HttpContext.TryGetFeature<IHttpRequestTrailersFeature>();
             if (httpRequestTrailers is null)
                 return;
 
