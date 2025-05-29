@@ -15,9 +15,11 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
- - AspNetUserClaimLayoutRenderer - Extended with Azure Claims ObjectId + TenantId + AppId (#1069) (@snakefoot)
- - Micro optimization by using is null (#1070) (@snakefoot)
- - Updated dependency NLog.Extensions.Logging v5.4 (#1072) (@snakefoot)List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
+- Added UseNLog extension method for IHostApplicationBuilder (#1080) (@snakefoot)
+- Added AddNLogWeb extension method for IServiceCollection (#1080) (@snakefoot)
+- Updated dependency NLog.Extensions.Logging v5.5 (#1080) (@snakefoot)
+ 
+List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
@@ -72,7 +74,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.4.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.5.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   

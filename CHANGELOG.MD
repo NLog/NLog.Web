@@ -4,6 +4,16 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 5.5 (2025/05/29)
+
+- **NLog.Web.AspNetCore**
+  - [#1078](https://github.com/NLog/NLog.Web/pull/1080) Added UseNLog extension method for IHostApplicationBuilder (#1080) (@snakefoot)
+  - [#1078](https://github.com/NLog/NLog.Web/pull/1080) Added AddNLogWeb extension method for IServiceCollection (#1080) (@snakefoot)
+  - [#1078](https://github.com/NLog/NLog.Web/pull/1080) Updated dependency NLog.Extensions.Logging v5.5 (#1080) (@snakefoot)
+
+- **NLog.Web**
+  - [#1078](https://github.com/NLog/NLog.Web/pull/1080) Updated dependency NLog v5.5 (#1080) (@snakefoot)
+
 ### Version 5.4 (2025/02/02)
 
 - **NLog.Web.AspNetCore**
