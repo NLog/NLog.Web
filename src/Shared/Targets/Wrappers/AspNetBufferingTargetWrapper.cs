@@ -111,7 +111,6 @@ namespace NLog.Web.Targets.Wrappers
         /// Gets or sets the number of log events to be buffered.
         /// </summary>
         /// <docgen category='Buffering Options' order='100' />
-        [DefaultValue(100)]
         public int BufferSize { get; set; } = 100;
 
         /// <summary>
@@ -123,7 +122,6 @@ namespace NLog.Web.Targets.Wrappers
         /// <c>false</c> causes the buffer to never expand and lose the earliest entries in case of overflow.
         /// </remarks>
         /// <docgen category='Buffering Options' order='100' />
-        [DefaultValue(false)]
         public bool GrowBufferAsNeeded { get; set; } = true;
 
         /// <summary>
