@@ -290,6 +290,52 @@ namespace NLog.Web
         }
 
         /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns>IServiceCollection for chaining</returns>
+        public static IServiceCollection AddNLogWeb(this IServiceCollection collection)
+        {
+            return AddNLogWeb(collection, NLogAspNetCoreOptions.Default);
+        }
+
+        /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="options">NLog Logging Provider options</param>
+        /// <returns>IServiceCollection for chaining</returns>
+        public static IServiceCollection AddNLogWeb(this IServiceCollection collection, NLogAspNetCoreOptions options)
+        {
+            Guard.ThrowIfNull(collection);
+            AddNLogLoggerProvider(collection, null, null, options, CreateNLogLoggerProvider);
+            return collection;
+        }
+
+        /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="options">NLog Logging Provider options</param>
+        /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        /// <returns>IServiceCollection for chaining</returns>
+        public static IServiceCollection AddNLogWeb(this IServiceCollection collection, NLogAspNetCoreOptions options, Func<IServiceProvider, LogFactory> factoryBuilder)
+        {
+            Guard.ThrowIfNull(collection);
+            Guard.ThrowIfNull(factoryBuilder);
+            AddNLogLoggerProvider(collection, null, null, options, (serviceProvider, config, env, opt) =>
+            {
+                config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
+
+                // Delay initialization of targets until we have loaded config-settings
+                var logFactory = factoryBuilder(serviceProvider);
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options, logFactory);
+                return provider;
+            });
+            return collection;
+        }
+
+        /// <summary>
         /// Enable NLog as logging provider for Microsoft Extension Logging.
         /// </summary>
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder)
@@ -334,6 +380,55 @@ namespace NLog.Web
 #endif
             return builder;
         }
+
+#if NET8_0_OR_GREATER
+        /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns>IHostApplicationBuilder for chaining</returns>
+        public static IHostApplicationBuilder UseNLog(this IHostApplicationBuilder builder)
+        {
+            Guard.ThrowIfNull(builder);
+            return builder.UseNLog(NLogAspNetCoreOptions.Default);
+        }
+
+        /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        /// <returns>IHostApplicationBuilder for chaining</returns>
+        public static IHostApplicationBuilder UseNLog(this IHostApplicationBuilder builder, NLogAspNetCoreOptions options)
+        {
+            Guard.ThrowIfNull(builder);
+            AddNLogLoggerProvider(builder.Services, builder.Configuration, builder.Environment, options, CreateNLogLoggerProvider);
+            return builder;
+        }
+
+        /// <summary>
+        /// Enable NLog as logging provider for Microsoft Extension Logging
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="options">NLogProviderOptions object to configure NLog behavior</param>
+        /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        /// <returns>IHostApplicationBuilder for chaining</returns>
+        public static IHostApplicationBuilder UseNLog(this IHostApplicationBuilder builder, NLogAspNetCoreOptions options, Func<IServiceProvider, LogFactory> factoryBuilder)
+        {
+            Guard.ThrowIfNull(builder);
+            Guard.ThrowIfNull(factoryBuilder);
+
+            AddNLogLoggerProvider(builder.Services, builder.Configuration, builder.Environment, options, (serviceProvider, config, env, options) =>
+            {
+                config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
+                // Delay initialization of targets until we have loaded config-settings
+                var logFactory = factoryBuilder(serviceProvider);
+                var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options, logFactory);
+                return provider;
+            });
+            return builder;
+        }
+#endif
 
         private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, IHostEnvironment, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         {
