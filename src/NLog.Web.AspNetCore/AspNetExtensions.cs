@@ -342,7 +342,6 @@ namespace NLog.Web
         }
 #endif
 
-        private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, IHostEnvironment, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration? hostConfiguration, IHostEnvironment? hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration?, IHostEnvironment?, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         {
             options = options ?? NLogAspNetCoreOptions.Default;

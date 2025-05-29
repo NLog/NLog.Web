@@ -68,10 +68,6 @@ namespace NLog.Web
                     return Microsoft.Extensions.Logging.LogLevel.Information;
                 }
             }
-            else if (exception is OperationCanceledException)
-            {
-                return Microsoft.Extensions.Logging.LogLevel.Warning;
-            }
             else
             {
                 return Microsoft.Extensions.Logging.LogLevel.Error;

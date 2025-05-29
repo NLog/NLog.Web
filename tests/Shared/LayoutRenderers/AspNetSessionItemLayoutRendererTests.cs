@@ -79,7 +79,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
-                Item = "",
+                Item = " ",
             };
 
             var o = new { b = "c" };
@@ -92,7 +92,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             var appSettingLayoutRenderer = new AspNetSessionItemLayoutRenderer()
             {
-                Item = "",
+                Item = " ",
             };
 
             var o = new { b = "c" };

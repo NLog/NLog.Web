@@ -97,6 +97,15 @@ namespace NLog.Web.LayoutRenderers
         private Func<ISession, string, object?> _sessionValueLookup = (session, key) => GetSessionValue(session, key);   // Skip delegate allocation for ValueType
 
         /// <inheritdoc/>
+        protected override void InitializeLayoutRenderer()
+        {
+            base.InitializeLayoutRenderer();
+
+            if (string.IsNullOrEmpty(Item))
+                throw new NLogConfigurationException("AspNetSessionValue-LayoutRenderer Item-property must be assigned. Lookup blank value not supported.");
+        }
+
+        /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var item = Item;

@@ -28,13 +28,22 @@ namespace NLog.Web.LayoutRenderers
         [DefaultParameter]
         public string Item { get; set; } = string.Empty;
 
+        /// <inheritdoc/>
+        protected override void InitializeLayoutRenderer()
+        {
+            base.InitializeLayoutRenderer();
+
+            if (string.IsNullOrEmpty(Item))
+                throw new NLogConfigurationException("AspNetRequestServerVariable-LayoutRenderer Item-property must be assigned. Lookup blank value not supported.");
+        }
+
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            if (Item != null)
-            {
-                builder.Append(LookupItemValue(Item, HttpContextAccessor?.HttpContext));
-            }
+            if (string.IsNullOrEmpty(Item))
+                return;
+
+            builder.Append(LookupItemValue(Item, HttpContextAccessor?.HttpContext));
         }
 
 #if !ASP_NET_CORE

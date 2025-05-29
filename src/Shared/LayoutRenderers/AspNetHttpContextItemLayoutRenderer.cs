@@ -76,6 +76,15 @@ namespace NLog.Web.LayoutRenderers
         public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <inheritdoc/>
+        protected override void InitializeLayoutRenderer()
+        {
+            base.InitializeLayoutRenderer();
+
+            if (string.IsNullOrEmpty(Item))
+                throw new NLogConfigurationException("AspNetItemValue-LayoutRenderer Item-property must be assigned. Lookup blank value not supported.");
+        }
+
+        /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var item = Item;

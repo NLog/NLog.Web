@@ -30,7 +30,6 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// The header name to check for the Forwarded-For. Default "X-Forwarded-For". Needs <see cref="CheckForwardedForHeader"/>
         /// </summary>
-        [DefaultValue("X-Forwarded-For")]
         public Layout ForwardedForHeader { get; set; } = "X-Forwarded-For";
 
         /// <summary>

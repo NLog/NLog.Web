@@ -26,7 +26,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.Item = string.Empty;
+            renderer.Item = " ";
 
             // Act
             string result = renderer.Render(new LogEventInfo());
