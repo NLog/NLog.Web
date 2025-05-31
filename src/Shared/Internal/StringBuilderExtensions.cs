@@ -8,7 +8,7 @@ namespace NLog.Web
     {
         private const string FormatAsJson = "@";
 
-        internal static void AppendFormattedValue(this StringBuilder destination, object value, string format, IFormatProvider formatProvider, IValueFormatter valueFormatter)
+        internal static void AppendFormattedValue(this StringBuilder destination, object? value, string? format, IFormatProvider? formatProvider, IValueFormatter valueFormatter)
         {
             if (value is string stringValue && string.IsNullOrEmpty(format))
             {

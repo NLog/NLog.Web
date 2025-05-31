@@ -21,7 +21,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.Item = string.Empty;
+            renderer.Item = " ";
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -100,7 +100,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Theory, MemberData(nameof(NestedPropertyData))]
-        public void NestedPropertyRendersValueItem(string itemKey, string variable, object data, object expectedValue)
+        public void NestedPropertyRendersValueItem(string itemKey, string objectPath, object data, object expectedValue)
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -112,10 +112,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items[itemKey].Returns(data);
 #endif
             var culture = CultureInfo.CurrentUICulture;
-            renderer.Item = variable;
-#pragma warning disable CS0618 // Type or member is obsolete
-            renderer.EvaluateAsNestedProperties = true;
-#pragma warning restore CS0618 // Type or member is obsolete
+            renderer.Item = itemKey;
+            renderer.ObjectPath = objectPath;
             renderer.Culture = culture;
 
             // Act
@@ -126,7 +124,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         }
 
         [Theory, MemberData(nameof(NestedPropertyData))]
-        public void NestedPropertyRendersValueObjectPath(string itemKey, string variable, object data,
+        public void NestedPropertyRendersValueObjectPath(string itemKey, string objectPath, object data,
             object expectedValue)
         {
             // Arrange
@@ -139,10 +137,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items[itemKey].Returns(data);
 #endif
             var culture = CultureInfo.CurrentUICulture;
-            renderer.Item = variable;
-#pragma warning disable CS0618 // Type or member is obsolete
-            renderer.EvaluateAsNestedProperties = true;
-#pragma warning restore CS0618 // Type or member is obsolete
+            renderer.Item = itemKey;
+            renderer.ObjectPath = objectPath;
             renderer.Culture = culture;
 
             // Act
@@ -168,11 +164,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             get
             {
-                yield return new object[] {"key", "key.Item1", Tuple.Create("value"), "value"};
-                yield return new object[] {"key", "key.Item1.Item1", Tuple.Create(Tuple.Create(1)), 1};
+                yield return new object[] {"key", "Item1", Tuple.Create("value"), "value"};
+                yield return new object[] {"key", "Item1.Item1", Tuple.Create(Tuple.Create(1)), 1};
             }
         }
-
 
         // Nested Properties Tests
         internal class Person
@@ -211,11 +206,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             httpContext.Items.Contains("person").Returns(true);
             httpContext.Items["person"].Returns(person);
 #endif
-            renderer.Item = "person.Name.First";
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            renderer.EvaluateAsNestedProperties = true;
-#pragma warning restore CS0618 // Type or member is obsolete
+            renderer.Item = "person";
+            renderer.ObjectPath = "Name.First";
 
             // Act
             string result = renderer.Render(new LogEventInfo());
@@ -252,10 +244,6 @@ namespace NLog.Web.Tests.LayoutRenderers
 #endif
             renderer.Item = "person";
             renderer.ObjectPath = "Name.Last";
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            renderer.EvaluateAsNestedProperties = false;
-#pragma warning restore CS0618 // Type or member is obsolete
 
             // Act
             string result = renderer.Render(new LogEventInfo());

@@ -28,7 +28,7 @@ namespace NLog.Web.LayoutRenderers
         const int HttpStatusCodeHigh = 999;
 
         private string[] FormatMapper => _formatMapper ?? (_formatMapper = Enumerable.Range(0, HttpStatusCodeHigh + 1).Select(s => ((HttpStatusCode)s).ToString(Format)).ToArray());
-        private string[] _formatMapper;
+        private string[]? _formatMapper;
 
         /// <summary>
         /// A valid enumeration format string, defaults to integer format
@@ -58,14 +58,14 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
+            var httpResponse = HttpContextAccessor?.HttpContext.TryGetResponse();
             if (httpResponse is null)
                 return;
 
             builder.Append(ConvertToString(httpResponse.StatusCode));
         }
 
-        private string ConvertToString(int httpStatusCode)
+        private string? ConvertToString(int httpStatusCode)
         {
             try
             {

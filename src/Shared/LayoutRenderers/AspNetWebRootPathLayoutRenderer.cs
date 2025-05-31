@@ -41,13 +41,13 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
-        internal IWebHostEnvironment WebHostEnvironment
+        internal IWebHostEnvironment? WebHostEnvironment
         {
             get => _webHostEnvironment ?? (_webHostEnvironment = ResolveHostEnvironment());
             set => _webHostEnvironment = value;
         }
-        private IWebHostEnvironment _webHostEnvironment;
-        private string _webRootPath;
+        private IWebHostEnvironment? _webHostEnvironment;
+        private string? _webRootPath;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -56,7 +56,7 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(webRootPath);
         }
 
-        private IWebHostEnvironment ResolveHostEnvironment()
+        private IWebHostEnvironment? ResolveHostEnvironment()
         {
 #if ASP_NET_CORE
             return ServiceLocator.ResolveService<IWebHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
@@ -65,7 +65,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
         }
 
-        private string ResolveWebRootPath()
+        private string? ResolveWebRootPath()
         {
 #if ASP_NET_CORE
             var webRootPath = WebHostEnvironment?.WebRootPath;

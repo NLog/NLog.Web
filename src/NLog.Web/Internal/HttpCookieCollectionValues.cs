@@ -7,7 +7,7 @@ namespace NLog.Web.Internal
 {
     internal static class HttpCookieCollectionValues
     {
-        internal static IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies, List<string> cookieNames, HashSet<string> excludeNames, bool expandMultiValue)
+        internal static IEnumerable<KeyValuePair<string, string?>> GetCookieValues(HttpCookieCollection cookies, List<string>? cookieNames, HashSet<string> excludeNames, bool expandMultiValue)
         {
             if (cookieNames?.Count > 0)
             {
@@ -19,7 +19,7 @@ namespace NLog.Web.Internal
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetCookieNameValues(HttpCookieCollection cookies, List<string> cookieNames, bool expandMultiValue)
+        private static IEnumerable<KeyValuePair<string, string?>> GetCookieNameValues(HttpCookieCollection cookies, List<string> cookieNames, bool expandMultiValue)
         {
             foreach (var cookieName in cookieNames)
             {
@@ -33,22 +33,22 @@ namespace NLog.Web.Internal
                     if (values?.Count > 1)
                     {
                         foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
-                            yield return new KeyValuePair<string, string>(cookieValue.Key, cookieValue.Value);
+                            yield return new KeyValuePair<string, string?>(cookieValue.Key, cookieValue.Value);
                         continue;
                     }
                 }
 
-                yield return new KeyValuePair<string, string>(httpCookie.Name, httpCookie.Value);
+                yield return new KeyValuePair<string, string?>(httpCookie.Name, httpCookie.Value);
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetCookieAllValues(HttpCookieCollection cookies, HashSet<string> excludeNames, bool expandMultiValue)
+        private static IEnumerable<KeyValuePair<string, string?>> GetCookieAllValues(HttpCookieCollection cookies, HashSet<string> excludeNames, bool expandMultiValue)
         {
-            bool checkForExclude = excludeNames?.Count > 0;
+            var checkForExclude = excludeNames?.Count > 0 ? excludeNames : null;
 
             foreach (string cookieName in cookies.Keys)
             {
-                if (checkForExclude && excludeNames.Contains(cookieName))
+                if (checkForExclude?.Contains(cookieName) == true)
                     continue;
 
                 var httpCookie = cookies[cookieName];
@@ -61,12 +61,12 @@ namespace NLog.Web.Internal
                     if (values?.Count > 1)
                     {
                         foreach (var cookieValue in GetCookieMultiValues(httpCookie.Name, values))
-                            yield return new KeyValuePair<string, string>(cookieValue.Key, cookieValue.Value);
+                            yield return new KeyValuePair<string, string?>(cookieValue.Key, cookieValue.Value);
                         continue;
                     }
                 }
 
-                yield return new KeyValuePair<string, string>(httpCookie.Name, httpCookie.Value);
+                yield return new KeyValuePair<string, string?>(httpCookie.Name, httpCookie.Value);
             }
         }
 
@@ -111,7 +111,7 @@ namespace NLog.Web.Internal
             }
         }
 
-        internal static IEnumerable<HttpCookie> GetVerboseCookieValues(HttpCookieCollection cookies, List<string> cookieNames, HashSet<string> excludeNames, bool expandMultiValue)
+        internal static IEnumerable<HttpCookie> GetVerboseCookieValues(HttpCookieCollection cookies, List<string>? cookieNames, HashSet<string> excludeNames, bool expandMultiValue)
         {
             if (cookieNames?.Count > 0)
             {
@@ -145,10 +145,10 @@ namespace NLog.Web.Internal
 
         private static IEnumerable<HttpCookie> GetCookieVerboseAllValues(HttpCookieCollection cookies, HashSet<string> excludeNames, bool expandMultiValue)
         {
-            bool checkForExclude = excludeNames?.Count > 0;
+            var checkForExclude = excludeNames?.Count > 0 ? excludeNames : null;
             foreach (string cookieName in cookies.Keys)
             {
-                if (checkForExclude && excludeNames.Contains(cookieName))
+                if (checkForExclude?.Contains(cookieName) == true)
                     continue;
 
                 var httpCookie = cookies[cookieName];

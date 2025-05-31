@@ -22,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
         {
             try
             {
-                var httpContext = HttpContextAccessor.HttpContext;
+                var httpContext = HttpContextAccessor?.HttpContext;
                 if (httpContext?.User?.Identity?.IsAuthenticated == true)
                 {
                     builder.Append('1');

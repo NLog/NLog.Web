@@ -165,7 +165,7 @@ namespace NLog.Web.Tests
             defaultContext.Request.ContentType = "text/plain";
 
             // Act
-            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next,NLogRequestPostedBodyMiddlewareOptions.Default);
+            var middlewareInstance = new NLogRequestPostedBodyMiddleware(Next, NLogRequestPostedBodyMiddlewareOptions.Default);
             middlewareInstance.Invoke(defaultContext).Wait(5000);
 
             // Assert

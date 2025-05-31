@@ -10,7 +10,7 @@ namespace NLog.Web
         /// <summary>
         /// HttpContext of the current request.
         /// </summary>
-        public HttpContextBase HttpContext
+        public HttpContextBase? HttpContext
         {
             get
             {
