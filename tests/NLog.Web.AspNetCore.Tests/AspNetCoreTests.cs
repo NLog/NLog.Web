@@ -25,14 +25,39 @@ namespace NLog.Web.Tests
             LogManager.Configuration = null;
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void UseNLogShouldLogTest(bool useNLogWeb)
+        [Fact]
+        public void UseNLogShouldLogTest()
+        {
+            Assert.True(ShouldLogTest(() => CreateWebHost()));
+        }
+
+        [Fact]
+        public void AddNLogWebShouldLogTest()
+        {
+            Assert.True(ShouldLogTest(() =>
+            {
+                return CreateWebHostBuilder()
+                    .ConfigureLogging(builder => builder.ClearProviders().AddNLogWeb())
+                    .Build();
+            }));
+        }
+
+        [Fact]
+        public void AddNLogWebServiceShouldLogTest()
+        {
+            Assert.True(ShouldLogTest(() =>
+            {
+                return CreateWebHostBuilder()
+                    .ConfigureServices(services => services.AddNLogWeb())
+                    .Build();
+            }));
+        }
+
+        private bool ShouldLogTest(Func<IWebHost> webHostBuilder)
         {
             LogManager.Configuration = null;
 
-            var webhost = useNLogWeb ? CreateWebHost() : CreateWebHostAddNLogWeb();
+            var webhost = webHostBuilder.Invoke();
 
             var loggerFact = GetLoggerFactory(webhost.Services);
 
@@ -49,7 +74,8 @@ namespace NLog.Web.Tests
             var logged = target.Logs;
 
             Assert.Single(logged);
-            Assert.Equal($"logger1|error1|{GetType()}.{nameof(UseNLogShouldLogTest)}", logged.First());
+            Assert.Equal($"logger1|error1|{GetType()}.{nameof(ShouldLogTest)}", logged.First());
+            return logged.Count == 1;
         }
 
         [Fact]
@@ -419,13 +445,6 @@ namespace NLog.Web.Tests
         {
             return CreateWebHostBuilder()
                 .UseNLog(options)
-                .Build();
-        }
-
-        private static IWebHost CreateWebHostAddNLogWeb()
-        {
-            return CreateWebHostBuilder()
-                .ConfigureLogging(builder => builder.ClearProviders().AddNLogWeb())
                 .Build();
         }
 

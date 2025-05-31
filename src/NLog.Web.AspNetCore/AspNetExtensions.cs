@@ -124,11 +124,7 @@ namespace NLog.Web
         public static ILoggingBuilder AddNLogWeb(this ILoggingBuilder builder, NLogAspNetCoreOptions options)
         {
             Guard.ThrowIfNull(builder);
-
-            AddNLogLoggerProvider(builder.Services, null, null, options, (serviceProvider, config, env, opt) =>
-            {
-                return CreateNLogLoggerProvider(serviceProvider, config, env, opt);
-            });
+            AddNLogLoggerProvider(builder.Services, null, null, options, CreateNLogLoggerProvider);
             return builder;
         }
 
@@ -351,7 +347,6 @@ namespace NLog.Web
         public static IWebHostBuilder UseNLog(this IWebHostBuilder builder, NLogAspNetCoreOptions options)
         {
             Guard.ThrowIfNull(builder);
-
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment as IHostEnvironment, options, CreateNLogLoggerProvider));
             return builder;
         }
