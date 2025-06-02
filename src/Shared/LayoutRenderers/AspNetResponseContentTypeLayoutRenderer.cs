@@ -16,9 +16,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetResponseContentTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpResponse = HttpContextAccessor.HttpContext.TryGetResponse();
+            var httpResponse = HttpContextAccessor?.HttpContext.TryGetResponse();
             if (httpResponse is null)
                 return;
 

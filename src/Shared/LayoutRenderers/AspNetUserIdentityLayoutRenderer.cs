@@ -21,11 +21,11 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetUserIdentityLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             try
             {
-                var identity = HttpContextAccessor.HttpContext?.User?.Identity;
+                var identity = HttpContextAccessor?.HttpContext?.User?.Identity;
                 if (identity is null)
                 {
                     InternalLogger.Debug("aspnet-user-identity - HttpContext User Identity is null");

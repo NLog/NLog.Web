@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -46,11 +45,7 @@ namespace NLog.Web.LayoutRenderers
         }
 #endif
 
-        /// <summary>
-        /// Validates that the HttpContext is available and delegates append to subclasses.<see cref="StringBuilder" />.
-        /// </summary>
-        /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
-        /// <param name="logEvent">Logging event.</param>
+        /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             if (!HttpContextAccessor.HasActiveHttpContext())
@@ -59,7 +54,9 @@ namespace NLog.Web.LayoutRenderers
                 return;
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             DoAppend(builder, logEvent);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -70,7 +67,11 @@ namespace NLog.Web.LayoutRenderers
         /// </remarks>
         /// <param name="builder">The <see cref="StringBuilder" /> to append the rendered data to.</param>
         /// <param name="logEvent">Logging event.</param>
-        protected abstract void DoAppend(StringBuilder builder, LogEventInfo logEvent);
+        [Obsolete("Instead override Append-method, and manual handle when HttpContextAccessor has no valid HttpContext. Marked obsolete with NLog v6.0")]
+        protected virtual void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        {
+            // SONAR: Nothing here in obsolete method
+        }
 
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()

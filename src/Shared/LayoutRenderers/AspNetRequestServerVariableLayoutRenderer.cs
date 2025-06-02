@@ -30,11 +30,11 @@ namespace NLog.Web.LayoutRenderers
         public string Item { get; set; }
 
         /// <inheritdoc />
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             if (Item != null)
             {
-                builder.Append(LookupItemValue(Item, HttpContextAccessor.HttpContext));
+                builder.Append(LookupItemValue(Item, HttpContextAccessor?.HttpContext));
             }
         }
 
@@ -47,7 +47,7 @@ namespace NLog.Web.LayoutRenderers
 #elif NETCOREAPP3_0_OR_GREATER
         private static string LookupItemValue(string key, HttpContext httpContext)
         {
-            return httpContext?.TryGetFeature<IServerVariablesFeature>()?[key];
+            return httpContext.TryGetFeature<IServerVariablesFeature>()?[key];
         }
 #endif
     }

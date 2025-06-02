@@ -15,15 +15,13 @@ namespace NLog.Web.LayoutRenderers
     public abstract class AspNetMvcLayoutRendererBase : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-            if (context == null)
-            {
+            var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext is null)
                 return;
-            }
 
-            MvcDoAppend(builder, logEvent, context);
+            MvcDoAppend(builder, logEvent, httpContext);
         }
 
         /// <summary>

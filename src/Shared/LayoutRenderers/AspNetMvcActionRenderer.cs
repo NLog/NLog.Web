@@ -20,17 +20,17 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetMvcActionRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var key = "action";
 
-            var context = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
 
 #if !ASP_NET_CORE
             object actionValue = null;
-            RouteTable.Routes?.GetRouteData(context)?.Values?.TryGetValue(key, out actionValue);
+            RouteTable.Routes?.GetRouteData(httpContext)?.Values?.TryGetValue(key, out actionValue);
 #else
-            var actionValue = context?.GetRouteValue(key);
+            var actionValue = httpContext?.GetRouteValue(key);
 #endif
             builder.Append(actionValue?.ToString());
         }

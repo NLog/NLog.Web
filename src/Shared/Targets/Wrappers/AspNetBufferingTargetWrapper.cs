@@ -234,14 +234,14 @@ namespace NLog.Web.Targets.Wrappers
             try
             {
 #if ASP_NET_CORE
-                var context = HttpContextAccessor?.HttpContext;
+                var httpContext = HttpContextAccessor?.HttpContext;
 #else
-                var context = HttpContext.Current;
+                var httpContext = HttpContext.Current;
 #endif
-                if (context is null)
+                if (httpContext is null)
                     return null;
 
-                var targetBufferList = GetTargetBufferList(context);
+                var targetBufferList = GetTargetBufferList(httpContext);
                 return targetBufferList?.GetRequestBuffer(this);
             }
             catch (Exception ex)

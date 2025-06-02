@@ -26,6 +26,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullHttpContextRendersEmptyString()
         {
             var renderer = new AspNetRequestValueLayoutRenderer();
+            renderer.HttpContextAccessor = new FakeHttpContextAccessor((HttpContext)null);
 
             string result = renderer.Render(new LogEventInfo());
 

@@ -61,10 +61,10 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var context = HttpContextAccessor.HttpContext;
-            if (context is null)
+            var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext is null)
                 return;
 
 #if ASP_NET_CORE && !NETCOREAPP3_0_OR_GREATER
@@ -72,7 +72,7 @@ namespace NLog.Web.LayoutRenderers
 #else
 
 #if !ASP_NET_CORE
-            var duration = GetDuration(context.Timestamp);
+            var duration = GetDuration(httpContext.Timestamp);
 #else
             var duration = GetDuration(System.Diagnostics.Activity.Current);
 #endif

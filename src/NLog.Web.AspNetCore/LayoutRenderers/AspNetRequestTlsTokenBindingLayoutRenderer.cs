@@ -38,9 +38,9 @@ namespace NLog.Web.LayoutRenderers
         public ByteArrayFormatProperty Format { get; set; }
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var tlsTokenBinding = HttpContextAccessor.HttpContext.TryGetFeature<ITlsTokenBindingFeature>();
+            var tlsTokenBinding = HttpContextAccessor?.HttpContext.TryGetFeature<ITlsTokenBindingFeature>();
             if (tlsTokenBinding is null)
                 return;
 

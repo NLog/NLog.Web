@@ -25,9 +25,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestHttpTransportTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var transportFeature = HttpContextAccessor.HttpContext.TryGetFeature<IHttpTransportFeature>();
+            var transportFeature = HttpContextAccessor?.HttpContext.TryGetFeature<IHttpTransportFeature>();
             var value = transportFeature?.TransportType ?? Microsoft.AspNetCore.Http.Connections.HttpTransportType.None;
             if (value != Microsoft.AspNetCore.Http.Connections.HttpTransportType.None)
                 builder.Append(value);

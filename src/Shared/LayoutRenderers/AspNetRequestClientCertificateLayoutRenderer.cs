@@ -25,9 +25,9 @@ namespace NLog.Web.LayoutRenderers
         public bool Verbose { get; set; }
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
 #if ASP_NET_CORE
             var connection = httpContext?.Connection;
             builder.Append(connection?.ClientCertificate?.ToString(Verbose));

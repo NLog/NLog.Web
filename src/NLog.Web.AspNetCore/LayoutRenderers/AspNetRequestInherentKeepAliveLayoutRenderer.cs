@@ -24,9 +24,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestInherentKeepAliveLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var connectionFeature = HttpContextAccessor.HttpContext.TryGetFeature<IConnectionInherentKeepAliveFeature>();
+            var connectionFeature = HttpContextAccessor?.HttpContext.TryGetFeature<IConnectionInherentKeepAliveFeature>();
             var value = connectionFeature?.HasInherentKeepAlive ?? false;
             builder.Append(value ? '1' : '0');
         }

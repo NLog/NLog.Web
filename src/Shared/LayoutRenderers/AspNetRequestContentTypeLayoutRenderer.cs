@@ -16,9 +16,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestContentTypeLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+            var httpRequest = HttpContextAccessor?.HttpContext.TryGetRequest();
             var contentType = httpRequest?.ContentType;
             builder.Append(contentType);
         }

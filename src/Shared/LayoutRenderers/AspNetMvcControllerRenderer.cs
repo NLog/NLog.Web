@@ -20,17 +20,17 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetMvcControllerRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var key = "controller";
 
-            var context = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
 
 #if !ASP_NET_CORE
             object controllerValue = null;
-            RouteTable.Routes?.GetRouteData(context)?.Values?.TryGetValue(key, out controllerValue);
+            RouteTable.Routes?.GetRouteData(httpContext)?.Values?.TryGetValue(key, out controllerValue);
 #else
-            var controllerValue = context?.GetRouteValue(key);
+            var controllerValue = httpContext?.GetRouteValue(key);
 #endif
             builder.Append(controllerValue?.ToString());
         }

@@ -68,9 +68,9 @@ namespace NLog.Web.LayoutRenderers
         public string Header { get; set; }
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequest = HttpContextAccessor.HttpContext.TryGetRequest();
+            var httpRequest = HttpContextAccessor?.HttpContext.TryGetRequest();
             if (httpRequest is null)
                 return;
 
@@ -203,7 +203,7 @@ namespace NLog.Web.LayoutRenderers
 #if NETCOREAPP3_0_OR_GREATER
         private static string LookupServerVariableValue(string key, HttpRequest httpRequest)
         {
-            return httpRequest?.HttpContext?.TryGetFeature<IServerVariablesFeature>()?[key];
+            return httpRequest?.HttpContext.TryGetFeature<IServerVariablesFeature>()?[key];
         }
 #endif
     }

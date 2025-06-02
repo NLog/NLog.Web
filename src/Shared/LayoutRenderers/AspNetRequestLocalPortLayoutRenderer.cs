@@ -20,9 +20,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestLocalPortLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
 #if ASP_NET_CORE
             var connection = httpContext.TryGetConnection();
             if (connection is null)

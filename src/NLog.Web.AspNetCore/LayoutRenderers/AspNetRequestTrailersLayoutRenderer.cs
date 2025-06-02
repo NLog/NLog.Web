@@ -48,9 +48,9 @@ namespace NLog.Web.LayoutRenderers
         public ISet<string> Exclude { get; set; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpRequestTrailers = HttpContextAccessor.HttpContext.TryGetFeature<IHttpRequestTrailersFeature>();
+            var httpRequestTrailers = HttpContextAccessor?.HttpContext.TryGetFeature<IHttpRequestTrailersFeature>();
             if (httpRequestTrailers is null)
                 return;
 

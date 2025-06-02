@@ -19,9 +19,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetTraceIdentifierLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc />
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
             builder.Append(LookupTraceIdentifier(httpContext));
         }
 
@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
             if (IgnoreActivityId)
                 return httpContext?.TraceIdentifier;
             else
-                return System.Diagnostics.Activity.Current?.Id ?? httpContext.TraceIdentifier;
+                return System.Diagnostics.Activity.Current?.Id ?? httpContext?.TraceIdentifier;
         }
 #elif ASP_NET_CORE
         private string LookupTraceIdentifier(HttpContext httpContext)

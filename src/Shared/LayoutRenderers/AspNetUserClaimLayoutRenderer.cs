@@ -96,11 +96,11 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             try
             {
-                var claimsPrincipal = HttpContextAccessor.HttpContext?.User;
+                var claimsPrincipal = HttpContextAccessor?.HttpContext?.User;
                 if (claimsPrincipal is null)
                 {
                     InternalLogger.Debug("aspnet-user-claim - HttpContext User is null");

@@ -58,9 +58,9 @@ namespace NLog.Web.LayoutRenderers
         private int _checkForwardedForHeaderOffset;
 
         /// <inheritdoc/>
-        protected override void DoAppend(StringBuilder builder, LogEventInfo logEvent)
+        protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor.HttpContext;
+            var httpContext = HttpContextAccessor?.HttpContext;
 
             var httpRequest = httpContext.TryGetRequest();
             if (httpRequest is null)
@@ -73,7 +73,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
                 ip = httpRequest.ServerVariables?["REMOTE_ADDR"];
 #else
-                ip = httpContext.Connection?.RemoteIpAddress?.ToString();
+                ip = httpContext?.Connection?.RemoteIpAddress?.ToString();
 #endif
             }
 
