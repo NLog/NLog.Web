@@ -8,8 +8,6 @@ using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 #endif
-using System.Xml;
-using NLog.Config;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {

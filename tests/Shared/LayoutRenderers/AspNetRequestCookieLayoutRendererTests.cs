@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if !ASP_NET_CORE
+using System.Web;
+using NSubstitute;
+#else
+using Microsoft.Extensions.Primitives;
+#endif
 using NLog.Web.LayoutRenderers;
 using NLog.Web.Enums;
 using Xunit;
 
-#if !ASP_NET_CORE
-using NSubstitute;
-using System.Web;
-#else
-using Microsoft.Extensions.Primitives;
-#endif
-
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetCookieLayoutRendererTests : TestInvolvingAspNetHttpContext
+    public class AspNetRequestCookieLayoutRendererTests : TestInvolvingAspNetHttpContext
     {
         [Fact]
         public void NullKeyRendersAllCookies()
