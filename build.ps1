@@ -3,7 +3,7 @@
 dotnet --version
 
 $versionPrefix = "6.0.0" # Also update version for minor versions in appveyor.yml 
-$versionSuffix = ""
+$versionSuffix = "rc2"
 $versionFile = $versionPrefix + "." + ${env:APPVEYOR_BUILD_NUMBER}
 if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
     $versionPrefix = $versionFile

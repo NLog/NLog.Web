@@ -15,7 +15,6 @@
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.*" AllowExplicitVersion="true" />
-    <PackageReference Include="NLog" Version="6.0.0-rc1" />
   </ItemGroup>
   
   <ItemGroup>

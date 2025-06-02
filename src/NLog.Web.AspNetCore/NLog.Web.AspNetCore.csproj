@@ -16,11 +16,15 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Added UseNLog extension method for IHostApplicationBuilder (#1080) (@snakefoot)
-- Added AddNLogWeb extension method for IServiceCollection (#1080) (@snakefoot)
-- Updated dependency NLog.Extensions.Logging v5.5 (#1080) (@snakefoot)
+- Updated dependency NLog v6.0 RC2
+- Removed support for .NET Core 3.1 + .NET v5
+- Enabled nullable references
+- Removed obsolete extension-methods to register NLog as Logging Provider.
+- Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
+- Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
+- Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
  
-List of major changes in NLog 5.0: https://nlog-project.org/2022/05/16/nlog-5-0-finally-ready.html
+List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
@@ -69,8 +73,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.0-rc1" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.5.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.0-rc2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   
@@ -84,12 +87,6 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="4.5.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="ILLink.Descriptors.xml">
-      <LogicalName>ILLink.Descriptors.xml</LogicalName>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

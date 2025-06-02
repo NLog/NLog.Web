@@ -71,7 +71,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.0-rc1" />
+    <PackageReference Include="NLog" Version="6.0.0-rc2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>

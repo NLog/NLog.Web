@@ -102,7 +102,7 @@ namespace NLog.Web.LayoutRenderers
             base.InitializeLayoutRenderer();
 
             if (string.IsNullOrEmpty(Item))
-                throw new NLogConfigurationException("AspNetSessionValue-LayoutRenderer Item-property must be assigned. Lookup blank value not supported.");
+                throw new NLogConfigurationException("AspNetSessionItem-LayoutRenderer Item-property must be assigned. Lookup blank value not supported.");
         }
 
         /// <inheritdoc/>

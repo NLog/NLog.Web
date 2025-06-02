@@ -49,7 +49,13 @@ namespace NLog.Web
 
         internal void OnBeginRequest(HttpContext? context)
         {
-            if (context != null && ShouldCaptureRequestBody(context))
+            if (context is null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext is null");
+                return;
+            }
+
+            if (ShouldCaptureRequestBody(context))
             {
                 var requestBody = GetString(context.Request.InputStream);
                 if (!string.IsNullOrEmpty(requestBody))
@@ -59,14 +65,8 @@ namespace NLog.Web
             }
         }
 
-        private bool ShouldCaptureRequestBody(HttpContext? context)
+        private bool ShouldCaptureRequestBody(HttpContext context)
         {
-            if (context is null)
-            {
-                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext is null");
-                return false;
-            }
-
             var httpRequest = context.Request;
             if (httpRequest is null)
             {
