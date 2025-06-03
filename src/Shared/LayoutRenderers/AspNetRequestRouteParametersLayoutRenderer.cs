@@ -25,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-RouteParameters-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-routeparameters")]
-    public class AspNetRequestRouteParametersRenderer : AspNetLayoutMultiValueRendererBase
+    public class AspNetRequestRouteParametersLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// List Route Parameter' Key to be rendered from Request.

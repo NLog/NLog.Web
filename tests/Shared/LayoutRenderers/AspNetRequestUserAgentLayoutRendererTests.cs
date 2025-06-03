@@ -16,24 +16,26 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestHttpMethodRendererTests : LayoutRenderersTestBase<AspNetRequestHttpMethodRenderer>
+    public class AspNetRequestUserAgentLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestUserAgentLayoutRenderer>
     {
         [Fact]
-        public void HttpMethod_Set_Renderer()
+        public void NotNullUserAgentRendersEmptyString()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 
-#if ASP_NET_CORE
-            httpContext.Request.Method.Returns("POST");
+
+#if !ASP_NET_CORE
+             httpContext.Request.UserAgent.Returns("TEST");
 #else
-            httpContext.Request.HttpMethod.Returns("POST");
+            var headers = new HeaderDict {{"User-Agent", new StringValues("TEST")}};
+            httpContext.Request.Headers.Returns((callinfo) => headers);
 #endif
             // Act
             string result = renderer.Render(new LogEventInfo());
 
             // Assert
-            Assert.Equal("POST", result);
+            Assert.Equal("TEST", result);
         }
     }
 }

@@ -15,12 +15,12 @@ using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class IISInstanceNameLayoutRendererTests : TestBase
+    public class IISSiteNameLayoutRendererTests : TestBase
     {
         [Fact]
         public void SuccessTest()
         {
-            var renderer = new IISInstanceNameLayoutRenderer();
+            var renderer = new IISSiteNameLayoutRenderer();
 
 #if !ASP_NET_CORE
             var hostEnvironment = new FakeHostEnvironment();
@@ -39,7 +39,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         [Fact]
         public void NullTest()
         {
-            var renderer = new IISInstanceNameLayoutRenderer();
+            var renderer = new IISSiteNameLayoutRenderer();
 
 #if !ASP_NET_CORE
             var hostEnvironment = new FakeHostEnvironment();

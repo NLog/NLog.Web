@@ -13,7 +13,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-UserAgent-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-useragent")]
-    public class AspNetRequestUserAgent : AspNetLayoutRendererBase
+    public class AspNetRequestUserAgentLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)

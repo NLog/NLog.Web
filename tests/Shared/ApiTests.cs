@@ -16,7 +16,7 @@
     public class ApiTests
     {
         private readonly Type[] allTypes;
-        private readonly Assembly nlogWebAssembly = typeof(AspNetRequestValueLayoutRenderer).Assembly;
+        private readonly Assembly nlogWebAssembly = typeof(AspNetRequestLayoutRenderer).Assembly;
         private readonly Dictionary<Type, int> typeUsageCount = new Dictionary<Type, int>();
 
         public ApiTests()
@@ -225,28 +225,6 @@
         [Fact]
         public void ValidateLayoutRendererTypeAlias()
         {
-            // These class-names should be repaired with next major version bump
-            // Do NOT add more incorrect class-names to this exlusion-list
-            HashSet<string> oldFaultyClassNames = new HashSet<string>()
-            {
-                "AspNetApplicationValueLayoutRenderer",
-                "AspNetItemValueLayoutRenderer",
-                "AspNetMvcActionRenderer",
-                "AspNetMvcControllerRenderer",
-                "AspNetRequestContentLength",
-                "AspNetRequestHttpMethodRenderer",
-                "AspNetQueryStringLayoutRenderer",
-                "AspNetRequestReferrerRenderer",
-                "AspNetRequestRouteParametersRenderer",
-                "AspNetRequestUrlRenderer",
-                "AspNetRequestUserAgent",
-                "AspNetRequestValueLayoutRenderer",
-                "AspNetResponseContentLength",
-                "AspNetResponseStatusCodeRenderer",
-                "AspNetSessionValueLayoutRenderer",
-                "IISInstanceNameLayoutRenderer",
-            };
-
             foreach (Type type in allTypes)
             {
                 if (type.IsSubclassOf(typeof(LayoutRenderer)))
@@ -262,14 +240,9 @@
                     else
                     {
                         Assert.False(type.IsAbstract, $"{type} with LayoutRendererAttribute cannot be abstract");
-
-                        if (!oldFaultyClassNames.Contains(type.Name))
-                        {
-                            var typeAlias = layoutRendererAttributes.First().Name.Replace("-", "");
-                            Assert.Equal(typeAlias + "LayoutRenderer", type.Name, StringComparer.OrdinalIgnoreCase);
-                        }
+                        var typeAlias = layoutRendererAttributes.First().Name.Replace("-", "");
+                        Assert.Equal(typeAlias + "LayoutRenderer", type.Name, StringComparer.OrdinalIgnoreCase);
                     }
-
                     Assert.Equal("NLog.Web.LayoutRenderers", type.Namespace);
                 }
             }

@@ -7,7 +7,7 @@ namespace NLog.Web.Internal
 
     /// <summary>
     /// Manages if a LayoutRenderer can be called recursively using AsyncLocal
-    /// Example used by <see cref="NLog.Web.LayoutRenderers.AspNetSessionValueLayoutRenderer"/>
+    /// Example used by <see cref="NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer"/>
     /// </summary>
     internal readonly struct ReEntrantScopeLock : IDisposable
     {

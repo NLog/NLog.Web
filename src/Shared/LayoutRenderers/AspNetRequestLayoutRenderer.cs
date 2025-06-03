@@ -26,7 +26,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request")]
-    public class AspNetRequestValueLayoutRenderer : AspNetLayoutRendererBase
+    public class AspNetRequestLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
         /// Gets or sets the HttpContext Item to be rendered.

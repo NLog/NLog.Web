@@ -25,7 +25,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-QueryString-Layout-Renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-request-querystring")]
-    public class AspNetQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
+    public class AspNetRequestQueryStringLayoutRenderer : AspNetLayoutMultiValueRendererBase
     {
         /// <summary>
         /// List Query Strings' Key to be rendered from Request.
@@ -52,9 +52,9 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AspNetQueryStringLayoutRenderer" /> class.
+        /// Initializes a new instance of the <see cref="AspNetRequestQueryStringLayoutRenderer" /> class.
         /// </summary>
-        public AspNetQueryStringLayoutRenderer()
+        public AspNetRequestQueryStringLayoutRenderer()
         {
             Exclude = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }

@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
     [LayoutRenderer("iis-site-name")]
     [ThreadAgnostic]
-    public class IISInstanceNameLayoutRenderer : LayoutRenderer
+    public class IISSiteNameLayoutRenderer : LayoutRenderer
     {
         /// <summary>
         /// Provides access to the current IHostEnvironment

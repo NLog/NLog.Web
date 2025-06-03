@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 #if !ASP_NET_CORE
 using System.Web;
+using System.Web.Routing;
 using System.Collections.Specialized;
 using System.Web.SessionState;
 #else
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http.Features;
 #endif
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
@@ -17,7 +18,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetMvcActionRendererTests : LayoutRenderersTestBase<AspNetMvcActionRenderer>
+    public class AspNetMvcControllerLayoutRendererTests : LayoutRenderersTestBase<AspNetMvcControllerLayoutRenderer>
     {
         [Fact]
         public void NullRoutesRenderersEmptyString()
@@ -34,7 +35,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #if ASP_NET_CORE
         [Fact]
-        public void ActionKeyRendersRouteParameter()
+        public void ControllerKeyRendersRouteParameter()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
@@ -45,7 +46,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal("actionName", result);
+            Assert.Equal("controllerName", result);
         }
 
         private void SetupRouteParameters(HttpContext httpContext)
@@ -60,7 +61,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             collection.Set(routingValuesFeature);
 #endif
             httpContext.Features.Returns(collection);
-            
+
             routeData.Values.Add("action", "actionName");
             routeData.Values.Add("controller", "controllerName");
             routingFeature.RouteData.Returns(routeData);

@@ -1,41 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using NLog.Web.LayoutRenderers;
-using Xunit;
-using NSubstitute;
-#if ASP_NET_CORE
+using System.Globalization;
+#if !ASP_NET_CORE
+using System.Web;
+using System.Collections.Specialized;
+using System.Web.SessionState;
+#else
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
 #endif
+using NLog.Web.LayoutRenderers;
+using NSubstitute;
+using Xunit;
+
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public class AspNetRequestRouteParametersRendererTests : LayoutRenderersTestBase<AspNetRequestRouteParametersRenderer>
+    public class AspNetMvcActionLayoutRendererTests : LayoutRenderersTestBase<AspNetMvcActionLayoutRenderer>
     {
-#if ASP_NET_CORE
         [Fact]
-        public void NullKeyRendersAllRouteParameters()
+        public void NullRoutesRenderersEmptyString()
         {
             // Arrange
-            var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.Items = null;
-
-            SetupRouteParameters(httpContext);
+            var (renderer, _) = CreateWithHttpContext();
 
             // Act
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal("key1=value1,key2=value2", result);
+            Assert.Empty(result);
         }
 
+#if ASP_NET_CORE
         [Fact]
-        public void SingleKeyRendersRouteParameter()
+        public void ActionKeyRendersRouteParameter()
         {
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
-            renderer.Items = new List<string> { "key2" };
 
             SetupRouteParameters(httpContext);
 
@@ -43,14 +45,14 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal("key2=value2", result);
+            Assert.Equal("actionName", result);
         }
 
         private void SetupRouteParameters(HttpContext httpContext)
         {
+            var collection = new FeatureCollection();
             var routeData = new RouteData();
             var routingFeature = Substitute.For<IRoutingFeature>();
-            var collection = new FeatureCollection();
             collection.Set(routingFeature);
 #if NETCOREAPP3_0_OR_GREATER
             var routingValuesFeature = Substitute.For<IRouteValuesFeature>();
@@ -58,9 +60,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             collection.Set(routingValuesFeature);
 #endif
             httpContext.Features.Returns(collection);
-
-            routeData.Values.Add("key1", "value1");
-            routeData.Values.Add("key2", "value2");
+            
+            routeData.Values.Add("action", "actionName");
+            routeData.Values.Add("controller", "controllerName");
             routingFeature.RouteData.Returns(routeData);
         }
 #endif
