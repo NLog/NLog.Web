@@ -47,12 +47,17 @@ namespace NLog.Web
             context.BeginRequest += (sender, args) => OnBeginRequest((sender as HttpApplication)?.Context);
         }
 
-        internal void OnBeginRequest(HttpContext context)
+        internal void OnBeginRequest(HttpContext? context)
         {
+            if (context is null)
+            {
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext is null");
+                return;
+            }
+
             if (ShouldCaptureRequestBody(context))
             {
                 var requestBody = GetString(context.Request.InputStream);
-
                 if (!string.IsNullOrEmpty(requestBody))
                 {
                     context.Items[AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey] = requestBody;
@@ -62,13 +67,14 @@ namespace NLog.Web
 
         private bool ShouldCaptureRequestBody(HttpContext context)
         {
-            if (context is null)
+            var httpRequest = context.Request;
+            if (httpRequest is null)
             {
-                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext is null");
+                InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request is null");
                 return false;
             }
 
-            var stream = context.Request?.InputStream;
+            var stream = httpRequest.InputStream;
             if (stream is null)
             {
                 InternalLogger.Debug("NLogRequestPostedBodyModule: HttpContext.Request.Body stream is null");
@@ -112,7 +118,7 @@ namespace NLog.Web
         /// <returns></returns>
         private string GetString(Stream stream)
         {
-            string responseText = null;
+            string? responseText = null;
 
             // Save away the original stream position
             var originalPosition = stream.Position;

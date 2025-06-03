@@ -16,7 +16,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void NullHttpContextRendersEmptyString()
         {
             var renderer = new AspNetApplicationLayoutRenderer();
-            renderer.Item = string.Empty;
+            renderer.Item = " ";
 
             string result = renderer.Render(new LogEventInfo());
             Assert.Empty(result);

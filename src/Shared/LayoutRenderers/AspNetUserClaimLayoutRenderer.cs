@@ -64,7 +64,7 @@ namespace NLog.Web.LayoutRenderers
         /// If using value null or empty then all claim types are rendered.
         /// </remarks>
         [DefaultParameter]
-        public string ClaimType { get; set; }
+        public string ClaimType { get; set; } = string.Empty;
 
         /// <inheritdoc />
         protected override void InitializeLayoutRenderer()
@@ -135,22 +135,22 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-        private static IEnumerable<KeyValuePair<string, string>> GetAllClaims(System.Security.Principal.IPrincipal claimsPrincipal)
+        private static IEnumerable<KeyValuePair<string, string?>> GetAllClaims(System.Security.Principal.IPrincipal claimsPrincipal)
         {
               return GetAllClaims(claimsPrincipal as ClaimsPrincipal);
         }
 #endif
-        private static IEnumerable<KeyValuePair<string, string>> GetAllClaims(ClaimsPrincipal claimsPrincipal)
+        private static IEnumerable<KeyValuePair<string, string?>> GetAllClaims(ClaimsPrincipal? claimsPrincipal)
         {
             return claimsPrincipal?.Claims?.Select(claim =>
-                       new KeyValuePair<string, string>(claim.Type, claim.Value)) ??
-                   System.Linq.Enumerable.Empty<KeyValuePair<string, string>>();
+                       new KeyValuePair<string, string?>(claim.Type, claim.Value)) ??
+                   System.Linq.Enumerable.Empty<KeyValuePair<string, string?>>();
         }
 
 #if ASP_NET_CORE
-        private static Claim GetClaim(ClaimsPrincipal claimsPrincipal, string claimType)
+        private static Claim? GetClaim(ClaimsPrincipal claimsPrincipal, string claimType)
 #else
-        private static Claim GetClaim(System.Security.Principal.IPrincipal claimsPrincipal, string claimType)
+        private static Claim? GetClaim(System.Security.Principal.IPrincipal claimsPrincipal, string claimType)
 #endif
         {
             var claimsIdentity = claimsPrincipal.Identity as ClaimsIdentity;    // Prioritize primary identity

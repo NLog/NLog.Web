@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <TargetFrameworks>net35;net46</TargetFrameworks>
@@ -15,8 +15,10 @@ For ASP.NET Core: Check https://www.nuget.org/packages/NLog.Web.AspNetCore
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
     <Copyright>Copyright (c) 2015-$(CurrentYear) NLog Project - https://nlog-project.org/ </Copyright>
     <AssemblyName>NLog.Web</AssemblyName>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
     <PackageId>NLog.Web</PackageId>
     <PackageTags>nlog;log;logging;target;layoutrenderer;web;asp.net;MVC;httpcontext</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
 Remember to register NLog.Web in NLog.config
 
@@ -39,16 +41,16 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <RepositoryUrl>https://github.com/NLog/NLog.Web.git</RepositoryUrl>
 
     <SignAssembly>true</SignAssembly>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <AssemblyVersion>6.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyTitle>$(Title)</AssemblyTitle>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <!-- EmbedUntrackedSources for deterministic build -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Nullable>enable</Nullable>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Update="Internal\AssemblyExtensionTypes.tt">
@@ -69,7 +71,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.5.0" />
+    <PackageReference Include="NLog" Version="6.0.0-rc2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>

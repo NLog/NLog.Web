@@ -22,7 +22,7 @@ namespace NLog.Web.LayoutRenderers
                 return;
 
 #if ASP_NET_CORE
-            var contentLength = httpResponse.ContentLength;
+            var contentLength = httpResponse.ContentLength ?? 0L;
 #else
             var contentLength = httpResponse.OutputStream?.Length ?? 0L;
 #endif

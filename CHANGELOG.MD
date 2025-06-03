@@ -4,6 +4,26 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.0 RC2 (2025/06/03)
+
+- **NLog.Web.AspNetCore**
+  - Updated dependency NLog v6.0 RC2
+  - Enabled nullable references
+  - Removed support for .NET Core 3.1 + .NET v5 
+  - Removed obsolete extension-methods to register NLog as Logging Provider.
+  - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
+  - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
+  - Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
+
+- **NLog.Web**
+  - Updated dependency NLog v6.0 RC2
+  - Enabled nullable references
+  - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
+  - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
+  - Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
+
+See also [List of major changes in NLog v6](https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html)
+
 ### Version 5.5 (2025/05/29)
 
 - **NLog.Web.AspNetCore**

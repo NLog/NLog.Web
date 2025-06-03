@@ -27,13 +27,13 @@ namespace NLog.Web.LayoutRenderers
         /// Provides access to the current IHostEnvironment
         /// </summary>
         /// <returns>IHostEnvironment or <c>null</c></returns>
-        internal IHostEnvironment HostEnvironment
+        internal IHostEnvironment? HostEnvironment
         {
             get => _hostEnvironment ?? (_hostEnvironment = ResolveHostEnvironment());
             set => _hostEnvironment = value;
         }
-        private IHostEnvironment _hostEnvironment;
-        private string _environmentName;
+        private IHostEnvironment? _hostEnvironment;
+        private string? _environmentName;
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -42,12 +42,12 @@ namespace NLog.Web.LayoutRenderers
             builder.Append(environmentName);
         }
 
-        private IHostEnvironment ResolveHostEnvironment()
+        private IHostEnvironment? ResolveHostEnvironment()
         {
             return ServiceLocator.ResolveService<IHostEnvironment>(ResolveService<IServiceProvider>(), LoggingConfiguration);
         }
 
-        private string ResolveEnvironmentName()
+        private string? ResolveEnvironmentName()
         {
             var environmentName = HostEnvironment?.EnvironmentName;
             return string.IsNullOrEmpty(environmentName) ? null : environmentName;

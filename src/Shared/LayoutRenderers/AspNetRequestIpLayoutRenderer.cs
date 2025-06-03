@@ -30,7 +30,6 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// The header name to check for the Forwarded-For. Default "X-Forwarded-For". Needs <see cref="CheckForwardedForHeader"/>
         /// </summary>
-        [DefaultValue("X-Forwarded-For")]
         public Layout ForwardedForHeader { get; set; } = "X-Forwarded-For";
 
         /// <summary>
@@ -111,7 +110,7 @@ namespace NLog.Web.LayoutRenderers
                 if (addresses.Length > 0)
                 {
                     var position = CalculatePosition(addresses);
-                    return addresses[position]?.Trim();
+                    return addresses[position]?.Trim() ?? string.Empty;
                 }
             }
 
@@ -127,7 +126,7 @@ namespace NLog.Web.LayoutRenderers
                 if (forwardedHeaders.Length > 0)
                 {
                     var position = CalculatePosition(forwardedHeaders);
-                    return forwardedHeaders[position]?.Trim();
+                    return forwardedHeaders[position]?.Trim() ?? string.Empty;
                 }
             }
 

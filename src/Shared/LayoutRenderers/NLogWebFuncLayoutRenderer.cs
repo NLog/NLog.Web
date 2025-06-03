@@ -15,10 +15,10 @@ namespace NLog.Web.LayoutRenderers
     /// </summary>
     internal class NLogWebFuncLayoutRenderer : FuncLayoutRenderer
     {
-        private readonly Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> _func;
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly Func<LogEventInfo, HttpContextBase?, LoggingConfiguration?, object?> _func;
+        private IHttpContextAccessor? _httpContextAccessor;
 
-        internal IHttpContextAccessor HttpContextAccessor
+        internal IHttpContextAccessor? HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = AspNetLayoutRendererBase.RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _httpContextAccessor = value;
@@ -31,16 +31,16 @@ namespace NLog.Web.LayoutRenderers
             base.CloseLayoutRenderer();
         }
 
-        public NLogWebFuncLayoutRenderer(string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> func) : base(name)
+        public NLogWebFuncLayoutRenderer(string name, Func<LogEventInfo, HttpContextBase?, LoggingConfiguration?, object?> func) : base(name)
         {
             _func = func;
         }
 
         /// <inheritdoc />
-        protected override object RenderValue(LogEventInfo logEvent)
+        protected override object? RenderValue(LogEventInfo logEvent)
         {
             var httpContext = HttpContextAccessor?.HttpContext;
-            return _func(logEvent, httpContext, LoggingConfiguration);
+            return _func.Invoke(logEvent, httpContext, LoggingConfiguration);
         }
     }
 }

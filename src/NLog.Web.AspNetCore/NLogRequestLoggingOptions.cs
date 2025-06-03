@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using NLog.Web.Internal;
@@ -43,15 +44,11 @@ namespace NLog.Web
         /// <summary>
         /// Mapper from HttpContext status to LogLevel
         /// </summary>
-        public Func<HttpContext, Exception, Microsoft.Extensions.Logging.LogLevel> ShouldLogRequest { get; set; }
+        public Func<HttpContext, Exception?, Microsoft.Extensions.Logging.LogLevel> ShouldLogRequest { get; set; }
 
-        private Microsoft.Extensions.Logging.LogLevel ShouldLogRequestDefault(HttpContext httpContext, Exception exception)
+        private Microsoft.Extensions.Logging.LogLevel ShouldLogRequestDefault(HttpContext httpContext, Exception? exception)
         {
-            if (exception != null)
-            {
-                return Microsoft.Extensions.Logging.LogLevel.Error;
-            }
-            else
+            if (exception is null)
             {
                 var statusCode = httpContext.Response?.StatusCode ?? 0;
                 if (statusCode < 100 || (statusCode >= 400 && statusCode < 600))
@@ -70,6 +67,10 @@ namespace NLog.Web
                 {
                     return Microsoft.Extensions.Logging.LogLevel.Information;
                 }
+            }
+            else
+            {
+                return Microsoft.Extensions.Logging.LogLevel.Error;
             }
         }
 
@@ -102,10 +103,10 @@ namespace NLog.Web
             if (ExcludeRequestPaths.Count > 0)
             {
                 var requestPath = httpContext.TryGetFeature<IHttpRequestFeature>()?.Path;
-                if (string.IsNullOrEmpty(requestPath))
+                if (requestPath is null || string.IsNullOrEmpty(requestPath))
                 {
                     requestPath = httpContext.Request?.Path;
-                    if (string.IsNullOrEmpty(requestPath))
+                    if (requestPath is null || string.IsNullOrEmpty(requestPath))
                     {
                         return false;
                     }

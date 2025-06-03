@@ -35,14 +35,14 @@ namespace NLog.Web.LayoutRenderers
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
         [DefaultParameter]
-        public List<string> Items { get; set; }
+        public List<string>? Items { get; set; }
 
         /// <summary>
         /// Cookie names to be rendered.
         /// If <c>null</c> or empty array, all cookies will be rendered.
         /// </summary>
         [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
-        public List<string> CookieNames { get => Items; set => Items = value; }
+        public List<string>? CookieNames { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
@@ -75,13 +75,13 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if !ASP_NET_CORE
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(HttpCookieCollection cookies)
+        private IEnumerable<KeyValuePair<string, string?>> GetCookieValues(HttpCookieCollection cookies)
         {
             var expandMultiValue = OutputFormat != AspNetRequestLayoutOutputFormat.Flat;
             return HttpCookieCollectionValues.GetCookieValues(cookies, Items, Exclude, expandMultiValue);
         }
 #else
-        private IEnumerable<KeyValuePair<string, string>> GetCookieValues(IRequestCookieCollection cookies)
+        private IEnumerable<KeyValuePair<string, string?>> GetCookieValues(IRequestCookieCollection cookies)
         {
             if (Items?.Count > 0)
             {
@@ -89,19 +89,19 @@ namespace NLog.Web.LayoutRenderers
                 {
                     if (cookies.TryGetValue(cookieName, out var cookieValue))
                     {
-                        yield return new KeyValuePair<string, string>(cookieName, cookieValue);
+                        yield return new KeyValuePair<string, string?>(cookieName, cookieValue);
                     }
                 }
             }
             else
             {
-                bool checkForExclude = Exclude?.Count > 0;
+                var checkForExclude = Exclude?.Count > 0 ? Exclude : null;
                 foreach (var cookie in cookies)
                 {
-                    if (checkForExclude && Exclude.Contains(cookie.Key))
+                    if (checkForExclude?.Contains(cookie.Key) == true)
                         continue;
 
-                    yield return new KeyValuePair<string, string>(cookie.Key, cookie.Value);
+                    yield return new KeyValuePair<string, string?>(cookie.Key, cookie.Value);
                 }
             }
         }

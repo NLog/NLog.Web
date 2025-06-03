@@ -31,7 +31,7 @@ namespace NLog.Web.LayoutRenderers
         public bool IgnoreActivityId { get; set; }
 
 #if NETCOREAPP3_0_OR_GREATER
-        private string LookupTraceIdentifier(HttpContext httpContext)
+        private string? LookupTraceIdentifier(HttpContext? httpContext)
         {
             if (IgnoreActivityId)
                 return httpContext?.TraceIdentifier;
@@ -39,7 +39,7 @@ namespace NLog.Web.LayoutRenderers
                 return System.Diagnostics.Activity.Current?.Id ?? httpContext?.TraceIdentifier;
         }
 #elif ASP_NET_CORE
-        private string LookupTraceIdentifier(HttpContext httpContext)
+        private string? LookupTraceIdentifier(HttpContext? httpContext)
         {
             return httpContext?.TraceIdentifier;
         }
@@ -49,9 +49,9 @@ namespace NLog.Web.LayoutRenderers
         ///
         /// See also http://blog.tatham.oddie.com.au/2012/02/07/code-request-correlation-in-asp-net/
         /// </summary>
-        private string LookupTraceIdentifier(System.Web.HttpContextBase httpContext)
+        private string? LookupTraceIdentifier(System.Web.HttpContextBase? httpContext)
         {
-            IServiceProvider serviceProvider = httpContext;
+            IServiceProvider? serviceProvider = httpContext;
             if (serviceProvider != null)
             {
                 var workerRequest = (System.Web.HttpWorkerRequest)serviceProvider.GetService(typeof(System.Web.HttpWorkerRequest));

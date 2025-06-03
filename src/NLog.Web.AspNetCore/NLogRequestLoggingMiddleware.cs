@@ -31,7 +31,7 @@ namespace NLog.Web
         /// }
         /// </code>
         /// </remarks>
-        public NLogRequestLoggingMiddleware(RequestDelegate next, NLogRequestLoggingOptions options = default, ILoggerFactory loggerFactory = default)
+        public NLogRequestLoggingMiddleware(RequestDelegate next, NLogRequestLoggingOptions? options = null, ILoggerFactory? loggerFactory = null)
         {
             _next = next;
             _options = options ?? NLogRequestLoggingOptions.Default;
@@ -59,7 +59,7 @@ namespace NLog.Web
         /// <summary>
         /// Exception Filter for better capture of thread-execution-context (Ex. AsyncLocal-state)
         /// </summary>
-        private bool LogHttpRequest(HttpContext httpContext, Exception exception)
+        private bool LogHttpRequest(HttpContext httpContext, Exception? exception)
         {
             var logLevel = _options.ShouldLogRequest?.Invoke(httpContext, exception) ?? Microsoft.Extensions.Logging.LogLevel.None;
             if (logLevel != Microsoft.Extensions.Logging.LogLevel.None)

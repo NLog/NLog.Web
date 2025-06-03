@@ -32,14 +32,14 @@ namespace NLog.Web.LayoutRenderers
         /// If empty, then render all querystrings
         /// </summary>
         [DefaultParameter]
-        public List<string> Items { get; set; }
+        public List<string>? Items { get; set; }
 
         /// <summary>
         /// List Query Strings' Key to be rendered from Request.
         /// If empty, then render all querystrings
         /// </summary>
         [Obsolete("Instead use Items-property. Marked obsolete with NLog.Web 5.3")]
-        public List<string> QueryStringKeys { get => Items; set => Items = value; }
+        public List<string>? QueryStringKeys { get => Items; set => Items = value; }
 
         /// <summary>
         /// Gets or sets the keys to exclude from the output. If omitted, none are excluded.
@@ -80,24 +80,23 @@ namespace NLog.Web.LayoutRenderers
 #else
                 queryStrings.Keys;
 #endif
-            bool checkForExclude = (Items is null || Items.Count == 0) && Exclude?.Count > 0;
-            var pairs = GetQueryStringValues(queryStrings, queryStringKeys, checkForExclude, Exclude);
+            var checkForExclude = (Exclude?.Count > 0 && (Items is null || Items.Count == 0)) ? Exclude : null;
+            var pairs = GetQueryStringValues(queryStrings, queryStringKeys, checkForExclude);
             SerializePairs(pairs, builder, logEvent);
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> GetQueryStringValues(
+        private static IEnumerable<KeyValuePair<string, string?>> GetQueryStringValues(
 #if !ASP_NET_CORE
             NameValueCollection queryStrings,
 #else
             IQueryCollection queryStrings,
 #endif
             IEnumerable<string> queryStringKeys,
-            bool checkForExclude,
-            ICollection<string> excludeNames)
+            ICollection<string>? checkForExclude)
         {
             foreach (var queryKey in queryStringKeys)
             {
-                if (checkForExclude && excludeNames.Contains(queryKey))
+                if (checkForExclude?.Contains(queryKey) == true)
                     continue;
 
 #if !ASP_NET_CORE
@@ -111,7 +110,7 @@ namespace NLog.Web.LayoutRenderers
                 var value = objValue.ToString();
 #endif
                 if (!string.IsNullOrEmpty(value))
-                    yield return new KeyValuePair<string, string>(queryKey, value);
+                    yield return new KeyValuePair<string, string?>(queryKey, value);
             }
         }
     }

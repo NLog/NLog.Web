@@ -17,23 +17,23 @@ namespace NLog.Web.LayoutRenderers
     [LayoutRenderer("aspnet-request-duration")]
     public class AspNetRequestDurationLayoutRenderer : AspNetLayoutRendererBase
     {
-        private static string[] DurationMsFormat = null;
+        private static string[]? DurationMsFormat = null;
 #if !ASP_NET_CORE
-        private string _formatString;
+        private string? _formatString;
 #elif !NETCOREAPP3_0_OR_GREATER
-        private NLog.Layouts.SimpleLayout _scopeTiming;
+        private NLog.Layouts.SimpleLayout? _scopeTiming;
 #endif
 
         /// <summary>
         /// When no format specified, then just total milliseconds
         /// </summary>
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering. 
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+        public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 
         /// <inheritdoc/>
         protected override void InitializeLayoutRenderer()
@@ -164,7 +164,7 @@ namespace NLog.Web.LayoutRenderers
 #endif
 
 #if ASP_NET_CORE && NETCOREAPP3_0_OR_GREATER
-        private static TimeSpan? GetDuration(System.Diagnostics.Activity activity)
+        private static TimeSpan? GetDuration(System.Diagnostics.Activity? activity)
         {
             var startTimeUtc = activity?.StartTimeUtc;
 
@@ -178,7 +178,7 @@ namespace NLog.Web.LayoutRenderers
                     startTimeUtc = activity.StartTimeUtc;
             }
 
-            if (startTimeUtc > DateTime.MinValue)
+            if (startTimeUtc > DateTime.MinValue && activity != null)
             {
                 var duration = activity.Duration;
                 if (duration == TimeSpan.Zero)

@@ -12,13 +12,13 @@ namespace NLog.Web.Internal
     internal static class HttpHeaderCollectionValues
     {
 #if ASP_NET_CORE
-        internal static IEnumerable<KeyValuePair<string, string>> GetHeaderValues(IHeaderDictionary headers, List<string> itemNames, ISet<string> excludeNames)
+        internal static IEnumerable<KeyValuePair<string, string?>> GetHeaderValues(IHeaderDictionary headers, List<string>? itemNames, ISet<string> excludeNames)
         {
-            bool checkForExclude = (itemNames is null || itemNames.Count == 0) && excludeNames?.Count > 0;
+            var checkForExclude = (excludeNames?.Count > 0 && (itemNames is null || itemNames.Count == 0)) ? excludeNames : null;
             var headerNames = itemNames?.Count > 0 ? itemNames : headers.Keys;
             foreach (var headerName in headerNames)
             {
-                if (checkForExclude && excludeNames.Contains(headerName))
+                if (checkForExclude?.Contains(headerName) == true)
                     continue;
 
                 if (!headers.TryGetValue(headerName, out var headerValue))
@@ -26,24 +26,25 @@ namespace NLog.Web.Internal
                     continue;
                 }
 
-                yield return new KeyValuePair<string, string>(headerName, headerValue);
+                yield return new KeyValuePair<string, string?>(headerName, headerValue);
             }
         }
 #else
-        internal static IEnumerable<KeyValuePair<string, string>> GetHeaderValues(NameValueCollection headers, List<string> itemNames, HashSet<string> excludeNames)
+        internal static IEnumerable<KeyValuePair<string, string?>> GetHeaderValues(NameValueCollection headers, List<string>? itemNames, HashSet<string> excludeNames)
         {
-            bool checkForExclude = (itemNames is null || itemNames.Count == 0) && excludeNames?.Count > 0;
+            var checkForExclude = (excludeNames?.Count > 0 && (itemNames is null || itemNames.Count == 0)) ? excludeNames : null;
+
             var headerNames = itemNames?.Count > 0 ? itemNames : headers.Keys.Cast<string>();
             foreach (var headerName in headerNames)
             {
-                if (checkForExclude && excludeNames.Contains(headerName))
+                if (checkForExclude?.Contains(headerName) == true)
                     continue;
 
                 var headerValue = headers[headerName];
                 if (headerValue is null)
                     continue;
 
-                yield return new KeyValuePair<string, string>(headerName, headerValue);
+                yield return new KeyValuePair<string, string?>(headerName, headerValue);
             }
         }
 #endif

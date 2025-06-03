@@ -13,12 +13,12 @@ namespace NLog.Web
         /// <summary>
         /// Event to be raised at the end of each HTTP Request.
         /// </summary>
-        public static event EventHandler EndRequest;
+        public static event EventHandler? EndRequest;
 
         /// <summary>
         /// Event to be raised at the beginning of each HTTP Request.
         /// </summary>
-        public static event EventHandler BeginRequest;
+        public static event EventHandler? BeginRequest;
 
         /// <summary>
         /// Notify the wrapper target that the correct IHttpModule is installed

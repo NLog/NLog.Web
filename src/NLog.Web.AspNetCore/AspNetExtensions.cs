@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using NLog.Config;
-using NLog.Web.DependencyInjection;
 #if !NETCOREAPP3_0_OR_GREATER
-using Microsoft.AspNetCore.Builder;
 using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
 using Microsoft.Extensions.Configuration;
@@ -23,90 +21,6 @@ namespace NLog.Web
     /// </summary>
     public static class AspNetExtensions
     {
-#if !NETCOREAPP3_0_OR_GREATER
-        /// <summary>
-        /// Enable NLog Web for ASP.NET Core.
-        /// </summary>
-        /// <param name="app"></param>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
-        public static void AddNLogWeb(this IApplicationBuilder app)
-        {
-            Guard.ThrowIfNull(app);
-            app.ApplicationServices.SetupNLogServiceLocator();
-        }
-#endif
-
-        /// <summary>
-        /// Override the default <see cref="IServiceProvider" /> used by the NLog ServiceLocator.
-        /// NLog ServiceLocator uses the <see cref="IServiceProvider" /> to access context specific services (Ex. <see cref="Microsoft.AspNetCore.Http.IHttpContextAccessor" />)
-        /// </summary>
-        /// <remarks>
-        /// Should only be used if the standard approach for configuring NLog is not enough
-        /// </remarks>
-        /// <param name="serviceProvider"></param>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
-        public static IServiceProvider SetupNLogServiceLocator(this IServiceProvider serviceProvider)
-        {
-            ServiceLocator.ServiceProvider = serviceProvider;
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            return serviceProvider;
-        }
-
-#if !NETCOREAPP3_0_OR_GREATER
-        /// <summary>
-        /// Apply NLog configuration from XML config.
-        /// </summary>
-        /// <param name="env"></param>
-        /// <param name="configFileRelativePath">relative path to NLog configuration file.</param>
-        /// <returns>LoggingConfiguration for chaining</returns>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
-        public static LoggingConfiguration ConfigureNLog(this IHostEnvironment env, string configFileRelativePath)
-        {
-            Guard.ThrowIfNull(env);
-
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            LogManager.AddHiddenAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            var fileName = System.IO.Path.Combine(env.ContentRootPath, configFileRelativePath);
-            LogManager.LoadConfiguration(fileName);
-            return LogManager.Configuration;
-        }
-#endif
-
-        /// <summary>
-        /// Apply NLog configuration from XML config.
-        /// 
-        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(string)" /> is used.
-        /// </summary>
-        /// <param name="builder">The logging builder</param>
-        /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
-        /// >
-        /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
-        public static LogFactory ConfigureNLog(this ILoggingBuilder builder, string configFileName)
-        {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            builder.AddNLogWeb();
-            return LogManager.LoadConfiguration(configFileName);
-        }
-
-        /// <summary>
-        /// Configure NLog from API
-        /// 
-        /// This call is not needed when <see cref="NLogBuilder.ConfigureNLog(LoggingConfiguration)" /> is used.
-        /// </summary>
-        /// <param name="builder">The logging builder</param>
-        /// <param name="configuration">Config for NLog</param>
-        /// <returns>LogFactory to get loggers, add events etc</returns>
-        [Obsolete("Use UseNLog() on IHostBuilder / IWebHostBuilder, or AddNLogWeb() on ILoggingBuilder")]
-        public static LogFactory ConfigureNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
-        {
-            ConfigurationItemFactory.Default.RegisterItemsFromAssembly(typeof(AspNetExtensions).GetTypeInfo().Assembly);
-            builder.AddNLogWeb();
-            LogManager.Configuration = configuration;
-            return LogManager.LogFactory;
-        }
-
         /// <summary>
         /// Enable NLog as logging provider for Microsoft Extension Logging
         /// </summary>
@@ -156,6 +70,7 @@ namespace NLog.Web
         /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
+        [Obsolete("Instead use AddNLogWeb() for explicit registration of NLog.Web.AspNetCore extensions. Marked obsolete with Nlog 6.0")]
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, string configFileName)
         {
             return AddNLogWeb(builder, configFileName);
@@ -170,7 +85,7 @@ namespace NLog.Web
         {
             Guard.ThrowIfNull(builder);
 
-            AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
+            AddNLogLoggerProvider(builder.Services, null, null, NLogAspNetCoreOptions.Default, (serviceProvider, config, env, options) =>
             {
                 var provider = CreateNLogLoggerProvider(serviceProvider, config, env, options);
                 // Delay initialization of targets until we have loaded config-settings
@@ -186,6 +101,7 @@ namespace NLog.Web
         /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
+        [Obsolete("Instead use AddNLogWeb() for explicit registration of NLog.Web.AspNetCore extensions. Marked obsolete with Nlog 6.0")]
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration)
         {
             return AddNLogWeb(builder, configuration);
@@ -208,6 +124,7 @@ namespace NLog.Web
         /// <param name="builder">The logging builder</param>
         /// <param name="configuration">Config for NLog</param>
         /// <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        [Obsolete("Instead use AddNLogWeb() for explicit registration of NLog.Web.AspNetCore extensions. Marked obsolete with Nlog 6.0")]
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, LoggingConfiguration configuration, NLogAspNetCoreOptions options)
         {
             return AddNLogWeb(builder, configuration, options);
@@ -240,6 +157,7 @@ namespace NLog.Web
         /// <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
         /// <param name="builder"></param>
         /// <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        [Obsolete("Instead use AddNLogWeb() for explicit registration of NLog.Web.AspNetCore extensions. Marked obsolete with Nlog 6.0")]
         public static ILoggingBuilder AddNLog(this ILoggingBuilder builder, Func<IServiceProvider, LogFactory> factoryBuilder)
         {
             return AddNLogWeb(builder, factoryBuilder);
@@ -255,7 +173,7 @@ namespace NLog.Web
             Guard.ThrowIfNull(builder);
             Guard.ThrowIfNull(factoryBuilder);
 
-            AddNLogLoggerProvider(builder.Services, null, null, null, (serviceProvider, config, env, options) =>
+            AddNLogLoggerProvider(builder.Services, null, null, NLogAspNetCoreOptions.Default, (serviceProvider, config, env, options) =>
             {
                 config = SetupNLogConfigSettings(serviceProvider, config, LogManager.LogFactory);
                 // Delay initialization of targets until we have loaded config-settings
@@ -367,7 +285,6 @@ namespace NLog.Web
         public static IHostBuilder UseNLog(this IHostBuilder builder, NLogAspNetCoreOptions options)
         {
             Guard.ThrowIfNull(builder);
-
 #if NETCOREAPP3_0_OR_GREATER
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment, options, CreateNLogLoggerProvider));
 #else
@@ -425,7 +342,7 @@ namespace NLog.Web
         }
 #endif
 
-        private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration, IHostEnvironment, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
+        private static void AddNLogLoggerProvider(IServiceCollection services, IConfiguration? hostConfiguration, IHostEnvironment? hostEnvironment, NLogAspNetCoreOptions options, Func<IServiceProvider, IConfiguration?, IHostEnvironment?, NLogAspNetCoreOptions, NLogLoggerProvider> factory)
         {
             options = options ?? NLogAspNetCoreOptions.Default;
             options.Configure(hostConfiguration?.GetSection("Logging:NLog"));
@@ -434,7 +351,7 @@ namespace NLog.Web
 
             if (options.ReplaceLoggerFactory)
             {
-                NLogLoggerProvider singleInstance = null;   // Ensure that registration of ILoggerFactory and ILoggerProvider shares the same single instance
+                NLogLoggerProvider? singleInstance = null;   // Ensure that registration of ILoggerFactory and ILoggerProvider shares the same single instance
                 sharedFactory = (provider, cfg, env, opt) => singleInstance ?? (singleInstance = factory(provider, cfg, env, opt));
 
                 services.AddLogging(builder => builder?.ClearProviders());  // Cleanup the existing LoggerFactory, before replacing it with NLogLoggerFactory
@@ -456,12 +373,12 @@ namespace NLog.Web
             }
         }
 
-        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options)
+        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration? hostConfiguration, IHostEnvironment? hostEnvironment, NLogAspNetCoreOptions options)
         {
-            return CreateNLogLoggerProvider(serviceProvider, hostConfiguration, hostEnvironment, options, null);
+            return CreateNLogLoggerProvider(serviceProvider, hostConfiguration, hostEnvironment, options, LogManager.LogFactory);
         }
 
-        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration hostConfiguration, IHostEnvironment hostEnvironment, NLogAspNetCoreOptions options, NLog.LogFactory logFactory)
+        private static NLogLoggerProvider CreateNLogLoggerProvider(IServiceProvider serviceProvider, IConfiguration? hostConfiguration, IHostEnvironment? hostEnvironment, NLogAspNetCoreOptions options, NLog.LogFactory logFactory)
         {
             NLogLoggerProvider provider = new NLogLoggerProvider(options, logFactory ?? LogManager.LogFactory);
 
@@ -479,9 +396,9 @@ namespace NLog.Web
 
             if (configuration is null || !TryLoadConfigurationFromSection(provider, configuration))
             {
-                string nlogConfigFile = string.Empty;
-                string contentRootPath = hostEnvironment?.ContentRootPath;
-                string environmentName = hostEnvironment?.EnvironmentName;
+                string? nlogConfigFile = null;
+                var contentRootPath = hostEnvironment?.ContentRootPath;
+                var environmentName = hostEnvironment?.EnvironmentName;
                 if (!string.IsNullOrWhiteSpace(contentRootPath) || !string.IsNullOrWhiteSpace(environmentName))
                 {
                     provider.LogFactory.Setup().LoadConfiguration(cfg =>
@@ -489,7 +406,9 @@ namespace NLog.Web
                         if (!IsLoggingConfigurationLoaded(cfg.Configuration))
                         {
                             nlogConfigFile = ResolveEnvironmentNLogConfigFile(contentRootPath, environmentName);
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
                             cfg.Configuration = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
                         }
                     });
                 }
@@ -508,7 +427,7 @@ namespace NLog.Web
             return provider;
         }
 
-        private static string ResolveEnvironmentNLogConfigFile(string basePath, string environmentName)
+        private static string? ResolveEnvironmentNLogConfigFile(string? basePath, string? environmentName)
         {
             if (!string.IsNullOrWhiteSpace(basePath))
             {
@@ -541,7 +460,7 @@ namespace NLog.Web
             return cfg?.LoggingRules?.Count > 0 && cfg?.AllTargets?.Count > 0;
         }
 
-        private static IConfiguration SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration configuration, LogFactory logFactory)
+        private static IConfiguration? SetupNLogConfigSettings(IServiceProvider serviceProvider, IConfiguration? configuration, LogFactory logFactory)
         {
             configuration = configuration ?? (serviceProvider?.GetService(typeof(IConfiguration)) as IConfiguration);
             logFactory.Setup()

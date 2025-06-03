@@ -48,9 +48,8 @@ namespace NLog.Web.LayoutRenderers
         /// Gets or sets the session item name.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        [RequiredParameter]
         [DefaultParameter]
-        public string Item { get; set; }
+        public string Item { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the session item name.
@@ -65,23 +64,16 @@ namespace NLog.Web.LayoutRenderers
         public string ObjectPath { get => _objectPathRenderer.ObjectPath; set => _objectPathRenderer.ObjectPath = value; }
 
         /// <summary>
-        /// Gets or sets whether variables with a dot are evaluated as properties or not
-        /// </summary>
-        /// <docgen category='Rendering Options' order='10' />
-        [Obsolete("Instead use ObjectPath-property. Marked obsolete with NLog.Web 5.2")]
-        public bool EvaluateAsNestedProperties { get; set; }
-
-        /// <summary>
         /// Format string for conversion from object to string.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
         /// <docgen category='Rendering Options' order='10' />
-        public CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+        public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 
 #if ASP_NET_CORE
         /// <summary>
@@ -102,7 +94,16 @@ namespace NLog.Web.LayoutRenderers
         private SessionValueType _valueType;
 #endif
 
-        private Func<ISession, string, object> _sessionValueLookup = (session, key) => GetSessionValue(session, key);   // Skip delegate allocation for ValueType
+        private Func<ISession, string, object?> _sessionValueLookup = (session, key) => GetSessionValue(session, key);   // Skip delegate allocation for ValueType
+
+        /// <inheritdoc/>
+        protected override void InitializeLayoutRenderer()
+        {
+            base.InitializeLayoutRenderer();
+
+            if (string.IsNullOrEmpty(Item))
+                throw new NLogConfigurationException("AspNetSessionItem-LayoutRenderer Item-property must be assigned. Lookup blank value not supported.");
+        }
 
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -134,27 +135,14 @@ namespace NLog.Web.LayoutRenderers
                 if (contextSession is null)
                     return;
 
-                object value = null;
+                var value = _sessionValueLookup(contextSession, item);
+                if (value is null)
+                    return;
 
-#pragma warning disable CS0618 // Type or member is obsolete
-                if (EvaluateAsNestedProperties)
+                if (!string.IsNullOrEmpty(ObjectPath))
                 {
-                    value = PropertyReader.GetValue(item, contextSession, _sessionValueLookup, true);
-                    if (value is null)
+                    if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
                         return;
-                }
-#pragma warning restore CS0618 // Type or member is obsolete
-                else
-                {
-                    value = _sessionValueLookup(contextSession, item);
-                    if (value is null)
-                        return;
-
-                    if (ObjectPath != null)
-                    {
-                        if (!_objectPathRenderer.TryGetPropertyValue(value, out value))
-                            return;
-                    }
                 }
 
                 var formatProvider = GetFormatProvider(logEvent, Culture);
@@ -163,18 +151,18 @@ namespace NLog.Web.LayoutRenderers
         }
 
 #if ASP_NET_CORE
-        private static object GetSessionIntValue(ISession session, string key)
+        private static object? GetSessionIntValue(ISession session, string key)
         {
             var value = session.GetInt32(key);
-            return value.HasValue ? (object)value.Value : null;
+            return value.HasValue ? (object?)value.Value : null;
         }
 
-        private static object GetSessionValue(ISession session, string key)
+        private static object? GetSessionValue(ISession session, string key)
         {
             return session.GetString(key);
         }
 #else
-        private static object GetSessionValue(ISession session, string key)
+        private static object? GetSessionValue(ISession session, string key)
         {
             return session.Count == 0 ? null : session[key];
         }

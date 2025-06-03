@@ -25,7 +25,7 @@ namespace NLog.Web
         /// <param name="setupBuilder">Fluent style</param>
         /// <param name="name">Name of the layout renderer - without ${}.</param>
         /// <param name="layoutMethod">Delegate method that returns layout renderer output.</param>
-        public static ISetupExtensionsBuilder RegisterAspNetLayoutRenderer(this ISetupExtensionsBuilder setupBuilder, string name, Func<LogEventInfo, HttpContextBase, LoggingConfiguration, object> layoutMethod)
+        public static ISetupExtensionsBuilder RegisterAspNetLayoutRenderer(this ISetupExtensionsBuilder setupBuilder, string name, Func<LogEventInfo, HttpContextBase?, LoggingConfiguration?, object?> layoutMethod)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
             AspNetLayoutRendererBase.Register(name, layoutMethod);

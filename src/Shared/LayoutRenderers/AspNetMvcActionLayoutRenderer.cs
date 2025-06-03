@@ -27,7 +27,7 @@ namespace NLog.Web.LayoutRenderers
             var httpContext = HttpContextAccessor?.HttpContext;
 
 #if !ASP_NET_CORE
-            object actionValue = null;
+            object? actionValue = null;
             RouteTable.Routes?.GetRouteData(httpContext)?.Values?.TryGetValue(key, out actionValue);
 #else
             var actionValue = httpContext?.GetRouteValue(key);

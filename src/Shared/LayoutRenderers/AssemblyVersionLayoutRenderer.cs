@@ -21,7 +21,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Support capture of Assembly-Version from active HttpContext ApplicationInstance
         /// </summary>
-        public LayoutRenderer FixThreadAgnostic => string.IsNullOrEmpty(Name) ? _fixThreadAgnostic : null;
+        public LayoutRenderer? FixThreadAgnostic => string.IsNullOrEmpty(Name) ? _fixThreadAgnostic : null;
         private readonly LayoutRenderer _fixThreadAgnostic = new ThreadIdLayoutRenderer();
 #endif
 
@@ -42,11 +42,13 @@ namespace NLog.Web.LayoutRenderers
                 assembly = GetAspNetEntryAssembly();
             }
 #endif
+#pragma warning disable CS8603 // Possible null reference return.
             return assembly;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
 #if !ASP_NET_CORE
-        private static Assembly GetAspNetEntryAssembly()
+        private static Assembly? GetAspNetEntryAssembly()
         {
             var applicatonType = System.Web.HttpContext.Current?.ApplicationInstance?.GetType();
             while (applicatonType != null && applicatonType.Namespace == "ASP")
