@@ -478,7 +478,7 @@ namespace NLog.Web.Tests
         }
 
 #if ASP_NET_CORE
-        private void ExecuteLogging(HttpContext httpContext, Action loggingInvoker)
+        private static void ExecuteLogging(HttpContext httpContext, Action loggingInvoker)
         {
             RequestDelegate next = (HttpContext hc) =>
             {
@@ -490,7 +490,7 @@ namespace NLog.Web.Tests
             middleware.Invoke(httpContext).GetAwaiter().GetResult();
         }
 #else
-        private void ExecuteLogging(System.Web.HttpContext httpContext, Action loggingInvoker)
+        private static void ExecuteLogging(System.Web.HttpContext httpContext, Action loggingInvoker)
         {
             AspNetBufferingTargetWrapper.OnBeginRequest(httpContext);
             loggingInvoker();

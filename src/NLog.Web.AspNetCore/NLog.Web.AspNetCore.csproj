@@ -19,6 +19,7 @@ ChangeLog:
 - Updated dependency NLog v6.0 RC2
 - Removed support for .NET Core 3.1 + .NET v5
 - Enabled nullable references
+- Enabled &lt;IsAotCompatible&gt;
 - Removed obsolete extension-methods to register NLog as Logging Provider.
 - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
 - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
