@@ -35,7 +35,7 @@ namespace NLog.Web.Targets.Wrappers
     /// <configuration>
     ///   <system.web>
     ///     <httpModules>
-    ///       <add name="NLog" type="NLog.Web.NLogHttpModule, NLog.Web"/>
+    ///       <add name="NLog" type="NLog.Web.NLogBufferingTargetWrapperModule, NLog.Web"/>
     ///     </httpModules>
     ///   </system.web>
     /// </configuration>
@@ -162,7 +162,15 @@ namespace NLog.Web.Targets.Wrappers
             {
                 InternalLogger.Debug("{0}: HttpContextAccessor not available", this);
             }
+
             base.InitializeTarget();
+
+#if !ASP_NET_CORE
+            if (httpContextAccessor?.HttpContext != null)
+            {
+                OnBeginRequest(HttpContext.Current);
+            }
+#endif
         }
 
         private bool _verifiedMiddlewareInstalled;
@@ -179,9 +187,9 @@ namespace NLog.Web.Targets.Wrappers
                 if (!MiddlewareInstalled)
                 {
 #if ASP_NET_CORE
-                    InternalLogger.Info("NLogBufferingTargetWrapperMiddleware is not yet initialized, which is required by AspNetBufferingWrapper.");
+                    InternalLogger.Info(nameof(NLogBufferingTargetWrapperMiddleware) + " is not yet initialized, which is required by AspNetBufferingWrapper.");
 #else
-                    InternalLogger.Info("NLogHttpModule is not yet initialized, which is required by AspNetBufferingWrapper.");
+                    InternalLogger.Info(nameof(NLogBufferingTargetWrapperModule) +  " is not yet initialized, which is required by AspNetBufferingWrapper.");
 #endif
                 }
             }

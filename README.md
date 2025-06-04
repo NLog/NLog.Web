@@ -47,22 +47,8 @@ NLog 5.0 requires that NLog.config must include NLog.Web in extensions:
   </extensions>
 ```
 
-## HTTP module (ASP.NET non-core)
-
-There is a ASP.NET ASP.NET HttpModule that enables NLog to hook BeginRequest and EndRequest events easily.
-
-The `NLogHttpModule` needs a registration in the web.config:
-```xml
-<system.webServer> 
-	<modules runAllManagedModulesForAllRequests="true"> 
-		<add name="NLog" type="NLog.Web.NLogHttpModule, NLog.Web" />
-	</modules>
-</system.webServer>
-```
-
 ## Contributions
 Contributions are highly appreciated! Please make sure if works for ASP.NET and ASP.NET Core if possible and make sure it is covered by unit tests. 
-
 
 ## License
 

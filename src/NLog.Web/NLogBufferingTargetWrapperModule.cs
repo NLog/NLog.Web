@@ -5,9 +5,9 @@ using NLog.Web.Targets.Wrappers;
 namespace NLog.Web
 {
     /// <summary>
-    /// IIS Module to allow the AspNet buffering wrapper target to function properly
+    /// IIS Module to allow the <see cref="AspNetBufferingTargetWrapper"/> to function properly
     /// </summary>
-    /// <seealso href = "https://github.com/nlog/nlog/wiki/AspNetBufferingWrapper-target" > Documentation on NLog Wiki</seealso>
+    /// <seealso href="https://github.com/nlog/nlog/wiki/AspNetBufferingWrapper-target">Documentation on NLog Wiki</seealso>
     public class NLogBufferingTargetWrapperModule : IHttpModule
     {
         /// <summary>

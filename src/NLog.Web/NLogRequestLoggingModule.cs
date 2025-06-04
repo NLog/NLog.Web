@@ -7,6 +7,7 @@ namespace NLog.Web
     /// <summary>
     /// HttpModule that writes all requests to Logger named "RequestLogging"
     /// </summary>
+    /// <seealso href="https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging">Documentation on NLog Wiki</seealso>
     public class NLogRequestLoggingModule : IHttpModule
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetLogger("NLogRequestLogging");
