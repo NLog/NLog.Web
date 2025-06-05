@@ -16,13 +16,13 @@ namespace NLog.Web.LayoutRenderers
     internal class NLogWebFuncLayoutRenderer : FuncLayoutRenderer
     {
         private readonly Func<LogEventInfo, HttpContextBase?, LoggingConfiguration?, object?> _func;
-        private IHttpContextAccessor? _httpContextAccessor;
 
         internal IHttpContextAccessor? HttpContextAccessor
         {
             get => _httpContextAccessor ?? (_httpContextAccessor = AspNetLayoutRendererBase.RetrieveHttpContextAccessor(ResolveService<IServiceProvider>(), LoggingConfiguration));
             set => _httpContextAccessor = value;
         }
+        private IHttpContextAccessor? _httpContextAccessor;
 
         /// <inheritdoc />
         protected override void CloseLayoutRenderer()

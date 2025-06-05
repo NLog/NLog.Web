@@ -49,7 +49,7 @@ namespace NLog.Web.LayoutRenderers
         ///
         /// See also http://blog.tatham.oddie.com.au/2012/02/07/code-request-correlation-in-asp-net/
         /// </summary>
-        private string? LookupTraceIdentifier(System.Web.HttpContextBase? httpContext)
+        private static string? LookupTraceIdentifier(System.Web.HttpContextBase? httpContext)
         {
             IServiceProvider? serviceProvider = httpContext;
             if (serviceProvider != null)
