@@ -116,7 +116,7 @@ namespace NLog.Web
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        private string GetString(Stream stream)
+        private static string GetString(Stream stream)
         {
             string? responseText = null;
 

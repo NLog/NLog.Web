@@ -21,7 +21,7 @@ namespace NLog.Web
             }
         }
 
-        internal bool HasActiveHttpContext()
+        internal static bool HasActiveHttpContext()
         {
             return System.Web.HttpContext.Current != null;  // Skip allocating HttpContextWrapper
         }

@@ -157,7 +157,7 @@ namespace NLog.Web.LayoutRenderers
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        private HttpCookieCollection GetCookies(HttpResponseBase response)
+        private static HttpCookieCollection GetCookies(HttpResponseBase response)
         {
             return response.Cookies;
         }
