@@ -24,7 +24,11 @@ var sampleTodos = new Todo[] {
 };
 
 var todosApi = app.MapGroup("/todos");
-todosApi.MapGet("/", () => sampleTodos);
+todosApi.MapGet("/", (ILogger<Todo> logger) =>
+{
+    logger.LogInformation("Generated {TodoList}", sampleTodos);
+    return sampleTodos;
+});
 todosApi.MapGet("/{id}", (int id) =>
     sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
         ? Results.Ok(todo)
