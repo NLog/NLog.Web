@@ -25,12 +25,14 @@ namespace NLog.Web.LayoutRenderers
             var key = "action";
 
             var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext is null)
+                return;
 
 #if !ASP_NET_CORE
             object? actionValue = null;
             RouteTable.Routes?.GetRouteData(httpContext)?.Values?.TryGetValue(key, out actionValue);
 #else
-            var actionValue = httpContext?.GetRouteValue(key);
+            var actionValue = httpContext.GetRouteValue(key);
 #endif
             builder.Append(actionValue?.ToString());
         }

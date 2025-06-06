@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using NLog.LayoutRenderers;
+using NLog.Web.Internal;
 #if !ASP_NET_CORE
 using System.Security.Cryptography.X509Certificates;
 #endif
@@ -29,8 +30,7 @@ namespace NLog.Web.LayoutRenderers
         {
             var httpContext = HttpContextAccessor?.HttpContext;
 #if ASP_NET_CORE
-            var connection = httpContext?.Connection;
-            builder.Append(connection?.ClientCertificate?.ToString(Verbose));
+            builder.Append(httpContext.TryGetConnection()?.ClientCertificate?.ToString(Verbose));
 #else
             var certificate = httpContext?.Request?.ClientCertificate?.Certificate;
             if (certificate?.Length > 0)

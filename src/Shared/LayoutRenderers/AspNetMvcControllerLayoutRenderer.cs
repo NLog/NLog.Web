@@ -25,12 +25,14 @@ namespace NLog.Web.LayoutRenderers
             var key = "controller";
 
             var httpContext = HttpContextAccessor?.HttpContext;
+            if (httpContext is null)
+                return;
 
 #if !ASP_NET_CORE
             object? controllerValue = null;
             RouteTable.Routes?.GetRouteData(httpContext)?.Values?.TryGetValue(key, out controllerValue);
 #else
-            var controllerValue = httpContext?.GetRouteValue(key);
+            var controllerValue = httpContext.GetRouteValue(key);
 #endif
             builder.Append(controllerValue?.ToString());
         }

@@ -65,14 +65,14 @@ namespace NLog.Web.LayoutRenderers
             if (httpRequest is null)
                 return;
 
-            var ip = CheckForwardedForHeader && ForwardedForHeader != null ? TryLookupForwardHeader(httpRequest, logEvent) : string.Empty;
+            var ip = CheckForwardedForHeader ? TryLookupForwardHeader(httpRequest, logEvent) : string.Empty;
 
             if (string.IsNullOrEmpty(ip))
             {
 #if !ASP_NET_CORE
                 ip = httpRequest.ServerVariables?["REMOTE_ADDR"];
 #else
-                ip = httpContext?.Connection?.RemoteIpAddress?.ToString();
+                ip = httpContext.TryGetConnection()?.RemoteIpAddress?.ToString();
 #endif
             }
 
@@ -101,9 +101,11 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
         string TryLookupForwardHeader(HttpRequestBase httpRequest, LogEventInfo logEvent)
         {
-            var headerName = ForwardedForHeader.Render(logEvent);
+            var headerName = ForwardedForHeader?.Render(logEvent);
+            if (headerName is null || string.IsNullOrEmpty(headerName))
+                return string.Empty;
+            
             var forwardedHeader = httpRequest.Headers[headerName];
-
             if (!string.IsNullOrEmpty(forwardedHeader))
             {
                 var addresses = forwardedHeader.Split(',');
@@ -119,10 +121,14 @@ namespace NLog.Web.LayoutRenderers
 #else
         private string TryLookupForwardHeader(HttpRequest httpRequest, LogEventInfo logEvent)
         {
-            var headerName = ForwardedForHeader.Render(logEvent);
-            if (httpRequest.Headers?.ContainsKey(headerName) == true)
+            var headerName = ForwardedForHeader?.Render(logEvent);
+            if (headerName is null || string.IsNullOrEmpty(headerName))
+                return string.Empty;
+
+            var headerDictionary = httpRequest.Headers;
+            if (headerDictionary?.ContainsKey(headerName) == true)
             {
-                var forwardedHeaders = httpRequest.Headers.GetCommaSeparatedValues(headerName);
+                var forwardedHeaders = headerDictionary.GetCommaSeparatedValues(headerName);
                 if (forwardedHeaders.Length > 0)
                 {
                     var position = CalculatePosition(forwardedHeaders);
