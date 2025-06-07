@@ -35,6 +35,8 @@ namespace NLog.Web.LayoutRenderers
     /// <seealso href="https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer">Documentation on NLog Wiki</seealso>
 #endif
     [LayoutRenderer("iis-site-name")]
+    [LayoutRenderer("aspnet-appname")]
+    [LayoutRenderer("host-appname")]
     [ThreadAgnostic]
     public class IISSiteNameLayoutRenderer : LayoutRenderer
     {

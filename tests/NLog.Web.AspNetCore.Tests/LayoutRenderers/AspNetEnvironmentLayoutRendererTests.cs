@@ -35,7 +35,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             renderer.HostEnvironment = hostEnvironment;
             string actual = renderer.Render(new LogEventInfo());
-            Assert.Equal(string.Empty, actual);
+            Assert.Equal("Production", actual);
         }
 
         [Fact]

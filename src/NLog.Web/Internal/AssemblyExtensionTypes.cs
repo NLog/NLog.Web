@@ -42,12 +42,13 @@ namespace NLog.Web.Internal
         {
             #pragma warning disable CS0618 // Type or member is obsolete
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-appbasepath");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-basedir");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("host-basedir");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetApplicationLayoutRenderer>("aspnet-application");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer>("aspnet-httpcontext-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer>("aspnet-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcActionLayoutRenderer>("aspnet-mvc-action");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcControllerLayoutRenderer>("aspnet-mvc-controller");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer>("aspnet-request-querystring");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestClientCertificateLayoutRenderer>("aspnet-request-client-certificate");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestContentLengthLayoutRenderer>("aspnet-request-contentlength");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestContentTypeLayoutRenderer>("aspnet-request-contenttype");
@@ -57,19 +58,20 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHasPostedBodyLayoutRenderer>("aspnet-request-has-posted-body");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer>("aspnet-request-headers");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestHostLayoutRenderer>("aspnet-request-host");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestMethodLayoutRenderer>("aspnet-request-method");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer>("aspnet-request-ip");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestIsWebSocketLayoutRenderer>("aspnet-request-is-web-socket");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer>("aspnet-request");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestLocalIpLayoutRenderer>("aspnet-request-local-ip");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestLocalPortLayoutRenderer>("aspnet-request-local-port");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestMethodLayoutRenderer>("aspnet-request-method");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestPostedBodyLayoutRenderer>("aspnet-request-posted-body");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer>("aspnet-request-querystring");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestReferrerLayoutRenderer>("aspnet-request-referrer");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestRemotePortLayoutRenderer>("aspnet-request-remote-port");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestRouteParametersLayoutRenderer>("aspnet-request-routeparameters");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer>("aspnet-request-servervariable");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer>("aspnet-request-url");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestUserAgentLayoutRenderer>("aspnet-request-useragent");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer>("aspnet-request");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestWebSocketRequestedProtocolsLayoutRenderer>("aspnet-request-web-socket-requested-protocols");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseContentLengthLayoutRenderer>("aspnet-response-contentlength");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseContentTypeLayoutRenderer>("aspnet-response-contenttype");
@@ -87,6 +89,8 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetWebRootPathLayoutRenderer>("aspnet-webrootpath");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AssemblyVersionLayoutRenderer>("assembly-version");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer>("iis-site-name");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer>("aspnet-appname");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer>("host-appname");
             setupBuilder.RegisterLayout<NLog.Web.Layouts.W3CExtendedLogLayout>("W3CExtendedLogLayout");
             setupBuilder.RegisterTarget<NLog.Web.Targets.AspNetTraceTarget>("AspNetTrace");
             setupBuilder.RegisterTarget<NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper>("AspNetBufferingWrapper");
