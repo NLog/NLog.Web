@@ -35,8 +35,8 @@ namespace NLog.Web.LayoutRenderers
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-AppBasePath-layout-renderer">Documentation on NLog Wiki</seealso>
 #endif
     [LayoutRenderer("aspnet-appbasepath")]
-    [LayoutRenderer("aspnet-basedir")]
-    [LayoutRenderer("host-basedir")]
+    [LayoutRenderer("aspnet-rootdir")]
+    [LayoutRenderer("host-rootdir")]
     [ThreadAgnostic]
     public class AspNetAppBasePathLayoutRenderer : LayoutRenderer
     {
