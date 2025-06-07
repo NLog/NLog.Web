@@ -20,6 +20,7 @@ namespace NLog.Web.LayoutRenderers
     /// </remarks>
     /// <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Environment-layout-renderer">Documentation on NLog Wiki</seealso>
     [LayoutRenderer("aspnet-environment")]
+    [LayoutRenderer("host-environment")]
     [ThreadAgnostic]
     public class AspNetEnvironmentLayoutRenderer : LayoutRenderer
     {
@@ -39,7 +40,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var environmentName = _environmentName ?? (_environmentName = ResolveEnvironmentName());
-            builder.Append(environmentName);
+            builder.Append(environmentName ?? "Production");
         }
 
         private IHostEnvironment? ResolveHostEnvironment()
@@ -50,6 +51,10 @@ namespace NLog.Web.LayoutRenderers
         private string? ResolveEnvironmentName()
         {
             var environmentName = HostEnvironment?.EnvironmentName;
+            if (string.IsNullOrEmpty(environmentName))
+            {
+                environmentName = GetAspNetCoreEnvironment("ASPNETCORE_ENVIRONMENT") ?? GetAspNetCoreEnvironment("DOTNET_ENVIRONMENT");
+            }
             return string.IsNullOrEmpty(environmentName) ? null : environmentName;
         }
 
@@ -60,5 +65,24 @@ namespace NLog.Web.LayoutRenderers
             _environmentName = null;
             base.CloseLayoutRenderer();
         }
+
+#if ASP_NET_CORE
+        private static string? GetAspNetCoreEnvironment(string variableName)
+        {
+            try
+            {
+                var environment = Environment.GetEnvironmentVariable(variableName);
+                if (string.IsNullOrWhiteSpace(environment))
+                    return null;
+
+                return environment.Trim();
+            }
+            catch (Exception ex)
+            {
+                NLog.Common.InternalLogger.Error(ex, "Failed to lookup environment variable {0}", variableName);
+                return null;
+            }
+        }
+#endif
     }
 }
