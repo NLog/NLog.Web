@@ -42,8 +42,8 @@ namespace NLog.Web.Internal
         {
             #pragma warning disable CS0618 // Type or member is obsolete
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-appbasepath");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-basedir");
-            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("host-basedir");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-rootdir");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("host-rootdir");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer>("aspnet-environment");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer>("host-environment");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer>("aspnet-httpcontext-item");
