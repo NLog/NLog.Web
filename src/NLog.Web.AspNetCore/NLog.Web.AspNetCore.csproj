@@ -16,7 +16,7 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Updated dependency NLog v6.0 RC2
+- Updated dependency NLog v6.0 RC3
 - Removed support for .NET Core 3.1 + .NET v5
 - Enabled nullable references
 - Enabled &lt;IsAotCompatible&gt;
@@ -24,6 +24,10 @@ ChangeLog:
 - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
 - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
 - Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
+- Introduced NLogBufferingTargetWrapperModule to replace NLogHttpModule (@bakgerman)
+- Added ${host-environment} as alias for ${aspnet-environment}
+- Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+- Added ${host-appname} as alias for ${iis-site-name}
  
 List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
 
@@ -74,7 +78,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.0-rc2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.0-rc3" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   

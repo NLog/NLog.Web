@@ -4,6 +4,21 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.0 RC3 (2025/06/08)
+
+- **NLog.Web.AspNetCore**
+  - Updated dependency NLog v6.0 RC3
+  - Added ${host-environment} as alias for ${aspnet-environment}
+  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-appname} as alias for ${iis-site-name}
+
+- **NLog.Web**
+  - Updated dependency NLog v6.0 RC3
+  - Added ${host-environment} as alias for ${aspnet-environment}
+  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-appname} as alias for ${iis-site-name}
+  - Introduced NLogBufferingTargetWrapperModule to replace NLogHttpModule (@bakgerman)
+
 ### Version 6.0 RC2 (2025/06/03)
 
 - **NLog.Web.AspNetCore**
