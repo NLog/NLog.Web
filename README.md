@@ -4,7 +4,7 @@
 
 |  Nuget-package  | Description  | Supported Platforms |
 |:----------------|:-------------|:--------------------|
-| [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore) | ASP.NET applications for new .NET Core platforms | .NET 5, 6, 7, 8 and 9 |
+| [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore) | ASP.NET applications for new .NET Core platforms | .NET 6, 7, 8 and 9 |
 | [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web) | Classic ASP.NET MVC applications for .NET Framework | .NET Framework 3.5 - 4.8 | 
 
 [![Build status](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
