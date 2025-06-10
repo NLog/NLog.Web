@@ -22,7 +22,7 @@ These packages are extensions to [NLog](https://github.com/NLog/NLog/), and prov
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
 ## ASP.NET Core
-The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package works with the new ASP.NET Core platforms .NET 5, 6, 7, 8 and 9
+The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package works with the new ASP.NET Core platforms .NET 6, 7, 8 and 9
 
 - [Getting started for ASP.NET Core 6](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
 - [Getting started for ASP.NET Core 5](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-5)
