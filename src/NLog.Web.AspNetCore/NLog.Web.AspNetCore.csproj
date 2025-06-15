@@ -16,7 +16,7 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Updated dependency NLog v6.0 RC3
+- Updated dependency NLog v6.0 RC4
 - Removed support for .NET Core 3.1 + .NET v5
 - Enabled nullable references
 - Enabled &lt;IsAotCompatible&gt;
@@ -78,7 +78,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.0-rc3" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.0-rc4" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   
