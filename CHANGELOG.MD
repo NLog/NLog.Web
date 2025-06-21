@@ -4,6 +4,33 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.0 (2025/06/21)
+
+- **NLog.Web.AspNetCore**
+  - Updated dependency NLog v6.0
+  - Enabled nullable references
+  - Removed support for .NET Core 3.1 + .NET v5 
+  - Added ${host-environment} as alias for ${aspnet-environment}
+  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-appname} as alias for ${iis-site-name}
+  - Removed obsolete extension-methods to register NLog as Logging Provider.
+  - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
+  - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
+  - Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
+
+- **NLog.Web**
+  - Updated dependency NLog v6.0
+  - Enabled nullable references
+  - Added ${host-environment} as alias for ${aspnet-environment}
+  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-appname} as alias for ${iis-site-name}
+  - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
+  - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
+  - Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
+  - Introduced NLogBufferingTargetWrapperModule to replace NLogHttpModule (@bakgerman)
+
+See also [List of major changes in NLog v6](https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html)
+
 ### Version 6.0 RC4 (2025/06/15)
 
 - **NLog.Web.AspNetCore**
