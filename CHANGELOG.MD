@@ -12,7 +12,7 @@ Date format: (year/month/day)
   - Removed support for .NET Core 3.1 + .NET v5 
   - Updated .NET Framework 4.6.2 to use NET8-nuget-dependencies
   - Added ${host-environment} as alias for ${aspnet-environment}
-  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-rootdir} as alias for ${aspnet-appbasepath}
   - Added ${host-appname} as alias for ${iis-site-name}
   - Removed obsolete extension-methods to register NLog as Logging Provider.
   - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
@@ -23,7 +23,7 @@ Date format: (year/month/day)
   - Updated dependency NLog v6.0
   - Enabled nullable references
   - Added ${host-environment} as alias for ${aspnet-environment}
-  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-rootdir} as alias for ${aspnet-appbasepath}
   - Added ${host-appname} as alias for ${iis-site-name}
   - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
   - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
@@ -45,13 +45,13 @@ See also [List of major changes in NLog v6](https://nlog-project.org/2025/04/29/
 - **NLog.Web.AspNetCore**
   - Updated dependency NLog v6.0 RC3
   - Added ${host-environment} as alias for ${aspnet-environment}
-  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-rootdir} as alias for ${aspnet-appbasepath}
   - Added ${host-appname} as alias for ${iis-site-name}
 
 - **NLog.Web**
   - Updated dependency NLog v6.0 RC3
   - Added ${host-environment} as alias for ${aspnet-environment}
-  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
+  - Added ${host-rootdir} as alias for ${aspnet-appbasepath}
   - Added ${host-appname} as alias for ${iis-site-name}
   - Introduced NLogBufferingTargetWrapperModule to replace NLogHttpModule (@bakgerman)
 
