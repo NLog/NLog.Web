@@ -10,6 +10,7 @@ Date format: (year/month/day)
   - Updated dependency NLog v6.0
   - Enabled nullable references
   - Removed support for .NET Core 3.1 + .NET v5 
+  - Updated .NET Framework 4.6.2 to use NET8-nuget-dependencies
   - Added ${host-environment} as alias for ${aspnet-environment}
   - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
   - Added ${host-appname} as alias for ${iis-site-name}
