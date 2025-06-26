@@ -2,13 +2,7 @@
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Xunit;
-
-#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.Extensions.Hosting;
-#else
-using Microsoft.AspNetCore.Hosting;
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
 
 namespace NLog.Web.Tests.LayoutRenderers
 {

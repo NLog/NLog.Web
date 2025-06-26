@@ -2,9 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using NLog.Config;
-#if !NETCOREAPP3_0_OR_GREATER
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
@@ -285,15 +282,11 @@ namespace NLog.Web
         public static IHostBuilder UseNLog(this IHostBuilder builder, NLogAspNetCoreOptions options)
         {
             Guard.ThrowIfNull(builder);
-#if NETCOREAPP3_0_OR_GREATER
             builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, builderContext.HostingEnvironment, options, CreateNLogLoggerProvider));
-#else
-            builder.ConfigureServices((builderContext, services) => AddNLogLoggerProvider(services, builderContext.Configuration, null, options, CreateNLogLoggerProvider));
-#endif
             return builder;
         }
 
-#if NET8_0_OR_GREATER
+#if !NET6_0
         /// <summary>
         /// Enable NLog as logging provider for Microsoft Extension Logging
         /// </summary>

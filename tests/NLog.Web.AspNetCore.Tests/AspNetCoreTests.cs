@@ -94,7 +94,6 @@ namespace NLog.Web.Tests
             Assert.Equal(typeof(NLogLoggerProvider), loggerProvider.GetType());
         }
 
-#if NETCOREAPP3_0_OR_GREATER
         [Fact]
         public void UseNLogContentRootTest()
         {
@@ -112,27 +111,28 @@ namespace NLog.Web.Tests
 
                 LogManager.ConfigurationChanged += (args, sender) => configChanged = true;
 
-                using var webhost = CreateWebHost();
+                using (var webhost = CreateWebHost())
+                {
+                    var hostEnvironment = webhost.Services.GetRequiredService<Microsoft.Extensions.Hosting.IHostEnvironment>();
+                    Assert.NotNull(hostEnvironment.ContentRootPath);
+                    Assert.False(configChanged);    // Scanned ContentRoot without assigning any default config
 
-                var hostEnvironment = webhost.Services.GetRequiredService<Microsoft.Extensions.Hosting.IHostEnvironment>();
-                Assert.NotNull(hostEnvironment.ContentRootPath);
-                Assert.False(configChanged);    // Scanned ContentRoot without assigning any default config
+                    var loggerFact = GetLoggerFactory(webhost.Services);
+                    Assert.NotNull(loggerFact);
 
-                var loggerFact = GetLoggerFactory(webhost.Services);
-                Assert.NotNull(loggerFact);
+                    var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}|${callsite}");
 
-                var configuration = CreateConfigWithMemoryTarget(out var target, "${logger}|${message}|${callsite}");
+                    LogManager.Setup().RegisterNLogWeb(serviceProvider: webhost.Services).LoadConfiguration(configuration);
 
-                LogManager.Setup().RegisterNLogWeb(serviceProvider: webhost.Services).LoadConfiguration(configuration);
+                    var logger = loggerFact.CreateLogger("logger1");
 
-                var logger = loggerFact.CreateLogger("logger1");
+                    logger.LogError("error1");
 
-                logger.LogError("error1");
+                    var logged = target.Logs;
 
-                var logged = target.Logs;
-
-                Assert.Single(logged);
-                Assert.Equal($"logger1|error1|{GetType()}.{nameof(UseNLogContentRootTest)}", logged.First());
+                    Assert.Single(logged);
+                    Assert.Equal($"logger1|error1|{GetType()}.{nameof(UseNLogContentRootTest)}", logged.First());
+                }
             }
             finally
             {
@@ -141,6 +141,7 @@ namespace NLog.Web.Tests
             }
         }
 
+#if NETCOREAPP3_0_OR_GREATER
         [Fact]
         public void LoadConfigurationFromAppSettingsShouldLogTest()
         {

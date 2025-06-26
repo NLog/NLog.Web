@@ -3,11 +3,7 @@ using System.IO;
 using System.Text;
 #if ASP_NET_CORE
 using NLog.Web.DependencyInjection;
-#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.Extensions.Hosting;
-#else
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
 #else
 using NLog.Web.Internal;
 #endif

@@ -7,19 +7,14 @@ using System.Web.Hosting;
 using NLog.Web.Internal;
 #else
 using NLog.Web.DependencyInjection;
-#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.Extensions.Hosting;
-#else
-using Microsoft.AspNetCore.Hosting;
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
 #endif
 
 namespace NLog.Web.LayoutRenderers
 {
 #if ASP_NET_CORE
     /// <summary>
-    /// Rendering site name in IIS. <see cref="IHostingEnvironment.ApplicationName" />
+    /// Rendering site name in IIS. <see cref="IHostEnvironment.ApplicationName" />
     /// </summary>
     /// <remarks>
     /// <code>${iis-site-name}</code>

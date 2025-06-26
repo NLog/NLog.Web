@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog.Web.LayoutRenderers;
+using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Xunit;
@@ -7,11 +8,6 @@ using Xunit;
 #if !ASP_NET_CORE
 using System.Web.Hosting;
 using NLog.Web.Internal;
-#elif NETCOREAPP3_0_OR_GREATER
-using Microsoft.Extensions.Hosting;
-#else
-using Microsoft.AspNetCore.Hosting;
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 #endif
 
 namespace NLog.Web.Tests.LayoutRenderers

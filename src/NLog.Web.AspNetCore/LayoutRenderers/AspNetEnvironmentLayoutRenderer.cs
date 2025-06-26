@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Text;
-#if NETCOREAPP3_0_OR_GREATER
 using Microsoft.Extensions.Hosting;
-#else
-using Microsoft.AspNetCore.Hosting;
-using IHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-#endif
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.DependencyInjection;
@@ -13,7 +8,7 @@ using NLog.Web.DependencyInjection;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Rendering development environment. <see cref="IHostingEnvironment.EnvironmentName" />
+    /// Rendering development environment. <see cref="IHostEnvironment.EnvironmentName" />
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-environment}</code>
