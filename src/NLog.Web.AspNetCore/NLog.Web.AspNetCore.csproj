@@ -16,17 +16,7 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-  - Updated dependency NLog v6.0
-  - Enabled nullable references
-  - Removed support for .NET Core 3.1 + .NET v5 
-  - Updated .NET Framework 4.6.2 to use NET8-nuget-dependencies
-  - Added ${host-environment} as alias for ${aspnet-environment}
-  - Added ${host-rootdir} as alias for ${aspnet-aspbasepath}
-  - Added ${host-appname} as alias for ${iis-site-name}
-  - Removed obsolete extension-methods to register NLog as Logging Provider.
-  - Removed support for EvaluateAsNestedProperties, instead use ObjectPath.
-  - Renamed class-names for old LayoutRenderers to follow standards (@bakgerman)
-  - Marked AspNetLayoutRendererBase DoAppend-method as obsolete (@bakgerman)
+  - Updated dependency NLog v6.0.1
 
 List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
 
@@ -56,7 +46,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <Title>$(AssemblyName) - .NET Framework 4.6.1</Title>
+    <Title>$(AssemblyName) - .NET Framework 4.6.2</Title>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
     <DebugType Condition=" '$(Configuration)' == 'Debug' ">Full</DebugType>
@@ -77,7 +67,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   
@@ -86,7 +76,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net462' ">
-    <!-- Fixed to 2.3.0 since Long Term Supported (LTS) and only supported version for .NET Framework 4.6.2 -->
+    <!-- Fixed to 2.3.0 since Long Term Supported (LTS) to support .NET Framework 4.6.2 -->
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.3.0" />
