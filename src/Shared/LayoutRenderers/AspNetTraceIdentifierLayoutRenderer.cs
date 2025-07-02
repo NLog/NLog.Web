@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
@@ -21,27 +20,21 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            var httpContext = HttpContextAccessor?.HttpContext;
-            builder.Append(LookupTraceIdentifier(httpContext));
+            builder.Append(LookupTraceIdentifier());
         }
 
         /// <summary>
-        /// Ignore the System.Diagnostics.Activity.Current.Id value (AspNetCore3 uses ActivityId by default)
+        /// Ignore the System.Diagnostics.Activity.Current.Id value, and always use HttpContext.TraceIdentifier
         /// </summary>
         public bool IgnoreActivityId { get; set; }
 
-#if NETCOREAPP3_0_OR_GREATER
-        private string? LookupTraceIdentifier(HttpContext? httpContext)
+#if ASP_NET_CORE
+        private string? LookupTraceIdentifier()
         {
             if (IgnoreActivityId)
-                return httpContext?.TraceIdentifier;
+                return HttpContextAccessor?.HttpContext?.TraceIdentifier;
             else
-                return System.Diagnostics.Activity.Current?.Id ?? httpContext?.TraceIdentifier;
-        }
-#elif ASP_NET_CORE
-        private string? LookupTraceIdentifier(HttpContext? httpContext)
-        {
-            return httpContext?.TraceIdentifier;
+                return System.Diagnostics.Activity.Current?.Id ?? HttpContextAccessor?.HttpContext?.TraceIdentifier;
         }
 #else
         /// <summary>
@@ -49,19 +42,16 @@ namespace NLog.Web.LayoutRenderers
         ///
         /// See also http://blog.tatham.oddie.com.au/2012/02/07/code-request-correlation-in-asp-net/
         /// </summary>
-        private static string? LookupTraceIdentifier(System.Web.HttpContextBase? httpContext)
+        private string? LookupTraceIdentifier()
         {
-            IServiceProvider? serviceProvider = httpContext;
-            if (serviceProvider != null)
+            IServiceProvider? serviceProvider = HttpContextAccessor?.HttpContext;
+            var workerRequest = (System.Web.HttpWorkerRequest?)serviceProvider?.GetService(typeof(System.Web.HttpWorkerRequest));
+            if (workerRequest != null)
             {
-                var workerRequest = (System.Web.HttpWorkerRequest)serviceProvider.GetService(typeof(System.Web.HttpWorkerRequest));
-                if (workerRequest != null)
+                Guid requestIdGuid = workerRequest.RequestTraceIdentifier;
+                if (requestIdGuid != Guid.Empty)
                 {
-                    Guid requestIdGuid = workerRequest.RequestTraceIdentifier;
-                    if (requestIdGuid != Guid.Empty)
-                    {
-                        return requestIdGuid.ToString();
-                    }
+                    return requestIdGuid.ToString();
                 }
             }
 
