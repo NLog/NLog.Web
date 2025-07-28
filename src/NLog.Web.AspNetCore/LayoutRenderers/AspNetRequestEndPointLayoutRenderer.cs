@@ -26,5 +26,4 @@ namespace NLog.Web.LayoutRenderers
     }
 }
 
-
 #endif

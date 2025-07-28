@@ -111,6 +111,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetResponseHttpsCompressionLayoutRenderer>("aspnet-response-https-compression");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer>("aspnet-request-servervariable");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestEndPointLayoutRenderer>("aspnet-request-endpoint");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestEndPointGroupLayoutRenderer>("aspnet-request-endpoint-group");
 #endif
 
             #pragma warning restore CS0618 // Type or member is obsolete
