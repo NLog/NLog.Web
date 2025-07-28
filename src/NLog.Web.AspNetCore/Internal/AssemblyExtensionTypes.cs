@@ -112,6 +112,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer>("aspnet-request-servervariable");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestEndPointLayoutRenderer>("aspnet-request-endpoint");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestEndPointGroupLayoutRenderer>("aspnet-request-endpoint-group");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestEndPointNameLayoutRenderer>("aspnet-request-endpoint-name");
 #endif
 
             #pragma warning restore CS0618 // Type or member is obsolete
