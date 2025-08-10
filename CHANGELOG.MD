@@ -4,21 +4,31 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.0.3 (2025/08/10)
+
+- **NLog.Web.AspNetCore**
+  - [#1101](https://github.com/NLog/NLog.Web/pull/1101) Added ${aspnet-request-endpoint-group} (@snakefoot)
+  - [#1102](https://github.com/NLog/NLog.Web/pull/1102) Added ${aspnet-request-endpoint-name} (@snakefoot)
+  - [#1103](https://github.com/NLog/NLog.Web/pull/1103) Updated dependency NLog v6.0.3 (@snakefoot)
+
+- **NLog.Web**
+  - [#1103](https://github.com/NLog/NLog.Web/pull/1103) Updated dependency NLog v6.0.3 (@snakefoot)
+
 ### Version 6.0.2 (2025/07/20)
 
 - **NLog.Web.AspNetCore**
-  - Updated dependency NLog v6.0.2
+  - [#1099](https://github.com/NLog/NLog.Web/pull/1099) Updated dependency NLog v6.0.2 (@snakefoot)
 
 - **NLog.Web**
-  - Updated dependency NLog v6.0.2
+  - [#1099](https://github.com/NLog/NLog.Web/pull/1099) Updated dependency NLog v6.0.2 (@snakefoot)
 
 ### Version 6.0.1 (2025/06/28)
 
 - **NLog.Web.AspNetCore**
-  - Updated dependency NLog v6.0.1
+  - [#1097](https://github.com/NLog/NLog.Web/pull/1097) Updated dependency NLog v6.0.1 (@snakefoot)
 
 - **NLog.Web**
-  - Updated dependency NLog v6.0.1
+  - [#1097](https://github.com/NLog/NLog.Web/pull/1097) Updated dependency NLog v6.0.1 (@snakefoot)
 
 ### Version 6.0 (2025/06/21)
 
