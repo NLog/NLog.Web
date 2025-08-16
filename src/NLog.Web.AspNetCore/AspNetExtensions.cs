@@ -396,7 +396,7 @@ namespace NLog.Web
 
             if (configuration is null || !TryLoadConfigurationFromSection(provider, configuration))
             {
-                string? nlogConfigFile = null;
+                string nlogConfigFile = string.Empty;
                 var contentRootPath = hostEnvironment?.ContentRootPath;
                 var environmentName = hostEnvironment?.EnvironmentName;
                 if (!string.IsNullOrWhiteSpace(contentRootPath) || !string.IsNullOrWhiteSpace(environmentName))
@@ -427,7 +427,7 @@ namespace NLog.Web
             return provider;
         }
 
-        private static string? ResolveEnvironmentNLogConfigFile(string? basePath, string? environmentName)
+        private static string ResolveEnvironmentNLogConfigFile(string? basePath, string? environmentName)
         {
             if (!string.IsNullOrWhiteSpace(basePath))
             {
@@ -452,7 +452,7 @@ namespace NLog.Web
             if (!string.IsNullOrWhiteSpace(environmentName))
                 return $"nlog.{environmentName}.config";
 
-            return null;
+            return string.Empty;
         }
 
         private static bool IsLoggingConfigurationLoaded(LoggingConfiguration cfg)
