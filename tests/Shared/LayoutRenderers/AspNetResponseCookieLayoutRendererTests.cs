@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NLog.Web.LayoutRenderers;
 using NLog.Web.Enums;
 using Xunit;
@@ -386,7 +385,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             {
                 cookieNames.Add(key);
 
-                httpContext.Response.Cookies.Append(key,value);
+                httpContext.Response.Cookies.Append(key, value);
             }
 
             AddCookie("key", "TEST");

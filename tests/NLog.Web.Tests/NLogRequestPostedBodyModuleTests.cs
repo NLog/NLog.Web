@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.Hosting;
@@ -71,7 +69,7 @@ namespace NLog.Web.Tests
             private readonly MemoryStream _entityBody;
 
             public MyWorkerRequest(string entityBody)
-                :base("/", "/", "/", "", new StringWriter(CultureInfo.InvariantCulture))
+                : base("/", "/", "/", "", new StringWriter(CultureInfo.InvariantCulture))
             {
                 _entityBody = new MemoryStream();
                 StreamWriter sw = new StreamWriter(_entityBody);

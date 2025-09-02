@@ -43,6 +43,6 @@ namespace NLog.Web.Enums
         /// <summary>
         /// By default, log the scheme://host/path
         /// </summary>
-        Default = Scheme|Host|Path
+        Default = Scheme | Host | Path
     }
 }

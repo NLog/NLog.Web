@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NLog.Common;
 
 namespace NLog.Web.DependencyInjection

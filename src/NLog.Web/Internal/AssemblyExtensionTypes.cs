@@ -40,7 +40,7 @@ namespace NLog.Web.Internal
     {
         public static void RegisterTypes(this NLog.Config.ISetupExtensionsBuilder setupBuilder)
         {
-            #pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-appbasepath");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("aspnet-rootdir");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer>("host-rootdir");
@@ -99,7 +99,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer>("aspnet-user-claim");
 #endif
 
-            #pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 }

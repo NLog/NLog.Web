@@ -1,6 +1,5 @@
 ﻿using NLog.Web.LayoutRenderers;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 #if !ASP_NET_CORE

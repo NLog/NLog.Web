@@ -93,7 +93,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             renderer.HttpContextAccessor.HttpContext.ReturnsNull();
 
             string expected = "This is a test of the request posted body layout renderer.";
-            var items = new Dictionary<object, object> {{AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey, expected}};
+            var items = new Dictionary<object, object> { { AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey, expected } };
             httpContext.Items.Returns(items);
 
             // Act

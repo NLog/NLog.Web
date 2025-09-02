@@ -1,9 +1,9 @@
 ﻿#if NETCOREAPP3_0_OR_GREATER
+using System;
+using System.Text;
 using Microsoft.AspNetCore.Http.Features;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using System;
-using System.Text;
 
 namespace NLog.Web.LayoutRenderers
 {

@@ -69,8 +69,8 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc />
         protected override void InitializeLayoutRenderer()
         {
-            if (ClaimType?.Trim().StartsWith("ClaimTypes.", StringComparison.OrdinalIgnoreCase) == true || 
-                ClaimType?.Trim().StartsWith("ClaimType.",  StringComparison.OrdinalIgnoreCase) == true)
+            if (ClaimType?.Trim().StartsWith("ClaimTypes.", StringComparison.OrdinalIgnoreCase) == true ||
+                ClaimType?.Trim().StartsWith("ClaimType.", StringComparison.OrdinalIgnoreCase) == true)
             {
                 var fieldName = ClaimType.Substring(ClaimType.IndexOf('.') + 1).Trim();
                 var claimTypesField = typeof(ClaimTypes).GetField(fieldName, BindingFlags.Static | BindingFlags.Public);
@@ -137,7 +137,7 @@ namespace NLog.Web.LayoutRenderers
 #if !ASP_NET_CORE
         private static IEnumerable<KeyValuePair<string, string?>> GetAllClaims(System.Security.Principal.IPrincipal claimsPrincipal)
         {
-              return GetAllClaims(claimsPrincipal as ClaimsPrincipal);
+            return GetAllClaims(claimsPrincipal as ClaimsPrincipal);
         }
 #endif
         private static IEnumerable<KeyValuePair<string, string?>> GetAllClaims(ClaimsPrincipal? claimsPrincipal)

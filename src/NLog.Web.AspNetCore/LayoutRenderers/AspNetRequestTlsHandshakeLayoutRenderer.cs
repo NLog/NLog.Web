@@ -1,10 +1,10 @@
 ﻿#if NETCOREAPP3_0_OR_GREATER
+using System.Text;
 using Microsoft.AspNetCore.Connections.Features;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Enums;
 using NLog.Web.Internal;
-using System.Text;
 
 namespace NLog.Web.LayoutRenderers
 {

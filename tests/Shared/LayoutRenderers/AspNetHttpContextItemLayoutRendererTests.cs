@@ -82,7 +82,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if ASP_NET_CORE
-            httpContext.Items = new Dictionary<object, object> {{"key", expectedValue}};
+            httpContext.Items = new Dictionary<object, object> { { "key", expectedValue } };
 #else
             httpContext.Items.Count.Returns(1);
             httpContext.Items.Contains("key").Returns(true);
@@ -105,7 +105,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 #if ASP_NET_CORE
-            httpContext.Items = new Dictionary<object, object> {{itemKey, data}};
+            httpContext.Items = new Dictionary<object, object> { { itemKey, data } };
 #else
             httpContext.Items.Count.Returns(1);
             httpContext.Items.Contains(itemKey).Returns(true);
@@ -130,7 +130,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 #if ASP_NET_CORE
-            httpContext.Items = new Dictionary<object, object> {{itemKey, data}};
+            httpContext.Items = new Dictionary<object, object> { { itemKey, data } };
 #else
             httpContext.Items.Count.Returns(1);
             httpContext.Items.Contains(itemKey).Returns(true);
@@ -152,11 +152,11 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             get
             {
-                yield return new object[] {"string"};
-                yield return new object[] {1};
-                yield return new object[] {1.5};
-                yield return new object[] {DateTime.Now};
-                yield return new object[] {Tuple.Create("a", 1)};
+                yield return new object[] { "string" };
+                yield return new object[] { 1 };
+                yield return new object[] { 1.5 };
+                yield return new object[] { DateTime.Now };
+                yield return new object[] { Tuple.Create("a", 1) };
             }
         }
 
@@ -164,8 +164,8 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             get
             {
-                yield return new object[] {"key", "Item1", Tuple.Create("value"), "value"};
-                yield return new object[] {"key", "Item1.Item1", Tuple.Create(Tuple.Create(1)), 1};
+                yield return new object[] { "key", "Item1", Tuple.Create("value"), "value" };
+                yield return new object[] { "key", "Item1.Item1", Tuple.Create(Tuple.Create(1)), 1 };
             }
         }
 

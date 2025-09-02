@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using NLog.Layouts;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using NLog.Web.DependencyInjection;
@@ -45,7 +44,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string expectedFieldHeaders = "c-ip cs-username s-computername cs-method cs-uri-stem cs-uri-query sc-status sc-bytes cs-bytes time-taken cs-host cs(User-Agent)";
             string expectedFieldValues = $"- - {Environment.MachineName} - - - - - - - - -";
             string expectedHeader = $@"#Software: Microsoft Internet Information Server{System.Environment.NewLine}#Version: 1.0{System.Environment.NewLine}#Start-Date: {logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}{System.Environment.NewLine}#Fields: date time {expectedFieldHeaders}";
-            string expectedBody= $@"{logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)} {expectedFieldValues}";
+            string expectedBody = $@"{logEvent.TimeStamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)} {expectedFieldValues}";
 
             var header = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Debug")?.Logs?.FirstOrDefault();
             var body = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Debug")?.Logs?.LastOrDefault();

@@ -79,7 +79,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         {
             get
             {
-                yield return new object[] { "string"};
+                yield return new object[] { "string" };
                 yield return new object[] { 1 };
                 yield return new object[] { 1.5 };
                 yield return new object[] { DateTime.Now };

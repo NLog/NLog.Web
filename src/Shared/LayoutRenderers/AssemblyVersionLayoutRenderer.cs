@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Text;
 using NLog.Common;
 using NLog.Config;
 using NLog.LayoutRenderers;

@@ -1,13 +1,13 @@
 ﻿#if NETCOREAPP3_0_OR_GREATER
 using System;
 using System.Collections.Generic;
-using NLog.Web.LayoutRenderers;
-using NLog.Web.Enums;
-using Xunit;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Primitives;
+using NLog.Web.Enums;
+using NLog.Web.LayoutRenderers;
 using NSubstitute;
-using Microsoft.AspNetCore.Http;
+using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {

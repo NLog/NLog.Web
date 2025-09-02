@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-#if !ASP_NET_CORE
+﻿#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -29,7 +25,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(new NameValueCollection());
 #else
             var headers = new HeaderDict();
@@ -52,8 +48,8 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
-            httpContext.Request.Headers.Returns(new NameValueCollection {{ForwardedForHeader, "127.0.0.1"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
+            httpContext.Request.Headers.Returns(new NameValueCollection { { ForwardedForHeader, "127.0.0.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add(ForwardedForHeader, new StringValues("127.0.0.1"));
@@ -75,9 +71,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(
-                new NameValueCollection {{ForwardedForHeader, "127.0.0.1, 192.168.1.1"}});
+                new NameValueCollection { { ForwardedForHeader, "127.0.0.1, 192.168.1.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add(ForwardedForHeader, new StringValues("127.0.0.1, 192.168.1.1"));
@@ -90,8 +86,8 @@ namespace NLog.Web.Tests.LayoutRenderers
 
             // Assert
             Assert.Equal("127.0.0.1", result);
-        }  
-        
+        }
+
         [Fact]
         public void ForwardedForHeaderPresentWithCustomRenderForwardedValue()
         {
@@ -99,9 +95,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(
-                new NameValueCollection {{"header2", "127.0.0.1"}});
+                new NameValueCollection { { "header2", "127.0.0.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add("header2", new StringValues("127.0.0.1"));
@@ -124,9 +120,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(
-                new NameValueCollection {{ForwardedForHeader, "192.168.1.1, 127.0.0.1"}});
+                new NameValueCollection { { ForwardedForHeader, "192.168.1.1, 127.0.0.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
@@ -148,9 +144,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(
-                new NameValueCollection {{ForwardedForHeader, "192.168.1.1, 127.0.0.1"}});
+                new NameValueCollection { { ForwardedForHeader, "192.168.1.1, 127.0.0.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
@@ -172,9 +168,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(
-                new NameValueCollection {{ForwardedForHeader, "192.168.1.1, 127.0.0.1"}});
+                new NameValueCollection { { ForwardedForHeader, "192.168.1.1, 127.0.0.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add(ForwardedForHeader, new StringValues("192.168.1.1, 127.0.0.1"));
@@ -204,9 +200,9 @@ namespace NLog.Web.Tests.LayoutRenderers
             var (renderer, httpContext) = CreateWithHttpContext();
 
 #if !ASP_NET_CORE
-            httpContext.Request.ServerVariables.Returns(new NameValueCollection {{"REMOTE_ADDR", "192.0.0.0"}});
+            httpContext.Request.ServerVariables.Returns(new NameValueCollection { { "REMOTE_ADDR", "192.0.0.0" } });
             httpContext.Request.Headers.Returns(
-                new NameValueCollection {{ForwardedForHeader, "127.0.0.1, 192.168.1.1"}});
+                new NameValueCollection { { ForwardedForHeader, "127.0.0.1, 192.168.1.1" } });
 #else
             var headers = new HeaderDict();
             headers.Add(ForwardedForHeader, new StringValues("127.0.0.1, 192.168.1.1"));

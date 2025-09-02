@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using NLog.Layouts;
+﻿using System.Linq;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using NLog.Web.DependencyInjection;

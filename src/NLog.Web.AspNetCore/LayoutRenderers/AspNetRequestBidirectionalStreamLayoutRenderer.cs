@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using System.Text;
+using Microsoft.AspNetCore.Http.Features;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using System.Text;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -21,7 +21,7 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var upgradeFeature = HttpContextAccessor?.HttpContext.TryGetFeature<IHttpUpgradeFeature>();
-            builder.Append(upgradeFeature?.IsUpgradableRequest == true ? '1': '0');
+            builder.Append(upgradeFeature?.IsUpgradableRequest == true ? '1' : '0');
         }
     }
 }

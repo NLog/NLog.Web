@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Text;
 using NLog.Common;
-using NLog.Config;
 using NLog.LayoutRenderers;
-using NLog.Web.LayoutRenderers;
 
 namespace NLog.Web.LayoutRenderers
 {

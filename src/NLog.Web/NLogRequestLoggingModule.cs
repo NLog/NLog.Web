@@ -83,7 +83,7 @@ namespace NLog.Web
         {
             if (httpContext is null)
                 return false;
-            
+
             var timestamp = httpContext.Timestamp;
             if (timestamp > DateTime.MinValue)
             {

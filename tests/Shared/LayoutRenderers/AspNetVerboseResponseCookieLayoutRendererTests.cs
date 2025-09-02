@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NLog.Web.LayoutRenderers;
 using NLog.Web.Enums;
 using Xunit;
@@ -121,10 +120,10 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void KeyFoundRendersValue_Multiple_Cookies_Flat_Formatting_separators_layouts()
         {
 #if ASP_NET_CORE
-            var expectedResult =$"Name>key{Environment.NewLine}Value>TEST{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web{Environment.NewLine}Expires>2022-02-04 13:14:15Z{Environment.NewLine}Secure>False{Environment.NewLine}HttpOnly>True{Environment.NewLine}SameSite>Strict;Name>Key1{Environment.NewLine}Value>TEST1{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web2{Environment.NewLine}Expires>2022-02-04 16:17:18Z{Environment.NewLine}Secure>True{Environment.NewLine}HttpOnly>False{Environment.NewLine}SameSite>Lax";
+            var expectedResult = $"Name>key{Environment.NewLine}Value>TEST{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web{Environment.NewLine}Expires>2022-02-04 13:14:15Z{Environment.NewLine}Secure>False{Environment.NewLine}HttpOnly>True{Environment.NewLine}SameSite>Strict;Name>Key1{Environment.NewLine}Value>TEST1{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web2{Environment.NewLine}Expires>2022-02-04 16:17:18Z{Environment.NewLine}Secure>True{Environment.NewLine}HttpOnly>False{Environment.NewLine}SameSite>Lax";
 
 #else
-            var expectedResult =$"Name>key{Environment.NewLine}Value>TEST{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web{Environment.NewLine}Expires>2022-02-04 13:14:15Z{Environment.NewLine}Secure>False{Environment.NewLine}HttpOnly>True;Name>Key1{Environment.NewLine}Value>TEST1{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web2{Environment.NewLine}Expires>2022-02-04 16:17:18Z{Environment.NewLine}Secure>True{Environment.NewLine}HttpOnly>False";
+            var expectedResult = $"Name>key{Environment.NewLine}Value>TEST{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web{Environment.NewLine}Expires>2022-02-04 13:14:15Z{Environment.NewLine}Secure>False{Environment.NewLine}HttpOnly>True;Name>Key1{Environment.NewLine}Value>TEST1{Environment.NewLine}Domain>www.nlog.com{Environment.NewLine}Path>/nlog.web2{Environment.NewLine}Expires>2022-02-04 16:17:18Z{Environment.NewLine}Secure>True{Environment.NewLine}HttpOnly>False";
 #endif
             var renderer = CreateRenderer();
             renderer.ValueSeparator = "${event-properties:valueSeparator1}";
@@ -318,7 +317,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             {
                 cookieNames.Add(key);
 
-                httpContext.Response.Cookies.Append(key,value,options);
+                httpContext.Response.Cookies.Append(key, value, options);
             }
 
             AddCookie("key", "TEST", new CookieOptions
@@ -357,7 +356,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 Path = "/nlog.web",
                 Secure = false,
                 HttpOnly = true,
-                Expires = new DateTime(2022,2,4,13,14,15,DateTimeKind.Utc)
+                Expires = new DateTime(2022, 2, 4, 13, 14, 15, DateTimeKind.Utc)
             };
             var cookies = new HttpCookieCollection { cookie1 };
             cookieNames.Add("key");

@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using NLog.Extensions.Logging;
+﻿using NLog.Extensions.Logging;
 
 namespace NLog.Web
 {

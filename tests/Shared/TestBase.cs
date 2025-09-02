@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;

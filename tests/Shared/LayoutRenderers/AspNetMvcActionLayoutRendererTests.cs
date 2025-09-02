@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-#if !ASP_NET_CORE
+﻿#if !ASP_NET_CORE
 using System.Web;
 using System.Collections.Specialized;
 using System.Web.SessionState;
@@ -60,7 +57,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             collection.Set(routingValuesFeature);
 #endif
             httpContext.Features.Returns(collection);
-            
+
             routeData.Values.Add("action", "actionName");
             routeData.Values.Add("controller", "controllerName");
             routingFeature.RouteData.Returns(routeData);

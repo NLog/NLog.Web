@@ -1,5 +1,4 @@
-﻿using System;
-using NLog.Web.LayoutRenderers;
+﻿using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Xunit;

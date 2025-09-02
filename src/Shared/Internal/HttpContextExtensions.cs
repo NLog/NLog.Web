@@ -146,7 +146,7 @@ namespace NLog.Web.Internal
                 var sessionFeature = context.TryGetFeature<ISessionFeature>();
                 if (sessionFeature is null)
                     return null;
-                    
+
                 if (sessionFeature.Session is null)
                 {
                     InternalLogger.Debug("HttpContext Session Feature returned null");
