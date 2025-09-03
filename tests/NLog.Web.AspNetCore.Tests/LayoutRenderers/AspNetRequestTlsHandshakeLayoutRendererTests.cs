@@ -1,11 +1,11 @@
 ﻿#if NETCOREAPP3_0_OR_GREATER
+using System.Security.Authentication;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using NLog.Web.Enums;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
-using System.Security.Authentication;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers

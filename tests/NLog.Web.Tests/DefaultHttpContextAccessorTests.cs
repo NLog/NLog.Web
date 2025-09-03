@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NLog.Web.Tests
 {
-    public class DefaultHttpContextAccessorTests: TestBase
+    public class DefaultHttpContextAccessorTests : TestBase
     {
         [Fact]
         public void UnavailableHttpContextReturnsNull()
@@ -20,7 +20,7 @@ namespace NLog.Web.Tests
         {
             var httpContextAccessor = new DefaultHttpContextAccessor();
             HttpContext.Current = new HttpContext(
-                new HttpRequest(null, "http://nlog-project.org", ""), 
+                new HttpRequest(null, "http://nlog-project.org", ""),
                 new HttpResponse(new StringWriter(new StringBuilder()))
             );
 

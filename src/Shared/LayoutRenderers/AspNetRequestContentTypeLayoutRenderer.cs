@@ -1,5 +1,4 @@
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Internal;
 

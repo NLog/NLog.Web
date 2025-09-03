@@ -1,9 +1,8 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 
 namespace NLog.Web
 {
- 
+
     /// <summary>
     /// Provides access to the HttpContext
     /// </summary>

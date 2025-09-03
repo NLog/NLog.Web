@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Text;
+﻿using System.Text;
 using NLog.LayoutRenderers;
 using NLog.Layouts;
 using NLog.Web.Internal;
@@ -104,7 +103,7 @@ namespace NLog.Web.LayoutRenderers
             var headerName = ForwardedForHeader?.Render(logEvent);
             if (headerName is null || string.IsNullOrEmpty(headerName))
                 return string.Empty;
-            
+
             var forwardedHeader = httpRequest.Headers[headerName];
             if (!string.IsNullOrEmpty(forwardedHeader))
             {

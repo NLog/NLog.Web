@@ -1,6 +1,5 @@
 ﻿#if ASP_NET_CORE || NET46_OR_GREATER
 
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;

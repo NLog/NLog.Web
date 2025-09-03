@@ -43,7 +43,7 @@ namespace NLog.Web.LayoutRenderers
         /// To specify whether to include / exclude the Query string. Default is false.
         /// </summary>
         [Obsolete("Please use the Properties flags enumeration instead. Marked obsolete on NLog.Web 5.1")]
-        public bool IncludeQueryString 
+        public bool IncludeQueryString
         {
             get => HasPropertiesFlag(AspNetRequestUrlProperty.Query);
             set => SetPropertiesFlag(AspNetRequestUrlProperty.Query, value);
@@ -113,7 +113,7 @@ namespace NLog.Web.LayoutRenderers
         /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
         /// </summary>
         public bool UseRawTarget { get; set; }
-        
+
 #endif
 
         /// <inheritdoc/>
@@ -141,7 +141,7 @@ namespace NLog.Web.LayoutRenderers
             if (url is null)
                 return;
 
-            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) &&
                 !string.IsNullOrEmpty(url.Scheme))
             {
                 builder.Append(url.Scheme);
@@ -159,7 +159,7 @@ namespace NLog.Web.LayoutRenderers
 
             if (HasPropertiesFlag(AspNetRequestUrlProperty.Path))
             {
-                var pathAndQuery = HasPropertiesFlag(AspNetRequestUrlProperty.Query) ? 
+                var pathAndQuery = HasPropertiesFlag(AspNetRequestUrlProperty.Query) ?
                     url.PathAndQuery : url.AbsolutePath;
                 builder.Append(pathAndQuery);
             }
@@ -171,7 +171,7 @@ namespace NLog.Web.LayoutRenderers
 #else
         private void RenderUrl(HttpRequest httpRequest, StringBuilder builder)
         {
-            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) && 
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Scheme) &&
                 !string.IsNullOrWhiteSpace(httpRequest.Scheme))
             {
                 builder.Append(httpRequest.Scheme);
@@ -183,7 +183,7 @@ namespace NLog.Web.LayoutRenderers
                 builder.Append(httpRequest.Host.Host);
             }
 
-            if (HasPropertiesFlag(AspNetRequestUrlProperty.Port) && 
+            if (HasPropertiesFlag(AspNetRequestUrlProperty.Port) &&
                 httpRequest.Host.Port > 0)
             {
                 builder.Append(':');

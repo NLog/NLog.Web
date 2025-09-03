@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Threading;
 #if !ASP_NET_CORE
 using System.Web;
@@ -189,7 +188,7 @@ namespace NLog.Web.Targets.Wrappers
 #if ASP_NET_CORE
                     InternalLogger.Info(nameof(NLogBufferingTargetWrapperMiddleware) + " is not yet initialized, which is required by AspNetBufferingWrapper.");
 #else
-                    InternalLogger.Info(nameof(NLogBufferingTargetWrapperModule) +  " is not yet initialized, which is required by AspNetBufferingWrapper.");
+                    InternalLogger.Info(nameof(NLogBufferingTargetWrapperModule) + " is not yet initialized, which is required by AspNetBufferingWrapper.");
 #endif
                 }
             }

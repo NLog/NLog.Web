@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-#if !ASP_NET_CORE
+﻿#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -26,9 +23,9 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 
 #if !ASP_NET_CORE
-             httpContext.Request.UserAgent.Returns("TEST");
+            httpContext.Request.UserAgent.Returns("TEST");
 #else
-            var headers = new HeaderDict {{"User-Agent", new StringValues("TEST")}};
+            var headers = new HeaderDict { { "User-Agent", new StringValues("TEST") } };
             httpContext.Request.Headers.Returns((callinfo) => headers);
 #endif
             // Act

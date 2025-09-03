@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Text;
 using NLog.Config;
 using NLog.LayoutRenderers;
-using NLog.Web.Internal;
 
 namespace NLog.Web.LayoutRenderers
 {

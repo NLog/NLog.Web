@@ -1,9 +1,6 @@
 ﻿using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers

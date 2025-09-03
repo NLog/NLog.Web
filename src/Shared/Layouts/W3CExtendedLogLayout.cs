@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using NLog.Config;
 using NLog.Layouts;
@@ -67,9 +66,9 @@ namespace NLog.Web.Layouts
 
             if (Directives.Count == 0)
             {
-                Directives.Add(new W3CExtendedLogField() { Name = "Software",   Layout = "Microsoft Internet Information Server" });
-                Directives.Add(new W3CExtendedLogField() { Name = "Version",    Layout = "1.0" });
-                Directives.Add(new W3CExtendedLogField() { Name = "Start-Date",  Layout = @"${date:universalTime=true:format=yyyy-MM-dd HH\:mm\:ss}" });
+                Directives.Add(new W3CExtendedLogField() { Name = "Software", Layout = "Microsoft Internet Information Server" });
+                Directives.Add(new W3CExtendedLogField() { Name = "Version", Layout = "1.0" });
+                Directives.Add(new W3CExtendedLogField() { Name = "Start-Date", Layout = @"${date:universalTime=true:format=yyyy-MM-dd HH\:mm\:ss}" });
             }
 
             base.InitializeLayout();

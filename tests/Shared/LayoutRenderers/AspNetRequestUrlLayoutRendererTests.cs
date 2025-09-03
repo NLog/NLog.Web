@@ -296,7 +296,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void EnumUrlPresentRenderNonEmpty_ExcludeScheme_IncludePort()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
-            
+
             renderer.Properties &= ~AspNetRequestUrlProperty.Scheme;
             renderer.Properties |= AspNetRequestUrlProperty.Port;
 
@@ -322,7 +322,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void EnumUrlPresentRenderNonEmpty_ExcludeHost()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp");
-            
+
             renderer.Properties &= ~AspNetRequestUrlProperty.Host;
 
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
@@ -348,7 +348,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void EnumUrlPresentRenderNonEmpty_UseRawTarget_IncludeQueryString()
         {
             var renderer = CreateRenderer("www.google.com:80", "?t=1", "http", "/Test.asp", rawTarget: "/rawTarget");
-            
+
             renderer.UseRawTarget = true;
 
             renderer.Properties |= AspNetRequestUrlProperty.Query;

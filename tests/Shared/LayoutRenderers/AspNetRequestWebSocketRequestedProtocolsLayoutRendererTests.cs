@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NLog.Web.Enums;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NLog.Config;
+﻿using NLog.Config;
 using NLog.Layouts;
 
 namespace NLog.Web.Layouts

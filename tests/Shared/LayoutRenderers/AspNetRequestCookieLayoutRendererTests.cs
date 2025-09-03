@@ -386,7 +386,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             {
                 cookieNames.Add(key);
 
-                var newCookieValues = new [] { $"{key}={result}" };
+                var newCookieValues = new[] { $"{key}={result}" };
                 if (!httpContext.Request.Headers.TryGetValue("Cookie", out var cookieHeaderValues))
                 {
                     cookieHeaderValues = new StringValues(newCookieValues);

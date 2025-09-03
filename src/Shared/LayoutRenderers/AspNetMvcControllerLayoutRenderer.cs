@@ -1,5 +1,4 @@
 using System.Text;
-using NLog.Config;
 using NLog.LayoutRenderers;
 #if !ASP_NET_CORE
 using System.Web.Routing;

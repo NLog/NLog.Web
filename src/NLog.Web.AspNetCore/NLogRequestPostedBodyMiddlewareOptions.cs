@@ -45,7 +45,7 @@ namespace NLog.Web
         /// <summary>
         /// Prefix and suffix values to be accepted as ContentTypes. Ex. key-prefix = "application/" and value-suffix = "json"
         /// </summary>
-        public IList<KeyValuePair<string,string>> AllowContentTypes { get; set; }
+        public IList<KeyValuePair<string, string>> AllowContentTypes { get; set; }
 
         /// <summary>
         /// If this returns true, the post request body will be captured

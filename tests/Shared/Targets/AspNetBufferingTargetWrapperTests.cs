@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -252,7 +251,7 @@ namespace NLog.Web.Tests
 
             Assert.NotEmpty(memoryTarget.Logs);
 
-            Assert.Equal(10,memoryTarget.Logs.Count);
+            Assert.Equal(10, memoryTarget.Logs.Count);
 
             // because we had a null HttpContext, we did not go thru the
             // buffered wrapper where the buffer limit was 9,

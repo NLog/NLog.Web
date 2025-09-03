@@ -1,8 +1,8 @@
 ﻿#if NETCOREAPP3_0_OR_GREATER
+using System;
 using Microsoft.AspNetCore.Http.Features;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
-using System;
 using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers

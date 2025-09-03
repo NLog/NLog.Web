@@ -1,6 +1,6 @@
-﻿using ASP.NetCore6_NLog_Web_Example.Models;
+﻿using System.Diagnostics;
+using ASP.NetCore6_NLog_Web_Example.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace ASP.NetCore6_NLog_Web_Example.Controllers
 {

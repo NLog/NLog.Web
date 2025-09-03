@@ -2,19 +2,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using Xunit;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using NLog.Config;
+using NLog.Extensions.Logging;
 using NLog.Layouts;
 using NLog.Targets;
+using Xunit;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
-using System.IO;
 
 namespace NLog.Web.Tests
 {

@@ -86,7 +86,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             string result = renderer.Render(LogEventInfo.CreateNullEvent());
 
             // Assert
-            Assert.Equal("0" ,result);
+            Assert.Equal("0", result);
         }
 #endif
     }

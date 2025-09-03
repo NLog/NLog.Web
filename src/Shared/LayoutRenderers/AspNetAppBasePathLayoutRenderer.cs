@@ -13,7 +13,6 @@ using NLog.Web.Internal;
 #endif
 using NLog.Config;
 using NLog.LayoutRenderers;
-using System.Linq;
 
 namespace NLog.Web.LayoutRenderers
 {
@@ -85,7 +84,7 @@ namespace NLog.Web.LayoutRenderers
 
         private static string? TrimEndDirectorySeparator(string? directoryPath)
         {
-            return (directoryPath is null ||string.IsNullOrEmpty(directoryPath)) ? null : directoryPath.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
+            return (directoryPath is null || string.IsNullOrEmpty(directoryPath)) ? null : directoryPath.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
         }
 
         private static string? ResolveCurrentAppDirectory()

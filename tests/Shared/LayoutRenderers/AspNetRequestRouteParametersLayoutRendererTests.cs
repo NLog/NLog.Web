@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NLog.Web.LayoutRenderers;
-using Xunit;
 using NSubstitute;
+using Xunit;
 #if ASP_NET_CORE
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;

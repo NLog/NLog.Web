@@ -11,7 +11,7 @@ namespace NLog.Web.Tests
         {
             var attr = new CallerArgumentExpressionAttribute("testInput");
 
-            Assert.Equal("testInput",attr.Param);
+            Assert.Equal("testInput", attr.Param);
         }
 
         [Fact]

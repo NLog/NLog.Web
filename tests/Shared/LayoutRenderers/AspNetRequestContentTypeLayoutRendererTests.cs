@@ -3,7 +3,7 @@ using Xunit;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
-    public  class AspNetRequestContentTypeLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestContentTypeLayoutRenderer>
+    public class AspNetRequestContentTypeLayoutRendererTests : LayoutRenderersTestBase<AspNetRequestContentTypeLayoutRenderer>
     {
         [Fact]
         public void SuccessText()

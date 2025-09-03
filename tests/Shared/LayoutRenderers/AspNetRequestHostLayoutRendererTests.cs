@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-#if !ASP_NET_CORE
+﻿#if !ASP_NET_CORE
 using System.Web;
 using System.Web.Routing;
 using System.Collections.Specialized;
@@ -16,8 +13,6 @@ using NLog.Web.LayoutRenderers;
 using NSubstitute;
 
 using Xunit;
-
-using System.IO;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {

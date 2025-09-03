@@ -1,7 +1,7 @@
 ﻿#if NETCOREAPP3_0_OR_GREATER
-using NLog.Web.LayoutRenderers;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Http.Features;
+using NLog.Web.LayoutRenderers;
 using NSubstitute;
 using Xunit;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using NLog.Web.Targets.Wrappers;
+﻿using NLog.Web.Targets.Wrappers;
 using Xunit;
 
 namespace NLog.Web.Tests

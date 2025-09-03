@@ -1,5 +1,4 @@
 ﻿using NLog.Web.LayoutRenderers;
-using NLog.Web.Tests;
 using NSubstitute;
 using Xunit;
 #if ASP_NET_CORE
@@ -34,7 +33,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             Assert.Empty(result);
         }
 
-        protected static (TLayoutRenderer renderer, HttpContextBase httpContext) CreateWithHttpContext()          
+        protected static (TLayoutRenderer renderer, HttpContextBase httpContext) CreateWithHttpContext()
         {
             var httpContext = Substitute.For<HttpContextBase>();
 #if ASP_NET_CORE

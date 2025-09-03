@@ -139,12 +139,13 @@ namespace NLog.Web.Tests.LayoutRenderers
                 var expectedResult = "value";
                 var httpContext = Substitute.For<HttpContextBase>();
 #if !ASP_NET_CORE
-                httpContext.Request.QueryString.Returns(new NameValueCollection { {"key", expectedResult} });
+                httpContext.Request.QueryString.Returns(new NameValueCollection { { "key", expectedResult } });
 #else
                 var queryCollection = Substitute.For<IQueryCollection>();
-                queryCollection.Keys.Returns(x => new [] { "key" });
+                queryCollection.Keys.Returns(x => new[] { "key" });
                 queryCollection.Count.Returns(x => 1);
-                queryCollection.TryGetValue("key", out Arg.Any<Microsoft.Extensions.Primitives.StringValues>()).Returns(x => {
+                queryCollection.TryGetValue("key", out Arg.Any<Microsoft.Extensions.Primitives.StringValues>()).Returns(x =>
+                {
                     x[1] = new Microsoft.Extensions.Primitives.StringValues(expectedResult);
                     return true;
                 });
@@ -253,7 +254,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 httpContext.Request.Form.Returns(new NameValueCollection { { "key", expectedResult } });
 #else
                 httpContext.Request.HasFormContentType.Returns(true);
-                var formCollection = new FormCollection(new Dictionary<string, StringValues>{ { "key", expectedResult } });
+                var formCollection = new FormCollection(new Dictionary<string, StringValues> { { "key", expectedResult } });
                 httpContext.Request.Form.Returns(formCollection);
 #endif
 
@@ -415,12 +416,13 @@ namespace NLog.Web.Tests.LayoutRenderers
                 var expectedResult = "value";
                 var httpContext = Substitute.For<HttpContextBase>();
 #if !ASP_NET_CORE
-                httpContext.Request.Cookies.Returns(new HttpCookieCollection {new HttpCookie("key", expectedResult) });
+                httpContext.Request.Cookies.Returns(new HttpCookieCollection { new HttpCookie("key", expectedResult) });
 #else
                 var cookieCollection = Substitute.For<IRequestCookieCollection>();
-                cookieCollection.Keys.Returns(x => new [] { "key" });
+                cookieCollection.Keys.Returns(x => new[] { "key" });
                 cookieCollection.Count.Returns(x => 1);
-                cookieCollection.TryGetValue("key", out Arg.Any<string>()).Returns(x => {
+                cookieCollection.TryGetValue("key", out Arg.Any<string>()).Returns(x =>
+                {
                     x[1] = expectedResult;
                     return true;
                 });

@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using NLog.Common;
-using NLog.Config;
 using NLog.LayoutRenderers;
 
 #if !ASP_NET_CORE

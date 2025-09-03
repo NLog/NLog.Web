@@ -1,6 +1,6 @@
-﻿using NLog.LayoutRenderers;
+﻿using System.Text;
+using NLog.LayoutRenderers;
 using NLog.Web.Internal;
-using System.Text;
 
 namespace NLog.Web.LayoutRenderers
 {

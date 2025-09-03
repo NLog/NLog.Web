@@ -13,9 +13,7 @@ using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using NLog.Common;
 using NLog.Web.LayoutRenderers;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using Xunit;
-using System.Collections.Generic;
 
 
 namespace NLog.Web.Tests.LayoutRenderers

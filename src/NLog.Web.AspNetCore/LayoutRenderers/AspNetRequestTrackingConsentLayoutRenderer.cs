@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using System.Text;
+using Microsoft.AspNetCore.Http.Features;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Web.Enums;
 using NLog.Web.Internal;
-using System.Text;
 
 namespace NLog.Web.LayoutRenderers
 {

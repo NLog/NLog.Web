@@ -1,5 +1,4 @@
-﻿using System;
-using NLog.Web.Tests.LayoutRenderers;
+﻿using NLog.Web.Tests.LayoutRenderers;
 using Xunit;
 
 namespace NLog.Web.Tests

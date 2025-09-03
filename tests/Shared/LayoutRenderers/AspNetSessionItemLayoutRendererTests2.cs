@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog.Web.LayoutRenderers;
-using NSubstitute;
-using Xunit;
-using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using NLog.Web.LayoutRenderers;
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Xunit;
+using HttpContextBase = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -98,7 +98,7 @@ namespace NLog.Web.Tests.LayoutRenderers
 
         private class SessionFeatureMock : ISessionFeature
         {
-#region Implementation of ISessionFeature
+            #region Implementation of ISessionFeature
 
             /// <inheritdoc />
             public SessionFeatureMock(ISession session)
@@ -109,7 +109,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             /// <inheritdoc />
             public ISession Session { get; set; }
 
-#endregion
+            #endregion
         }
 
         private class SessionMock : ISession
@@ -123,7 +123,7 @@ namespace NLog.Web.Tests.LayoutRenderers
                 _throwsErrorOnGet = throwsErrorOnGet;
             }
 
-#region Implementation of ISession
+            #region Implementation of ISession
 
             /// <summary>
             /// Load the session from the data store. This may throw if the data store is unavailable.
@@ -193,7 +193,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             /// <inheritdoc />
             public IEnumerable<string> Keys => _values.Keys;
 
-#endregion
+            #endregion
         }
     }
 }

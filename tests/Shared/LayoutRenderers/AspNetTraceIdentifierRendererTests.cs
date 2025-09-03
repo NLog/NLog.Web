@@ -55,7 +55,7 @@ namespace NLog.Web.Tests.LayoutRenderers
             SetTraceIdentifier(httpContext, expectedResult);
 
             System.Diagnostics.Activity.Current = new System.Diagnostics.Activity("MyOperation").Start();
-            
+
             // Act
             string result = renderer.Render(new LogEventInfo());
 
