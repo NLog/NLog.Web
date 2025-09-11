@@ -16,9 +16,7 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-  - [#1101] Added ${aspnet-request-endpoint-group} (@snakefoot)
-  - [#1102] Added ${aspnet-request-endpoint-name} (@snakefoot)
-  - [#1103] Updated dependency NLog v6.0.3 (@snakefoot)
+  - [#1107] Updated dependency NLog v6.0.4 (@snakefoot)
 
 List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
 
@@ -69,7 +67,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.3" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.4" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   
