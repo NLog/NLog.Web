@@ -15,7 +15,7 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=coverage)](https://sonarcloud.io/component_measures?id=nlog.web&branch=master&metric=coverage) 
 
-These packages are extensions to [NLog](https://github.com/NLog/NLog/), and provides targets and [layout-renderes](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) specific to ASP.NET (Core), MVC and IIS.
+Extensions for [NLog](https://github.com/NLog/NLog/) that includes [layout-renderes](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) for capturing contextual details from the HttpContext for both ASP.NET Core and IIS.
 
 ## Releases
 
