@@ -302,12 +302,12 @@ namespace NLog.Web.Tests.LayoutRenderers
 
 #if ASP_NET_CORE
             headerNames.Add("key");
-            httpContext.Request.Headers.Add("key", new StringValues("TEST"));
+            httpContext.Request.Headers["key"] = new StringValues("TEST");
 
             if (addSecondHeader)
             {
                 headerNames.Add("Key1");
-                httpContext.Request.Headers.Add("Key1", new StringValues("TEST1"));
+                httpContext.Request.Headers["Key1"] = new StringValues("TEST1");
             }
 #else
             var headers = new NameValueCollection();

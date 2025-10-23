@@ -32,6 +32,8 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'net462' ">
     <PackageReference Include="System.ValueTuple" Version="4.6.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Core" Version="2.3.6" />
+    <PackageReference Include="System.Formats.Asn1" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
