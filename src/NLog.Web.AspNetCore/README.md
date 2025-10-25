@@ -10,6 +10,9 @@ Providing features like:
 
 - Enrich logging output with additional details from active HttpContext using NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), by just updating the NLog configuration.
 - Supports middleware injection for [HTTP Request Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging) and [HTTP Response Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Response-Body-Capture).
+- Load NLog configuration from [appsettings.json](https://github.com/NLog/NLog.Extensions.Logging/wiki/NLog-configuration-with-appsettings.json)
+- Capture [structured message properties](https://github.com/NLog/NLog.Extensions.Logging/wiki/NLog-properties-with-Microsoft-Extension-Logging) from the [Microsoft ILogger](https://github.com/NLog/NLog.Extensions.Logging/wiki/NLog-GetCurrentClassLogger-and-Microsoft-ILogger)
+- Capture [scope context properties](https://github.com/NLog/NLog/wiki/ScopeProperty-Layout-Renderer) from the Microsoft ILogger `BeginScope`
 - Routing logging output to multiple destinations via the available NLog [Targets](https://nlog-project.org/config/?tab=targets)
 - Rendering logging output into standard formats like JSON, CVS, W3C ELF and XML using NLog [Layouts](https://nlog-project.org/config/?tab=layouts).
 - Contributions are always welcome, by creating a [pull request](https://github.com/NLog/NLog.Web/pulls).
