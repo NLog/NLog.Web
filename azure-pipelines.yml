@@ -22,6 +22,13 @@ steps:
     projectVersion: '$(Build.BuildId)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Restore solution'
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
   displayName: 'Build solution'
   inputs:
     command: 'build'
