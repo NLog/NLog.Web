@@ -4,6 +4,12 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.1.0 (2025/11/12)
+
+- **NLog.Web.AspNetCore**
+  - [#1110](https://github.com/NLog/NLog.Web/pull/1110) Added NET10 targetframework (@snakefoot)
+  - [#1110](https://github.com/NLog/NLog.Web/pull/1110) aspnet-request-tls-handshake supporting NegotiatedCipherSuite + HostName (@snakefoot)
+
 ### Version 6.0.5 (2025/11/09)
 
 - **NLog.Web.AspNetCore**

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net462;netstandard2.0;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.0;net6.0;net8.0;net10.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
     <Description>
 Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog LayoutRenderers to enrich logging output with details from HttpContext.
@@ -16,7 +16,8 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- [#1111] Updated dependency NLog v6.0.6 (@snakefoot)
+- [#1110] Added NET10 targetframework (@snakefoot)
+- [#1110] aspnet-request-tls-handshake supporting NegotiatedCipherSuite + HostName (@snakefoot)
 
 List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
 
@@ -63,11 +64,15 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <Title>$(AssemblyName) - .NET 8.0</Title>
     <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+    <Title>$(AssemblyName) - .NET 10.0</Title>
+    <DefineConstants>$(DefineConstants);ASP_NET_CORE</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup>
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.0.6" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.1.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   

@@ -42,6 +42,8 @@ namespace NLog.Web.LayoutRenderers
 
             switch (Property)
             {
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0058 // Type or member is obsolete
                 case TlsHandshakeProperty.CipherAlgorithm:
                     builder.Append(tlsHandshake.CipherAlgorithm);
                     break;
@@ -60,6 +62,16 @@ namespace NLog.Web.LayoutRenderers
                 case TlsHandshakeProperty.KeyExchangeStrength:
                     builder.Append(tlsHandshake.KeyExchangeStrength);
                     break;
+#pragma warning restore SYSLIB0058 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
+#if NET8_0_OR_GREATER
+                case TlsHandshakeProperty.NegotiatedCipherSuite:
+                    builder.Append(tlsHandshake.NegotiatedCipherSuite);
+                    break;
+                case TlsHandshakeProperty.HostName:
+                    builder.Append(tlsHandshake.HostName);
+                    break;
+#endif
                 case TlsHandshakeProperty.Protocol:
                     builder.Append(tlsHandshake.Protocol);
                     break;
