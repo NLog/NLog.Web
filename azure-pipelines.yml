@@ -12,6 +12,13 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restore solution'
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+    arguments: '--configuration $(BuildConfiguration)'
+
 - task: SonarCloudPrepare@2
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
@@ -20,13 +27,6 @@ steps:
     projectKey: nlog.web
     projectName: 'NLog Web'
     projectVersion: '$(Build.BuildId)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Restore solution'
-  inputs:
-    command: 'restore'
-    projects: '$(solution)'
-    arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build solution'
