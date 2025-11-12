@@ -17,9 +17,11 @@ namespace NLog.Web.Tests.LayoutRenderers
             // Arrange
             var (renderer, httpContext) = CreateWithHttpContext();
 
+#pragma warning disable SYSLIB0057 // Type or member is obsolete
             var certificate = new X509Certificate2(
                 Convert.FromBase64String(
 "MIIC7DCCAdSgAwIBAgIQJq2oGnSgP79FVWGrezYIBDANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDEwlsb2NhbGhvc3QwHhcNMjIwMzExMDQyOTI4WhcNMjcwMzEwMDAwMDAwWjAUMRIwEAYDVQQDEwlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCfSpPySBJetaQdagcgNMs6owXj6QwDv4BKB/qRG4AM5myL3T+7cTiUUOaHywIR+79k2K+LVOLKzfXLJvrzYZSj3yd02ScmM4BEJEcbauY7wCYjgFfB6K9Klh87UAP6+gUUHjIVfzI/Go3883c9D29S3PbO3z5Yz1hTVS0Hes5ZE0d7TDevVSXm2ZpUZSPz7W50+FBq2z3uI3pSBg2oZYHhUvbFIhMI0VIFAPSiyU9XIo+RCv3eN27Fq8g3Qo0z+8wnk7zSldncVEZko5WGKNL781U/TDuhBigkvEme9goaRPRW8oNjm//v+vyJwo/WDzghSwc6jCIdjTXUIqxw4THBAgMBAAGjOjA4MAsGA1UdDwQEAwIEsDATBgNVHSUEDDAKBggrBgEFBQcDATAUBgNVHREEDTALgglsb2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAEqAzHpQgeiW1abdOj4LClM+8uU813tvFhepneLL59yvtZ2NT6ruSd7Fa15CT8bIKACgxzUOaB7N/KseORqLFrNiwvu2A1vvEkhueH0TLC2KJt7SvlEKw5QooiLdOIfNBaL8h/YE/TK9hXCdTgmsPuXuc47vxSyLUUzMGFlW4olFkOEHOP0havplJvPabLY/WpPTV0+mKUe+CKKEKNduH8il9heXguak06XGufP8UQP1fE+GVDFJDqX0S2TMcaoohxL2lV4VqNnadGJ/VA97ZDTWKFteDdTNwZYyb0KvxLtUCc6cHak9ZRs1E7+SZyNx/pcB4vgpnWPXKX8WDr3VGw0="));
+#pragma warning restore SYSLIB0057 // Type or member is obsolete
 
             httpContext.Connection.ClientCertificate.Returns(certificate);
             // Act

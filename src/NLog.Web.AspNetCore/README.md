@@ -19,8 +19,8 @@ Providing features like:
 
 Supported platforms:
 
-- ASP.NET Core 6, 7, 8 and 9
-- ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.1+
+- ASP.NET Core 6, 7, 8, 9 and 10
+- ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.2+
 
 Registration of NLog.Web.AspNetCore in the NLog.config file:
 

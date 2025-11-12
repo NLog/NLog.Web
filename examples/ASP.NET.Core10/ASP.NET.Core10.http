@@ -1,0 +1,11 @@
+@ASP.NET.Core10_HostAddress = http://localhost:5252
+
+GET {{ASP.NET.Core10_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{ASP.NET.Core10_HostAddress}}/todos/1
+Accept: application/json
+
+###
