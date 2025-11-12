@@ -1,6 +1,6 @@
 pool:
   name: Azure Pipelines
-  vmImage: 'windows-2026'
+  vmImage: 'windows-2025'
   demands:
   - msbuild
   - visualstudio
