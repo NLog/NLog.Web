@@ -33,7 +33,7 @@ steps:
   inputs:
     command: 'build'
     projects: '$(solution)'
-    arguments: '--configuration $(BuildConfiguration)'
+    arguments: '--configuration $(BuildConfiguration) /p:ContinuousIntegrationBuild=true'
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
