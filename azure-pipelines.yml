@@ -12,17 +12,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 6.x'
-  inputs:
-    versionSpec: 6.x
-
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
-  inputs:
-    restoreSolution: '$(solution)'
-    verbosityRestore: Quiet
-
 - task: SonarCloudPrepare@2
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
@@ -32,14 +21,12 @@ steps:
     projectName: 'NLog Web'
     projectVersion: '$(Build.BuildId)'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   displayName: 'Build solution'
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '-v:m'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    maximumCpuCount: true
+    command: 'build'
+    projects: '$(solution)'
+    arguments: '--configuration $(BuildConfiguration)'
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
