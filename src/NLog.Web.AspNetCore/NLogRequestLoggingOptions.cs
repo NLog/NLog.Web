@@ -76,6 +76,9 @@ namespace NLog.Web
         private bool IsSlowHttpRequest()
         {
 #if NETCOREAPP3_0_OR_GREATER
+            if (_durationThresholdMs == TimeSpan.Zero)
+                return false;
+
             var currentActivity = System.Diagnostics.Activity.Current;
             var activityStartTime = DateTime.MinValue;
             while (currentActivity != null)
