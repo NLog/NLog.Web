@@ -84,6 +84,9 @@ namespace NLog.Web
             if (httpContext is null)
                 return false;
 
+            if (_durationThresholdMs == TimeSpan.Zero)
+                return false;
+
             var timestamp = httpContext.Timestamp;
             if (timestamp > DateTime.MinValue)
             {
