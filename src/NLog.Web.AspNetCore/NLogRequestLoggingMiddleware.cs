@@ -78,6 +78,12 @@ namespace NLog.Web
                             _logger.Log(logLevel, 0, null, "HttpRequest Completed");
                             break;
                         case Microsoft.Extensions.Logging.LogLevel.Warning:
+                            var statusCode = httpContext.Response?.StatusCode ?? 0;
+                            if (statusCode < 100 || (statusCode >= 400 && statusCode < 600))
+                                _logger.Log(logLevel, 0, null, "HttpRequest Failure");
+                            else
+                                _logger.Log(logLevel, 0, null, "HttpRequest Completed");
+                            break;
                         case Microsoft.Extensions.Logging.LogLevel.Error:
                         case Microsoft.Extensions.Logging.LogLevel.Critical:
                             _logger.Log(logLevel, 0, null, "HttpRequest Failure");

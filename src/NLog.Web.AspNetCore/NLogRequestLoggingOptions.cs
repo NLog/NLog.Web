@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using NLog.Web.Internal;
@@ -69,6 +70,22 @@ namespace NLog.Web
             }
             else
             {
+                if (exception is OperationCanceledException || (exception is AggregateException aggregateException && aggregateException.InnerException is OperationCanceledException))
+                {
+                    var statusCode = httpContext.Response?.StatusCode ?? 0;
+                    if (statusCode == StatusCodes.Status408RequestTimeout
+#if NET8_0_OR_GREATER
+                     || statusCode == StatusCodes.Status499ClientClosedRequest
+#else
+                     || statusCode == 499
+#endif
+                     || httpContext.RequestAborted.IsCancellationRequested
+                     )
+                    {
+                        // Client canceled the request - not server side error, but maybe server is responding slow
+                        return Microsoft.Extensions.Logging.LogLevel.Warning;
+                    }
+                }
                 return Microsoft.Extensions.Logging.LogLevel.Error;
             }
         }
@@ -76,6 +93,9 @@ namespace NLog.Web
         private bool IsSlowHttpRequest()
         {
 #if NETCOREAPP3_0_OR_GREATER
+            if (_durationThresholdMs == TimeSpan.Zero)
+                return false;
+
             var currentActivity = System.Diagnostics.Activity.Current;
             var activityStartTime = DateTime.MinValue;
             while (currentActivity != null)
