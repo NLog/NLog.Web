@@ -98,6 +98,44 @@ namespace NLog.Web.Tests
         }
 
         [Fact]
+        public void HttpRequestAbortedTest()
+        {
+            // Arrange
+            DefaultHttpContext defaultContext = new DefaultHttpContext();
+            defaultContext.Response.Body = new MemoryStream();
+            defaultContext.Request.Path = "/";
+
+            var testTarget = new NLog.Targets.MemoryTarget() { Layout = "${level}|${message}" };
+            var nlogFactory = new LogFactory().Setup().LoadConfiguration(builder =>
+            {
+                builder.ForLogger().WriteTo(testTarget);
+            }).LogFactory;
+            var loggerFactory = new NLogLoggerFactory(new NLogLoggerProvider(new NLogProviderOptions(), nlogFactory));
+
+            var middlewareInstance = new NLogRequestLoggingMiddleware(next: (innerHttpContext) =>
+            {
+                innerHttpContext.Response.StatusCode = StatusCodes.Status408RequestTimeout;
+                throw new OperationCanceledException();
+            }, loggerFactory: loggerFactory);
+
+            // Act
+            Assert.Throws<OperationCanceledException>(() =>
+            {
+                try
+                {
+                    middlewareInstance.Invoke(defaultContext).GetAwaiter().GetResult();
+                }
+                catch
+                {
+                    // Assert
+                    Assert.Single(testTarget.Logs);
+                    Assert.Equal("Warn|HttpRequest Exception", testTarget.Logs[0]);
+                    throw;
+                }
+            });
+        }
+
+        [Fact]
         public void HttpRequestExceptionFilterTest()
         {
             // Arrange
