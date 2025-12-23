@@ -22,18 +22,23 @@ Supported platforms:
 - ASP.NET Core 6, 7, 8, 9 and 10
 - ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.2+
 
-Registration of NLog.Web.AspNetCore in the NLog.config file:
+Register NLog as logging provider:
+```csharp
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
+```
+
+If logging is needed before the host building, then one can use fluent setup:
+```csharp
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+```
+
+Alternative include NLog.Web.AspNetCore extension in the NLog.config file:
 
 ```xml
 <extensions>
     <add assembly="NLog.Web.AspNetCore"/>
 </extensions>
-```
-
-Registration of NLog.Web.AspNetCore can also be performed with fluent setup:
-
-```csharp
-NLog.LogManager.Setup().LoadConfigurationFromAppSettings();
 ```
 
 Useful Links:
