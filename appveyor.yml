@@ -8,6 +8,10 @@ nuget:
   project_feed: true
 matrix:
   fast_finish: true
+environment:
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+    DOTNET_CLI_TELEMETRY_OPTOUT: true
+    DOTNET_NOLOGO: true
 install:
 - ps: |
     Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
