@@ -72,7 +72,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
   </Target>
   <ItemGroup>
     <PackageReference Include="NLog" Version="6.1.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.102" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
