@@ -84,6 +84,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.3.0" />
+  <PackageReference Include="System.ValueTuple" Version="4.6.2" />
   </ItemGroup>
 
   <ItemGroup>
