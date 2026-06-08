@@ -1,7 +1,7 @@
 version: 6.0.0.{build}
 clone_folder: c:\projects\nlogweb
 configuration: Release
-image: Visual Studio 2022
+image: Visual Studio 2026
 platform: Any CPU
 
 nuget:
@@ -12,10 +12,7 @@ environment:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
     DOTNET_CLI_TELEMETRY_OPTOUT: true
     DOTNET_NOLOGO: true
-install:
-- ps: |
-    Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '10.0.102' -InstallDir "$env:ProgramFiles\dotnet"
+
 build:
   publish_nuget: true
   publish_nuget_symbols: true

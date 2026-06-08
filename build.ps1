@@ -10,7 +10,7 @@ if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {
     $versionSuffix = "PR" + $env:APPVEYOR_PULL_REQUEST_NUMBER
 }
 
-msbuild NLog.Web.sln /t:restore,rebuild /p:configuration=release /p:ContinuousIntegrationBuild=true /verbosity:minimal
+msbuild NLog.Web.sln /t:restore /p:configuration=release /verbosity:minimal
 if (-Not $LastExitCode -eq 0) {
     exit $LastExitCode 
 }
