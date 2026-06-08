@@ -16,7 +16,6 @@ environment:
 build:
   publish_nuget: true
   publish_nuget_symbols: true
-  verbosity: quiet
   
 skip_tags: true
 skip_branch_with_pr: true
