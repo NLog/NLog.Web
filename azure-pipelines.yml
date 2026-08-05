@@ -19,7 +19,7 @@ steps:
     projects: '$(solution)'
     arguments: '--configuration $(BuildConfiguration)'
 
-- task: SonarCloudPrepare@2
+- task: SonarCloudPrepare@3
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
     SonarCloud: Sonarcloud
@@ -67,10 +67,10 @@ steps:
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
 
-- task: SonarCloudAnalyze@2
+- task: SonarCloudAnalyze@3
   displayName: 'Run Code Analysis'
 
-- task: SonarCloudPublish@2
+- task: SonarCloudPublish@3
   displayName: 'Publish Quality Gate Result'
 
 - task: PublishBuildArtifacts@1
