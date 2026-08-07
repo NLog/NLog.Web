@@ -39,4 +39,5 @@ Useful Links:
 - [Tutorial](https://github.com/NLog/NLog/wiki/Tutorial)
 - [ASP.NET Layout Renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web)
 - [Logging Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
+- [Change Log](https://github.com/NLog/NLog.Web/releases)
 - [Have a question?](https://stackoverflow.com/questions/tagged/nlog)
