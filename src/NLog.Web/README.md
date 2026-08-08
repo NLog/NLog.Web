@@ -35,7 +35,6 @@ NLog.LogManager.Setup().RegisterNLogWeb();
 Useful Links:
 
 - [Home Page](https://nlog-project.org/)
-- [Change Log](https://github.com/NLog/NLog.Web/releases)
 - [Tutorial](https://github.com/NLog/NLog/wiki/Tutorial)
 - [ASP.NET Layout Renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web)
 - [Logging Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
