@@ -36,7 +36,6 @@ var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurre
 Useful Links:
 
 - [Home Page](https://nlog-project.org/)
-- [Change Log](https://github.com/NLog/NLog.Web/releases)
 - [Getting started with ASP.NET Core](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
 - [ASP.NET Core Layout Renderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore)
 - [Logging Troubleshooting](https://github.com/NLog/NLog/wiki/Logging-troubleshooting)
