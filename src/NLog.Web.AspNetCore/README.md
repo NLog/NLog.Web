@@ -4,9 +4,9 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=vulnerabilities)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 
-Integrates NLog as [Logging provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging-providers) for the ASP.NET Core platform, by just calling `UseNLog()` with the application host-builder.
+**NLog.Web.AspNetCore** integrates NLog as a logging provider for **Microsoft.Extensions.Logging** by calling `UseNLog()` on the application HostBuilder.
 
-Providing features like:
+Application code can continue using `ILogger<T>`, while NLog provides powerful logging capabilities including:
 
 - Enrich logging output with additional details from active HttpContext using NLog [LayoutRenderers](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore), by just updating the NLog configuration.
 - Supports middleware injection for [HTTP Request Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Request-Logging) and [HTTP Response Logging](https://github.com/NLog/NLog.Web/wiki/HTTP-Response-Body-Capture).
@@ -31,14 +31,6 @@ builder.Host.UseNLog();
 If logging is needed before the host building, then one can use fluent setup:
 ```csharp
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-```
-
-Alternative include NLog.Web.AspNetCore extension in the NLog.config file:
-
-```xml
-<extensions>
-    <add assembly="NLog.Web.AspNetCore"/>
-</extensions>
 ```
 
 Useful Links:
