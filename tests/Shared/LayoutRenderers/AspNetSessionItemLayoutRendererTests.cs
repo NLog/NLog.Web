@@ -19,6 +19,7 @@ using NLog.Layouts;
 using NLog.Web.LayoutRenderers;
 using Xunit;
 using NSubstitute;
+using System.Linq;
 
 namespace NLog.Web.Tests.LayoutRenderers
 {
@@ -125,7 +126,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         private void ExecTest(string key, object value, object expected, Layout appSettingLayoutRenderer)
         {
             var simpleLayout = (appSettingLayoutRenderer as SimpleLayout);
-            var renderer = simpleLayout?.Renderers[0] as AspNetLayoutRendererBase;
+            var renderer = simpleLayout?.LayoutRenderers.FirstOrDefault() as AspNetLayoutRendererBase;
 
             Assert.NotNull(renderer);
 

@@ -29,21 +29,24 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// The header name to check for the Forwarded-For. Default "X-Forwarded-For". Needs <see cref="CheckForwardedForHeader"/>
         /// </summary>
+        /// <remarks>Default: <c>X-Forwarded-For</c></remarks>
         public Layout ForwardedForHeader { get; set; } = "X-Forwarded-For";
 
         /// <summary>
         /// Gets or sets whether the renderer should check value of <see cref="ForwardedForHeader"/> header
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public bool CheckForwardedForHeader { get; set; }
 
         /// <summary>
         /// Gets or sets the array index of the X-Forwarded-For header to use, if the desired client IP is not at
-        /// the zeroth index.  Defaults to zero.  If the index is too large the last array element is returned instead.
+        /// the zeroth index.  If the index is too large the last array element is returned instead.
         /// If a negative index is used, this is used as the position from the end of the array.
         /// Minus one will indicate the last element in the array.  If the negative index is too large the first index
         /// of the array is returned instead.
         /// </summary>
+        /// <remarks>Default: <see langword="0"/> (zero)</remarks>
         public int CheckForwardedForHeaderOffset
         {
             get => _checkForwardedForHeaderOffset;

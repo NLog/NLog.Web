@@ -26,11 +26,13 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// When no format specified, then just total milliseconds
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering. 
         /// </summary>
+        /// <remarks>Default: <see cref="CultureInfo.InvariantCulture"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 

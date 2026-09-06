@@ -16,7 +16,7 @@ namespace NLog.Web
     public class NLogRequestPostedBodyModule : IHttpModule
     {
         /// <summary>
-        /// The maximum request posted body size that will be captured. Defaults to 30KB.
+        /// The maximum request posted body size that will be captured. Default: 30 KByte
         /// </summary>
         public int MaxContentLength { get; set; } = 30 * 1024;
 

@@ -16,6 +16,7 @@ namespace NLog.Web
         /// <summary>
         /// Get or set duration time in milliseconds, before a HttpRequest is seen as slow (Logged as warning)
         /// </summary>
+        /// <remarks>Default: <see langword="300"/> milliseconds</remarks>
         public int DurationThresholdMs { get => (int)_durationThresholdMs.TotalMilliseconds; set => _durationThresholdMs = TimeSpan.FromMilliseconds(value); }
         private TimeSpan _durationThresholdMs = TimeSpan.FromMilliseconds(300);
 

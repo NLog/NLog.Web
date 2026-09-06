@@ -28,8 +28,8 @@ namespace NLog.Web.LayoutRenderers
     {
         /// <summary>
         /// Specifies which of the 7 properties of ITlsHandshakeFeature to emit
-        /// Defaults to the protocol
         /// </summary>
+        /// <remarks>Default: <see cref="TlsHandshakeProperty.Protocol"/></remarks>
         [DefaultParameter]
         public TlsHandshakeProperty Property { get; set; } = TlsHandshakeProperty.Protocol;
 

@@ -36,6 +36,7 @@ namespace NLog.Web.LayoutRenderers
         /// A flags enumeration that controls which of the five portions of the URL are logged.
         /// Defaults to scheme://host/path, port and query string are by default not logged.
         /// </summary>
+        /// <remarks>Default: <see cref="AspNetRequestUrlProperty.Default"/> (scheme://host/path)</remarks>
         [DefaultParameter]
         public AspNetRequestUrlProperty Properties { get; set; } = AspNetRequestUrlProperty.Default;
 
@@ -109,9 +110,10 @@ namespace NLog.Web.LayoutRenderers
 #if ASP_NET_CORE
 
         /// <summary>
-        /// To specify whether to use raw path and full query. Default is false.
-        /// See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
+        /// To specify whether to use raw path and full query.
+        /// See <see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget">IHttpRequestFeature.RawTarget</see>
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         public bool UseRawTarget { get; set; }
 
 #endif

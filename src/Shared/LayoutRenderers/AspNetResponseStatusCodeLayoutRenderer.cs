@@ -30,7 +30,7 @@ namespace NLog.Web.LayoutRenderers
         private string[]? _formatMapper;
 
         /// <summary>
-        /// A valid enumeration format string, defaults to integer format
+        /// A valid enumeration format string, defaults to integer format. Default: <c>D</c>
         /// </summary>
         /// <remarks>
         /// Supported Values, Case Insensitive

@@ -25,6 +25,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
+        /// <remarks>Default: <see cref="string.Empty"/></remarks>
         [DefaultParameter]
         public string Item { get; set; } = string.Empty;
 

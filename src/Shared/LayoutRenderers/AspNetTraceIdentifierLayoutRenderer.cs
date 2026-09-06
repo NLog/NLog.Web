@@ -26,6 +26,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Ignore the System.Diagnostics.Activity.Current.Id value, and always use HttpContext.TraceIdentifier
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         public bool IgnoreActivityId { get; set; }
 
 #if ASP_NET_CORE

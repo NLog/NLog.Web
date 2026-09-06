@@ -106,24 +106,23 @@ namespace NLog.Web.Targets.Wrappers
         }
 
         /// <summary>
-        /// Gets or sets the number of log events to be buffered.
+        /// Gets or sets the number of log events to be buffered. Default: <see langword="100"/>
         /// </summary>
         /// <docgen category='Buffering Options' order='100' />
         public int BufferSize { get; set; } = 100;
 
         /// <summary>
-        /// Gets or sets a value indicating whether buffer should grow as needed.
+        /// Gets or sets a value indicating whether buffer should grow as needed. Default: <see langword="true"/>
         /// </summary>
-        /// <value>A value of <c>true</c> if buffer should grow as needed; otherwise, <c>false</c>.</value>
         /// <remarks>
-        /// Value of <c>true</c> causes the buffer to expand until <see cref="BufferGrowLimit"/> is hit,
-        /// <c>false</c> causes the buffer to never expand and lose the earliest entries in case of overflow.
+        /// Value of <see langword="true"/> causes the buffer to expand until <see cref="BufferGrowLimit"/> is hit,
+        /// <see langword="false"/> causes the buffer to never expand and lose the earliest entries in case of overflow.
         /// </remarks>
         /// <docgen category='Buffering Options' order='100' />
         public bool GrowBufferAsNeeded { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the maximum number of log events that the buffer can keep.
+        /// Gets or sets the maximum number of log events that the buffer can keep. Default: <see langword="0"/>
         /// </summary>
         /// <docgen category='Buffering Options' order='100' />
         public int BufferGrowLimit

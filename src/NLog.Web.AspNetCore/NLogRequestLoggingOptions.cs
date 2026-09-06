@@ -24,11 +24,13 @@ namespace NLog.Web
         /// <summary>
         /// Logger-name used for logging http-requests
         /// </summary>
+        /// <remarks>Default: <c>NLogRequestLogging</c></remarks>
         public string LoggerName { get; set; } = "NLogRequestLogging";
 
         /// <summary>
         /// Get or set duration time in milliseconds, before a HttpRequest is seen as slow (Logged as warning)
         /// </summary>
+        /// <remarks>Default: 300 milliseconds</remarks>
         public int DurationThresholdMs { get => (int)_durationThresholdMs.TotalMilliseconds; set => _durationThresholdMs = TimeSpan.FromMilliseconds(value); }
         private TimeSpan _durationThresholdMs = TimeSpan.FromMilliseconds(300);
 

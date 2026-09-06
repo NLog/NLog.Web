@@ -31,6 +31,9 @@ namespace NLog.Web.Layouts
         /// <summary>
         /// Newline to append after each directive header
         /// </summary>
+        /// <remarks>
+        /// Default: <see cref="NLog.Targets.LineEndingMode.Default"/> Newline.
+        /// </remarks>
         public NLog.Targets.LineEndingMode LineEnding { get; set; } = NLog.Targets.LineEndingMode.Default;
 
         /// <summary>

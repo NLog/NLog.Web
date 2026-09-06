@@ -34,7 +34,7 @@ namespace NLog.Web
         }
 
         /// <summary>
-        /// The maximum request posted body size that will be captured. Defaults to 30KB.
+        /// The maximum request posted body size that will be captured. Default: 30 KByte
         /// </summary>
         /// <remarks>
         /// HttpRequest.EnableBuffer() writes the request to TEMP files on disk if the request ContentLength is > 30KB
