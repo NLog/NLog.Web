@@ -33,11 +33,13 @@ namespace NLog.Web.Layouts
         /// Gets or sets the name of the field.
         /// </summary>
         /// <remarks>
-        /// Standard field prefixes:<br/>
+        /// Default: <see cref="string.Empty"/>.
+        /// <para>Standard field prefixes:<br/>
         ///  * s- = server details<br/>
         ///  * c- = client details<br/>
         ///  * cs- = client to server request details<br/>
         ///  * sc- = server to client response details<br/>
+        /// </para>
         /// </remarks>
         /// <docgen category='W3C Field Options' order='10' />
         public string Name { get; set; }
@@ -45,6 +47,9 @@ namespace NLog.Web.Layouts
         /// <summary>
         /// Gets or sets the layout of the field.
         /// </summary>
+        /// <remarks>
+        /// Default: <see cref="Layout.Empty"/>.
+        /// </remarks>
         /// <docgen category='W3C Field Options' order='10' />
         public Layout Layout { get; set; }
     }

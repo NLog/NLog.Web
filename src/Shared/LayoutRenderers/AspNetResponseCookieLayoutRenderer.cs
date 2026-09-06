@@ -36,7 +36,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Separator between objects, like cookies. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
-        /// <remarks>Render with <see cref="GetRenderedObjectSeparator" /></remarks>
+        /// <remarks>Default: <c>;</c> (semi-colon)</remarks>
         public string ObjectSeparator { get => _objectSeparatorLayout.OriginalText; set => _objectSeparatorLayout = new SimpleLayout(value ?? ""); }
         private SimpleLayout _objectSeparatorLayout = new SimpleLayout(";");
 
@@ -57,6 +57,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Render all of the cookie properties, such as Daom and Path, not merely Name and Value
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         public bool Verbose { get; set; }
 
         /// <summary>

@@ -31,6 +31,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the HttpContext Item to be rendered.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
         public string? Item { get; set; }
@@ -38,18 +39,21 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the QueryString variable to be rendered.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? QueryString { get; set; }
 
         /// <summary>
         /// Gets or sets the form variable to be rendered.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? Form { get; set; }
 
         /// <summary>
         /// Gets or sets the cookie to be rendered.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? Cookie { get; set; }
 
@@ -57,6 +61,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the ServerVariables item to be rendered.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? ServerVariable { get; set; }
 #endif
@@ -64,6 +69,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the Headers item to be rendered.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? Header { get; set; }
 

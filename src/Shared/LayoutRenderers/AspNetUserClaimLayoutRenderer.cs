@@ -61,7 +61,7 @@ namespace NLog.Web.LayoutRenderers
         /// 
         /// Additional Azure Claims are also recognized: ClaimTypes.ObjectId + ClaimTypes.TenantId + ClaimTypes.AppId .
         /// 
-        /// If using value null or empty then all claim types are rendered.
+        /// Default: <see cref="string.Empty"/> (all claim types are rendered).
         /// </remarks>
         [DefaultParameter]
         public string ClaimType { get; set; } = string.Empty;

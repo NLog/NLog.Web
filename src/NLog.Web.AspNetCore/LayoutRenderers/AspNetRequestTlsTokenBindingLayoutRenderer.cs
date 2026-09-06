@@ -29,13 +29,15 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Tls Token Binding Type Enumeration, Provider or Referrer
         /// </summary>
+        /// <remarks>Default: <see cref="TlsTokenBindingProperty.Provider"/></remarks>
         [DefaultParameter]
-        public TlsTokenBindingProperty Property { get; set; }
+        public TlsTokenBindingProperty Property { get; set; } = TlsTokenBindingProperty.Provider;
 
         /// <summary>
         /// Tls Token Binding Format Enumeration, Hex or Base64
         /// </summary>
-        public ByteArrayFormatProperty Format { get; set; }
+        /// <remarks>Default: <see cref="ByteArrayFormatProperty.Base64"/></remarks>
+        public ByteArrayFormatProperty Format { get; set; } = ByteArrayFormatProperty.Base64;
 
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)

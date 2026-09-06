@@ -38,7 +38,7 @@ namespace NLog.Web.Tests
             }).LogFactory;
 
             var target = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("hello");
-            var layoutRenderer = (target.Layout as NLog.Layouts.SimpleLayout).Renderers.FirstOrDefault() as NLogWebFuncLayoutRenderer;
+            var layoutRenderer = (target.Layout as NLog.Layouts.SimpleLayout).LayoutRenderers.FirstOrDefault() as NLogWebFuncLayoutRenderer;
             layoutRenderer.HttpContextAccessor = httpContextMock;
 
             logFactory.GetCurrentClassLogger().Info("Hello World");

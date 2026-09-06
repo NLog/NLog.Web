@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NLog.Config;
@@ -40,6 +39,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
+        /// <remarks>Default: <see cref="string.Empty"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
         public string Item { get; set; } = string.Empty;
@@ -52,12 +52,14 @@ namespace NLog.Web.LayoutRenderers
         /// ObjectPath="Name.First"
         /// This will emit the First Name property of the object in HttpContext.Items woith the key of 'person' in the collection
         /// </summary>
+        /// <remarks>Default: <see cref="string.Empty"/></remarks>
         /// <docgen category='Layout Options' order='20' />
         public string ObjectPath { get => _objectPathRenderer.ObjectPath; set => _objectPathRenderer.ObjectPath = value; }
 
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
+        /// <remarks>Default: <see cref="string.Empty"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         [Obsolete("Instead use Item-property. Marked obsolete with NLog.Web 5.3")]
         public string Variable { get => Item; set => Item = value; }
@@ -65,12 +67,14 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Format string for conversion from object to string.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
+        /// <remarks>Default: <see cref="CultureInfo.InvariantCulture"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 
@@ -114,7 +118,7 @@ namespace NLog.Web.LayoutRenderers
             return items?.Count > 0 && items.Contains(key) ? items[key] : null;
         }
 #else
-        private static object? LookupItemValue(IDictionary<object, object?> items, string key)
+        private static object? LookupItemValue(System.Collections.Generic.IDictionary<object, object?> items, string key)
         {
             return items != null && items.TryGetValue(key, out var itemValue) ? itemValue : null;
         }

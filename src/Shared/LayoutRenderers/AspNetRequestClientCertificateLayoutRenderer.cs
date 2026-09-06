@@ -23,6 +23,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// This is passed to the X509Certificate2.ToString(bool) method
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         public bool Verbose { get; set; }
 
         /// <inheritdoc/>

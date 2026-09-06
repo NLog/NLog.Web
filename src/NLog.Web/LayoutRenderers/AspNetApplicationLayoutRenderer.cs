@@ -38,6 +38,7 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the item variable name.
         /// </summary>
+        /// <remarks>Default: <see cref="string.Empty"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         [DefaultParameter]
         public string Item { get; set; } = string.Empty;
@@ -52,17 +53,20 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Gets or sets the object-property-navigation-path for lookup of nested property
         /// </summary>
+        /// <remarks>Default: <see cref="string.Empty"/></remarks>
         public string ObjectPath { get => _objectPathRenderer.ObjectPath; set => _objectPathRenderer.ObjectPath = value; }
 
         /// <summary>
         /// Format string for conversion from object to string.
         /// </summary>
+        /// <remarks>Default: <see langword="null"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering.
         /// </summary>
+        /// <remarks>Default: <see cref="CultureInfo.InvariantCulture"/></remarks>
         /// <docgen category='Rendering Options' order='10' />
         public CultureInfo? Culture { get; set; } = CultureInfo.InvariantCulture;
 

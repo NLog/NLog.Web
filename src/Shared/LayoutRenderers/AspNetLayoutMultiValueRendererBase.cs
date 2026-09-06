@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NLog.Layouts;
 using NLog.Web.Enums;
@@ -15,14 +14,14 @@ namespace NLog.Web.LayoutRenderers
         /// <summary>
         /// Separator between key/value pair, and the next pair. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
-        /// <remarks>Render with <see cref="GetRenderedItemSeparator" /></remarks>
+        /// <remarks>Default: <c>,</c> (comma)</remarks>
         public string ItemSeparator { get => _itemSeparatorLayout.OriginalText; set => _itemSeparatorLayout = new SimpleLayout(value ?? ""); }
         private SimpleLayout _itemSeparatorLayout = new SimpleLayout(",");
 
         /// <summary>
         /// Separator between value and key. Only used for <see cref="AspNetRequestLayoutOutputFormat.Flat" />
         /// </summary>
-        /// <remarks>Render with <see cref="GetRenderedValueSeparator" /></remarks>
+        /// <remarks>Default: <c>=</c> (equals)</remarks>
         public string ValueSeparator { get => _valueSeparatorLayout.OriginalText; set => _valueSeparatorLayout = new SimpleLayout(value ?? ""); }
         private SimpleLayout _valueSeparatorLayout = new SimpleLayout("=");
 
@@ -43,18 +42,21 @@ namespace NLog.Web.LayoutRenderers
         }
 
         /// <summary>
-        /// Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
+        /// Determines how the output is rendered. Possible Value: FLAT or JSON.
         /// </summary>
+        /// <remarks>Default: <see cref="AspNetRequestLayoutOutputFormat.Flat"/></remarks>
         public AspNetRequestLayoutOutputFormat OutputFormat { get; set; } = AspNetRequestLayoutOutputFormat.Flat;
 
         /// <summary>
         /// Only render values if true, otherwise render key/value pairs.
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         public bool ValuesOnly { get; set; }
 
         /// <summary>
         /// Convert the key to lowercase if true, otherwise render the raw value of key. Default is false.
         /// </summary>
+        /// <remarks>Default: <see langword="false"/></remarks>
         public bool LowerCaseKeys { get; set; }
 
         /// <summary>
@@ -279,7 +281,7 @@ namespace NLog.Web.LayoutRenderers
         internal static void AppendQuoted(StringBuilder builder, string? value)
         {
             builder.Append('"');
-            if (value?.Contains('"') == true)
+            if (value?.IndexOf('"') >= 0)
             {
                 builder.Append(value.Replace("\"", "\\\""));
             }

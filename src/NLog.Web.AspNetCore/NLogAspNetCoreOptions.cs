@@ -10,7 +10,7 @@ namespace NLog.Web
         /// <summary>
         /// Register the HttpContextAccessor when not yet registed. Default <c>true</c>
         /// </summary>
-        /// <remarks>needed for various layout renderers</remarks>
+        /// <remarks>Default: <see langword="true"/></remarks>
         public bool RegisterHttpContextAccessor { get; set; } = true;
 
         /// <summary>

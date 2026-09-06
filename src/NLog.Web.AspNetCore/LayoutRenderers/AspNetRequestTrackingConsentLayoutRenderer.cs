@@ -22,8 +22,9 @@ namespace NLog.Web.LayoutRenderers
     public class AspNetRequestTrackingConsentLayoutRenderer : AspNetLayoutRendererBase
     {
         /// <summary>
-        /// Gets or sets what property to emit from ITrackingConsentFeature. Default = CanTrack
+        /// Gets or sets what property to emit from ITrackingConsentFeature.
         /// </summary>
+        /// <remarks>Default: <see cref="TrackingConsentProperty.CanTrack"/></remarks>
         [DefaultParameter]
         public TrackingConsentProperty Property { get; set; } = TrackingConsentProperty.CanTrack;
 
