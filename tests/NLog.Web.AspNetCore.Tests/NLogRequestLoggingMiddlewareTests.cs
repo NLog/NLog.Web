@@ -129,7 +129,7 @@ namespace NLog.Web.Tests
                 {
                     // Assert
                     Assert.Single(testTarget.Logs);
-                    Assert.Equal("Warn|HttpRequest Exception", testTarget.Logs[0]);
+                    Assert.Equal("Info|HttpRequest Exception", testTarget.Logs[0]);
                     throw;
                 }
             });

@@ -83,8 +83,10 @@ namespace NLog.Web
                      || httpContext.RequestAborted.IsCancellationRequested
                      )
                     {
-                        // Client canceled the request - not server side error, but maybe server is responding slow
-                        return Microsoft.Extensions.Logging.LogLevel.Warning;
+                        // Client canceled the request - only warn if the server was slow
+                        return IsSlowHttpRequest()
+                            ? Microsoft.Extensions.Logging.LogLevel.Warning
+                            : Microsoft.Extensions.Logging.LogLevel.Information;
                     }
                 }
                 return Microsoft.Extensions.Logging.LogLevel.Error;
