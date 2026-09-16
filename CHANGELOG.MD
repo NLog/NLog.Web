@@ -4,6 +4,17 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.2.1 (2026/09/16)
+
+- **NLog.Web.AspNetCore**
+  - [#1190](https://github.com/NLog/NLog.Web/pull/1190) Updated dependency NLog v6.2.1 (@snakefoot)
+  - [#1187](https://github.com/NLog/NLog.Web/pull/1187) NLogRequestLoggingOptions - Cancelled client request only warning when slow (@snakefoot)
+  - [#1179](https://github.com/NLog/NLog.Web/pull/1179) XML Docs for all public properties with setters to include Default value (@snakefoot)
+
+- **NLog.Web**
+  - [#1190](https://github.com/NLog/NLog.Web/pull/1190) Updated dependency NLog v6.2.1 (@snakefoot)
+  - [#1179](https://github.com/NLog/NLog.Web/pull/1179) XML Docs for all public properties with setters to include Default value (@snakefoot)
+
 ### Version 6.2 (2026/08/16)
 
 - **NLog.Web.AspNetCore**
