@@ -16,8 +16,9 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- [#1178] Updated dependency NLog v6.2 (@snakefoot)
-- [#1162] Updated tutorials and examples for using NLog with ASP.NET Core (@snakefoot)
+- [#1190] Updated dependency NLog v6.2.1 (@snakefoot)
+- [#1187] NLogRequestLoggingOptions - Cancelled client request only warning when slow (@snakefoot)
+- [#1179] XML Docs for all public properties with setters to include Default value (@snakefoot)
 
 List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
 
@@ -72,7 +73,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.400" PrivateAssets="All" />
   </ItemGroup>
   
