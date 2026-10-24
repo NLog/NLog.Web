@@ -6,7 +6,7 @@ using NLog.LayoutRenderers;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET User Identity Authenticated? (0 = not authenticated, 1 = authenticated)
+    /// ASP.NET User Identity Authenticated? (1 = authenticated, 0 = not authenticated or no httpcontext/user)
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-user-isAuthenticated}</code>
@@ -21,14 +21,8 @@ namespace NLog.Web.LayoutRenderers
             try
             {
                 var httpContext = HttpContextAccessor?.HttpContext;
-                if (httpContext?.User?.Identity?.IsAuthenticated == true)
-                {
-                    builder.Append('1');
-                }
-                else
-                {
-                    builder.Append('0');
-                }
+                var isAuthenticated = httpContext?.User?.Identity?.IsAuthenticated == true;
+                builder.Append(isAuthenticated ? '1' : '0');
             }
             catch (ObjectDisposedException ex)
             {

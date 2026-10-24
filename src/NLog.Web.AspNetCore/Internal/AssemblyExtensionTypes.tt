@@ -52,7 +52,7 @@ namespace NLog.Web.Internal
     {
         public static void RegisterTypes(this NLog.Config.ISetupExtensionsBuilder setupBuilder)
         {
-            #pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 <#
     IEnumerable<Type> types = null;
     try
@@ -131,7 +131,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestEndPointNameLayoutRenderer>("aspnet-request-endpoint-name");
 #endif
 
-            #pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 }

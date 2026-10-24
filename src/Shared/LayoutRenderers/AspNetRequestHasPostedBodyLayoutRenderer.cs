@@ -5,7 +5,7 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Used to indicate if the request has a body.
+    /// Used to indicate if the request has a posted body (1 = has posted body, 0 = No posted body or no httpcontext).
     /// Uses IHttpRequestBodyDetectionFeature
     ///
     /// This returns true when:
@@ -29,10 +29,11 @@ namespace NLog.Web.LayoutRenderers
         /// <inheritdoc/>
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
-            builder.Append(CanHaveBody() ? '1' : '0');
+            var hasPostedBody = HasPostedBody();
+            builder.Append(hasPostedBody ? '1' : '0');
         }
 
-        private bool CanHaveBody()
+        private bool HasPostedBody()
         {
 #if NET5_0_OR_GREATER
             var requestFeature = HttpContextAccessor?.HttpContext.TryGetFeature<Microsoft.AspNetCore.Http.Features.IHttpRequestBodyDetectionFeature>();

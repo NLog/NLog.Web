@@ -6,9 +6,7 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// Indicates if the server can upgrade this request to an opaque, bidirectional stream.
-    /// 1 if Capable
-    /// 0 if Incapable
+    /// Indicates if the server can upgrade this request to an opaque, bidirectional stream (1 = capable, 0 = incapable or no httpcontext).
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-request-bidirectional-stream}</code>
@@ -21,7 +19,8 @@ namespace NLog.Web.LayoutRenderers
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var upgradeFeature = HttpContextAccessor?.HttpContext.TryGetFeature<IHttpUpgradeFeature>();
-            builder.Append(upgradeFeature?.IsUpgradableRequest == true ? '1' : '0');
+            var isUpgradableRequest = upgradeFeature?.IsUpgradableRequest == true;
+            builder.Append(isUpgradableRequest ? '1' : '0');
         }
     }
 }

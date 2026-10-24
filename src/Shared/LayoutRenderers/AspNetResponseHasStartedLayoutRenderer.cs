@@ -5,7 +5,7 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET response headers already sent, in other words the response has started
+    /// ASP.NET response headers already sent, in other words the response has started (1 = response started, 0 = response not started or no httpcontext)
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-response-has-started}</code>
@@ -19,9 +19,11 @@ namespace NLog.Web.LayoutRenderers
         {
             var httpResponse = HttpContextAccessor?.HttpContext.TryGetResponse();
 #if ASP_NET_CORE
-            builder.Append(httpResponse?.HasStarted == true ? '1' : '0');
+            var hasResponseStarted = httpResponse?.HasStarted == true;
+            builder.Append(hasResponseStarted ? '1' : '0');
 #elif NET46_OR_GREATER
-            builder.Append(httpResponse?.HeadersWritten == true ? '1' : '0');
+            var hasResponseStarted = httpResponse?.HeadersWritten == true;
+            builder.Append(hasResponseStarted ? '1' : '0');
 #endif
         }
     }
