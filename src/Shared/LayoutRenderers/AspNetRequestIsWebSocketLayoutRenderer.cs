@@ -5,7 +5,7 @@ using NLog.Web.Internal;
 namespace NLog.Web.LayoutRenderers
 {
     /// <summary>
-    /// ASP.NET Is Request Web Socket
+    /// ASP.NET Is Request Web Socket (1 = is web socket request, 0 = not web socket request or no httpcontext)
     /// </summary>
     /// <remarks>
     /// <code>${aspnet-request-is-web-socket}</code>
@@ -20,10 +20,12 @@ namespace NLog.Web.LayoutRenderers
             // Not available on .NET 3.5
 #if ASP_NET_CORE
             var websockets = HttpContextAccessor?.HttpContext.TryGetWebSocket();
-            builder.Append(websockets?.IsWebSocketRequest == true ? '1' : '0');
+            var isWebSocketRequest = websockets?.IsWebSocketRequest == true;
+            builder.Append(isWebSocketRequest ? '1' : '0');
 #elif NET46_OR_GREATER
             var httpContext = HttpContextAccessor?.HttpContext;
-            builder.Append(httpContext?.IsWebSocketRequest == true ? '1' : '0');
+            var isWebSocketRequest = httpContext?.IsWebSocketRequest == true;
+            builder.Append(isWebSocketRequest ? '1' : '0');
 #endif
         }
     }

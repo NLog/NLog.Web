@@ -49,6 +49,7 @@ namespace NLog.Web.Internal
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer>("aspnet-item");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcActionLayoutRenderer>("aspnet-mvc-action");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetMvcControllerLayoutRenderer>("aspnet-mvc-controller");
+            setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestAbortedLayoutRenderer>("aspnet-request-aborted");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestClientCertificateLayoutRenderer>("aspnet-request-client-certificate");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestContentLengthLayoutRenderer>("aspnet-request-contentlength");
             setupBuilder.RegisterLayoutRenderer<NLog.Web.LayoutRenderers.AspNetRequestContentTypeLayoutRenderer>("aspnet-request-contenttype");

@@ -104,6 +104,9 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
   <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
     <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
   </Target>
