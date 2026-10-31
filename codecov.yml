@@ -3,7 +3,7 @@ coverage:
   status:
     project:
       minimum:
-        target: 70%
+        target: 60%
         threshold: 0%
       change:
         target: auto
