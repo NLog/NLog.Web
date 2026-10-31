@@ -9,3 +9,7 @@ coverage:
         target: auto
         threshold: 1%
 
+fixes:
+  - "/home/runner/work/NLog.Web/NLog.Web/::"
+  - "D:/a/NLog.Web/NLog.Web/::"
+
