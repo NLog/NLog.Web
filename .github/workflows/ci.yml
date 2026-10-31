@@ -41,7 +41,7 @@ jobs:
 
       - name: Test NLog.Web (.NET Framework)
         if: matrix.os == 'windows-latest'
-        run: dotnet test tests/NLog.Web.Tests/NLog.Web.Tests.csproj --framework net462 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
+        run: dotnet test tests/NLog.Web.Tests/NLog.Web.Tests.csproj --framework net462 --configuration Release --no-restore --no-build --logger GitHubActions
 
       - name: Test ASP.NET Core (.NET Framework)
         if: matrix.os == 'windows-latest'
