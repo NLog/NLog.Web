@@ -99,7 +99,7 @@ namespace NLog.Web.Tests.LayoutRenderers
         public void ShouldUseTheSpecifiedSeparator()
         {
             // Arrange
-            var expectedResult = "id=1\r\nname=Test Person\r\ntoken=86abe8fe-2237-4f87-81af-0a4e522b4140";
+            var expectedResult = "id=1" + System.Environment.NewLine + "name=Test Person" + System.Environment.NewLine + "token=86abe8fe-2237-4f87-81af-0a4e522b4140";
             var renderer = CreateRenderer();
             renderer.ItemSeparator = "${newline}";
 

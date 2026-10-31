@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SOLUTION: NLog.Web.sln
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Build & test (Windows)
+            build_target: NLog.Web.sln
+            framework_args: ""
+          - os: ubuntu-latest
+            name: Build & test (Ubuntu)
+            build_target: tests/NLog.Web.AspNetCore.Tests/NLog.Web.AspNetCore.Tests.csproj
+            framework_args: "--framework net10.0"
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Restore
+        run: dotnet restore ${{ matrix.build_target }}
+
+      - name: Build
+        run: dotnet build ${{ matrix.build_target }} --configuration Release --no-restore ${{ matrix.framework_args }} /p:ContinuousIntegrationBuild=true
+
+      - name: Test NLog.Web (.NET Framework)
+        if: matrix.os == 'windows-latest'
+        run: dotnet test tests/NLog.Web.Tests/NLog.Web.Tests.csproj --framework net462 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
+
+      - name: Test ASP.NET Core (.NET Framework)
+        if: matrix.os == 'windows-latest'
+        run: dotnet test tests/NLog.Web.AspNetCore.Tests/NLog.Web.AspNetCore.Tests.csproj --framework net462 --configuration Release --no-restore --no-build --logger GitHubActions
+
+      - name: Test ASP.NET Core (.NET 8)
+        if: matrix.os == 'windows-latest'
+        run: dotnet test tests/NLog.Web.AspNetCore.Tests/NLog.Web.AspNetCore.Tests.csproj --framework net8.0 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
+
+      - name: Test ASP.NET Core (.NET 10)
+        if: matrix.os == 'windows-latest'
+        run: dotnet test tests/NLog.Web.AspNetCore.Tests/NLog.Web.AspNetCore.Tests.csproj --framework net10.0 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
+
+      - name: Test ASP.NET Core (.NET 10, Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet test ${{ matrix.build_target }} --framework net10.0 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5
+        with:
+          files: tests/**/TestResults/**/coverage.cobertura.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+
+  pack:
+    name: Create NuGet package
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Determine version suffix
+        id: version
+        shell: pwsh
+        env:
+          REF: ${{ github.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          if ($env:REF -eq "refs/heads/master") {
+            echo "suffix=" >> $env:GITHUB_OUTPUT
+          } elseif ($env:PR_NUMBER) {
+            echo "suffix=pr.$($env:PR_NUMBER).ci.$($env:RUN_NUMBER)" >> $env:GITHUB_OUTPUT
+          } else {
+            echo "suffix=ci.$($env:RUN_NUMBER)" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Pack solution
+        shell: pwsh
+        env:
+          VERSION_SUFFIX: ${{ steps.version.outputs.suffix }}
+        run: dotnet pack $env:SOLUTION --no-restore --configuration Release --output artifacts -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:EmbedUntrackedSources=true -p:ContinuousIntegrationBuild=true --version-suffix "$env:VERSION_SUFFIX"
+
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v7
+        with:
+          name: NuGetPackages
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          if-no-files-found: error
