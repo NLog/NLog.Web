@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Version (VersionPrefix) and shared build properties are defined in ../Directory.Build.props. -->
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;net6.0;net8.0;net10.0</TargetFrameworks>
     <Product>NLog.Web.AspNetCore v$(VersionPrefix)</Product>
@@ -30,14 +31,10 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/NLog/NLog.Web</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
-    <AssemblyVersion>6.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <RootNamespace>NLog.Web</RootNamespace>
     
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <Nullable>enable</Nullable>
     <LangVersion>9</LangVersion>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
