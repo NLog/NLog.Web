@@ -7,13 +7,13 @@
 | [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore) | ASP.NET Core applications for new .NET platforms | .NET 6, 7, 8, 9 and 10 |
 | [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web) | Classic ASP.NET MVC applications for .NET Framework | .NET Framework 3.5 - 4.8 | 
 
-[![Build status](https://img.shields.io/appveyor/ci/nlog/nlog-web/master.svg)](https://ci.appveyor.com/project/nlog/nlog-web/branch/master)
+[![CI](https://github.com/NLog/NLog.Web/actions/workflows/ci.yml/badge.svg)](https://github.com/NLog/NLog.Web/actions/workflows/ci.yml)
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=ncloc)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=bugs)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=vulnerabilities)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=code_smells)](https://sonarcloud.io/project/issues?id=nlog.web&branch=master&resolved=false&types=CODE_SMELL) 
 [![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=sqale_debt_ratio)](https://sonarcloud.io/dashboard/?id=nlog.web&branch=master) 
-[![](https://sonarcloud.io/api/project_badges/measure?project=nlog.web&branch=master&metric=coverage)](https://sonarcloud.io/component_measures?id=nlog.web&branch=master&metric=coverage) 
+[![codecov](https://codecov.io/gh/NLog/NLog.Web/graph/badge.svg?token=XCQCDMm5io)](https://codecov.io/gh/NLog/NLog.Web)
 
 Extensions for [NLog](https://github.com/NLog/NLog/) that includes [layout-renderes](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) for capturing contextual details from the HttpContext for both ASP.NET Core and IIS.
 
@@ -22,6 +22,9 @@ Extensions for [NLog](https://github.com/NLog/NLog/) that includes [layout-rende
 For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https://github.com/NLog/NLog.Web/releases)
 
 ## ASP.NET Core
+
+[Package README](src/NLog.Web.AspNetCore/README.md)
+
 The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package works with the new ASP.NET Core platforms .NET 6, 7, 8, 9 and 10
 
 - [Tutorial for using NLog with ASP.NET Core](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
@@ -29,6 +32,8 @@ The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-pa
 - [How to use structured logging](https://github.com/NLog/NLog/wiki/How-to-use-structured-logging)
 
 ## ASP.NET Classic
+
+[Package README](src/NLog.Web/README.md)
 
 The [NLog.Web](https://www.nuget.org/packages/NLog.Web)-package works with classic ASP.NET MVC with .NET Framework 3.5 - 4.8
 
