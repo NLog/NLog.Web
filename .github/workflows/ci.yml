@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      force_nuget_publish:
+        description: Force NuGet publish for non-master builds. Packages use a CI suffix.
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -128,3 +133,33 @@ jobs:
             artifacts/*.nupkg
             artifacts/*.snupkg
           if-no-files-found: error
+
+  publish:
+    name: Publish NuGet package
+    needs: [build, pack]
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      (github.event_name == 'workflow_dispatch' && inputs.force_nuget_publish)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download NuGet package
+        uses: actions/download-artifact@v7
+        with:
+          name: NuGetPackages
+          path: artifacts
+
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push to NuGet.org
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
