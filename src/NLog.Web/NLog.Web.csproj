@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Version (VersionPrefix) and shared build properties are defined in ../Directory.Build.props. -->
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <TargetFrameworks>net35;net46</TargetFrameworks>
@@ -41,14 +42,10 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <RepositoryUrl>https://github.com/NLog/NLog.Web.git</RepositoryUrl>
 
     <SignAssembly>true</SignAssembly>
-    <AssemblyVersion>6.0.0.0</AssemblyVersion>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
 
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <!-- EmbedUntrackedSources for deterministic build -->
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <Nullable>enable</Nullable>
     <LangVersion>9</LangVersion>
   </PropertyGroup>

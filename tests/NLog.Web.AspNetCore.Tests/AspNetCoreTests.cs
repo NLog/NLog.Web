@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -280,9 +281,11 @@ namespace NLog.Web.Tests
             }
         }
 
-        [Fact]
+        [SkippableFact]
         public void LoadConfigurationFromAppSettingsUNC()
         {
+            Skip.IfNot(RuntimeInformation.IsOSPlatform(OSPlatform.Windows), "UNC paths are only supported on Windows.");
+
             // Arrange
             var tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), nameof(AspNetCoreTests), Guid.NewGuid().ToString()).Replace("\\", "/");
             var UNCtempPath = @"\\?\" + tempPath.Replace('/', '\\');
