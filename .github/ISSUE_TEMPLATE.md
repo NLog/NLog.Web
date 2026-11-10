@@ -19,7 +19,7 @@ Please only post issues here related to NLog.Web. If unsure, please post on http
 
 **NLog.Extensions.Logging version**: 
 
-**Platform**: .Net 3.5 / .Net 4.6 / .NET Core 3.1 / .NET 8.0 / .NET 11.0
+**Platform**: .NET 3.5 / .NET 4.6 / .NET 8.0 / .NET 10.0 / .NET 11.0
 
 **Current NLog config** (xml or C#, if relevant)
 
