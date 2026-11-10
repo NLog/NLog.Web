@@ -40,6 +40,9 @@ namespace NLog.Web.LayoutRenderers
         public ByteArrayFormatProperty Format { get; set; } = ByteArrayFormatProperty.Base64;
 
         /// <inheritdoc/>
+    #if NET11_0_OR_GREATER
+#pragma warning disable ASPDEPR010
+    #endif
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var tlsTokenBinding = HttpContextAccessor?.HttpContext.TryGetFeature<ITlsTokenBindingFeature>();
@@ -57,6 +60,9 @@ namespace NLog.Web.LayoutRenderers
                     break;
             }
         }
+        #if NET11_0_OR_GREATER
+#pragma warning restore ASPDEPR010
+        #endif
 
         private string ToFormattedString(byte[] bytes)
         {

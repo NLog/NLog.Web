@@ -19,7 +19,7 @@ Application code can continue using `ILogger<T>`, while NLog provides powerful l
 
 Supported platforms:
 
-- ASP.NET Core 6, 7, 8, 9 and 10
+- ASP.NET Core 8, 9, 10 and 11
 - ASP.NET Core 2, .NET Standard 2.0 and .NET 4.6.2+
 
 Register NLog as logging provider:
