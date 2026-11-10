@@ -4,6 +4,25 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
+### Version 6.3.0 (2026/10/15)
+
+### Version 6.3.0 (2026/11/10)
+
+- **NLog.Web.AspNetCore**
+  - [#1201](https://github.com/NLog/NLog.Web/pull/1201) Added .NET 11 support (@304NotModified)
+  - [#1201](https://github.com/NLog/NLog.Web/pull/1201) Removed .NET 6 support (@304NotModified)
+  - [#1196](https://github.com/NLog/NLog.Web/pull/1196) Introduced ${aspnet-request-aborted} to filter errors and warnings when RequestAborted (@snakefoot)
+
+- **NLog.Web**
+  - [#1196](https://github.com/NLog/NLog.Web/pull/1196) Introduced ${aspnet-request-aborted} to filter errors and warnings when RequestAborted (@snakefoot)
+
+- **Infrastructure**
+  - [#1199](https://github.com/NLog/NLog.Web/pull/1199) Moved to GitHub Actions, enabled trusted publishing, and moved to Codecov (@304NotModified)
+
+- **Maintenance**
+  - [#1172](https://github.com/NLog/NLog.Web/pull/1172) Bumped NSubstitute from 5.3.0 to 6.2.0 (@dependabot[bot])
+
+
 ### Version 6.2.2 (2026/10/15)
 
 - **NLog.Web.AspNetCore**
