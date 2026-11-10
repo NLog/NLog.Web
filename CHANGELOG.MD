@@ -4,8 +4,6 @@ See also [releases](https://github.com/NLog/NLog.Web/releases) and [milestones](
 
 Date format: (year/month/day)
 
-### Version 6.3.0 (2026/10/15)
-
 ### Version 6.3.0 (2026/11/10)
 
 - **NLog.Web.AspNetCore**
