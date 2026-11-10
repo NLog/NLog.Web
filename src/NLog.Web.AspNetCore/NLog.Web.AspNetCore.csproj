@@ -68,7 +68,7 @@ List of available Layout Renderers: https://nlog-project.org/config/?tab=layout-
     <AssemblyTitle>$(Title)</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.3.0" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' and '$(TargetFramework)' != 'net462' ">
