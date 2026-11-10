@@ -230,7 +230,7 @@ namespace NLog.Web.Tests
 
             public override long Length => _length;
 
-#if NET6_0_OR_GREATER
+#if NET8_0_OR_GREATER
             public override long Position { get => throw new System.NotSupportedException(); set => throw new System.NotSupportedException(); }  // Microsoft.AspNetCore.Server.IIS.Core.ReadOnlyStream
 #else
             public override long Position { get; set; }

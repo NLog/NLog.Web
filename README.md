@@ -4,7 +4,7 @@
 
 |  Nuget-package  | Description  | Supported Platforms |
 |:----------------|:-------------|:--------------------|
-| [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore) | ASP.NET Core applications for new .NET platforms | .NET 6, 7, 8, 9 and 10 |
+| [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.AspNetCore.svg?label=NLog.Web.AspNetCore)](https://www.nuget.org/packages/NLog.Web.AspNetCore) | ASP.NET Core applications for new .NET platforms | .NET 8, 9, 10 and 11 |
 | [![NuGet Release](https://img.shields.io/nuget/v/NLog.Web.svg?label=NLog.Web)](https://www.nuget.org/packages/NLog.Web) | Classic ASP.NET MVC applications for .NET Framework | .NET Framework 3.5 - 4.8 | 
 
 [![CI](https://github.com/NLog/NLog.Web/actions/workflows/ci.yml/badge.svg)](https://github.com/NLog/NLog.Web/actions/workflows/ci.yml)
@@ -25,7 +25,7 @@ For updates and releases, check [CHANGELOG.MD](CHANGELOG.MD) or [Releases](https
 
 [Package README](src/NLog.Web.AspNetCore/README.md)
 
-The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package works with the new ASP.NET Core platforms .NET 6, 7, 8, 9 and 10
+The [NLog.Web.AspNetCore](https://www.nuget.org/packages/NLog.Web.AspNetCore)-package works with the new ASP.NET Core platforms .NET 8, 9, 10 and 11
 
 - [Tutorial for using NLog with ASP.NET Core](https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-6)
 - [Layout renderers for ASP.NET Core](https://nlog-project.org/config/?tab=layout-renderers&search=package:nlog.web.aspnetcore) 
