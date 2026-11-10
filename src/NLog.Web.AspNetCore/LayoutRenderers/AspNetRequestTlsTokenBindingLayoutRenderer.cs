@@ -41,7 +41,7 @@ namespace NLog.Web.LayoutRenderers
 
         /// <inheritdoc/>
     #if NET11_0_OR_GREATER
-#pragma warning disable ASPDEPR010
+#pragma warning disable ASPDEPR010 // error ASPDEPR010: 'ITlsTokenBindingFeature' is obsolete: 'ITlsTokenBindingFeature is deprecated. TLS Token Binding (RFC 8471) has not been adopted by browsers.' (https://aka.ms/aspnet/deprecate/010)
     #endif
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
