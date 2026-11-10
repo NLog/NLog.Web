@@ -17,9 +17,10 @@ Integrates NLog as provider for Microsoft.Extensions.Logging, and provides NLog 
     <PackageReleaseNotes>
 ChangeLog:
 
-- Removed .NET 6 target framework and added .NET 11 target framework
-
-List of major changes in NLog v6.0: https://nlog-project.org/2025/04/29/nlog-6-0-major-changes.html
+- Added .NET 11 support (@304NotModified)
+- Removed .NET 6 support (@304NotModified)
+- Introduced ${aspnet-request-aborted} to filter errors and warnings when RequestAborted (@snakefoot)
+- Moved to GitHub Actions, enabled trusted publishing, and moved to Codecov (@304NotModified)
 
 Full changelog: https://github.com/NLog/NLog.Web/releases
 
