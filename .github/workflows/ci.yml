@@ -28,11 +28,9 @@ jobs:
           - os: windows-latest
             name: Build & test (Windows)
             build_target: NLog.Web.sln
-            framework_args: ""
           - os: ubuntu-latest
             name: Build & test (Ubuntu)
             build_target: tests/NLog.Web.AspNetCore.Tests/NLog.Web.AspNetCore.Tests.csproj
-            framework_args: "--framework net11.0"
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -48,7 +46,8 @@ jobs:
         run: dotnet restore ${{ matrix.build_target }}
 
       - name: Build
-        run: dotnet build ${{ matrix.build_target }} --configuration Release --no-restore ${{ matrix.framework_args }} /p:ContinuousIntegrationBuild=true
+        if: matrix.os == 'windows-latest'
+        run: dotnet build ${{ matrix.build_target }} --configuration Release --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: Test NLog.Web (.NET Framework)
         if: matrix.os == 'windows-latest'
@@ -70,9 +69,13 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: dotnet test tests/NLog.Web.AspNetCore.Tests/NLog.Web.AspNetCore.Tests.csproj --framework net11.0 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
 
+      - name: Test ASP.NET Core (.NET 10, Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet test ${{ matrix.build_target }} --framework net10.0 --configuration Release --no-restore --collect:"XPlat Code Coverage" --logger GitHubActions
+          
       - name: Test ASP.NET Core (.NET 11, Ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        run: dotnet test ${{ matrix.build_target }} --framework net11.0 --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --logger GitHubActions
+        run: dotnet test ${{ matrix.build_target }} --framework net11.0 --configuration Release --no-restore --collect:"XPlat Code Coverage" --logger GitHubActions
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v7
